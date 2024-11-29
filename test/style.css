@@ -1,0 +1,120 @@
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.endpoint {
+    border: 1px solid #ddd;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.method {
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 3px;
+    width: 60px;
+    text-align: center;
+}
+
+.endpoint-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.endpoint-header:hover {
+    background-color: #f5f5f5;
+}
+
+.endpoint-url {
+    flex-grow: 1;
+    font-family: monospace;
+}
+
+.endpoint-content {
+    display: none;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 3px;
+    margin-left: 75px;
+}
+
+.endpoint.active .endpoint-content {
+    display: block;
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.response {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 3px;
+    white-space: pre-wrap;
+    max-height: 300px;
+    overflow-y: auto;
+    font-family: monospace;
+}
+
+.url-display {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #e8f4ff;
+    border-radius: 3px;
+    word-break: break-all;
+    font-family: monospace;
+}
+
+.try-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.try-btn:hover {
+    background-color: #0056b3;
+}
+
+.params-container {
+    margin: 10px 0;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.param-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.param-group label {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.param-group input, 
+.param-group select {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
