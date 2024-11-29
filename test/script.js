@@ -97,23 +97,23 @@ function createEndpoint(endpoint) {
 
 async function testEndpoint(endpoint, button) {
     const params = new URLSearchParams();
-    params.set('get', endpoint);
-    params.set('limit', '50');
+    params.append('get', endpoint);
 
-    // Get all input values for this endpoint
-    const inputs = button.parentElement.querySelectorAll('input, select');
-    inputs.forEach(input => {
+    // Get parameters
+    const paramInputs = button.parentElement.querySelectorAll('.param-group input, .param-group select');
+    paramInputs.forEach(input => {
         if (input.value) {
-            params.set(input.name, input.value);
+            params.append(input.name, input.value);
         }
     });
 
-    // Create the full URL
-    const url = `../index.php?${params.toString()}`;
+    // Build the URL using window.location
+    const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname.replace(/\/test\/.*$/, '')}`.replace(/\/$/, '');
+    const url = `${baseUrl}/index.php?${params.toString()}`;
 
     // Display the URL
     const urlDisplay = button.parentElement.querySelector('.url-display');
-    urlDisplay.textContent = url;
+    urlDisplay.innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
 
     try {
         const response = await fetch(url);

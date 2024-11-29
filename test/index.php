@@ -6,7 +6,7 @@
     <title>MDWiki API Test Interface</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/test/style.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg">
@@ -22,14 +22,14 @@
 
     <div class="container">
         <h1>MDWiki API Test Interface</h1>
-        
+
         <div id="endpoints-container">
             <!-- Endpoints will be generated here -->
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="theme.js"></script>
-    <script src="script.js"></script>
+    <script src="/test/theme.js"></script>
+    <script src="/test/script.js"></script>
 </body>
 </html>
