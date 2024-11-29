@@ -13,6 +13,11 @@
             { "name": "distinct", "type": "select", "options": ["", "yes"] }
         ]
     },
+    "lang_views": {
+        "params": [
+            { "name": "lang", "type": "text", "placeholder": "Language code" }
+        ]
+    },
     "words": {
         "params": [
             { "name": "title", "type": "text", "placeholder": "Title" },
