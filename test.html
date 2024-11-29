@@ -107,6 +107,15 @@
 
     <script>
         const endpoints = [
+            'pages',
+            'pages_users',
+            'views',
+            'categories',
+            'full_translators',
+            'projects',
+            'settings',
+            'words',
+            'translate_type',
             'coordinator',
             'count_pages',
             'graph_data',
@@ -119,20 +128,10 @@
             'qids_others',
             'site_matrix',
             'status',
-            'user_access',
             'user_views',
             'users',
             'users_by_last_pupdate',
-            'users_by_last_pupdate_old',
-            'views',
-            'categories',
-            'full_translators',
-            'projects',
-            'settings',
-            'words',
-            'translate_type',
-            'pages',
-            'pages_users'
+            'users_by_last_pupdate_old'
         ];
 
         function createParamInput(param) {
@@ -226,26 +225,26 @@
 
         // Test endpoint function
         async function testEndpoint(endpoint, button) {
-            const endpointDiv = button.closest('.endpoint-content');
-            const responseDiv = document.getElementById('response-' + endpoint);
-            responseDiv.textContent = 'Loading...';
-            
-            // Collect parameters
             const params = new URLSearchParams();
-            params.append('get', endpoint);
-            
-            endpointDiv.querySelectorAll('input, select').forEach(input => {
+            params.set('get', endpoint);
+            params.set('limit', '50'); // Add default limit of 50 to all requests
+
+            // Get all input values for this endpoint
+            const inputs = button.parentElement.querySelectorAll('input, select');
+            inputs.forEach(input => {
                 if (input.value) {
-                    params.append(input.name, input.value);
+                    params.set(input.name, input.value);
                 }
             });
-            
+
             try {
                 const response = await fetch(`index.php?${params.toString()}`);
                 const data = await response.json();
-                responseDiv.textContent = JSON.stringify(data, null, 2);
+                
+                const responseElement = button.parentElement.querySelector('.response');
+                responseElement.textContent = JSON.stringify(data, null, 2);
             } catch (error) {
-                responseDiv.textContent = 'Error: ' + error.message;
+                console.error('Error:', error);
             }
         }
 

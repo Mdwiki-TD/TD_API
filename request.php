@@ -22,9 +22,9 @@ use function API\InterWiki\get_inter_wiki;
 use function API\SiteMatrix\get_site_matrix;
 use function API\Helps\sanitize_input;
 use function API\Helps\add_li;
+use function API\Helps\add_limit;
 use function API\Pages\get_pages_qua;
 use function API\Qids\qids_qua;
-
 
 function leaderboard_table()
 {
@@ -105,7 +105,9 @@ function make_status_query()
 
 $DISTINCT = (isset($_GET['distinct'])) ? 'DISTINCT ' : '';
 $SELECT   = (isset($_GET['select'])) ? filter_input(INPUT_GET, 'select', FILTER_SANITIZE_SPECIAL_CHARS) : '*';
-$get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_SPECIAL_CHARS); //$_GET['get'];
+$get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_SPECIAL_CHARS); //$_GET['get']
+
+// if (!isset($_GET['limit'])) $_GET['limit'] = '50';
 
 $qua = "";
 $query = "";
@@ -120,11 +122,12 @@ switch ($get) {
             $added = filter_input(INPUT_GET, 'userlike', FILTER_SANITIZE_SPECIAL_CHARS);
             $qua .= " WHERE username like '$added%'";
         }
-        // $results = fetch_query($qua);
+        $qua = add_limit($qua);
         break;
 
     case 'coordinator':
         $qua = "SELECT $SELECT FROM coordinator";
+        $qua = add_limit($qua);
         break;
 
     case 'leaderboard_table':
@@ -132,11 +135,9 @@ switch ($get) {
         $query = $de["qua"];
         $params = $de["params"];
 
-        // $results = fetch_query($query, $params);
-
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
-
+        $qua = add_limit($qua);
         break;
 
     case 'status':
@@ -144,41 +145,37 @@ switch ($get) {
         $query = $d["qua"];
         $params = $d["params"];
 
-        // $results = fetch_query($query, $params);
-
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
-
+        $qua = add_limit($qua);
         break;
 
     case 'views':
         $qua = "SELECT * FROM views ";
         $qua = add_li($qua, ['lang']);
-
-        // $results = fetch_query($qua);
+        $qua = add_limit($qua);
         break;
 
     case 'user_access':
         $qua = "SELECT id, user_name, created_at FROM access_keys";
         $qua = add_li($qua, ['user_name']);
+        $qua = add_limit($qua);
         break;
 
     case 'qids':
-        // {"id":18638,"title":"11p deletion syndrome","qid":"Q1892153"}
         $qua = qids_qua($get, $dis);
+        $qua = add_limit($qua);
         break;
 
     case 'qids_others':
-        // {"id":18638,"title":"11p deletion syndrome","qid":"Q1892153"}
         $qua = qids_qua($get, $dis);
+        $qua = add_limit($qua);
         break;
-
 
     case 'count_pages':
         $target_t = (isset($_GET['target_empty'])) ? " target = '' " : " target != '' ";
         $qua = "SELECT DISTINCT user, count(target) as count from pages where $target_t group by user order by count desc";
-
-        // $results = fetch_query($qua);
+        $qua = add_limit($qua);
         break;
 
     case 'users_by_last_pupdate_old':
@@ -190,8 +187,7 @@ switch ($get) {
             group by p1.user
             ORDER BY p1.pupdate DESC
         SQL;
-
-        // $results = fetch_query($qua);
+        $qua = add_limit($qua);
         break;
 
     case 'users_by_last_pupdate':
@@ -211,14 +207,12 @@ switch ($get) {
             WHERE rn = 1
             ORDER BY pupdate DESC;
         SQL;
-
-        // $results = fetch_query($qua);
+        $qua = add_limit($qua);
         break;
 
     case 'lang_names':
         $results = get_lang_names();
         break;
-
 
     case 'lang_names_new':
         $results = get_lang_names_new();
@@ -244,6 +238,7 @@ switch ($get) {
                 and p.lang = v.lang
                 and p.target = v.target
             SQL;
+            $qua = add_limit($qua);
         };
         break;
 
@@ -255,6 +250,7 @@ switch ($get) {
             GROUP BY LEFT(pupdate, 7)
             ORDER BY LEFT(pupdate, 7) ASC;
         SQL;
+        $qua = add_limit($qua);
         break;
 
     case 'lang_views':
@@ -267,50 +263,40 @@ switch ($get) {
                 and p.lang = v.lang
                 and p.target = v.target
             SQL;
+            $qua = add_limit($qua);
         };
         break;
 
     default:
-        // ---
         if (in_array($get, ['categories', 'full_translators', 'projects', 'settings', 'words', 'translate_type'])) {
             $qua = "SELECT * FROM $get";
+            $qua = add_limit($qua);
             break;
         }
-        // ---
         if (in_array($get, ['pages', 'pages_users'])) {
             $qua = get_pages_qua($get, $DISTINCT, $SELECT);
-
-            // $results = fetch_query($qua);
+            $qua = add_limit($qua);
             break;
         }
         $results = ["error" => "invalid get request"];
         break;
 }
 
-// ---
 if ($results === [] && $qua !== "") {
-    // ---
     $start_time = microtime(true);
-    // ---
     if ($query !== "") {
         $results = fetch_query($query, $params);
     } else {
         $results = fetch_query($qua);
     }
-    // ---
     $end_time = microtime(true);
-    // ---
     $execution_time = $end_time - $start_time;
     $execution_time = number_format($execution_time, 2);
-    // ---
-    // if ($get === 'full_translators') { $results = array_map(function ($row) { return $row['user']; }, $results); }
-    // ---
-};
-// ---
+}
+
 $qua = str_replace(["\n", "\r"], " ", $qua);
-// remove extra spaces
 $qua = preg_replace("/ +/", " ", $qua);
-// ---
+
 $out = [
     "time" => $execution_time,
     "query" => $qua,
