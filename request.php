@@ -60,6 +60,8 @@ function leaderboard_table()
         $params[] = $year;
     }
     // ---
+    $query = add_limit($query);
+    // ---
     return ["qua" => $query, "params" => $params];
 }
 
@@ -137,17 +139,16 @@ switch ($get) {
 
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
-        $qua = add_limit($qua);
         break;
 
     case 'status':
         $d = make_status_query();
         $query = $d["qua"];
+        $query = add_limit($query);
         $params = $d["params"];
 
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
-        $qua = add_limit($qua);
         break;
 
     case 'views':
