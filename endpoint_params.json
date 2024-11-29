@@ -13,21 +13,34 @@
             { "name": "distinct", "type": "select", "options": ["", "yes"] }
         ]
     },
-    "lang_views": {
+    "users": {
+        "params": [
+            { "name": "userlike", "type": "text", "placeholder": "Username starts with" }
+        ]
+    },
+    "views": {
         "params": [
             { "name": "lang", "type": "text", "placeholder": "Language code" }
         ]
     },
-    "words": {
+    "user_access": {
         "params": [
-            { "name": "title", "type": "text", "placeholder": "Title" },
-            { "name": "lead_words", "type": "number", "placeholder": "Lead words count" },
-            { "name": "all_words", "type": "number", "placeholder": "All words count" }
+            { "name": "user_name", "type": "text", "placeholder": "Username" }
         ]
     },
-    "user_views": {
+    "qids": {
         "params": [
-            { "name": "user", "type": "text", "placeholder": "Username" }
+            { "name": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
+        ]
+    },
+    "qids_others": {
+        "params": [
+            { "name": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
+        ]
+    },
+    "count_pages": {
+        "params": [
+            { "name": "target_empty", "type": "select", "options": ["", "yes"] }
         ]
     },
     "status": {
@@ -43,14 +56,21 @@
             { "name": "user_group", "type": "text", "placeholder": "User group" }
         ]
     },
-    "qids": {
+    "lang_views": {
         "params": [
-            { "name": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
+            { "name": "lang", "type": "text", "placeholder": "Language code" }
         ]
     },
-    "qids_others": {
+    "words": {
         "params": [
-            { "name": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
+            { "name": "title", "type": "text", "placeholder": "Title" },
+            { "name": "lead_words", "type": "number", "placeholder": "Lead words count" },
+            { "name": "all_words", "type": "number", "placeholder": "All words count" }
+        ]
+    },
+    "user_views": {
+        "params": [
+            { "name": "user", "type": "text", "placeholder": "Username" }
         ]
     }
 }

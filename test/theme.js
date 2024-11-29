@@ -7,15 +7,15 @@ const htmlElement = document.documentElement;
 const themes = {
     system: {
         icon: 'bi-circle-half',
-        label: 'النظام'
+        label: 'Auto'
     },
     dark: {
         icon: 'bi-moon-stars-fill',
-        label: 'داكن'
+        label: 'Dark'
     },
     light: {
         icon: 'bi-sun-fill',
-        label: 'فاتح'
+        label: 'Light'
     }
 };
 
@@ -42,7 +42,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e =
 function createThemeMenu() {
     const menu = document.createElement('div');
     menu.className = 'theme-menu';
-    
+
     Object.entries(themes).forEach(([value, { icon, label }]) => {
         const item = document.createElement('button');
         item.className = 'theme-menu-item';
@@ -54,7 +54,7 @@ function createThemeMenu() {
         });
         menu.appendChild(item);
     });
-    
+
     return menu;
 }
 
@@ -66,22 +66,22 @@ updateTheme(savedTheme);
 let activeMenu = null;
 themeToggle.addEventListener('click', (e) => {
     e.stopPropagation();
-    
+
     if (activeMenu) {
         activeMenu.remove();
         activeMenu = null;
         return;
     }
-    
+
     const menu = createThemeMenu();
     document.body.appendChild(menu);
-    
+
     // Position menu below button
     const buttonRect = themeToggle.getBoundingClientRect();
     menu.style.position = 'fixed';
     menu.style.top = `${buttonRect.bottom + 5}px`;
     menu.style.right = `${window.innerWidth - buttonRect.right}px`;
-    
+
     activeMenu = menu;
 });
 
