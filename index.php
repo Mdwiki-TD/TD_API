@@ -1,7 +1,7 @@
 <?php
 
 if (!isset($_GET['get'])) {
-    header('Location: test.html');
+    header('Location: test/index.html');
     exit();
 }
 
