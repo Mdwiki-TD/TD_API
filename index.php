@@ -5,4 +5,4 @@ if (!isset($_GET['get'])) {
     exit();
 }
 
-include_once __DIR__ . '/request.php';
+include_once __DIR__ . '/api_cod/request.php';
