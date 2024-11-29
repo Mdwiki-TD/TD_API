@@ -1,49 +1,17 @@
-const endpointGroups = {
-    pages: [
-        'pages',
-        'pages_users'
-    ],
-    identifiers: [
-        'qids',
-        'qids_others'
-    ],
-    views: [
-        'views',
-        'user_views',
-        'lang_views'
-    ],
-    users: [
-        'users',
-        'users_by_last_pupdate',
-        'users_by_last_pupdate_old',
-        'full_translators',
-        'coordinator'
-    ],
-    statistics: [
-        'status',
-        'leaderboard_table',
-        'count_pages',
-        'graph_data'
+let endpointGroups = {};
+let endpoints = [];
 
-    ],
-    languages: [
-        'lang_names',
-        'lang_names_new',
-        'site_matrix',
-        'translate_type'
-
-    ],
-    other: [
-        'categories',
-        'projects',
-        'settings',
-        'words',
-        'inter_wiki'
-    ]
-};
-
-// Flatten endpoints array for compatibility with existing code
-const endpoints = Object.values(endpointGroups).flat();
+// Load endpoint groups from JSON file
+async function loadEndpointGroups() {
+    try {
+        const response = await fetch('../endpointGroups.json');
+        endpointGroups = await response.json();
+        // Flatten endpoints array for compatibility with existing code
+        endpoints = Object.values(endpointGroups).flat();
+    } catch (error) {
+        console.error('Error loading endpoint groups:', error);
+    }
+}
 
 function createParamInput(param) {
     const div = document.createElement('div');
@@ -217,4 +185,7 @@ function generateEndpoints(endpointParams) {
 }
 
 // Initialize when the document is loaded
-document.addEventListener('DOMContentLoaded', loadEndpointParams);
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadEndpointGroups();
+    await loadEndpointParams();
+});

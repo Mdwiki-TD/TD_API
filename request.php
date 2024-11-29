@@ -137,13 +137,11 @@ switch ($get) {
         $query = $de["qua"];
         $params = $de["params"];
 
-        // apply $params to $qua
-        $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
         break;
 
     case 'status':
         $status = make_status_query();
-        $qua = $status['qua'];
+        $query = $status['qua'];
         $params = $status['params'];
         break;
 
@@ -266,30 +264,30 @@ switch ($get) {
 
     case 'words':
         $params = [];
-        $qua = "SELECT * FROM words WHERE 1=1";
+        $query = "SELECT * FROM words WHERE 1=1";
 
         // التحقق من عنوان الكلمات
         $title = sanitize_input($_GET['title'] ?? '', '/^[a-zA-Z0-9\s_-]+$/');
         if ($title !== null) {
-            $qua .= " AND w_title LIKE ?";
-            $params[] = "%$title%";
+            $query .= " AND w_title = ?";
+            $params[] = $title;
         }
 
         // التحقق من عدد كلمات المقدمة
         $lead_words = sanitize_input($_GET['lead_words'] ?? '', '/^\d+$/');
         if ($lead_words !== null) {
-            $qua .= " AND w_lead_words = ?";
+            $query .= " AND w_lead_words = ?";
             $params[] = $lead_words;
         }
 
         // التحقق من عدد كل الكلمات
         $all_words = sanitize_input($_GET['all_words'] ?? '', '/^\d+$/');
         if ($all_words !== null) {
-            $qua .= " AND w_all_words = ?";
+            $query .= " AND w_all_words = ?";
             $params[] = $all_words;
         }
 
-        $qua = add_limit($qua);
+        $query = add_limit($query);
         break;
 
     default:
@@ -307,9 +305,11 @@ switch ($get) {
         break;
 }
 
-if ($results === [] && $qua !== "") {
+if ($results === [] && ($qua !== "" || $query !== "")) {
     $start_time = microtime(true);
     if ($query !== "") {
+        // apply $params to $qua
+        $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
         $results = fetch_query($query, $params);
     } else {
         $results = fetch_query($qua);
