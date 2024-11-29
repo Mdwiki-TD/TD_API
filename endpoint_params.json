@@ -1,0 +1,41 @@
+{
+    "pages": {
+        "params": [
+            { "name": "lang", "type": "text", "placeholder": "Language code" },
+            { "name": "user", "type": "text", "placeholder": "Username" },
+            { "name": "translate_type", "type": "text", "placeholder": "Translation type" },
+            { "name": "cat", "type": "text", "placeholder": "Category" },
+            { "name": "title", "type": "text", "placeholder": "Title" },
+            { "name": "target_empty", "type": "select", "options": ["", "yes"] },
+            { "name": "target_notempty", "type": "select", "options": ["", "yes"] },
+            { "name": "order", "type": "text", "placeholder": "Order by field" },
+            { "name": "group", "type": "text", "placeholder": "Group by field" },
+            { "name": "limit", "type": "number", "placeholder": "Limit results" },
+            { "name": "distinct", "type": "select", "options": ["", "yes"] },
+            { "name": "select", "type": "text", "placeholder": "Select fields" }
+        ]
+    },
+    "status": {
+        "params": [
+            { "name": "year", "type": "number", "placeholder": "Year" },
+            { "name": "user_group", "type": "text", "placeholder": "User group" },
+            { "name": "campaign", "type": "text", "placeholder": "Campaign" }
+        ]
+    },
+    "leaderboard_table": {
+        "params": [
+            { "name": "year", "type": "number", "placeholder": "Year" },
+            { "name": "user_group", "type": "text", "placeholder": "User group" }
+        ]
+    },
+    "qids": {
+        "params": [
+            { "name": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
+        ]
+    },
+    "qids_others": {
+        "params": [
+            { "name": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
+        ]
+    }
+}

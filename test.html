@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .endpoint {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .method {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 60px;
+            text-align: center;
+        }
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .endpoint-url {
+            flex-grow: 1;
+            font-family: monospace;
+        }
+        .endpoint-content {
+            display: none;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 3px;
+            margin-left: 75px;
+        }
+        .endpoint.active .endpoint-content {
+            display: block;
+        }
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+        .response {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+        }
+        .try-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .try-btn:hover {
+            background-color: #0056b3;
+        }
+        .params-container {
+            margin: 10px 0;
+            display: grid;
+            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+        .param-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .param-group label {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .param-group input, .param-group select {
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Test Interface</h1>
+    
+    <div id="endpoints-container">
+        <!-- Endpoints will be generated here -->
+    </div>
+
+    <script>
+        const endpoints = [
+            'coordinator',
+            'count_pages',
+            'graph_data',
+            'inter_wiki',
+            'lang_names',
+            'lang_names_new',
+            'lang_views',
+            'leaderboard_table',
+            'qids',
+            'qids_others',
+            'site_matrix',
+            'status',
+            'user_access',
+            'user_views',
+            'users',
+            'users_by_last_pupdate',
+            'users_by_last_pupdate_old',
+            'views',
+            'categories',
+            'full_translators',
+            'projects',
+            'settings',
+            'words',
+            'translate_type',
+            'pages',
+            'pages_users'
+        ];
+
+        function createParamInput(param) {
+            const group = document.createElement('div');
+            group.className = 'param-group';
+            
+            const label = document.createElement('label');
+            label.textContent = param.name;
+            group.appendChild(label);
+
+            if (param.type === 'select') {
+                const select = document.createElement('select');
+                select.name = param.name;
+                select.id = param.name;
+                param.options.forEach(option => {
+                    const opt = document.createElement('option');
+                    opt.value = option;
+                    opt.textContent = option || '-- Select --';
+                    select.appendChild(opt);
+                });
+                group.appendChild(select);
+            } else {
+                const input = document.createElement('input');
+                input.type = param.type;
+                input.name = param.name;
+                input.id = param.name;
+                input.placeholder = param.placeholder;
+                group.appendChild(input);
+            }
+
+            return group;
+        }
+
+        // Load endpoint parameters from JSON file
+        async function loadEndpointParams() {
+            try {
+                const response = await fetch('endpoint_params.json');
+                const endpointParams = await response.json();
+                generateEndpoints(endpointParams);
+            } catch (error) {
+                console.error('Error loading endpoint parameters:', error);
+                generateEndpoints({});
+            }
+        }
+
+        // Generate endpoints
+        function generateEndpoints(endpointParams) {
+            const container = document.getElementById('endpoints-container');
+            endpoints.forEach(endpoint => {
+                const div = document.createElement('div');
+                div.className = 'endpoint';
+                
+                const headerHtml = `
+                    <div class="endpoint-header">
+                        <button class="method">GET</button>
+                        <span class="endpoint-url">/api/?get=${endpoint}</span>
+                        <button class="toggle-btn">▼</button>
+                    </div>
+                `;
+
+                const paramsContainer = document.createElement('div');
+                paramsContainer.className = 'params-container';
+                
+                if (endpointParams[endpoint]) {
+                    endpointParams[endpoint].params.forEach(param => {
+                        paramsContainer.appendChild(createParamInput(param));
+                    });
+                }
+
+                const contentHtml = `
+                    <div class="endpoint-content">
+                        ${paramsContainer.outerHTML}
+                        <button class="try-btn" onclick="testEndpoint('${endpoint}', this)">Try it</button>
+                        <div class="response" id="response-${endpoint}"></div>
+                    </div>
+                `;
+
+                div.innerHTML = headerHtml + contentHtml;
+                container.appendChild(div);
+            });
+
+            // Add toggle functionality after generating endpoints
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const endpoint = btn.closest('.endpoint');
+                    endpoint.classList.toggle('active');
+                    btn.textContent = endpoint.classList.contains('active') ? '▲' : '▼';
+                });
+            });
+        }
+
+        // Test endpoint function
+        async function testEndpoint(endpoint, button) {
+            const endpointDiv = button.closest('.endpoint-content');
+            const responseDiv = document.getElementById('response-' + endpoint);
+            responseDiv.textContent = 'Loading...';
+            
+            // Collect parameters
+            const params = new URLSearchParams();
+            params.append('get', endpoint);
+            
+            endpointDiv.querySelectorAll('input, select').forEach(input => {
+                if (input.value) {
+                    params.append(input.name, input.value);
+                }
+            });
+            
+            try {
+                const response = await fetch(`index.php?${params.toString()}`);
+                const data = await response.json();
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                responseDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        // Load parameters and initialize the interface
+        loadEndpointParams();
+    </script>
+</body>
+</html>
