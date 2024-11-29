@@ -6,8 +6,6 @@
             { "name": "translate_type", "type": "text", "placeholder": "Translation type" },
             { "name": "cat", "type": "text", "placeholder": "Category" },
             { "name": "title", "type": "text", "placeholder": "Title" },
-            { "name": "target_empty", "type": "select", "options": ["", "yes"] },
-            { "name": "target_notempty", "type": "select", "options": ["", "yes"] },
             { "name": "order", "type": "text", "placeholder": "Order by field" },
             { "name": "group", "type": "text", "placeholder": "Group by field" },
             { "name": "limit", "type": "number", "placeholder": "Limit results", "value": "50" },

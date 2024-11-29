@@ -34,58 +34,6 @@ function createParamInput(param) {
     label.textContent = param.name;
     
     let input;
-    
-    // Special handling for target_empty and target_notempty
-    if (param.name === 'target_empty' || param.name === 'target_notempty') {
-        const radioGroup = document.createElement('div');
-        radioGroup.className = 'radio-group';
-        
-        // Create radio buttons
-        const options = [
-            { value: '', label: 'Not selected' },
-            { value: 'yes', label: 'Yes' }
-        ];
-        
-        options.forEach(option => {
-            const radioDiv = document.createElement('div');
-            radioDiv.className = 'radio-option';
-            
-            const radio = document.createElement('input');
-            radio.type = 'radio';
-            radio.name = 'target_status'; // Same name for both to make them exclusive
-            radio.value = option.value;
-            radio.id = `${param.name}_${option.value}`;
-            
-            // Set default selection for the first option (Not selected)
-            if (option.value === '') {
-                radio.checked = true;
-            }
-            
-            // Add change event to handle mutual exclusivity
-            radio.addEventListener('change', function() {
-                if (this.checked && this.value === 'yes') {
-                    // Clear the other target parameter if it exists
-                    const otherParam = param.name === 'target_empty' ? 'target_notempty' : 'target_empty';
-                    const otherRadios = document.querySelectorAll(`input[name="target_status"][id^="${otherParam}"]`);
-                    otherRadios.forEach(radio => radio.checked = false);
-                }
-            });
-            
-            const radioLabel = document.createElement('label');
-            radioLabel.textContent = option.label;
-            radioLabel.htmlFor = radio.id;
-            
-            radioDiv.appendChild(radio);
-            radioDiv.appendChild(radioLabel);
-            radioGroup.appendChild(radioDiv);
-        });
-        
-        div.appendChild(label);
-        div.appendChild(radioGroup);
-        return div;
-    }
-    
-    // Original code for other parameters
     if (param.type === 'select' && param.options) {
         input = document.createElement('select');
         param.options.forEach(option => {
@@ -134,20 +82,12 @@ async function testEndpoint(endpoint, button) {
     params.set('limit', '50');
 
     // Get all input values for this endpoint
-    const inputs = button.parentElement.querySelectorAll('input:not([type="radio"]), select');
+    const inputs = button.parentElement.querySelectorAll('input, select');
     inputs.forEach(input => {
         if (input.value) {
             params.set(input.name, input.value);
         }
     });
-
-    // Handle radio buttons for target status
-    const checkedRadio = button.parentElement.querySelector('input[type="radio"][name="target_status"]:checked');
-    if (checkedRadio && checkedRadio.value === 'yes') {
-        // Set the appropriate parameter based on which radio group was checked
-        const paramName = checkedRadio.id.startsWith('target_empty') ? 'target_empty' : 'target_notempty';
-        params.set(paramName, 'yes');
-    }
 
     // Create the full URL
     const url = `../index.php?${params.toString()}`;
