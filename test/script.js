@@ -1,11 +1,45 @@
 const endpointGroups = {
-    pages: ['pages', 'pages_users'],
-    identifiers: ['qids', 'qids_others'],
-    views: ['views', 'user_views', 'lang_views'],
-    users: ['users', 'users_by_last_pupdate', 'users_by_last_pupdate_old', 'full_translators', 'coordinator'],
-    statistics: ['status', 'leaderboard_table', 'count_pages', 'graph_data'],
-    languages: ['lang_names', 'lang_names_new', 'site_matrix', 'translate_type'],
-    other: ['categories', 'projects', 'settings', 'words', 'inter_wiki']
+    pages: [
+        'pages',
+        'pages_users'
+    ],
+    identifiers: [
+        'qids',
+        'qids_others'
+    ],
+    views: [
+        'views',
+        'user_views',
+        'lang_views'
+    ],
+    users: [
+        'users',
+        'users_by_last_pupdate',
+        'users_by_last_pupdate_old',
+        'full_translators',
+        'coordinator'
+    ],
+    statistics: [
+        'status',
+        'leaderboard_table',
+        'count_pages',
+        'graph_data'
+
+    ],
+    languages: [
+        'lang_names',
+        'lang_names_new',
+        'site_matrix',
+        'translate_type'
+
+    ],
+    other: [
+        'categories',
+        'projects',
+        'settings',
+        'words',
+        'inter_wiki'
+    ]
 };
 
 // Flatten endpoints array for compatibility with existing code

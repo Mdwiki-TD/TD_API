@@ -29,9 +29,9 @@ use function API\Qids\qids_qua;
 function leaderboard_table()
 {
     // ---
-    $params = [];
+    $pa_rams = [];
     // ---
-    $query = "SELECT p.title,
+    $qu_ery = "SELECT p.title,
         p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, LEFT(p.pupdate, 7) as m,
         p.user,
         (SELECT u.user_group FROM users u WHERE p.user = u.username) AS user_group
@@ -43,26 +43,26 @@ function leaderboard_table()
     // ---
     if ($user_group !== null && $user_group !== 'all') {
         // ---
-        $query = "SELECT p.title,
+        $qu_ery = "SELECT p.title,
             p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, p.user, u.user_group, LEFT(p.pupdate, 7) as m
             FROM pages p, users u
             WHERE p.user = u.username
             AND u.user_group = ?
         ";
         // ---
-        $params[] = $user_group;
+        $pa_rams[] = $user_group;
     };
     // ---
     $year = sanitize_input($_GET['year'] ?? '', '/^\d+$/');
     // ---
     if ($year !== null) {
-        $query .= " AND YEAR(p.pupdate) = ?";
-        $params[] = $year;
+        $qu_ery .= " AND YEAR(p.pupdate) = ?";
+        $pa_rams[] = $year;
     }
     // ---
-    $query = add_limit($query);
+    $qu_ery = add_limit($qu_ery);
     // ---
-    return ["qua" => $query, "params" => $params];
+    return ["qua" => $qu_ery, "params" => $pa_rams];
 }
 
 function make_status_query()
@@ -75,7 +75,7 @@ function make_status_query()
         WHERE p.target != ''
     SQL;
 
-    $params = [];
+    $pa_rams = [];
 
     $year       = sanitize_input($_GET['year'] ?? '', '/^\d+$/');
     $user_group = sanitize_input($_GET['user_group'] ?? '', '/^[a-zA-Z ]+$/');
@@ -84,17 +84,17 @@ function make_status_query()
     if ($year !== null) {
         $added = $year;
         $qu_ery .= " AND YEAR(p.pupdate) = ?";
-        $params[] = $added;
+        $pa_rams[] = $added;
     }
 
     if ($user_group !== null) {
         $qu_ery .= " AND p.user IN (SELECT username FROM users WHERE user_group = ?)";
-        $params[] = $user_group;
+        $pa_rams[] = $user_group;
     }
 
     if ($campaign !== null) {
         $qu_ery .= " AND p.cat IN (SELECT category FROM categories WHERE campaign = ?)";
-        $params[] = $campaign;
+        $pa_rams[] = $campaign;
     }
 
     $qu_ery .= <<<SQL
@@ -102,7 +102,7 @@ function make_status_query()
         ORDER BY LEFT(p.pupdate, 7) ASC;
     SQL;
 
-    return ["qua" => $qu_ery, "params" => $params];
+    return ["qua" => $qu_ery, "params" => $pa_rams];
 }
 
 $DISTINCT = (isset($_GET['distinct'])) ? 'DISTINCT ' : '';
@@ -142,13 +142,9 @@ switch ($get) {
         break;
 
     case 'status':
-        $d = make_status_query();
-        $query = $d["qua"];
-        $query = add_limit($query);
-        $params = $d["params"];
-
-        // apply $params to $qua
-        $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
+        $status = make_status_query();
+        $qua = $status['qua'];
+        $params = $status['params'];
         break;
 
     case 'views':
@@ -268,8 +264,36 @@ switch ($get) {
         };
         break;
 
+    case 'words':
+        $params = [];
+        $qua = "SELECT * FROM words WHERE 1=1";
+
+        // التحقق من عنوان الكلمات
+        $title = sanitize_input($_GET['title'] ?? '', '/^[a-zA-Z0-9\s_-]+$/');
+        if ($title !== null) {
+            $qua .= " AND w_title LIKE ?";
+            $params[] = "%$title%";
+        }
+
+        // التحقق من عدد كلمات المقدمة
+        $lead_words = sanitize_input($_GET['lead_words'] ?? '', '/^\d+$/');
+        if ($lead_words !== null) {
+            $qua .= " AND w_lead_words = ?";
+            $params[] = $lead_words;
+        }
+
+        // التحقق من عدد كل الكلمات
+        $all_words = sanitize_input($_GET['all_words'] ?? '', '/^\d+$/');
+        if ($all_words !== null) {
+            $qua .= " AND w_all_words = ?";
+            $params[] = $all_words;
+        }
+
+        $qua = add_limit($qua);
+        break;
+
     default:
-        if (in_array($get, ['categories', 'full_translators', 'projects', 'settings', 'words', 'translate_type'])) {
+        if (in_array($get, ['categories', 'full_translators', 'projects', 'settings', 'translate_type'])) {
             $qua = "SELECT * FROM $get";
             $qua = add_limit($qua);
             break;
