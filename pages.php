@@ -30,7 +30,6 @@ function get_pages_qua($get, $DISTINCT, $SELECT)
     // ---
     $qua = add_group($qua);
     $qua = add_order($qua);
-    $qua = add_limit($qua);
     // ---
     return $qua;
 }

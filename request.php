@@ -248,7 +248,7 @@ switch ($get) {
             FROM pages
             WHERE target != ''
             GROUP BY LEFT(pupdate, 7)
-            ORDER BY LEFT(pupdate, 7) ASC;
+            ORDER BY LEFT(pupdate, 7) ASC
         SQL;
         $qua = add_limit($qua);
         break;
