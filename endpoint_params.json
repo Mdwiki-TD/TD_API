@@ -3,14 +3,19 @@
         "params": [
             { "name": "lang", "type": "text", "placeholder": "Language code" },
             { "name": "user", "type": "text", "placeholder": "Username" },
-            { "name": "translate_type", "type": "text", "placeholder": "Translation type" },
+            { "name": "translate_type", "type": "select", "options": ["all", "lead"]},
             { "name": "cat", "type": "text", "placeholder": "Category" },
             { "name": "title", "type": "text", "placeholder": "Title" },
             { "name": "order", "type": "text", "placeholder": "Order by field" },
             { "name": "group", "type": "text", "placeholder": "Group by field" },
             { "name": "limit", "type": "number", "placeholder": "Limit results", "value": "50" },
-            { "name": "distinct", "type": "select", "options": ["", "yes"] },
-            { "name": "select", "type": "text", "placeholder": "Select fields" }
+            { "name": "select", "type": "text", "placeholder": "Select fields" },
+            { "name": "distinct", "type": "select", "options": ["", "yes"] }
+        ]
+    },
+    "user_views": {
+        "params": [
+            { "name": "user", "type": "text", "placeholder": "Username" }
         ]
     },
     "status": {
