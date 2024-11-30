@@ -134,7 +134,9 @@ switch ($get) {
         $qua = "SELECT username FROM users";
         if (isset($_GET['userlike'])) {
             $added = filter_input(INPUT_GET, 'userlike', FILTER_SANITIZE_SPECIAL_CHARS);
-            $qua .= " WHERE username like '$added%'";
+            if ($added !== null) {
+                $qua .= " WHERE username like '$added%'";
+            }
         }
         $qua = add_limit($qua);
         break;
