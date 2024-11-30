@@ -1,0 +1,76 @@
+{
+    "pages": {
+        "params": [
+            { "name": "lang", "type": "text", "placeholder": "Language code" },
+            { "name": "user", "type": "text", "placeholder": "Username" },
+            { "name": "translate_type", "type": "select", "options": ["all", "lead"]},
+            { "name": "cat", "type": "text", "placeholder": "Category" },
+            { "name": "title", "type": "text", "placeholder": "Title" },
+            { "name": "order", "type": "text", "placeholder": "Order by field" },
+            { "name": "group", "type": "text", "placeholder": "Group by field" },
+            { "name": "limit", "type": "number", "placeholder": "Limit results", "value": "50" },
+            { "name": "select", "type": "text", "placeholder": "Select fields" },
+            { "name": "distinct", "type": "select", "options": ["", "yes"] }
+        ]
+    },
+    "users": {
+        "params": [
+            { "name": "userlike", "type": "text", "placeholder": "Username starts with" }
+        ]
+    },
+    "views": {
+        "params": [
+            { "name": "lang", "type": "text", "placeholder": "Language code" }
+        ]
+    },
+    "user_access": {
+        "params": [
+            { "name": "user_name", "type": "text", "placeholder": "Username" }
+        ]
+    },
+    "qids": {
+        "params": [
+            { "name": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
+        ]
+    },
+    "qids_others": {
+        "params": [
+            { "name": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
+        ]
+    },
+    "count_pages": {
+        "params": [
+            { "name": "target_empty", "type": "select", "options": ["", "yes"] }
+        ]
+    },
+    "status": {
+        "params": [
+            { "name": "year", "type": "number", "placeholder": "Year" },
+            { "name": "user_group", "type": "text", "placeholder": "User group" },
+            { "name": "campaign", "type": "text", "placeholder": "Campaign" }
+        ]
+    },
+    "leaderboard_table": {
+        "params": [
+            { "name": "year", "type": "number", "placeholder": "Year" },
+            { "name": "user_group", "type": "text", "placeholder": "User group" }
+        ]
+    },
+    "lang_views": {
+        "params": [
+            { "name": "lang", "type": "text", "placeholder": "Language code" }
+        ]
+    },
+    "words": {
+        "params": [
+            { "name": "title", "type": "text", "placeholder": "Title" },
+            { "name": "lead_words", "type": "number", "placeholder": "Lead words count" },
+            { "name": "all_words", "type": "number", "placeholder": "All words count" }
+        ]
+    },
+    "user_views": {
+        "params": [
+            { "name": "user", "type": "text", "placeholder": "Username" }
+        ]
+    }
+}
