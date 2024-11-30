@@ -87,8 +87,14 @@ function createEndpoint(endpoint) {
         </div>
         <div class="endpoint-content">
             <div class="params-container"></div>
-            <button class="method" onclick="testEndpoint('${endpoint}', this)">Try it</button>
-            <div class="url-display"></div>
+            <div class="row">
+                <div class="col-2">
+                    <button class="method" onclick="testEndpoint('${endpoint}', this)">Try it</button>
+                </div>
+                <div class="col-10">
+                    <div class="url-display"></div>
+                </div>
+            </div>
             <div class="response"></div>
         </div>
     `;
@@ -100,7 +106,8 @@ async function testEndpoint(endpoint, button) {
     params.append('get', endpoint);
 
     // Get parameters
-    const paramInputs = button.parentElement.querySelectorAll('.param-group input, .param-group select');
+    const endpointContent = button.closest('.endpoint-content');
+    const paramInputs = endpointContent.querySelectorAll('.param-group input, .param-group select');
     paramInputs.forEach(input => {
         if (input.value) {
             params.append(input.name, input.value);
@@ -112,14 +119,14 @@ async function testEndpoint(endpoint, button) {
     const url = `${baseUrl}/index.php?${params.toString()}`;
 
     // Display the URL
-    const urlDisplay = button.parentElement.querySelector('.url-display');
+    const urlDisplay = endpointContent.querySelector('.url-display');
     urlDisplay.innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
 
-        const responseElement = button.parentElement.querySelector('.response');
+        const responseElement = endpointContent.querySelector('.response');
         responseElement.textContent = JSON.stringify(data, null, 2);
     } catch (error) {
         console.error('Error:', error);
