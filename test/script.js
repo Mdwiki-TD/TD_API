@@ -87,7 +87,7 @@ function createEndpoint(endpoint) {
         </div>
         <div class="endpoint-content">
             <div class="params-container"></div>
-            <button class="try-btn" onclick="testEndpoint('${endpoint}', this)">Try it</button>
+            <button class="method" onclick="testEndpoint('${endpoint}', this)">Try it</button>
             <div class="url-display"></div>
             <div class="response"></div>
         </div>
