@@ -106,7 +106,6 @@ function make_status_query()
 }
 
 $DISTINCT = (isset($_GET['distinct'])) ? 'DISTINCT ' : '';
-$SELECT   = (isset($_GET['select'])) ? filter_input(INPUT_GET, 'select', FILTER_SANITIZE_SPECIAL_CHARS) : '*';
 $get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_SPECIAL_CHARS); //$_GET['get']
 
 // if (!isset($_GET['limit'])) $_GET['limit'] = '50';
@@ -116,6 +115,19 @@ $query = "";
 $params = [];
 $results = [];
 $execution_time = 0;
+
+$select_valids = [
+    'count(title) as count',
+    'YEAR(pupdate) AS year',
+    'lang',
+    'user',
+];
+
+$SELECT   = (isset($_GET['select'])) ? filter_input(INPUT_GET, 'select', FILTER_SANITIZE_SPECIAL_CHARS) : '*';
+
+if (!in_array($SELECT, $select_valids)) {
+    $SELECT = '*';
+};
 
 switch ($get) {
     case 'users':
