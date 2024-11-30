@@ -95,7 +95,7 @@ function createEndpoint(endpoint) {
                     <div class="url-display"></div>
                 </div>
             </div>
-            <div class="response"></div>
+            <div class="response language-json"></div>
         </div>
     `;
     return div;
@@ -127,7 +127,8 @@ async function testEndpoint(endpoint, button) {
         const data = await response.json();
 
         const responseElement = endpointContent.querySelector('.response');
-        responseElement.textContent = JSON.stringify(data, null, 2);
+        const formattedJson = JSON.stringify(data, null, 2);
+        responseElement.innerHTML = `<code>${formattedJson}</code>`;
     } catch (error) {
         console.error('Error:', error);
     }
