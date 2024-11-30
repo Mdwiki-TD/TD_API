@@ -40,7 +40,7 @@
     background: none;
     color: var(--ps5-text);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
     border-radius: 6px;
     font-size: 0.9em;
 }
