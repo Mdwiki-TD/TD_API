@@ -113,20 +113,25 @@ async function testEndpoint(endpoint, button) {
             params.append(input.name, input.value);
         }
     });
+    // ---
     var baseUrl
+    // ---
     if (window.location.hostname === 'localhost') {
-        // baseUrl = `${window.location.protocol}//${window.location.host}/api/index.php`;
+        // baseUrl = `${window.location.protocol}//${window.location.host}/index.php`;
         baseUrl = `${window.location.protocol}//${window.location.host}/api/proxy.php`;
     } else {
         baseUrl = `https://mdwiki.toolforge.org/api.php`;
     }
-
+    // ---
+    baseUrl = `${window.location.protocol}//${window.location.host}/index.php`;
     const url = `${baseUrl}?${params.toString()}`;
 
     // Display the URL
     const urlDisplay = endpointContent.querySelector('.url-display');
-    var url2 = `https://mdwiki.toolforge.org/api.php?${params.toString()}`;
-    urlDisplay.innerHTML = `<a href="${url2}" target="_blank">${url2}</a>`;
+    // ---
+    // var url2 = `https://mdwiki.toolforge.org/api.php?${params.toString()}`;
+    // ---
+    urlDisplay.innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
 
     try {
         const response = await fetch(url, {
@@ -187,13 +192,7 @@ function generateEndpoints(endpointParams) {
             };
             paramsContainer.appendChild(createParamInput(limitParam));
 
-            // Add endpoint-specific parameters
-            if (endpoint === 'pages_users') {
-                // استخدام نفس معلمات pages
-                endpointParams['pages'].params.forEach(param => {
-                    paramsContainer.appendChild(createParamInput(param));
-                });
-            } else if (endpointParams[endpoint] && endpointParams[endpoint].params) {
+            if (endpointParams[endpoint] && endpointParams[endpoint].params) {
                 endpointParams[endpoint].params.forEach(param => {
                     paramsContainer.appendChild(createParamInput(param));
                 });
