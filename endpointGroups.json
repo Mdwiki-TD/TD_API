@@ -1,4 +1,11 @@
 {
+    "pages_infos": [
+        "titles",
+        "assessments",
+        "enwiki_pageviews",
+        "refs_counts",
+        "words"
+    ],
     "pages": [
         "pages",
         "pages_users"
@@ -22,6 +29,7 @@
     "statistics": [
         "status",
         "leaderboard_table",
+        "leaderboard_table_new",
         "count_pages",
         "graph_data"
     ],
@@ -35,7 +43,6 @@
         "categories",
         "projects",
         "settings",
-        "words",
         "inter_wiki"
     ]
 }

@@ -6,7 +6,7 @@ Usage:
 use function API\Qids\qids_qua;
 */
 
-function qids_qua($get, $dis)
+function qids_qua($get)
 {
     // ---
     $valid_tables = ["qids", "qids_others"];
@@ -16,8 +16,8 @@ function qids_qua($get, $dis)
     }
     // ---
     $quaries = [
-        'empty' => "select id, title, qid from xx where qid = '';",
-        'all' => "select id, title, qid from xx;",
+        'empty' => "select id, title, qid from xx where qid = ''",
+        'all' => "select id, title, qid from xx",
         'duplicate' => <<<SQL
             SELECT
             A.id AS id, A.title AS title, A.qid AS qid,
@@ -27,7 +27,7 @@ function qids_qua($get, $dis)
         JOIN
             xx B ON A.qid = B.qid
         WHERE
-            A.qid != '' AND A.title != B.title AND A.id != B.id;
+            A.qid != '' AND A.title != B.title AND A.id != B.id
         SQL
     ];
     //---

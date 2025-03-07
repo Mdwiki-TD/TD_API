@@ -1,88 +1,160 @@
 {
+    "titles": {
+        "params": [
+            { "name": "title", "column": "ase.title", "type": "text", "placeholder": "Title" },
+            { "name": "importance", "column": "ase.importance", "type": "text", "placeholder": "Importance" }
+        ]
+    },
+    "assessments": {
+        "params": [
+            { "name": "title", "column": "title", "type": "text", "placeholder": "Title" },
+            { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" },
+            { "name": "distinct", "column": "distinct", "type": "switch"}
+        ]
+    },
+    "refs_counts": {
+        "params": [
+            { "name": "title", "column": "r_title", "type": "text", "placeholder": "Page Title" },
+            { "name": "lead", "column": "r_lead_refs", "type": "number", "placeholder": "Lead Refs Count" },
+            { "name": "all", "column": "r_all_refs", "type": "number", "placeholder": "All Refs Count" }
+        ]
+    },
+    "enwiki_pageviews": {
+        "params": [
+            { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
+            { "name": "en_views", "column": "en_views", "type": "number", "placeholder": "Views Count" }
+        ]
+    },
+    "categories": {
+        "params": [
+            { "name": "Depth", "column": "depth", "type": "number", "placeholder": "Depth Level" }
+        ]
+    },
+    "coordinator": {
+        "params": [
+            { "name": "User", "column": "user", "type": "text", "placeholder": "Coordinator Username" }
+        ]
+    },
     "pages": {
         "params": [
-            { "name": "lang", "type": "text", "placeholder": "Language code" },
-            { "name": "user", "type": "text", "placeholder": "Username" },
-            { "name": "translate_type", "type": "select", "options": ["all", "lead"]},
-            { "name": "cat", "type": "text", "placeholder": "Category" },
-            { "name": "title", "type": "text", "placeholder": "Title" },
-            { "name": "order", "type": "text", "placeholder": "Order by field" },
-            { "name": "group", "type": "text", "placeholder": "Group by field" },
-            { "name": "limit", "type": "number", "placeholder": "Limit results", "value": "50" },
-            { "name": "select", "type": "text", "placeholder": "Select fields" },
-            { "name": "distinct", "type": "select", "options": ["", "yes"] }
+            { "name": "title", "column": "title", "type": "text", "placeholder": "Title" },
+            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" },
+            { "name": "user", "column": "user", "type": "text", "placeholder": "Username" },
+            { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category" },
+            { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field" },
+            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field" },
+            { "name": "limit", "column": "limit", "type": "number", "placeholder": "Limit results", "value": "50" },
+            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields" },
+            { "name": "translate_type", "column": "translate_type", "type": "select", "options": ["all", "lead"]},
+            { "name": "distinct", "column": "distinct", "type": "switch"},
+            { "name": "Deleted", "column": "deleted", "type": "switch", "placeholder": "0 or 1" }
         ]
     },
     "pages_users": {
         "params": [
-            { "name": "lang", "type": "text", "placeholder": "Language code" },
-            { "name": "user", "type": "text", "placeholder": "Username" },
-            { "name": "title", "type": "text", "placeholder": "Title" },
-            { "name": "order", "type": "text", "placeholder": "Order by field" },
-            { "name": "group", "type": "text", "placeholder": "Group by field" },
-            { "name": "limit", "type": "number", "placeholder": "Limit results", "value": "50" },
-            { "name": "select", "type": "text", "placeholder": "Select fields" },
-            { "name": "distinct", "type": "select", "options": ["", "yes"] }
-        ]
-    },
-    "users": {
-        "params": [
-            { "name": "userlike", "type": "text", "placeholder": "Username starts with" }
-        ]
-    },
-    "views": {
-        "params": [
-            { "name": "lang", "type": "text", "placeholder": "Language code" }
+            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" },
+            { "name": "user", "column": "user", "type": "text", "placeholder": "Username" },
+            { "name": "title", "column": "title", "type": "text", "placeholder": "Title" },
+            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field" },
+            { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field" },
+            { "name": "limit", "column": "limit", "type": "number", "placeholder": "Limit results", "value": "50" },
+            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields" },
+            { "name": "distinct", "column": "distinct", "type": "switch"}
         ]
     },
     "user_access": {
         "params": [
-            { "name": "user_name", "type": "text", "placeholder": "Username" }
+            { "name": "user_name", "column": "user_name", "type": "text", "placeholder": "Username" }
         ]
     },
     "qids": {
         "params": [
-            { "name": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
+            { "name": "dis", "column": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
         ]
     },
     "qids_others": {
         "params": [
-            { "name": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
+            { "name": "dis", "column": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
         ]
     },
     "count_pages": {
         "params": [
-            { "name": "target_empty", "type": "select", "options": ["", "yes"] }
+            { "name": "target", "column": "target", "type": "text", "placeholder": "Target empty or not" }
         ]
     },
     "status": {
         "params": [
-            { "name": "year", "type": "number", "placeholder": "Year" },
-            { "name": "user_group", "type": "text", "placeholder": "User group" },
-            { "name": "campaign", "type": "text", "placeholder": "Campaign" }
+            { "name": "year", "column": "year", "type": "number", "placeholder": "Year" },
+            { "name": "user_group", "column": "user_group", "type": "text", "placeholder": "User group" },
+            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" }
+        ]
+    },
+    "leaderboard_table_new": {
+        "params": [
+            { "name": "year", "column": "year", "type": "number", "placeholder": "Year" },
+            { "name": "user_group", "column": "user_group", "type": "text", "placeholder": "User group" }
         ]
     },
     "leaderboard_table": {
         "params": [
-            { "name": "year", "type": "number", "placeholder": "Year" },
-            { "name": "user_group", "type": "text", "placeholder": "User group" }
+            { "name": "year", "column": "year", "type": "number", "placeholder": "Year" },
+            { "name": "user_group", "column": "user_group", "type": "text", "placeholder": "User group" }
         ]
     },
     "lang_views": {
         "params": [
-            { "name": "lang", "type": "text", "placeholder": "Language code" }
-        ]
-    },
-    "words": {
-        "params": [
-            { "name": "title", "type": "text", "placeholder": "Title" },
-            { "name": "lead_words", "type": "number", "placeholder": "Lead words count" },
-            { "name": "all_words", "type": "number", "placeholder": "All words count" }
+            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" }
         ]
     },
     "user_views": {
         "params": [
-            { "name": "user", "type": "text", "placeholder": "Username" }
+            { "name": "user", "column": "user", "type": "text", "placeholder": "Username" }
+        ]
+    },
+    "users": {
+        "params": [
+            { "name": "userlike", "column": "userlike", "type": "text", "placeholder": "Username starts with" },
+            { "name": "wiki", "column": "wiki", "type": "text", "placeholder": "Wiki Name" },
+            { "name": "group", "column": "user_group", "type": "text", "placeholder": "Group Name" }
+        ]
+    },
+    "views": {
+        "params": [
+            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" }
+        ]
+    },
+    "views_x": {
+        "params": [
+            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language Code" },
+            { "name": "target", "column": "target", "type": "text", "placeholder": "Target Page" },
+            { "name": "Total Views", "column": "countall", "type": "number", "placeholder": "Total Views Count" },
+            { "name": "Views 2021", "column": "count2021", "type": "number", "placeholder": "Views in 2021" },
+            { "name": "Views 2022", "column": "count2022", "type": "number", "placeholder": "Views in 2022" },
+            { "name": "Views 2023", "column": "count2023", "type": "number", "placeholder": "Views in 2023" },
+            { "name": "Views 2024", "column": "count2024", "type": "number", "placeholder": "Views in 2024" },
+            { "name": "Views 2025", "column": "count2025", "type": "number", "placeholder": "Views in 2025" },
+            { "name": "Views 2026", "column": "count2026", "type": "number", "placeholder": "Views in 2026" }
+        ]
+    },
+    "words": {
+        "params": [
+            { "name": "title", "column": "w_title", "type": "text", "placeholder": "Page Title" },
+            { "name": "lead_words", "column": "w_lead_words", "type": "number", "placeholder": "Lead words Count" },
+            { "name": "all_words", "column": "w_all_words", "type": "number", "placeholder": "Total words Count" }
+        ]
+    },
+    "translate_type": {
+        "params": [
+            { "name": "Lead", "column": "tt_lead", "type": "number", "placeholder": "Lead Translation (0 or 1)" },
+            { "name": "Full", "column": "tt_full", "type": "number", "placeholder": "Full Translation (0 or 1)" }
+        ]
+    },
+    "projects": {
+        "params": [
+        ]
+    },
+    "full_translators": {
+        "params": [
         ]
     }
 }
