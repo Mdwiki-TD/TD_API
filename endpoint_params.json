@@ -1,4 +1,10 @@
 {
+    "missing": {
+        "params": [
+            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" },
+            { "name": "category", "column": "category", "type": "text", "placeholder": "Category" }
+        ]
+    },
     "titles": {
         "params": [
             { "name": "title", "column": "ase.title", "type": "text", "placeholder": "Title" },

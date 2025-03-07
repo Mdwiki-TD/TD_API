@@ -66,6 +66,35 @@ $endpoint_params = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.
 $endpoint_params = $endpoint_params[$get]['params'] ?? [];
 // ---
 switch ($get) {
+
+    case 'missing':
+        $query = <<<SQL
+            SELECT a.article_id
+                FROM all_articles a
+                WHERE NOT EXISTS (
+                    SELECT 1
+                    FROM all_translations t
+                    WHERE t.article_id = a.article_id
+
+        SQL;
+        $params = [];
+        if (isset($_GET['lang'])) {
+            $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
+            if ($added !== null) {
+                $query .= " AND t.code = ?";
+                $params[] = $added;
+            }
+        }
+        $query .= ")";
+        if (isset($_GET['category'])) {
+            $added = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_SPECIAL_CHARS);
+            if ($added !== null) {
+                $query .= " AND a.category = ?";
+                $params[] = $added;
+            }
+        }
+        break;
+
     case 'users':
         $qua = "SELECT username FROM users";
         if (isset($_GET['userlike'])) {
