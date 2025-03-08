@@ -10,3 +10,4 @@ include_once __DIR__ . '/qids.php';
 include_once __DIR__ . '/leaderboard.php';
 include_once __DIR__ . '/status.php';
 include_once __DIR__ . '/subs/titles_infos.php';
+include_once __DIR__ . '/subs/missing.php';

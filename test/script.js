@@ -72,10 +72,8 @@ function createParamInput(param) {
     // ---
     input = document.createElement('div');
     // ---
-    var innerHTML = '';
-    // ---
     // default
-    input.innerHTML = `
+    var innerHTML = `
     <div class="param-group">
         <label>${param.name}</label>
         <input name="${param.name}" type="${type}" placeholder="${param.placeholder}" value="${value}">
@@ -83,44 +81,47 @@ function createParamInput(param) {
     // ---
     let randomNumber = Math.floor(Math.random() * 1000);
     // ---
-    if (param.type === 'text') {
-        innerHTML = `
-        <label>${param.name}</label>
-        <div class="form-control one_group">
-            <div class="form-check form-check-inline">
-                <input type="radio" class="form-check-input" id="manualInput" name="${param.name}" value="manual" checked>
-                <label class="form-check-label" for="manualInput">
-                    <input name="!" type="${type}" class="textInput" id="manual_value" placeholder="${param.placeholder}" value="${value}">
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input type="radio" class="form-check-input" id="empty_${randomNumber}" name="${param.name}" value="empty">
-                <label class="form-check-label" for="empty_${randomNumber}">empty</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input type="radio" class="form-check-input" id="notEmpty_${randomNumber}" name="${param.name}" value="not_empty">
-                <label class="form-check-label" for="notEmpty_${randomNumber}">not_empty</label>
-            </div>
-        </div>
-    `;
-    };
-    // ---
-    if (param.type === 'number') {
-        innerHTML = `
-        <label>${param.name}</label>
-        <div class="form-control one_group">
-            <div class="form-check form-check-inline">
-                <input type="radio" class="form-check-input" id="manualInput" name="${param.name}" value="manual" checked>
-                <label class="form-check-label" for="manualInput">
-                    <input name="!" type="${type}" class="textInput" id="manual_value" placeholder="${param.placeholder}" value="${value}">
-                </label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input type="radio" class="form-check-input" id="not_0" name="${param.name}" value="&#62;0">
-                <label class="form-check-label" for="not_0">&#62;0</label>
-            </div>
-        </div>
-    `;
+    if (!param.no_mt_options) {
+        // ---
+        if (param.type === 'text') {
+            innerHTML = `
+                <label>${param.name}</label>
+                <div class="form-control one_group">
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="manualInput" name="${param.name}" value="manual" checked>
+                        <label class="form-check-label" for="manualInput">
+                            <input name="!" type="${type}" class="textInput" id="manual_value" placeholder="${param.placeholder}" value="${value}">
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="empty_${randomNumber}" name="${param.name}" value="empty">
+                        <label class="form-check-label" for="empty_${randomNumber}">empty</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="notEmpty_${randomNumber}" name="${param.name}" value="not_empty">
+                        <label class="form-check-label" for="notEmpty_${randomNumber}">not_empty</label>
+                    </div>
+                </div>
+            `;
+        };
+        // ---
+        if (param.type === 'number') {
+            innerHTML = `
+                <label>${param.name}</label>
+                <div class="form-control one_group">
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="manualInput" name="${param.name}" value="manual" checked>
+                        <label class="form-check-label" for="manualInput">
+                            <input name="!" type="${type}" class="textInput" id="manual_value" placeholder="${param.placeholder}" value="${value}">
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="not_0" name="${param.name}" value="&#62;0">
+                        <label class="form-check-label" for="not_0">&#62;0</label>
+                    </div>
+                </div>
+            `;
+        };
     };
     // ---
     input.innerHTML = innerHTML;

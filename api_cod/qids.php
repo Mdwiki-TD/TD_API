@@ -16,7 +16,7 @@ function qids_qua($get)
     }
     // ---
     $quaries = [
-        'empty' => "select id, title, qid from xx where qid = ''",
+        'empty' => "select id, title, qid from xx WHERE qid = ''",
         'all' => "select id, title, qid from xx",
         'duplicate' => <<<SQL
             SELECT

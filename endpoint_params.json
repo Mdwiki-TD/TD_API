@@ -1,8 +1,8 @@
 {
     "missing": {
         "params": [
-            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" },
-            { "name": "category", "column": "category", "type": "text", "placeholder": "Category" }
+            { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
+            { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true }
         ]
     },
     "titles": {

@@ -11,7 +11,7 @@ use function API\Helps\add_li_params;
 function titles_query($endpoint_params)
 {
     // ---
-    $qua = <<<SQL
+    $qua_old = <<<SQL
         SELECT
             ase.title,
             ase.importance,
@@ -26,6 +26,11 @@ function titles_query($endpoint_params)
         JOIN qids q ON q.title = ase.title
         JOIN refs_counts rc ON rc.r_title = ase.title
         JOIN words w ON w.w_title = ase.title
+    SQL;
+    // ---
+    $qua = <<<SQL
+        SELECT *
+        FROM titles_infos
     SQL;
     // ---
     $tab = add_li_params($qua, [], $endpoint_params);
