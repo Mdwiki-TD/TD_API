@@ -34,7 +34,9 @@ $other_tables = [
     'full_translators',
     'projects',
     'settings',
-    'translate_type'
+    'translate_type',
+    // 'pages',
+    // 'pages_users',
 ];
 
 $DISTINCT = (isset($_GET['distinct'])) ? 'DISTINCT ' : '';
@@ -77,14 +79,15 @@ switch ($get) {
         break;
 
     case 'users':
-        $qua = "SELECT username FROM users";
+        $query = "SELECT username FROM users";
         if (isset($_GET['userlike'])) {
             $added = filter_input(INPUT_GET, 'userlike', FILTER_SANITIZE_SPECIAL_CHARS);
             if ($added !== null) {
-                $qua .= " WHERE username like '$added%'";
+                $query .= " WHERE username like ?";
+                $params[] = "$added%";
             }
         }
-        $qua = add_limit($qua);
+        $query = add_limit($query);
         break;
 
     case 'titles':
@@ -121,9 +124,11 @@ switch ($get) {
         break;
 
     case 'views':
-        $qua = "SELECT * FROM views ";
-        $qua = add_li($qua, ['lang']);
-        $qua = add_limit($qua);
+        $query = "SELECT * FROM views ";
+        $tab = add_li_params($query, [], $endpoint_params);
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        $query = add_limit($query);
         break;
 
     case 'user_access':
@@ -204,14 +209,15 @@ switch ($get) {
     case 'user_views':
         if (isset($_GET['user'])) {
             $user_name = filter_input(INPUT_GET, 'user', FILTER_SANITIZE_SPECIAL_CHARS);
-            $qua = <<<SQL
+            $query = <<<SQL
                     select p.target, v.countall
                 from pages p, views v
-                WHERE p.user = '{$user_name}'
-                and p.lang = v.lang
+                WHERE p.user = ?
                 and p.target = v.target
+                and p.lang = v.lang
             SQL;
-            $qua = add_limit($qua);
+            $params = [$user_name];
+            $query = add_limit($query);
         };
         break;
 
@@ -229,14 +235,15 @@ switch ($get) {
     case 'lang_views':
         if (isset($_GET['lang'])) {
             $lang = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
-            $qua = <<<SQL
+            $query = <<<SQL
                     select p.target, v.countall
                 from pages p, views v
-                WHERE p.lang = '{$lang}'
-                and p.lang = v.lang
+                WHERE p.lang = ?
                 and p.target = v.target
+                and p.lang = v.lang
             SQL;
-            $qua = add_limit($qua);
+            $params = [$lang];
+            $query = add_limit($query);
         };
         break;
 
@@ -282,9 +289,11 @@ switch ($get) {
 
     default:
         if (in_array($get, $other_tables)) {
-            $qua = "SELECT * FROM $get";
-            $qua = add_li($qua, [], $endpoint_params);
-            $qua = add_limit($qua);
+            $query = "SELECT * FROM $get";
+            $tab = add_li_params($query, [], $endpoint_params);
+            $query = $tab['qua'];
+            $params = $tab['params'];
+            $query = add_limit($query);
             break;
         }
         $results = ["error" => "invalid get request"];

@@ -37,6 +37,8 @@ function add_order($qua)
 }
 function add_limit($qua)
 {
+    // if $qua has LIMIT then return
+    if (strpos($qua, 'LIMIT') !== false || strpos($qua, 'limit') !== false) return $qua;
     if (isset($_GET['limit'])) {
         $added = filter_input(INPUT_GET, 'limit', FILTER_SANITIZE_SPECIAL_CHARS);
         $qua .= " LIMIT $added";
