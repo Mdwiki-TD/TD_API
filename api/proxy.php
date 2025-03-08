@@ -13,6 +13,8 @@ $params = $_SERVER['QUERY_STRING'];
 // Create the full URL
 $full_url = $api_url;
 if (!empty($params)) {
+    // Sanitize the query string to prevent potential injection
+    $params = filter_var($params, FILTER_SANITIZE_STRING);
     $full_url .= '?' . $params;
 }
 
@@ -23,7 +25,7 @@ $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $full_url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3');
 
 // Execute cURL request

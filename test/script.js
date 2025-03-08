@@ -15,78 +15,141 @@ async function loadEndpointGroups() {
 
 function createParamInput(param) {
     const div = document.createElement('div');
-    div.className = 'param-group';
-    /*
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="save" name="save" value="1">
-            <label class="check-label" for="save">Auto save</label>
-        </div>
-    */
+    div.className = 'paramgroup';
     // Special handling for distinct parameter
-    if (param.name === 'distinct') {
-        div.className = 'param-group form-check form-switch';
-
-        const input = document.createElement('input');
-        input.type = 'checkbox';
-        input.className = 'form-check-input';
-        input.id = 'distinct-switch';
-        input.name = param.name;
-        input.role = 'switch';
-
-        const label = document.createElement('label');
-        label.className = 'check-label';
-        label.htmlFor = 'distinct-switch';
-        label.textContent = 'Distinct';
-
-        div.appendChild(input);
-        div.appendChild(label);
-
-        // Add change event to set the value
-        input.addEventListener('change', function () {
-            this.value = this.checked ? 'yes' : '';
-        });
-
+    if (param.type === 'switch') {
+        div.innerHTML = `
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="${param.name}-switch" name="${param.name}" role="switch" value="1">
+                <label class="check-label" for="${param.name}-switch">&nbsp;${param.name}</label>
+            </div>`;
         return div;
     }
-
-    const label = document.createElement('label');
-    label.textContent = param.name;
 
     let input;
     if (param.type === 'select' && param.options) {
         input = document.createElement('select');
+        // add class form-select
+        input.className = 'form-select';
         param.options.forEach(option => {
             const opt = document.createElement('option');
             opt.value = option;
             opt.textContent = option || 'Select...';
             input.appendChild(opt);
         });
-    } else {
+        // ---
+        const label = document.createElement('label');
+        label.textContent = param.name;
+        // input.name = param.name;
+        div.appendChild(label);
+        div.appendChild(input);
+        // ---
+        return div;
+    };
+    // input = document.createElement('input');
+    var type = param.type || 'text';
+    var value = param.value || '';
+    // ---
+    var names_no_more = [
+        "limit",
+        "order",
+        "select",
+    ];
+    // ---
+    if (names_no_more.includes(param.name)) {
+        div.className = 'param-group';
+        let label = document.createElement('label');
+        label.textContent = param.name;
         input = document.createElement('input');
-        input.type = param.type || 'text';
+        input.name = param.name;
+        input.type = type;
         input.placeholder = param.placeholder || '';
-        if (param.value) {
-            input.value = param.value;
-        }
+        input.value = value;
+        div.appendChild(label);
+        div.appendChild(input);
+        return div;
     }
-
-    input.name = param.name;
-    div.appendChild(label);
+    // ---
+    input = document.createElement('div');
+    // ---
+    // default
+    var innerHTML = `
+    <div class="param-group">
+        <label>${param.name}</label>
+        <input name="${param.name}" type="${type}" placeholder="${param.placeholder}" value="${value}">
+    </div>`;
+    // ---
+    let randomNumber = Math.floor(Math.random() * 1000);
+    // ---
+    if (!param.no_mt_options) {
+        // ---
+        if (param.type === 'text') {
+            innerHTML = `
+                <label>${param.name}</label>
+                <div class="form-control one_group">
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="manualInput_${randomNumber}" name="${param.name}" value="manual" checked="">
+                        <label class="form-check-label" for="manualInput_${randomNumber}">
+                            <input name="!" type="${type}" class="textInput" id="manual_value" placeholder="${param.placeholder}" value="${value}">
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="empty_${randomNumber}" name="${param.name}" value="empty">
+                        <label class="form-check-label" for="empty_${randomNumber}">empty</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="notEmpty_${randomNumber}" name="${param.name}" value="not_empty">
+                        <label class="form-check-label" for="notEmpty_${randomNumber}">not_empty</label>
+                    </div>
+                </div>
+            `;
+        };
+        // ---
+        if (param.type === 'number') {
+            innerHTML = `
+                <label>${param.name}</label>
+                <div class="form-control one_group">
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="manualInput_${randomNumber}" name="${param.name}" value="manual" checked>
+                        <label class="form-check-label" for="manualInput_${randomNumber}">
+                            <input name="!" type="${type}" class="textInput" id="manual_value" placeholder="${param.placeholder}" value="${value}">
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="not_0" name="${param.name}" value="&#62;0">
+                        <label class="form-check-label" for="not_0">&#62;0</label>
+                    </div>
+                </div>
+            `;
+        };
+    };
+    // ---
+    input.innerHTML = innerHTML;
+    // ---
     div.appendChild(input);
+    // ---
     return div;
 }
 
 function createEndpoint(endpoint) {
     const div = document.createElement('div');
     div.className = 'endpoint';
+    // if endpoint in hash, add active class
+    if (window.location.hash === `#${endpoint}`) {
+        div.classList.add('active');
+    }
     div.innerHTML = `
-        <div class="endpoint-header" onclick="this.closest('.endpoint').classList.toggle('active')">
+        <div id="${endpoint}" class="endpoint-header" onclick="this.closest('.endpoint').classList.toggle('active')">
+            <a href="#${endpoint}"><i class="bi bi-link-45deg"></i></a>
             <span class="method">GET</span>
             <span class="endpoint-url">?get=${endpoint}</span>
-            <button class="toggle-btn" onclick="event.stopPropagation()">▼</button>
+            <!-- <button class="toggle-btn" onclick="event.stopPropagation()">▼</button> -->
+            <button class="toggle-btn">▼</button>
         </div>
         <div class="endpoint-content">
+            <form>
             <div class="params-container"></div>
+            </form>
             <div class="row">
                 <div class="col-2">
                     <button class="method" onclick="testEndpoint('${endpoint}', this)">Try it</button>
@@ -107,10 +170,23 @@ async function testEndpoint(endpoint, button) {
 
     // Get parameters
     const endpointContent = button.closest('.endpoint-content');
-    const paramInputs = endpointContent.querySelectorAll('.param-group input, .param-group select');
+    const paramInputs = endpointContent.querySelectorAll(' input, select');
+    // const paramInputs = endpointContent.querySelectorAll('.param-group input, .param-group select');
     paramInputs.forEach(input => {
-        if (input.value) {
-            params.append(input.name, input.value);
+        var value = input.value;
+        if (value === 'manual') {
+            // get value from #manual_value in parent of input
+            // value = $(`#${input.name}_manual`).val();
+            value = $(input).parent().find('#manual_value').val();
+        };
+        if (input.name !== '!' && input.name !== '' && value !== '') {
+            if (['checkbox', 'radio'].includes(input.type)) {
+                if (input.checked) {
+                    params.append(input.name, value);
+                }
+            } else if (value) {
+                params.append(input.name, value);
+            }
         }
     });
     // ---
@@ -118,12 +194,13 @@ async function testEndpoint(endpoint, button) {
     // ---
     if (window.location.hostname === 'localhost') {
         // baseUrl = `${window.location.protocol}//${window.location.host}/index.php`;
-        baseUrl = `${window.location.protocol}//${window.location.host}/api/proxy.php`;
+        baseUrl = `${window.location.protocol}//${window.location.host}/api/api/proxy.php`;
     } else {
         baseUrl = `https://mdwiki.toolforge.org/api.php`;
     }
     // ---
-    baseUrl = `${window.location.protocol}//${window.location.host}/index.php`;
+    baseUrl = `${window.location.protocol}//${window.location.host}/api.php`;
+    // ---
     const url = `${baseUrl}?${params.toString()}`;
 
     // Display the URL
@@ -132,7 +209,7 @@ async function testEndpoint(endpoint, button) {
     // var url2 = `https://mdwiki.toolforge.org/api.php?${params.toString()}`;
     // ---
     urlDisplay.innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
-
+    // ---
     try {
         const response = await fetch(url, {
             method: 'GET',
@@ -170,7 +247,11 @@ function generateEndpoints(endpointParams) {
     for (const [groupName, groupEndpoints] of Object.entries(endpointGroups)) {
         // Create group header
         const groupHeader = document.createElement('h3');
+        groupHeader.id = groupName;
         groupHeader.textContent = groupName.charAt(0).toUpperCase() + groupName.slice(1);
+        const link = document.createElement('a');
+        link.innerHTML = `<a href="#${groupName}"><i class="bi bi-link-45deg"></i></a>`;
+        groupHeader.insertAdjacentElement('afterbegin', link);
         container.appendChild(groupHeader);
 
         // Create group container
@@ -183,19 +264,24 @@ function generateEndpoints(endpointParams) {
             const div = createEndpoint(endpoint);
             const paramsContainer = div.querySelector('.params-container');
 
-            // Add common parameter for limit
-            const limitParam = {
-                name: 'limit',
-                type: 'number',
-                placeholder: 'Number of results',
-                value: '50'
-            };
-            paramsContainer.appendChild(createParamInput(limitParam));
-
             if (endpointParams[endpoint] && endpointParams[endpoint].params) {
+                // sort endpointParams[endpoint].params by param.type
+                // endpointParams[endpoint].params.sort((a, b) => { return a.type.localeCompare(b.type); })
                 endpointParams[endpoint].params.forEach(param => {
                     paramsContainer.appendChild(createParamInput(param));
                 });
+            }
+
+            // check if paramsContainer has limit before appending
+            if (!paramsContainer.querySelector(`input[name="limit"]`)) {
+                // Add common parameter for limit
+                const limitParam = {
+                    name: 'limit',
+                    type: 'number',
+                    placeholder: 'Number of results',
+                    value: '50'
+                };
+                paramsContainer.appendChild(createParamInput(limitParam));
             }
 
             groupContainer.appendChild(div);
@@ -203,8 +289,24 @@ function generateEndpoints(endpointParams) {
     }
 }
 
+async function add_event() {
+    $(".one_group").each(function () {
+        var form = $(this);
+
+        form.find("input[type='radio']").change(function () {
+            var textInput = form.find(".textInput");
+
+            if ($(this).val() === "manual") {
+                textInput.prop("disabled", false);
+            } else {
+                textInput.prop("disabled", true);
+            }
+        });
+    });
+};
 // Initialize when the document is loaded
 document.addEventListener('DOMContentLoaded', async () => {
     await loadEndpointGroups();
     await loadEndpointParams();
+    await add_event();
 });

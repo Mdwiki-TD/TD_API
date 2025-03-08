@@ -8,6 +8,7 @@ $gets = [
     'lang_names_new',
     'lang_views',
     'leaderboard_table',
+    'leaderboard_table_new',
     'qids',
     'qids_others',
     'site_matrix',

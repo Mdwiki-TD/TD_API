@@ -7,15 +7,7 @@ if (isset($_REQUEST['test'])) {
 }
 header('Content-Type: application/json');
 
-include_once __DIR__ . '/helps.php';
-include_once __DIR__ . '/sql.php';
-include_once __DIR__ . '/interwiki.php';
-include_once __DIR__ . '/lang_pairs.php';
-include_once __DIR__ . '/site_matrix.php';
-include_once __DIR__ . '/pages.php';
-include_once __DIR__ . '/qids.php';
-include_once __DIR__ . '/leaderboard.php';
-include_once __DIR__ . '/status.php';
+include_once __DIR__ . '/include.php';
 
 use function API\Langs\get_lang_names_new;
 use function API\Langs\get_lang_names;
@@ -24,11 +16,28 @@ use function API\InterWiki\get_inter_wiki;
 use function API\SiteMatrix\get_site_matrix;
 use function API\Helps\sanitize_input;
 use function API\Helps\add_li;
+use function API\Helps\add_li_params;
 use function API\Helps\add_limit;
 use function API\Pages\get_pages_qua;
 use function API\Qids\qids_qua;
 use function API\Leaderboard\leaderboard_table;
+use function API\Leaderboard\leaderboard_table_new;
 use function API\Status\make_status_query;
+use function API\TitlesInfos\titles_query;
+use function API\Missing\missing_query;
+
+$other_tables = [
+    'assessments',
+    'refs_counts',
+    'enwiki_pageviews',
+    'categories',
+    'full_translators',
+    'projects',
+    'settings',
+    'translate_type',
+    // 'pages',
+    // 'pages_users',
+];
 
 $DISTINCT = (isset($_GET['distinct'])) ? 'DISTINCT ' : '';
 $get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_SPECIAL_CHARS); //$_GET['get']
@@ -43,27 +52,50 @@ $execution_time = 0;
 
 $select_valids = [
     'count(title) as count',
+    'YEAR(date) AS year',
     'YEAR(pupdate) AS year',
     'lang',
     'user',
 ];
 
-$SELECT   = (isset($_GET['select'])) ? filter_input(INPUT_GET, 'select', FILTER_SANITIZE_SPECIAL_CHARS) : '*';
+$SELECT = (isset($_GET['select'])) ? filter_input(INPUT_GET, 'select', FILTER_SANITIZE_SPECIAL_CHARS) : '*';
 
 if (!in_array($SELECT, $select_valids)) {
     $SELECT = '*';
 };
 
+// load endpoint_params.json
+$endpoint_params = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
+$endpoint_params = $endpoint_params[$get]['params'] ?? [];
+// ---
 switch ($get) {
+
+    case 'missing':
+        $tab = missing_query($endpoint_params);
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        // echo json_encode($tab);
+        $query = add_limit($query);
+        break;
+
     case 'users':
-        $qua = "SELECT username FROM users";
+        $query = "SELECT username FROM users";
         if (isset($_GET['userlike'])) {
             $added = filter_input(INPUT_GET, 'userlike', FILTER_SANITIZE_SPECIAL_CHARS);
             if ($added !== null) {
-                $qua .= " WHERE username like '$added%'";
+                $query .= " WHERE username like ?";
+                $params[] = "$added%";
             }
         }
-        $qua = add_limit($qua);
+        $query = add_limit($query);
+        break;
+
+    case 'titles':
+        $tab = titles_query($endpoint_params);
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        // echo json_encode($tab);
+        $query = add_limit($query);
         break;
 
     case 'coordinator':
@@ -78,6 +110,13 @@ switch ($get) {
 
         break;
 
+    case 'leaderboard_table_new':
+        $de = leaderboard_table_new();
+        $query = $de["qua"];
+        $params = $de["params"];
+
+        break;
+
     case 'status':
         $status = make_status_query();
         $query = $status['qua'];
@@ -85,9 +124,11 @@ switch ($get) {
         break;
 
     case 'views':
-        $qua = "SELECT * FROM views ";
-        $qua = add_li($qua, ['lang']);
-        $qua = add_limit($qua);
+        $query = "SELECT * FROM views ";
+        $tab = add_li_params($query, [], $endpoint_params);
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        $query = add_limit($query);
         break;
 
     case 'user_access':
@@ -97,18 +138,21 @@ switch ($get) {
         break;
 
     case 'qids':
-        $qua = qids_qua($get, $dis);
+        $qua = qids_qua($get);
         $qua = add_limit($qua);
         break;
 
     case 'qids_others':
-        $qua = qids_qua($get, $dis);
+        $qua = qids_qua($get);
         $qua = add_limit($qua);
         break;
 
     case 'count_pages':
-        $target_t = (isset($_GET['target_empty'])) ? " target = '' " : " target != '' ";
-        $qua = "SELECT DISTINCT user, count(target) as count from pages where $target_t group by user order by count desc";
+        // $target_t = (isset($_GET['target_empty'])) ? " target = '' " : " target != '' ";
+        // $qua = "SELECT DISTINCT user, count(target) as count from pages WHERE $target_t group by user order by count desc";
+        $qua = "SELECT DISTINCT user, count(target) as count from pages";
+        $qua = add_li($qua, [], $endpoint_params);
+        $qua .= " group by user order by count desc";
         $qua = add_limit($qua);
         break;
 
@@ -116,8 +160,8 @@ switch ($get) {
         $qua = <<<SQL
             select DISTINCT p1.target, p1.title, p1.cat, p1.user, p1.pupdate, p1.lang
             from pages p1
-            where target != ''
-            and p1.pupdate = (select p2.pupdate from pages p2 where p2.user = p1.user ORDER BY p2.pupdate DESC limit 1)
+            WHERE target != ''
+            and p1.pupdate = (select p2.pupdate from pages p2 WHERE p2.user = p1.user ORDER BY p2.pupdate DESC limit 1)
             group by p1.user
             ORDER BY p1.pupdate DESC
         SQL;
@@ -165,14 +209,15 @@ switch ($get) {
     case 'user_views':
         if (isset($_GET['user'])) {
             $user_name = filter_input(INPUT_GET, 'user', FILTER_SANITIZE_SPECIAL_CHARS);
-            $qua = <<<SQL
+            $query = <<<SQL
                     select p.target, v.countall
                 from pages p, views v
-                where p.user = '{$user_name}'
-                and p.lang = v.lang
+                WHERE p.user = ?
                 and p.target = v.target
+                and p.lang = v.lang
             SQL;
-            $qua = add_limit($qua);
+            $params = [$user_name];
+            $query = add_limit($query);
         };
         break;
 
@@ -190,21 +235,28 @@ switch ($get) {
     case 'lang_views':
         if (isset($_GET['lang'])) {
             $lang = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
-            $qua = <<<SQL
+            $query = <<<SQL
                     select p.target, v.countall
                 from pages p, views v
-                where p.lang = '{$lang}'
-                and p.lang = v.lang
+                WHERE p.lang = ?
                 and p.target = v.target
+                and p.lang = v.lang
             SQL;
-            $qua = add_limit($qua);
+            $params = [$lang];
+            $query = add_limit($query);
         };
         break;
 
     case 'words':
         $params = [];
-        $query = "SELECT * FROM words WHERE 1=1";
-
+        $query = "SELECT * FROM words ";
+        // ---
+        $tab = add_li_params($query, [], $endpoint_params);
+        // ---
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        // ---
+        /*
         // التحقق من عنوان الكلمات
         $title = sanitize_input($_GET['title'] ?? '', '/^[a-zA-Z0-9\s_-]+$/');
         if ($title !== null) {
@@ -225,7 +277,7 @@ switch ($get) {
             $query .= " AND w_all_words = ?";
             $params[] = $all_words;
         }
-
+        */
         $query = add_limit($query);
         break;
 
@@ -236,9 +288,12 @@ switch ($get) {
         break;
 
     default:
-        if (in_array($get, ['categories', 'full_translators', 'projects', 'settings', 'translate_type'])) {
-            $qua = "SELECT * FROM $get";
-            $qua = add_limit($qua);
+        if (in_array($get, $other_tables)) {
+            $query = "SELECT * FROM $get";
+            $tab = add_li_params($query, [], $endpoint_params);
+            $query = $tab['qua'];
+            $params = $tab['params'];
+            $query = add_limit($query);
             break;
         }
         $results = ["error" => "invalid get request"];
@@ -264,9 +319,23 @@ $qua = preg_replace("/ +/", " ", $qua);
 
 $out = [
     "time" => $execution_time,
-    "query" => $qua,
+    // "query" => $qua,
     "length" => count($results),
     "results" => $results
 ];
+
+// if server is localhost then add query to out
+if ($_SERVER['SERVER_NAME'] === 'localhost') {
+    $out = [
+        "query" => $qua,
+        "time" => $execution_time,
+        "length" => count($results),
+        "results" => $results
+    ];
+};
+$out["supported_params"] = [];
+foreach ($endpoint_params as $param) {
+    $out["supported_params"][] = $param["name"];
+};
 
 echo json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
