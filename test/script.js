@@ -88,8 +88,8 @@ function createParamInput(param) {
                 <label>${param.name}</label>
                 <div class="form-control one_group">
                     <div class="form-check form-check-inline">
-                        <input type="radio" class="form-check-input" id="manualInput" name="${param.name}" value="manual" checked>
-                        <label class="form-check-label" for="manualInput">
+                        <input type="radio" class="form-check-input" id="manualInput_${randomNumber}" name="${param.name}" value="manual" checked="">
+                        <label class="form-check-label" for="manualInput_${randomNumber}">
                             <input name="!" type="${type}" class="textInput" id="manual_value" placeholder="${param.placeholder}" value="${value}">
                         </label>
                     </div>
@@ -110,8 +110,8 @@ function createParamInput(param) {
                 <label>${param.name}</label>
                 <div class="form-control one_group">
                     <div class="form-check form-check-inline">
-                        <input type="radio" class="form-check-input" id="manualInput" name="${param.name}" value="manual" checked>
-                        <label class="form-check-label" for="manualInput">
+                        <input type="radio" class="form-check-input" id="manualInput_${randomNumber}" name="${param.name}" value="manual" checked>
+                        <label class="form-check-label" for="manualInput_${randomNumber}">
                             <input name="!" type="${type}" class="textInput" id="manual_value" placeholder="${param.placeholder}" value="${value}">
                         </label>
                     </div>
@@ -147,7 +147,9 @@ function createEndpoint(endpoint) {
             <button class="toggle-btn">▼</button>
         </div>
         <div class="endpoint-content">
+            <form>
             <div class="params-container"></div>
+            </form>
             <div class="row">
                 <div class="col-2">
                     <button class="method" onclick="testEndpoint('${endpoint}', this)">Try it</button>

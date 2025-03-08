@@ -50,15 +50,15 @@ function add_li(string $qua, array $types, array $endpoint_params = []): string
     // $not_empty_keys = ['target_notempty' => 'target'];
     // $empty_keys = ['target_empty' => 'target'];
     // ---
-    $types = array_flip($types);
+    // $types = array_flip($types);
     // ---
-    // $types2 = [];
-    // // ---
-    // foreach ($types as $type) {
-    //     $types2[$type] = $type;
-    // }
-    // // ---
-    // $types = $types2;
+    $types2 = [];
+    // ---
+    foreach ($types as $type) {
+        $types2[$type] = $type;
+    }
+    // ---
+    $types = $types2;
     // ---
     if (count($types) == 0 && count($endpoint_params) > 0) {
         foreach ($endpoint_params as $param) {

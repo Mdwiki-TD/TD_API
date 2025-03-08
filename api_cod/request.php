@@ -242,7 +242,7 @@ switch ($get) {
 
     case 'words':
         $params = [];
-        $query = "SELECT * FROM words WHERE 1=1";
+        $query = "SELECT * FROM words ";
         // ---
         $tab = add_li_params($query, [], $endpoint_params);
         // ---
