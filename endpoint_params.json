@@ -7,15 +7,15 @@
     },
     "titles": {
         "params": [
-            { "name": "title", "column": "ase.title", "type": "text", "placeholder": "Title" },
-            { "name": "importance", "column": "ase.importance", "type": "text", "placeholder": "Importance" }
+            { "name": "title", "column": "title", "type": "text", "placeholder": "Title" },
+            { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" }
         ]
     },
     "assessments": {
         "params": [
             { "name": "title", "column": "title", "type": "text", "placeholder": "Title" },
             { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" },
-            { "name": "distinct", "column": "distinct", "type": "switch"}
+            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true}
         ]
     },
     "refs_counts": {
@@ -48,16 +48,16 @@
             { "name": "user", "column": "user", "type": "text", "placeholder": "Username" },
             { "name": "target", "column": "target", "type": "text", "placeholder": "Target" },
             { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category" },
-            { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field" },
-            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field" },
+            { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field", "no_select": true},
+            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field", "no_select": true },
             { "name": "pupdate", "column": "pupdate", "type": "pupdate", "placeholder": "Date of publication" },
             { "name": "add_date", "column": "add_date", "type": "text", "placeholder": "Date of addition to DB" },
-            { "name": "limit", "column": "limit", "type": "number", "placeholder": "Limit results", "value": "50" },
-            { "name": "year", "column": "YEAR(date)", "type": "number", "placeholder": "year of date" },
+            { "name": "limit", "column": "limit", "type": "number", "placeholder": "Limit results", "value": "50", "no_select": true },
+            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "year of date" },
             { "name": "YEAR(date)", "column": "YEAR(date)", "type": "number", "placeholder": "year of date" },
-            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields" },
+            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
             { "name": "translate_type", "column": "translate_type", "type": "select", "options": ["all", "lead"]},
-            { "name": "distinct", "column": "distinct", "type": "switch"},
+            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true},
             { "name": "Deleted", "column": "deleted", "type": "switch", "placeholder": "0 or 1" }
         ]
     },
@@ -67,13 +67,13 @@
             { "name": "user", "column": "user", "type": "text", "placeholder": "Username" },
             { "name": "target", "column": "target", "type": "text", "placeholder": "Target" },
             { "name": "title", "column": "title", "type": "text", "placeholder": "Title" },
-            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field" },
+            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field", "no_select": true },
             { "name": "pupdate", "column": "pupdate", "type": "text", "placeholder": "Date of publication" },
             { "name": "add_date", "column": "add_date", "type": "text", "placeholder": "Date of addition to DB" },
-            { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field" },
-            { "name": "limit", "column": "limit", "type": "number", "placeholder": "Limit results", "value": "50" },
-            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields" },
-            { "name": "distinct", "column": "distinct", "type": "switch"}
+            { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field", "no_select": true },
+            { "name": "limit", "column": "limit", "type": "number", "placeholder": "Limit results", "value": "50", "no_select": true },
+            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
+            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true}
         ]
     },
     "user_access": {
@@ -117,19 +117,23 @@
     },
     "lang_views": {
         "params": [
-            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" }
+            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
+            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
+            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "Year" }
         ]
     },
     "user_views": {
         "params": [
-            { "name": "user", "column": "user", "type": "text", "placeholder": "Username" }
+            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
+            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
+            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "Year" }
         ]
     },
     "users": {
         "params": [
             { "name": "userlike", "column": "userlike", "type": "text", "placeholder": "Username starts with" },
             { "name": "wiki", "column": "wiki", "type": "text", "placeholder": "Wiki Name" },
-            { "name": "group", "column": "user_group", "type": "text", "placeholder": "Group Name" }
+            { "name": "group", "column": "user_group", "type": "text", "placeholder": "Group Name", "no_select": true }
         ]
     },
     "views": {

@@ -7,7 +7,6 @@ use function API\Helps\sanitize_input;
 use function API\Helps\add_order;
 use function API\Helps\add_group;
 use function API\Helps\add_limit;
-use function API\Helps\add_li;
 use function API\Helps\add_li_params;
 */
 
@@ -46,11 +45,41 @@ function add_limit($qua)
     return $qua;
 }
 
-function add_li(string $qua, array $types, array $endpoint_params = []): string
+function add_distinct($qua)
+{
+    $qua = preg_replace("/^\s*SELECT\s*/i", "SELECT DISTINCT ", $qua);
+    return $qua;
+}
+
+function add_one_param($qua, $column, $added, $as_params)
 {
     // ---
-    // $not_empty_keys = ['target_notempty' => 'target'];
-    // $empty_keys = ['target_empty' => 'target'];
+    $add_str = "";
+    $params = [];
+    // ---
+    // ---
+    $where_or_and = (strpos($qua, 'WHERE') !== false) ? ' AND ' : ' WHERE ';
+    // ---
+    if ($added == "not_mt" || $added == "not_empty") {
+        $add_str = " $where_or_and ($column != '' AND $column IS NOT NULL) ";
+    } elseif ($added == "mt" || $added == "empty") {
+        $add_str = " $where_or_and ($column = '' OR $column IS NULL) ";
+    } elseif ($added == ">0" || $added == "&#62;0") {
+        $add_str = " $where_or_and $column > 0 ";
+    } else {
+        if ($as_params) {
+            $params[] = $added;
+            $add_str = " $where_or_and $column = ? ";
+        } else {
+            $add_str = " $where_or_and $column = '$added' ";
+        }
+    }
+    // ---
+    return ["add_str" => $add_str, "params" => $params];
+}
+
+function change_types($types, $endpoint_params)
+{
     // ---
     // $types = array_flip($types);
     // ---
@@ -65,80 +94,46 @@ function add_li(string $qua, array $types, array $endpoint_params = []): string
     if (count($types) == 0 && count($endpoint_params) > 0) {
         foreach ($endpoint_params as $param) {
             // { "name": "title", "column": "w_title", "type": "text", "placeholder": "Page Title" },
+            // , "no_select": true
+            if ($param['no_select']) continue;
             $types[$param['name']] = $param['column'];
         }
     }
     // ---
-    foreach ($types as $type => $column) {
-        if (isset($_GET[$type]) || isset($_GET[$column])) {
-            // filter input
-            $added = filter_input(INPUT_GET, $type, FILTER_SANITIZE_SPECIAL_CHARS) ?? filter_input(INPUT_GET, $column, FILTER_SANITIZE_SPECIAL_CHARS);
-            // ---
-            $where_or_and = (strpos($qua, 'WHERE') !== false) ? ' AND ' : ' WHERE ';
-            // ---
-            if ($added == "not_mt" || $added == "not_empty") {
-                $add_str = " $where_or_and ($column != '' AND $column IS NOT NULL) ";
-            } elseif ($added == "mt" || $added == "empty") {
-                $add_str = " $where_or_and ($column = '' OR $column IS NULL) ";
-            } elseif ($added == ">0" || $added == "&#62;0") {
-                $add_str = " $where_or_and $column > 0 ";
-            } else {
-                // $add_str = " $where_or_and $column = `$added` ";
-                $add_str = " $where_or_and $column = '$added' ";
-            }
-            // ---
-            /*
-            if (isset($not_empty_keys[$column])) {
-                $key2 = $not_empty_keys[$column];
-                $add_str = " $where_or_and $key2 != '' ";
-            }
-            // ---
-            if (isset($empty_keys[$column])) {
-                $key2 = $empty_keys[$column];
-                $add_str = " $where_or_and $key2 = '' ";
-            }
-                */
-            // ---
-            $qua .= $add_str;
-            // ---
-        }
-    }
-    return $qua;
+    return $types;
 }
 
 function add_li_params(string $qua, array $types, array $endpoint_params = []): array
 {
-    // ---
-    $types = array_flip($types);
+    $types = change_types($types, $endpoint_params);
     // ---
     $params = [];
     // ---
-    if (count($types) == 0 && count($endpoint_params) > 0) {
-        foreach ($endpoint_params as $param) {
-            // { "name": "title", "column": "w_title", "type": "text", "placeholder": "Page Title" },
-            $types[$param['name']] = $param['column'];
-        }
-    }
-    // ---
     foreach ($types as $type => $column) {
         if (isset($_GET[$type]) || isset($_GET[$column])) {
+            // ---
             // filter input
             $added = filter_input(INPUT_GET, $type, FILTER_SANITIZE_SPECIAL_CHARS) ?? filter_input(INPUT_GET, $column, FILTER_SANITIZE_SPECIAL_CHARS);
             // ---
-            $where_or_and = (strpos($qua, 'WHERE') !== false) ? ' AND ' : ' WHERE ';
-            // ---
-            if ($added == "not_mt" || $added == "not_empty") {
-                $add_str = " $where_or_and ($column != '' AND $column IS NOT NULL) ";
-            } elseif ($added == ">0" || $added == "&#62;0") {
-                $add_str = " $where_or_and $column > 0 ";
-            } else {
-                // $add_str = " $where_or_and $column = `$added` ";
-                $params[] = $added;
-                $add_str = " $where_or_and $column = ? ";
+            // if "limit" in endpoint_params remove it
+            if ($column == "limit" || $column == "select" || strtolower($added) == "all") {
+                continue;
             }
             // ---
-            $qua .= $add_str;
+            if ($column == "distinct" && $added == "1") {
+                if (strpos(strtolower($qua), 'distinct') === false) {
+                    $qua = add_distinct($qua);
+                }
+            } else {
+                $tab = add_one_param($qua, $column, $added, true);
+                // ---
+                $add_str = $tab['add_str'];
+                $params = array_merge($params, $tab['params']);
+                // ---
+                $qua .= $add_str;
+            }
         }
     }
+    // ---
     return ["qua" => $qua, "params" => $params];
 }
