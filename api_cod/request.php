@@ -121,7 +121,7 @@ switch ($get) {
         break;
 
     case 'views':
-        $query = "SELECT * FROM views ";
+        $query = "SELECT * FROM views v, pages p WHERE p.target = v.target ";
         $tab = add_li_params($query, [], $endpoint_params);
         $query = $tab['qua'];
         $params = $tab['params'];
@@ -158,6 +158,20 @@ switch ($get) {
             and p1.pupdate = (select p2.pupdate from pages p2 WHERE p2.user = p1.user ORDER BY p2.pupdate DESC limit 1)
             group by p1.user
             ORDER BY p1.pupdate DESC
+        SQL;
+        break;
+
+    case 'users_by_wiki':
+        // , sum(target_count) AS sum_target
+        $qua = <<<SQL
+            SELECT user, lang, MAX(target_count) AS max_target
+                FROM (
+                    SELECT user, lang, COUNT(target) AS target_count
+                    FROM pages
+                    GROUP BY user, lang
+                ) AS subquery
+            GROUP BY user
+            ORDER BY 3 DESC
         SQL;
         break;
 

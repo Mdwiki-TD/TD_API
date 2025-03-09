@@ -138,7 +138,8 @@
     },
     "views": {
         "params": [
-            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" }
+            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
+            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year" }
         ]
     },
     "views_x": {

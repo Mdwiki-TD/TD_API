@@ -23,6 +23,7 @@
     "users": [
         "users",
         "user_access",
+        "users_by_wiki",
         "users_by_last_pupdate",
         "users_by_last_pupdate_old",
         "full_translators",
