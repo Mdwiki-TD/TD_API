@@ -240,7 +240,6 @@ switch ($get) {
                 from pages p, views v
                 WHERE p.target = v.target
                 AND p.lang = v.lang
-                AND p.lang = ?
             SQL;
             // ---
             // $lang = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
