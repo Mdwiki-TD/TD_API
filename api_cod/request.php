@@ -15,10 +15,10 @@ use function API\SQL\fetch_query;
 use function API\InterWiki\get_inter_wiki;
 use function API\SiteMatrix\get_site_matrix;
 use function API\Helps\sanitize_input;
-use function API\Helps\add_li;
 use function API\Helps\add_li_params;
+use function API\Helps\add_group;
+use function API\Helps\add_order;
 use function API\Helps\add_limit;
-use function API\Pages\get_pages_qua;
 use function API\Qids\qids_qua;
 use function API\Leaderboard\leaderboard_table;
 use function API\Leaderboard\leaderboard_table_new;
@@ -128,8 +128,10 @@ switch ($get) {
         break;
 
     case 'user_access':
-        $qua = "SELECT id, user_name, created_at FROM access_keys";
-        $qua = add_li($qua, ['user_name']);
+        $query = "SELECT id, user_name, created_at FROM access_keys";
+        $tab = add_li_params($query, [], $endpoint_params);
+        $query = $tab['qua'];
+        $params = $tab['params'];
         break;
 
     case 'qids':
@@ -141,11 +143,11 @@ switch ($get) {
         break;
 
     case 'count_pages':
-        // $target_t = (isset($_GET['target_empty'])) ? " target = '' " : " target != '' ";
-        // $qua = "SELECT DISTINCT user, count(target) as count from pages WHERE $target_t group by user order by count desc";
-        $qua = "SELECT DISTINCT user, count(target) as count from pages";
-        $qua = add_li($qua, [], $endpoint_params);
-        $qua .= " group by user order by count desc";
+        $query = "SELECT DISTINCT user, count(target) as count from pages";
+        $tab = add_li_params($query, [], $endpoint_params);
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        $query .= " group by user order by count desc";
         break;
 
     case 'users_by_last_pupdate_old':
@@ -283,7 +285,23 @@ switch ($get) {
 
     case 'pages':
     case 'pages_users':
-        $qua = get_pages_qua($get, $DISTINCT, $SELECT);
+        // ---
+        $qua = "SELECT $DISTINCT $SELECT FROM $get";
+        // ---
+        $tab = add_li_params($qua, [], $endpoint_params);
+        // ---
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        // ---
+        $title_not_in_pages = (isset($_GET['title_not_in_pages'])) ? true : false;
+        // ---
+        if ($title_not_in_pages) {
+            $query .= " and title not in (select p.title from pages p WHERE p.lang = lang and p.target != '') ";
+        }
+        // ---
+        $query = add_group($query);
+        $query = add_order($query);
+        // ---
         break;
 
     default:

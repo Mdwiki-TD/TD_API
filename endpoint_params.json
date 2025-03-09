@@ -7,8 +7,8 @@
     },
     "titles": {
         "params": [
-            { "name": "title", "column": "ase.title", "type": "text", "placeholder": "Title" },
-            { "name": "importance", "column": "ase.importance", "type": "text", "placeholder": "Importance" }
+            { "name": "title", "column": "title", "type": "text", "placeholder": "Title" },
+            { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" }
         ]
     },
     "assessments": {
