@@ -53,7 +53,7 @@
             { "name": "pupdate", "column": "pupdate", "type": "pupdate", "placeholder": "Date of publication" },
             { "name": "add_date", "column": "add_date", "type": "text", "placeholder": "Date of addition to DB" },
             { "name": "limit", "column": "limit", "type": "number", "placeholder": "Limit results", "value": "50" },
-            { "name": "year", "column": "YEAR(date)", "type": "number", "placeholder": "year of date" },
+            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "year of date" },
             { "name": "YEAR(date)", "column": "YEAR(date)", "type": "number", "placeholder": "year of date" },
             { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields" },
             { "name": "translate_type", "column": "translate_type", "type": "select", "options": ["all", "lead"]},
@@ -117,12 +117,16 @@
     },
     "lang_views": {
         "params": [
-            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" }
+            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
+            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
+            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "Year" }
         ]
     },
     "user_views": {
         "params": [
-            { "name": "user", "column": "user", "type": "text", "placeholder": "Username" }
+            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
+            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
+            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "Year" }
         ]
     },
     "users": {

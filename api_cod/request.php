@@ -75,7 +75,6 @@ switch ($get) {
         $query = $tab['qua'];
         $params = $tab['params'];
         // echo json_encode($tab);
-        $query = add_limit($query);
         break;
 
     case 'users':
@@ -87,7 +86,6 @@ switch ($get) {
                 $params[] = "$added%";
             }
         }
-        $query = add_limit($query);
         break;
 
     case 'titles':
@@ -95,7 +93,6 @@ switch ($get) {
         $query = $tab['qua'];
         $params = $tab['params'];
         // echo json_encode($tab);
-        $query = add_limit($query);
         break;
 
     case 'coordinator':
@@ -128,23 +125,19 @@ switch ($get) {
         $tab = add_li_params($query, [], $endpoint_params);
         $query = $tab['qua'];
         $params = $tab['params'];
-        $query = add_limit($query);
         break;
 
     case 'user_access':
         $qua = "SELECT id, user_name, created_at FROM access_keys";
         $qua = add_li($qua, ['user_name']);
-        $qua = add_limit($qua);
         break;
 
     case 'qids':
         $qua = qids_qua($get);
-        $qua = add_limit($qua);
         break;
 
     case 'qids_others':
         $qua = qids_qua($get);
-        $qua = add_limit($qua);
         break;
 
     case 'count_pages':
@@ -153,7 +146,6 @@ switch ($get) {
         $qua = "SELECT DISTINCT user, count(target) as count from pages";
         $qua = add_li($qua, [], $endpoint_params);
         $qua .= " group by user order by count desc";
-        $qua = add_limit($qua);
         break;
 
     case 'users_by_last_pupdate_old':
@@ -165,7 +157,6 @@ switch ($get) {
             group by p1.user
             ORDER BY p1.pupdate DESC
         SQL;
-        $qua = add_limit($qua);
         break;
 
     case 'users_by_last_pupdate':
@@ -185,7 +176,6 @@ switch ($get) {
             WHERE rn = 1
             ORDER BY pupdate DESC;
         SQL;
-        $qua = add_limit($qua);
         break;
 
     case 'lang_names':
@@ -208,16 +198,43 @@ switch ($get) {
 
     case 'user_views':
         if (isset($_GET['user'])) {
-            $user_name = filter_input(INPUT_GET, 'user', FILTER_SANITIZE_SPECIAL_CHARS);
             $query = <<<SQL
-                    select p.target, v.countall
+                select p.title, p.target, v.countall
                 from pages p, views v
-                WHERE p.user = ?
-                and p.target = v.target
+                WHERE p.target = v.target
                 and p.lang = v.lang
             SQL;
-            $params = [$user_name];
-            $query = add_limit($query);
+            // ---
+            // $user_name = filter_input(INPUT_GET, 'user', FILTER_SANITIZE_SPECIAL_CHARS);
+            // $params = [$user_name];
+            // $query .= " and p.user = ?";
+            // ---
+            $tab = add_li_params($query, [], $endpoint_params);
+            // ---
+            $query = $tab['qua'];
+            $params = $tab['params'];
+            // ---
+        };
+        break;
+
+    case 'lang_views':
+        if (isset($_GET['lang'])) {
+            $query = <<<SQL
+                select p.target, v.countall
+                from pages p, views v
+                WHERE p.target = v.target
+                AND p.lang = v.lang
+                AND p.lang = ?
+            SQL;
+            // ---
+            // $lang = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
+            // $params = [$lang];
+            // $query .= " and p.lang = ?";
+            // ---
+            $tab = add_li_params($query, [], $endpoint_params);
+            // ---
+            $query = $tab['qua'];
+            $params = $tab['params'];
         };
         break;
 
@@ -229,22 +246,6 @@ switch ($get) {
             GROUP BY LEFT(pupdate, 7)
             ORDER BY LEFT(pupdate, 7) ASC
         SQL;
-        $qua = add_limit($qua);
-        break;
-
-    case 'lang_views':
-        if (isset($_GET['lang'])) {
-            $lang = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
-            $query = <<<SQL
-                    select p.target, v.countall
-                from pages p, views v
-                WHERE p.lang = ?
-                and p.target = v.target
-                and p.lang = v.lang
-            SQL;
-            $params = [$lang];
-            $query = add_limit($query);
-        };
         break;
 
     case 'words':
@@ -278,13 +279,11 @@ switch ($get) {
             $params[] = $all_words;
         }
         */
-        $query = add_limit($query);
         break;
 
     case 'pages':
     case 'pages_users':
         $qua = get_pages_qua($get, $DISTINCT, $SELECT);
-        $qua = add_limit($qua);
         break;
 
     default:
@@ -293,7 +292,6 @@ switch ($get) {
             $tab = add_li_params($query, [], $endpoint_params);
             $query = $tab['qua'];
             $params = $tab['params'];
-            $query = add_limit($query);
             break;
         }
         $results = ["error" => "invalid get request"];
@@ -303,10 +301,12 @@ switch ($get) {
 if ($results === [] && ($qua !== "" || $query !== "")) {
     $start_time = microtime(true);
     if ($query !== "") {
+        $query = add_limit($query);
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
         $results = fetch_query($query, $params);
     } else {
+        $qua = add_limit($qua);
         $results = fetch_query($qua);
     }
     $end_time = microtime(true);

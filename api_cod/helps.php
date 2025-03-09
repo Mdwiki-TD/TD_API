@@ -125,6 +125,10 @@ function add_li_params(string $qua, array $types, array $endpoint_params = []): 
             // filter input
             $added = filter_input(INPUT_GET, $type, FILTER_SANITIZE_SPECIAL_CHARS) ?? filter_input(INPUT_GET, $column, FILTER_SANITIZE_SPECIAL_CHARS);
             // ---
+            if (strtolower($added) == "all") {
+                continue;
+            }
+            // ---
             $where_or_and = (strpos($qua, 'WHERE') !== false) ? ' AND ' : ' WHERE ';
             // ---
             if ($added == "not_mt" || $added == "not_empty") {

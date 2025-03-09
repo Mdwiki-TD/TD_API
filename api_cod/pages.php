@@ -22,7 +22,19 @@ function get_pages_qua($get, $DISTINCT, $SELECT)
     // ---
     $qua = "SELECT $DISTINCT $SELECT FROM $get";
     // ---
-    $qua = add_li($qua, ['lang', 'user', 'translate_type', 'cat', 'title', 'YEAR(date)', 'target', 'pupdate']);
+    $endpoint_params = [
+        ["name" => "lang", "column" => "lang"],
+        ["name" => "user", "column" => "user"],
+        ["name" => "translate_type", "column" => "translate_type"],
+        ["name" => "cat", "column" => "cat"],
+        ["name" => "title", "column" => "title"],
+        ["name" => "YEAR(date)", "column" => "YEAR(date)"],
+        ["name" => "year", "column" => "YEAR(pupdate)"],
+        ["name" => "target", "column" => "target"],
+        ["name" => "pupdate", "column" => "pupdate"]
+    ];
+    // ---
+    $qua = add_li($qua, [], $endpoint_params);
     // ---
     if ($title_not_in_pages) {
         $qua .= " and title not in (select p.title from pages p WHERE p.lang = lang and p.target != '') ";
