@@ -114,7 +114,7 @@ function add_li_params(string $qua, array $types, array $endpoint_params = []): 
             $added = filter_input(INPUT_GET, $type, FILTER_SANITIZE_SPECIAL_CHARS) ?? filter_input(INPUT_GET, $column, FILTER_SANITIZE_SPECIAL_CHARS);
             // ---
             // if "limit" in endpoint_params remove it
-            if ($column == "limit" || strtolower($added) == "all") {
+            if ($column == "limit" || $column == "select" || strtolower($added) == "all") {
                 continue;
             }
             // ---
