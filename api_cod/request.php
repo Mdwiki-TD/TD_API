@@ -25,6 +25,7 @@ use function API\Leaderboard\leaderboard_table_new;
 use function API\Status\make_status_query;
 use function API\TitlesInfos\titles_query;
 use function API\Missing\missing_query;
+use function API\Missing\missing_qids_query;
 
 $other_tables = [
     'assessments',
@@ -72,6 +73,13 @@ switch ($get) {
 
     case 'missing':
         $tab = missing_query($endpoint_params);
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        // echo json_encode($tab);
+        break;
+
+    case 'missing_qids':
+        $tab = missing_qids_query($endpoint_params);
         $query = $tab['qua'];
         $params = $tab['params'];
         // echo json_encode($tab);

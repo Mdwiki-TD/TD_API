@@ -5,6 +5,11 @@
             { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true }
         ]
     },
+    "missing_qids": {
+        "params": [
+            { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true }
+        ]
+    },
     "titles": {
         "params": [
             { "name": "title", "column": "title", "type": "text", "placeholder": "Title" },
