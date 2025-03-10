@@ -95,7 +95,7 @@ function change_types($types, $endpoint_params)
         foreach ($endpoint_params as $param) {
             // { "name": "title", "column": "w_title", "type": "text", "placeholder": "Page Title" },
             // , "no_select": true
-            if ($param['no_select']) continue;
+            if (isset($param['no_select'])) continue;
             $types[$param['name']] = $param['column'];
         }
     }
