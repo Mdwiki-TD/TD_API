@@ -22,10 +22,10 @@ function titles_query($endpoint_params)
             w.w_all_words,
             q.qid
         FROM assessments ase
-        JOIN enwiki_pageviews ep ON ase.title = ep.title
-        JOIN qids q ON q.title = ase.title
-        JOIN refs_counts rc ON rc.r_title = ase.title
-        JOIN words w ON w.w_title = ase.title
+        LEFT JOIN enwiki_pageviews ep ON ase.title = ep.title
+        LEFT JOIN qids q ON q.title = ase.title
+        LEFT JOIN refs_counts rc ON rc.r_title = ase.title
+        LEFT JOIN words w ON w.w_title = ase.title
     SQL;
     // ---
     $qua = <<<SQL
