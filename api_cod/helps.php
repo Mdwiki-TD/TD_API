@@ -51,12 +51,11 @@ function add_distinct($qua)
     return $qua;
 }
 
-function add_one_param($qua, $column, $added, $as_params)
+function add_one_param($qua, $column, $added, $tabe)
 {
     // ---
     $add_str = "";
     $params = [];
-    // ---
     // ---
     $where_or_and = (strpos($qua, 'WHERE') !== false) ? ' AND ' : ' WHERE ';
     // ---
@@ -67,11 +66,13 @@ function add_one_param($qua, $column, $added, $as_params)
     } elseif ($added == ">0" || $added == "&#62;0") {
         $add_str = " $where_or_and $column > 0 ";
     } else {
-        if ($as_params) {
-            $params[] = $added;
-            $add_str = " $where_or_and $column = ? ";
-        } else {
-            $add_str = " $where_or_and $column = '$added' ";
+        $params[] = $added;
+        $add_str = " $where_or_and $column = ? ";
+        // ---
+        $value_can_be_null = isset($tabe['value_can_be_null']) ? $tabe['value_can_be_null'] : false;
+        // ---
+        if ($value_can_be_null) {
+            $add_str = " $where_or_and  ($column = ? OR $column IS NULL OR $column = '') ";
         }
     }
     // ---
@@ -86,9 +87,9 @@ function change_types($types, $endpoint_params)
     $types2 = [];
     // ---
     foreach ($types as $type) {
-        $types2[$type] = $type;
+        $types2[$type] = ["column" => $type];
     }
-    // ---
+    // ---value_can_be_null
     $types = $types2;
     // ---
     if (count($types) == 0 && count($endpoint_params) > 0) {
@@ -96,7 +97,7 @@ function change_types($types, $endpoint_params)
             // { "name": "title", "column": "w_title", "type": "text", "placeholder": "Page Title" },
             // , "no_select": true
             if (isset($param['no_select'])) continue;
-            $types[$param['name']] = $param['column'];
+            $types[$param['name']] = $param;
         }
     }
     // ---
@@ -109,7 +110,12 @@ function add_li_params(string $qua, array $types, array $endpoint_params = []): 
     // ---
     $params = [];
     // ---
-    foreach ($types as $type => $column) {
+    foreach ($types as $type => $tabe) {
+        // ---
+        $column = $tabe['column'];
+        // ---
+        if (empty($column)) continue;
+        // ---
         if (isset($_GET[$type]) || isset($_GET[$column])) {
             // ---
             // filter input
@@ -125,7 +131,7 @@ function add_li_params(string $qua, array $types, array $endpoint_params = []): 
                     $qua = add_distinct($qua);
                 }
             } else {
-                $tab = add_one_param($qua, $column, $added, true);
+                $tab = add_one_param($qua, $column, $added, $tabe);
                 // ---
                 $add_str = $tab['add_str'];
                 $params = array_merge($params, $tab['params']);
