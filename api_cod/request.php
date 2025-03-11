@@ -20,8 +20,7 @@ use function API\Helps\add_group;
 use function API\Helps\add_order;
 use function API\Helps\add_limit;
 use function API\Qids\qids_qua;
-use function API\Leaderboard\leaderboard_table;
-use function API\Leaderboard\leaderboard_table_new;
+use function API\Leaderboard\leaderboard_table_format;
 use function API\Status\make_status_query;
 use function API\TitlesInfos\titles_query;
 use function API\Missing\missing_query;
@@ -109,17 +108,26 @@ switch ($get) {
         break;
 
     case 'leaderboard_table':
-        $de = leaderboard_table();
-        $query = $de["qua"];
-        $params = $de["params"];
-
-        break;
-
-    case 'leaderboard_table_new':
-        $de = leaderboard_table_new();
-        $query = $de["qua"];
-        $params = $de["params"];
-
+    case 'leaderboard_table_formated':
+        // ---
+        $query = "SELECT p.title,
+            p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, p.user, u.user_group, LEFT(p.pupdate, 7) as m, v.views as views
+            FROM pages p
+            LEFT JOIN users u
+                ON p.user = u.username
+            LEFT JOIN views_new v
+                ON p.target = v.target
+                AND p.lang = v.lang
+                AND YEAR(p.pupdate) = v.year
+            WHERE p.target != ''
+        ";
+        // ---
+        $tab = add_li_params($query, [], $endpoint_params);
+        // ---
+        $query = $tab["qua"];
+        $query .= " ORDER BY 1 DESC";
+        // ---
+        $params = $tab["params"];
         break;
 
     case 'status':
@@ -129,10 +137,31 @@ switch ($get) {
         break;
 
     case 'views':
-        $query = "SELECT * FROM views v, pages p WHERE p.target = v.target ";
+        $query = <<<SQL
+            SELECT *
+            FROM views v
+            LEFT JOIN pages p
+                ON p.target = v.target
+                AND p.lang = v.lang
+        SQL;
         $tab = add_li_params($query, [], $endpoint_params);
         $query = $tab['qua'];
         $params = $tab['params'];
+        break;
+
+    case 'views_new':
+        // $query = "SELECT v.target, v.lang, sum(v.views) as views FROM views_new v";
+        $query = <<<SQL
+            SELECT p.title, v.target, v.lang, sum(v.views) as views
+            FROM views_new v
+            LEFT JOIN pages p
+                ON p.target = v.target
+                AND p.lang = v.lang
+        SQL;
+        $tab = add_li_params($query, [], $endpoint_params);
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        $query .= " group by v.target";
         break;
 
     case 'user_access':
@@ -229,10 +258,6 @@ switch ($get) {
                 and p.lang = v.lang
             SQL;
             // ---
-            // $user_name = filter_input(INPUT_GET, 'user', FILTER_SANITIZE_SPECIAL_CHARS);
-            // $params = [$user_name];
-            // $query .= " and p.user = ?";
-            // ---
             $tab = add_li_params($query, [], $endpoint_params);
             // ---
             $query = $tab['qua'];
@@ -241,6 +266,26 @@ switch ($get) {
         };
         break;
 
+    case 'user_views2':
+        if (isset($_GET['user'])) {
+            $query = <<<SQL
+                SELECT p.title, v.target, sum(v.views) as views
+                FROM views_new v
+                JOIN pages p
+                    ON p.target = v.target
+                    AND p.lang = v.lang
+            SQL;
+            // ---
+            $tab = add_li_params($query, [], $endpoint_params);
+            // ---
+            $query = $tab['qua'];
+            // ---
+            $query .= " GROUP BY v.target";
+            // ---
+            $params = $tab['params'];
+            // ---
+        };
+        break;
     case 'lang_views':
         if (isset($_GET['lang'])) {
             $query = <<<SQL
@@ -250,13 +295,28 @@ switch ($get) {
                 AND p.lang = v.lang
             SQL;
             // ---
-            // $lang = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
-            // $params = [$lang];
-            // $query .= " and p.lang = ?";
+            $tab = add_li_params($query, [], $endpoint_params);
+            // ---
+            $query = $tab['qua'];
+            $params = $tab['params'];
+        };
+        break;
+
+    case 'lang_views2':
+        if (isset($_GET['lang'])) {
+            $query = <<<SQL
+                SELECT v.target, sum(v.views) as views
+                FROM views_new v
+                JOIN pages p
+                    ON p.target = v.target
+                    AND p.lang = v.lang
+            SQL;
             // ---
             $tab = add_li_params($query, [], $endpoint_params);
             // ---
             $query = $tab['qua'];
+            $query .= " GROUP BY v.target";
+            // ---
             $params = $tab['params'];
         };
         break;
@@ -356,6 +416,12 @@ if ($results === [] && ($qua !== "" || $query !== "")) {
 $qua = str_replace(["\n", "\r"], " ", $qua);
 $qua = preg_replace("/ +/", " ", $qua);
 
+// ---
+switch ($get) {
+    case 'leaderboard_table_formated':
+        $results = leaderboard_table_format($results);
+        break;
+}
 $out = [
     "time" => $execution_time,
     // "query" => $qua,

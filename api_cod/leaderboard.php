@@ -3,84 +3,49 @@
 namespace API\Leaderboard;
 /*
 Usage:
-use function API\Leaderboard\leaderboard_table;
-use function API\Leaderboard\leaderboard_table_new;
+use function API\Leaderboard\leaderboard_table_format;
 */
 
-use function API\Helps\sanitize_input;
-use function API\Helps\add_limit;
-
-function leaderboard_table()
+function leaderboard_table_format($data)
 {
     // ---
-    $pa_rams = [];
+    $result = [
+        "by_lang" => [],
+        "by_user" => [],
+        "by_month" => [],
+        "by_page" => $data
+    ];
     // ---
-    $qu_ery = "SELECT p.title,
-        p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, LEFT(p.pupdate, 7) as m,
-        p.user,
-        (SELECT u.user_group FROM users u WHERE p.user = u.username) AS user_group
-        FROM pages p
-        WHERE p.target != ''
-    ";
-    // ---
-    $user_group = sanitize_input($_GET['user_group'] ?? '', '/^[a-zA-Z ]+$/');
-    // ---
-    if ($user_group !== null && $user_group !== 'all') {
-        // ---
-        $qu_ery = "SELECT p.title,
-            p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, p.user, u.user_group, LEFT(p.pupdate, 7) as m
-            FROM pages p, users u
-            WHERE p.user = u.username
-            AND u.user_group = ?
-        ";
-        // ---
-        $pa_rams[] = $user_group;
-    };
-    // ---
-    $year = sanitize_input($_GET['year'] ?? '', '/^\d+$/');
-    // ---
-    if ($year !== null) {
-        $qu_ery .= " AND YEAR(p.pupdate) = ?";
-        $pa_rams[] = $year;
+    foreach ($data as $Key => $teb) {
+        // $title  = $teb['title'] ?? "";
+        // $cat    = $teb['cat'] ?? "";
+        //---
+        $month  = $teb['m'] ?? ""; // 2021-05
+        //---
+        if (!isset($result['by_month'][$month])) $result['by_month'][$month] = 0;
+        $result['by_month'][$month] += 1;
+        //---
+        // $target = $teb['target'] ?? "";
+        $lang   = $teb['lang'] ?? "";
+        $user   = $teb['user'] ?? "";
+        //---
+        $word   = isset($teb['word']) ? intval($teb['word']) : 0;
+        $views  = isset($teb['views']) ? intval($teb['views']) : 0;
+        //---
+        if (!isset($result['by_lang'][$lang])) {
+            $result['by_lang'][$lang] = ["pages" => 0, "words" => 0, "views" => 0];
+        }
+        $result['by_lang'][$lang]["pages"] += 1;
+        $result['by_lang'][$lang]["views"] += $views;
+        $result['by_lang'][$lang]["words"] += $word;
+
+        if (!isset($result['by_user'][$user])) {
+            $result['by_user'][$user] = ["pages" => 0, "words" => 0, "views" => 0];
+        }
+        $result['by_user'][$user]["pages"] += 1;
+        $result['by_user'][$user]["views"] += $views;
+        $result['by_user'][$user]["words"] += $word;
     }
     // ---
-    $qu_ery = add_limit($qu_ery);
-    // ---
-    return ["qua" => $qu_ery, "params" => $pa_rams];
-}
-
-
-function leaderboard_table_new()
-{
-    // ---
-    $pa_rams = [];
-    // ---
-    $qu_ery = "SELECT p.title,
-        p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, LEFT(p.pupdate, 7) as m,
-        p.user,
-        u.user_group
-        FROM pages p
-        LEFT JOIN users u ON p.user = u.username
-        WHERE p.target != ''
-    ";
-    // ---
-    $user_group = sanitize_input($_GET['user_group'] ?? '', '/^[a-zA-Z ]+$/');
-    // ---
-    if ($user_group !== null && $user_group !== 'all') {
-        // ---
-        $qu_ery .= " AND u.user_group = ?";
-        // ---
-        $pa_rams[] = $user_group;
-    };
-    // ---
-    $year = sanitize_input($_GET['year'] ?? '', '/^\d+$/');
-    // ---
-    if ($year !== null) {
-        $qu_ery .= " AND YEAR(p.pupdate) = ?";
-        $pa_rams[] = $year;
-    }
-    // ---
-    $qu_ery = add_limit($qu_ery);
-    // ---
-    return ["qua" => $qu_ery, "params" => $pa_rams];
+    return $result;
 }

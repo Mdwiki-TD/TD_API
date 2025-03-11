@@ -108,16 +108,18 @@
             { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" }
         ]
     },
-    "leaderboard_table_new": {
-        "params": [
-            { "name": "year", "column": "year", "type": "number", "placeholder": "Year" },
-            { "name": "user_group", "column": "user_group", "type": "text", "placeholder": "User group" }
-        ]
-    },
     "leaderboard_table": {
         "params": [
-            { "name": "year", "column": "year", "type": "number", "placeholder": "Year" },
-            { "name": "user_group", "column": "user_group", "type": "text", "placeholder": "User group" }
+            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year" },
+            { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category", "value_can_be_null": true },
+            { "name": "user_group", "column": "u.user_group", "type": "text", "placeholder": "User group" }
+        ]
+    },
+    "leaderboard_table_formated": {
+        "params": [
+            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year" },
+            { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category", "value_can_be_null": true },
+            { "name": "user_group", "column": "u.user_group", "type": "text", "placeholder": "User group" }
         ]
     },
     "lang_views": {
@@ -127,7 +129,21 @@
             { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "Year" }
         ]
     },
+    "lang_views2": {
+        "params": [
+            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
+            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
+            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "Year" }
+        ]
+    },
     "user_views": {
+        "params": [
+            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
+            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
+            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "Year" }
+        ]
+    },
+    "user_views2": {
         "params": [
             { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
             { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
@@ -147,17 +163,11 @@
             { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year" }
         ]
     },
-    "views_x": {
+    "views_new": {
         "params": [
-            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language Code" },
-            { "name": "target", "column": "target", "type": "text", "placeholder": "Target Page" },
-            { "name": "Total Views", "column": "countall", "type": "number", "placeholder": "Total Views Count" },
-            { "name": "Views 2021", "column": "count2021", "type": "number", "placeholder": "Views in 2021" },
-            { "name": "Views 2022", "column": "count2022", "type": "number", "placeholder": "Views in 2022" },
-            { "name": "Views 2023", "column": "count2023", "type": "number", "placeholder": "Views in 2023" },
-            { "name": "Views 2024", "column": "count2024", "type": "number", "placeholder": "Views in 2024" },
-            { "name": "Views 2025", "column": "count2025", "type": "number", "placeholder": "Views in 2025" },
-            { "name": "Views 2026", "column": "count2026", "type": "number", "placeholder": "Views in 2026" }
+            { "name": "lang", "column": "v.lang", "type": "text", "placeholder": "Language code" },
+            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year" },
+            { "name": "views", "column": "v.views", "type": "number", "placeholder": "Views" }
         ]
     },
     "words": {

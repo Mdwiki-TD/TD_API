@@ -18,6 +18,7 @@
     ],
     "views": [
         "views",
+        "views_new",
         "user_views",
         "lang_views"
     ],
@@ -33,7 +34,7 @@
     "statistics": [
         "status",
         "leaderboard_table",
-        "leaderboard_table_new",
+        "leaderboard_table_formated",
         "count_pages",
         "graph_data"
     ],
