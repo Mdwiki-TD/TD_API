@@ -10,10 +10,10 @@ function leaderboard_table_format($data)
 {
     // ---
     $result = [
+        // "by_page" => $data,
         "by_lang" => [],
         "by_user" => [],
-        "by_month" => [],
-        "by_page" => $data
+        "by_month" => []
     ];
     // ---
     foreach ($data as $Key => $teb) {

@@ -81,6 +81,13 @@
             { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true}
         ]
     },
+    "pages_by_user_or_lang": {
+        "params": [
+            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
+            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
+            { "name": "year", "column": "YEAR(p.date)", "type": "number", "placeholder": "year of date" }
+        ]
+    },
     "user_access": {
         "params": [
             { "name": "user_name", "column": "user_name", "type": "text", "placeholder": "Username" }
@@ -183,11 +190,43 @@
             { "name": "Full", "column": "tt_full", "type": "number", "placeholder": "Full Translation (0 or 1)" }
         ]
     },
+    "lang_names": {
+        "params": [
+        ]
+    },
+    "lang_names_new": {
+        "params": [
+        ]
+    },
+    "site_matrix": {
+        "params": [
+        ]
+    },
     "projects": {
         "params": [
         ]
     },
+    "inter_wiki": {
+        "params": [
+        ]
+    },
     "full_translators": {
+        "params": [
+        ]
+    },
+    "settings": {
+        "params": [
+        ]
+    },
+    "graph_data": {
+        "params": [
+        ]
+    },
+    "users_by_last_pupdate": {
+        "params": [
+        ]
+    },
+    "users_by_wiki": {
         "params": [
         ]
     }
