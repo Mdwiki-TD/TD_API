@@ -19,15 +19,14 @@
     "views": [
         "views",
         "views_new",
-        "user_views",
-        "lang_views"
+        "user_views2",
+        "lang_views2"
     ],
     "users": [
         "users",
         "user_access",
         "users_by_wiki",
         "users_by_last_pupdate",
-        "users_by_last_pupdate_old",
         "full_translators",
         "coordinator"
     ],
