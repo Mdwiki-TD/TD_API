@@ -111,11 +111,11 @@ switch ($get) {
     case 'leaderboard_table_formated':
         // ---
         $query = "SELECT p.title,
-            p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, p.user, u.user_group, LEFT(p.pupdate, 7) as m, sum(v.views) as views
+            p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, p.user, u.user_group, LEFT(p.pupdate, 7) as m, v.views
             FROM pages p
             LEFT JOIN users u
                 ON p.user = u.username
-            LEFT JOIN views_new v
+            LEFT JOIN views_new_all v
                 ON p.target = v.target
                 AND p.lang = v.lang
             WHERE p.target != ''
@@ -125,7 +125,7 @@ switch ($get) {
         // ---
         $query = $tab["qua"];
         // ---
-        $query .= " \n group by v.target, v.lang";
+        // $query .= " \n group by v.target, v.lang";
         $query .= " ORDER BY 1 DESC";
         //---
         $params = $tab["params"];
@@ -153,8 +153,8 @@ switch ($get) {
     case 'views':
     case 'views_new':
         $query = <<<SQL
-            SELECT p.title, v.target, v.lang, sum(v.views) as views
-            FROM views_new v
+            SELECT p.title, v.target, v.lang, v.views as views
+            FROM views_new_all v
             LEFT JOIN pages p
                 ON p.target = v.target
                 AND p.lang = v.lang
@@ -162,7 +162,7 @@ switch ($get) {
         $tab = add_li_params($query, [], $endpoint_params);
         $query = $tab['qua'];
         $params = $tab['params'];
-        $query .= " group by v.target, v.lang";
+        // $query .= " group by v.target, v.lang"; // used with views_new and sum(v.views)
         $query .= " ORDER BY 1 DESC";
         break;
 
@@ -244,8 +244,8 @@ switch ($get) {
     case 'user_views2':
         if (isset($_GET['user'])) {
             $query = <<<SQL
-                SELECT p.title, v.target, v.lang, sum(v.views) as views
-                FROM views_new v
+                SELECT p.title, v.target, v.lang, v.views
+                FROM views_new_all v
                 JOIN pages p
                     ON p.target = v.target
                     AND p.lang = v.lang
@@ -255,7 +255,7 @@ switch ($get) {
             // ---
             $query = $tab['qua'];
             // ---
-            $query .= " GROUP BY v.target, v.lang";
+            // $query .= " GROUP BY v.target, v.lang";
             // ---
             $params = $tab['params'];
             // ---
@@ -266,7 +266,7 @@ switch ($get) {
     case 'lang_views2':
         if (isset($_GET['lang'])) {
             $query = <<<SQL
-                SELECT v.target, v.lang, sum(v.views) as views
+                SELECT v.target, v.lang, v.views
                 FROM views_new v
                 LEFT JOIN pages p
                     ON p.target = v.target
@@ -276,7 +276,7 @@ switch ($get) {
             $tab = add_li_params($query, [], $endpoint_params);
             // ---
             $query = $tab['qua'];
-            $query .= " GROUP BY v.target, v.lang";
+            // $query .= " GROUP BY v.target, v.lang";
             // ---
             $params = $tab['params'];
         };
