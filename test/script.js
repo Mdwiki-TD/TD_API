@@ -40,7 +40,7 @@ function createParamInput(param) {
         // ---
         const label = document.createElement('label');
         label.textContent = param.name;
-        // input.name = param.name;
+        input.name = param.name;
         div.appendChild(label);
         div.appendChild(input);
         // ---
@@ -119,6 +119,10 @@ function createParamInput(param) {
                         <input type="radio" class="form-check-input" id="not_0" name="${param.name}" value="&#62;0">
                         <label class="form-check-label" for="not_0">&#62;0</label>
                     </div>
+                    <div class="form-check form-check-inline">
+                        <input type="radio" class="form-check-input" id="is_0" name="${param.name}" value="0">
+                        <label class="form-check-label" for="is_0">= 0</label>
+                    </div>
                 </div>
             `;
         };
@@ -170,7 +174,8 @@ async function testEndpoint(endpoint, button) {
 
     // Get parameters
     const endpointContent = button.closest('.endpoint-content');
-    const paramInputs = endpointContent.querySelectorAll(' input, select');
+    // ---
+    const paramInputs = endpointContent.querySelectorAll('input');
     // const paramInputs = endpointContent.querySelectorAll('.param-group input, .param-group select');
     paramInputs.forEach(input => {
         var value = input.value;
@@ -187,6 +192,30 @@ async function testEndpoint(endpoint, button) {
             } else if (value) {
                 params.append(input.name, value);
             }
+        }
+    });
+    // ---
+    const paramInputs_select = endpointContent.querySelectorAll('select');
+    // const paramInputs = endpointContent.querySelectorAll('.param-group input, .param-group select');
+    paramInputs_select.forEach(input => {
+        // ---
+        console.log(input);
+        // ---
+        // console.table(input);
+        // ---
+        let value;
+        // ---
+        for (let i = 0; i < input.options.length; i++) {
+            if (input.options[i].selected) {
+                value = input.options[i].value;
+                break;
+            }
+        }
+        // ---
+        console.log(value);
+        // ---
+        if (value) {
+            params.append(input.name, value);
         }
     });
     // ---
