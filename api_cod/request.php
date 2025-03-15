@@ -212,11 +212,12 @@ switch ($get) {
                     p1.user,
                     p1.pupdate,
                     p1.lang,
+                    p1.title,
                     ROW_NUMBER() OVER (PARTITION BY p1.user ORDER BY p1.pupdate DESC) AS rn
                 FROM pages p1
                 WHERE p1.target != ''
             )
-            SELECT target, user, pupdate, lang
+            SELECT target, user, pupdate, lang, title
             FROM RankedPages
             WHERE rn = 1
             ORDER BY pupdate DESC;
