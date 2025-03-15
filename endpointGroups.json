@@ -10,7 +10,8 @@
     ],
     "pages": [
         "pages",
-        "pages_users"
+        "pages_users",
+        "in_process"
     ],
     "identifiers": [
         "qids",

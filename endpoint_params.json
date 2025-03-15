@@ -81,6 +81,12 @@
             { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true}
         ]
     },
+    "in_process": {
+        "params": [
+            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" },
+            { "name": "user", "column": "user", "type": "text", "placeholder": "Username" }
+        ]
+    },
     "pages_by_user_or_lang": {
         "params": [
             { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },

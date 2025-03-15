@@ -27,6 +27,7 @@ use function API\Missing\missing_query;
 use function API\Missing\missing_qids_query;
 
 $other_tables = [
+    'in_process',
     'assessments',
     'refs_counts',
     'enwiki_pageviews',
