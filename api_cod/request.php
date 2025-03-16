@@ -66,8 +66,13 @@ if (!in_array($SELECT, $select_valids)) {
 };
 
 // load endpoint_params.json
-$endpoint_params = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
-$endpoint_params = $endpoint_params[$get]['params'] ?? [];
+$endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
+$endpoint_params = $endpoint_params_tab[$get]['params'] ?? [];
+// ---
+if (isset($endpoint_params_tab[$get]['redirect'])) {
+    $redirect = $endpoint_params_tab[$get]['redirect'];
+    $endpoint_params = $endpoint_params_tab[$redirect]['params'] ?? [];
+};
 // ---
 switch ($get) {
 
@@ -350,7 +355,7 @@ switch ($get) {
     case 'pages':
     case 'pages_users':
         // ---
-        $qua = "SELECT $DISTINCT $SELECT FROM $get";
+        $qua = "SELECT $DISTINCT $SELECT FROM $get p";
         // ---
         $tab = add_li_params($qua, [], $endpoint_params);
         // ---
@@ -360,8 +365,27 @@ switch ($get) {
         $title_not_in_pages = (isset($_GET['title_not_in_pages'])) ? true : false;
         // ---
         if ($title_not_in_pages) {
-            $query .= " and title not in (select p.title from pages p WHERE p.lang = lang and p.target != '') ";
+            $query .= " and p.title not in (select p2.title from pages p2 WHERE p2.lang = p.lang and p2.target != '') ";
         }
+        // ---
+        $query = add_group($query);
+        $query = add_order($query);
+        // ---
+        break;
+
+    case 'pages_with_views':
+        // ---
+        $qua = <<<SQL
+            SELECT DISTINCT $SELECT FROM pages p
+            LEFT JOIN views_new_all v
+                ON p.target = v.target
+                AND p.lang = v.lang
+        SQL;
+        // ---
+        $tab = add_li_params($qua, [], $endpoint_params);
+        // ---
+        $query = $tab['qua'];
+        $params = $tab['params'];
         // ---
         $query = add_group($query);
         $query = add_order($query);

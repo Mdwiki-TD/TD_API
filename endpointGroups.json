@@ -11,6 +11,7 @@
     "pages": [
         "pages",
         "pages_users",
+        "pages_with_views",
         "in_process"
     ],
     "identifiers": [

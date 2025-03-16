@@ -292,11 +292,16 @@ function generateEndpoints(endpointParams) {
         groupEndpoints.forEach(endpoint => {
             const div = createEndpoint(endpoint);
             const paramsContainer = div.querySelector('.params-container');
-
-            if (endpointParams[endpoint] && endpointParams[endpoint].params) {
-                // sort endpointParams[endpoint].params by param.type
-                // endpointParams[endpoint].params.sort((a, b) => { return a.type.localeCompare(b.type); })
-                endpointParams[endpoint].params.forEach(param => {
+            let end_params = endpointParams[endpoint].params;
+            // ---
+            if (end_params === undefined && endpointParams[endpoint].redirect) {
+                end_params = endpointParams[endpointParams[endpoint].redirect].params;
+            };
+            // ---
+            if (end_params) {
+                // sort end_params by param.type
+                // end_params.sort((a, b) => { return a.type.localeCompare(b.type); })
+                end_params.forEach(param => {
                     paramsContainer.appendChild(createParamInput(param));
                 });
             }
