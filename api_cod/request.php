@@ -376,15 +376,23 @@ switch ($get) {
     case 'pages_with_views':
         // ---
         $qua = <<<SQL
-            SELECT DISTINCT $SELECT FROM pages p
-            LEFT JOIN views_new_all v
-                ON p.target = v.target
-                AND p.lang = v.lang
+            from pages p
+            WHERE p.target != ''
         SQL;
         // ---
         $tab = add_li_params($qua, [], $endpoint_params);
         // ---
         $query = $tab['qua'];
+        // ---
+        $query_start = <<<SQL
+            select distinct
+                p.id, p.title, p.word, p.translate_type, p.cat,
+                p.lang, p.user, p.target, p.date, p.pupdate, p.add_date, p.deleted, p.target, p.lang,
+                (select v.views from views_new_all v WHERE p.target = v.target AND p.lang = v.lang) as views
+        SQL;
+        // ---
+        $query = $query_start . $query;
+        // ---
         $params = $tab['params'];
         // ---
         $query = add_group($query);
