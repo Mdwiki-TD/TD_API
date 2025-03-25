@@ -28,8 +28,15 @@ function add_group($qua)
 }
 function add_order($qua)
 {
+    $orders = [
+        "pupdate_or_add_date" => "GREATEST(UNIX_TIMESTAMP(pupdate), UNIX_TIMESTAMP(add_date))",
+    ];
+    // ---
     if (isset($_GET['order'])) {
         $added = filter_input(INPUT_GET, 'order', FILTER_SANITIZE_SPECIAL_CHARS);
+        // ---
+        $added = $orders[$added] ?? $added;
+        // ---
         $qua .= " ORDER BY $added DESC";
     }
     return $qua;

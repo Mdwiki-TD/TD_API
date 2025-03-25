@@ -79,7 +79,63 @@ class Database
     }
 }
 
-function fetch_query($sql_query, $params = null)
+function create_apcu_key($sql_query, $params)
+{
+    if (empty($sql_query)) {
+        return "!empty_sql_query";
+    }
+    // Serialize the parameters to create a unique cache key
+    $params_string = is_array($params) ? json_encode($params) : '';
+
+    return 'apcu_' . md5($sql_query . $params_string);
+}
+
+function get_from_apcu($sql_query, $params)
+{
+    $cache_key = create_apcu_key($sql_query, $params);
+    // ---
+    $items = apcu_fetch($cache_key);
+    // ---
+    if (empty($items)) {
+        apcu_delete($cache_key);
+        $items = false;
+    }
+    return $items;
+}
+
+function add_to_apcu($sql_query, $params, $results)
+{
+    $cache_key = create_apcu_key($sql_query, $params);
+    // ---
+    $cache_ttl = 3600 * 12;
+    // ---
+    apcu_store($cache_key, $results, $cache_ttl);
+}
+
+function fetch_query_new($sql_query, $params = null)
+{
+    $in_apcu = get_from_apcu($sql_query, $params);
+    // ---
+    if ($in_apcu && is_array($in_apcu) && !empty($in_apcu)) {
+        return ['results' => $in_apcu, "source" => "apcu"];
+    }
+    // Create a new database object
+    $db = new Database($_SERVER['SERVER_NAME'] ?? '');
+
+    // Execute a SQL query
+    $results = $db->fetch_query($sql_query, $params);
+
+    // Destroy the database object
+    $db = null;
+
+    if ($results && !empty($results)) {
+        add_to_apcu($sql_query, $params, $results);
+    }
+
+    return ['results' => $results, "source" => "db"];
+}
+
+function fetch_query_old($sql_query, $params = null)
 {
 
     // Create a new database object
@@ -91,5 +147,5 @@ function fetch_query($sql_query, $params = null)
     // Destroy the database object
     $db = null;
 
-    return $results;
+    return ['results' => $results, "source" => "db"];
 };

@@ -11,7 +11,7 @@ include_once __DIR__ . '/include.php';
 
 use function API\Langs\get_lang_names_new;
 use function API\Langs\get_lang_names;
-use function API\SQL\fetch_query;
+use function API\SQL\fetch_query_new;
 use function API\InterWiki\get_inter_wiki;
 use function API\SiteMatrix\get_site_matrix;
 use function API\Helps\sanitize_input;
@@ -27,6 +27,7 @@ use function API\Missing\missing_query;
 use function API\Missing\missing_qids_query;
 
 $other_tables = [
+    'in_process',
     'assessments',
     'refs_counts',
     'enwiki_pageviews',
@@ -65,8 +66,13 @@ if (!in_array($SELECT, $select_valids)) {
 };
 
 // load endpoint_params.json
-$endpoint_params = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
-$endpoint_params = $endpoint_params[$get]['params'] ?? [];
+$endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
+$endpoint_params = $endpoint_params_tab[$get]['params'] ?? [];
+// ---
+if (isset($endpoint_params_tab[$get]['redirect'])) {
+    $redirect = $endpoint_params_tab[$get]['redirect'];
+    $endpoint_params = $endpoint_params_tab[$redirect]['params'] ?? [];
+};
 // ---
 switch ($get) {
 
@@ -153,7 +159,7 @@ switch ($get) {
     case 'views':
     case 'views_new':
         $query = <<<SQL
-            SELECT p.title, v.target, v.lang, v.views as views
+            SELECT p.title, v.target, v.lang, v.views
             FROM views_new_all v
             LEFT JOIN pages p
                 ON p.target = v.target
@@ -211,11 +217,12 @@ switch ($get) {
                     p1.user,
                     p1.pupdate,
                     p1.lang,
+                    p1.title,
                     ROW_NUMBER() OVER (PARTITION BY p1.user ORDER BY p1.pupdate DESC) AS rn
                 FROM pages p1
                 WHERE p1.target != ''
             )
-            SELECT target, user, pupdate, lang
+            SELECT target, user, pupdate, lang, title
             FROM RankedPages
             WHERE rn = 1
             ORDER BY pupdate DESC;
@@ -267,7 +274,7 @@ switch ($get) {
         if (isset($_GET['lang'])) {
             $query = <<<SQL
                 SELECT v.target, v.lang, v.views
-                FROM views_new v
+                FROM views_new_all v
                 LEFT JOIN pages p
                     ON p.target = v.target
                     AND p.lang = v.lang
@@ -348,7 +355,7 @@ switch ($get) {
     case 'pages':
     case 'pages_users':
         // ---
-        $qua = "SELECT $DISTINCT $SELECT FROM $get";
+        $qua = "SELECT $DISTINCT $SELECT FROM $get p";
         // ---
         $tab = add_li_params($qua, [], $endpoint_params);
         // ---
@@ -358,8 +365,35 @@ switch ($get) {
         $title_not_in_pages = (isset($_GET['title_not_in_pages'])) ? true : false;
         // ---
         if ($title_not_in_pages) {
-            $query .= " and title not in (select p.title from pages p WHERE p.lang = lang and p.target != '') ";
+            $query .= " and p.title not in (select p2.title from pages p2 WHERE p2.lang = p.lang and p2.target != '') ";
         }
+        // ---
+        $query = add_group($query);
+        $query = add_order($query);
+        // ---
+        break;
+
+    case 'pages_with_views':
+        // ---
+        $qua = <<<SQL
+            from pages p
+            WHERE p.target != ''
+        SQL;
+        // ---
+        $tab = add_li_params($qua, [], $endpoint_params);
+        // ---
+        $query = $tab['qua'];
+        // ---
+        $query_start = <<<SQL
+            select distinct
+                p.id, p.title, p.word, p.translate_type, p.cat,
+                p.lang, p.user, p.target, p.date, p.pupdate, p.add_date, p.deleted, p.target, p.lang,
+                (select v.views from views_new_all v WHERE p.target = v.target AND p.lang = v.lang) as views
+        SQL;
+        // ---
+        $query = $query_start . $query;
+        // ---
+        $params = $tab['params'];
         // ---
         $query = add_group($query);
         $query = add_order($query);
@@ -377,18 +411,24 @@ switch ($get) {
         $results = ["error" => "invalid get request"];
         break;
 }
+$source = "db";
 
 if ($results === [] && ($qua !== "" || $query !== "")) {
     $start_time = microtime(true);
+    $results_tab = [];
     if ($query !== "") {
         $query = add_limit($query);
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
-        $results = fetch_query($query, $params);
+        $results_tab = fetch_query_new($query, $params);
     } else {
         $qua = add_limit($qua);
-        $results = fetch_query($qua);
+        $results_tab = fetch_query_new($qua);
     }
+    // ---
+    $results = $results_tab['results'];
+    $source = $results_tab['source'];
+    // ---
     $end_time = microtime(true);
     $execution_time = $end_time - $start_time;
     $execution_time = number_format($execution_time, 2);
@@ -405,20 +445,18 @@ switch ($get) {
 }
 $out = [
     "time" => $execution_time,
-    // "query" => $qua,
+    "query" => $qua,
+    "source" => $source,
     "length" => count($results),
     "results" => $results
 ];
 
 // if server is localhost then add query to out
-if ($_SERVER['SERVER_NAME'] === 'localhost') {
-    $out = [
-        "query" => $qua,
-        "time" => $execution_time,
-        "length" => count($results),
-        "results" => $results
-    ];
+if ($_SERVER['SERVER_NAME'] !== 'localhost') {
+    // remove query from $out
+    unset($out["query"]);
 };
+
 $out["supported_params"] = [];
 foreach ($endpoint_params as $param) {
     $out["supported_params"][] = $param["name"];

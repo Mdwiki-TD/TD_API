@@ -14,13 +14,14 @@ use function API\Missing\missing_query;
 function missing_query($endpoint_params)
 {
     // ---
+    // FROM all_articles a
     $query = <<<SQL
-        SELECT a.article_id
-            FROM all_articles a
+        SELECT *
+            FROM all_articles_titles a
             WHERE NOT EXISTS (
                 SELECT 1
                 FROM all_exists t
-                WHERE t.article_id = a.article_id
+                WHERE t.article_id = a.title
 
     SQL;
     $params = [];
@@ -47,8 +48,8 @@ function missing_qids_query($endpoint_params)
 {
     // ---
     $query = <<<SQL
-        SELECT a.qid
-            FROM all_qids a
+        SELECT *
+            FROM all_qids_titles a
             WHERE NOT EXISTS (
                 SELECT 1
                 FROM all_qidsexists t
