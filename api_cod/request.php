@@ -11,7 +11,7 @@ include_once __DIR__ . '/include.php';
 
 use function API\Langs\get_lang_names_new;
 use function API\Langs\get_lang_names;
-use function API\SQL\fetch_query;
+use function API\SQL\fetch_query_new;
 use function API\InterWiki\get_inter_wiki;
 use function API\SiteMatrix\get_site_matrix;
 use function API\Helps\sanitize_input;
@@ -411,18 +411,24 @@ switch ($get) {
         $results = ["error" => "invalid get request"];
         break;
 }
+$source = "db";
 
 if ($results === [] && ($qua !== "" || $query !== "")) {
     $start_time = microtime(true);
+    $results_tab = [];
     if ($query !== "") {
         $query = add_limit($query);
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
-        $results = fetch_query($query, $params);
+        $results_tab = fetch_query_new($query, $params);
     } else {
         $qua = add_limit($qua);
-        $results = fetch_query($qua);
+        $results_tab = fetch_query_new($qua);
     }
+    // ---
+    $results = $results_tab['results'];
+    $source = $results_tab['source'];
+    // ---
     $end_time = microtime(true);
     $execution_time = $end_time - $start_time;
     $execution_time = number_format($execution_time, 2);
@@ -439,20 +445,18 @@ switch ($get) {
 }
 $out = [
     "time" => $execution_time,
-    // "query" => $qua,
+    "query" => $qua,
+    "source" => $source,
     "length" => count($results),
     "results" => $results
 ];
 
 // if server is localhost then add query to out
-if ($_SERVER['SERVER_NAME'] === 'localhost') {
-    $out = [
-        "query" => $qua,
-        "time" => $execution_time,
-        "length" => count($results),
-        "results" => $results
-    ];
+if ($_SERVER['SERVER_NAME'] !== 'localhost') {
+    // remove query from $out
+    unset($out["query"]);
 };
+
 $out["supported_params"] = [];
 foreach ($endpoint_params as $param) {
     $out["supported_params"][] = $param["name"];
