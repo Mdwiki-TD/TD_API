@@ -94,12 +94,17 @@ function get_from_apcu($sql_query, $params)
 {
     $cache_key = create_apcu_key($sql_query, $params);
     // ---
-    $items = apcu_fetch($cache_key);
+    $items = [];
     // ---
-    if (empty($items)) {
-        apcu_delete($cache_key);
-        $items = false;
+    if (apcu_exists($cache_key)) {
+        $items = apcu_fetch($cache_key);
+        // ---
+        if (empty($items)) {
+            apcu_delete($cache_key);
+            $items = false;
+        }
     }
+    // ---
     return $items;
 }
 
