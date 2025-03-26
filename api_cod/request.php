@@ -420,10 +420,10 @@ if ($results === [] && ($qua !== "" || $query !== "")) {
         $query = add_limit($query);
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
-        $results_tab = fetch_query_new($query, $params);
+        $results_tab = fetch_query_new($query, $params, $get);
     } else {
         $qua = add_limit($qua);
-        $results_tab = fetch_query_new($qua);
+        $results_tab = fetch_query_new($qua, [], $get);
     }
     // ---
     $results = $results_tab['results'];

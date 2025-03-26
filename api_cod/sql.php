@@ -117,13 +117,16 @@ function add_to_apcu($sql_query, $params, $results)
     apcu_store($cache_key, $results, $cache_ttl);
 }
 
-function fetch_query_new($sql_query, $params = null)
+function fetch_query_new($sql_query, $params, $get)
 {
-    $in_apcu = get_from_apcu($sql_query, $params);
-    // ---
-    if ($in_apcu && is_array($in_apcu) && !empty($in_apcu)) {
-        return ['results' => $in_apcu, "source" => "apcu"];
+    if ($get != 'settings') {
+        $in_apcu = get_from_apcu($sql_query, $params);
+        // ---
+        if ($in_apcu && is_array($in_apcu) && !empty($in_apcu)) {
+            return ['results' => $in_apcu, "source" => "apcu"];
+        }
     }
+    // ---
     // Create a new database object
     $db = new Database($_SERVER['SERVER_NAME'] ?? '');
 
@@ -133,8 +136,10 @@ function fetch_query_new($sql_query, $params = null)
     // Destroy the database object
     $db = null;
 
-    if ($results && !empty($results)) {
-        add_to_apcu($sql_query, $params, $results);
+    if ($get != 'settings') {
+        if ($results && !empty($results)) {
+            add_to_apcu($sql_query, $params, $results);
+        }
     }
 
     return ['results' => $results, "source" => "db"];
