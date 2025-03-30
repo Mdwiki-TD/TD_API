@@ -143,19 +143,6 @@ switch ($get) {
         $params = $status['params'];
         break;
 
-    case 'views_old':
-        $query = <<<SQL
-            SELECT *
-            FROM views v
-            LEFT JOIN pages p
-                ON p.target = v.target
-                AND p.lang = v.lang
-        SQL;
-        $tab = add_li_params($query, [], $endpoint_params);
-        $query = $tab['qua'];
-        $params = $tab['params'];
-        break;
-
     case 'views':
     case 'views_new':
         $query = <<<SQL
