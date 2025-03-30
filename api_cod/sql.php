@@ -119,7 +119,7 @@ function add_to_apcu($sql_query, $params, $results)
 
 function fetch_query_new($sql_query, $params, $get)
 {
-    if ($get != 'settings') {
+    if ($get != 'settings' && isset($_REQUEST['apcu'])) {
         $in_apcu = get_from_apcu($sql_query, $params);
         // ---
         if ($in_apcu && is_array($in_apcu) && !empty($in_apcu)) {
@@ -136,7 +136,7 @@ function fetch_query_new($sql_query, $params, $get)
     // Destroy the database object
     $db = null;
 
-    if ($get != 'settings') {
+    if ($get != 'settings' && isset($_REQUEST['apcu'])) {
         if ($results && !empty($results)) {
             add_to_apcu($sql_query, $params, $results);
         }
