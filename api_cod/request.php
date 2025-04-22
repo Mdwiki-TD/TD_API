@@ -33,6 +33,7 @@ $other_tables = [
     'enwiki_pageviews',
     'categories',
     'full_translators',
+    'users_no_inprocess',
     'projects',
     'settings',
     'translate_type',
@@ -53,9 +54,14 @@ $execution_time = 0;
 
 $select_valids = [
     'count(title) as count',
+    'count(p.title) as count',
     'YEAR(date) AS year',
+    'YEAR(p.date) AS year',
     'YEAR(pupdate) AS year',
+    'YEAR(p.pupdate) AS year',
     'lang',
+    'p.lang',
+    'p.user',
     'user',
 ];
 
@@ -141,19 +147,6 @@ switch ($get) {
         $status = make_status_query();
         $query = $status['qua'];
         $params = $status['params'];
-        break;
-
-    case 'views_old':
-        $query = <<<SQL
-            SELECT *
-            FROM views v
-            LEFT JOIN pages p
-                ON p.target = v.target
-                AND p.lang = v.lang
-        SQL;
-        $tab = add_li_params($query, [], $endpoint_params);
-        $query = $tab['qua'];
-        $params = $tab['params'];
         break;
 
     case 'views':
@@ -335,7 +328,8 @@ switch ($get) {
     case 'pages_by_user_or_lang':
         // ---
         $qua = <<<SQL
-            SELECT DISTINCT *
+            SELECT DISTINCT p.title, p.word, p.translate_type, p.cat, p.lang, p.user, p.target, p.date,
+            p.pupdate, p.add_date, p.deleted, v.views
             FROM pages p
             LEFT JOIN views_new_all v
                 ON p.target = v.target
@@ -420,10 +414,10 @@ if ($results === [] && ($qua !== "" || $query !== "")) {
         $query = add_limit($query);
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
-        $results_tab = fetch_query_new($query, $params);
+        $results_tab = fetch_query_new($query, $params, $get);
     } else {
         $qua = add_limit($qua);
-        $results_tab = fetch_query_new($qua);
+        $results_tab = fetch_query_new($qua, [], $get);
     }
     // ---
     $results = $results_tab['results'];
