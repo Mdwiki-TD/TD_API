@@ -33,6 +33,7 @@ $other_tables = [
     'enwiki_pageviews',
     'categories',
     'full_translators',
+    'users_no_inprocess',
     'projects',
     'settings',
     'translate_type',
