@@ -114,6 +114,18 @@ switch ($get) {
         // echo json_encode($tab);
         break;
 
+    case 'pages_users_to_main':
+        $query = "SELECT * FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
+        $params = [];
+        if (isset($_GET['lang'])) {
+            $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
+            if ($added !== null) {
+                $query .= " AND pu.lang = ?";
+                $params[] = $added;
+            }
+        }
+        break;
+
     case 'coordinator':
         $qua = "SELECT $SELECT FROM coordinator";
         $qua = add_limit($qua);
