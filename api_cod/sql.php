@@ -28,7 +28,7 @@ class Database
     public function __construct($server_name, $db_suffix = 'mdwiki')
     {
         if (empty($db_suffix)) {
-            $db_suffix = 'localhost';
+            $db_suffix = 'mdwiki';
         }
         // ---
         $this->db_suffix = $db_suffix;
