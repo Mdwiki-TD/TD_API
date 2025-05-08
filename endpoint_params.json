@@ -58,6 +58,7 @@
             { "name": "pupdate", "column": "p.pupdate", "type": "pupdate", "placeholder": "Date of publication" },
             { "name": "add_date", "column": "p.add_date", "type": "text", "placeholder": "Date of addition to DB" },
             { "name": "limit", "column": "p.limit", "type": "number", "placeholder": "Limit results", "value": "50", "no_select": true },
+            { "name": "offset", "column": "p.offset", "type": "number", "placeholder": "Offset results", "value": "0", "no_select": true },
             { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "year of date" },
             { "name": "YEAR(date)", "column": "YEAR(p.date)", "type": "number", "placeholder": "year of date" },
             { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
@@ -80,6 +81,7 @@
             { "name": "add_date", "column": "add_date", "type": "text", "placeholder": "Date of addition to DB" },
             { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field", "no_select": true },
             { "name": "limit", "column": "limit", "type": "number", "placeholder": "Limit results", "value": "50", "no_select": true },
+            { "name": "offset", "column": "p.offset", "type": "number", "placeholder": "Offset results", "value": "0", "no_select": true },
             { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
             { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true}
         ]

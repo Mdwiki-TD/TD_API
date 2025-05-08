@@ -55,6 +55,7 @@ function createParamInput(param) {
     var value = param.value || '';
     // ---
     var names_no_more = [
+        "offset",
         "limit",
         "order",
         "select",
@@ -325,6 +326,18 @@ function generateEndpoints(endpointParams) {
                 end_params.forEach(param => {
                     paramsContainer.appendChild(createParamInput(param));
                 });
+            }
+
+            // check if paramsContainer has limit before appending
+            if (!paramsContainer.querySelector(`input[name="offset"]`)) {
+                // Add common parameter for offset
+                const limitParam = {
+                    name: 'offset',
+                    type: 'number',
+                    placeholder: 'Offset of results',
+                    value: '0'
+                };
+                paramsContainer.appendChild(createParamInput(limitParam));
             }
 
             // check if paramsContainer has limit before appending

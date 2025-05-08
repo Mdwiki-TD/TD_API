@@ -19,6 +19,7 @@ use function API\Helps\add_li_params;
 use function API\Helps\add_group;
 use function API\Helps\add_order;
 use function API\Helps\add_limit;
+use function API\Helps\add_offset;
 use function API\Qids\qids_qua;
 use function API\Leaderboard\leaderboard_table_format;
 use function API\Status\make_status_query;
@@ -424,11 +425,13 @@ if ($results === [] && ($qua !== "" || $query !== "")) {
     $results_tab = [];
     if ($query !== "") {
         $query = add_limit($query);
+        $query = add_offset($query);
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
         $results_tab = fetch_query_new($query, $params, $get);
     } else {
         $qua = add_limit($qua);
+        $qua = add_offset($qua);
         $results_tab = fetch_query_new($qua, [], $get);
     }
     // ---
