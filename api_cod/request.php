@@ -54,6 +54,8 @@ $results = [];
 $execution_time = 0;
 
 $select_valids = [
+    'COUNT(*) as count',
+    'count(*) as count',
     'count(title) as count',
     'count(p.title) as count',
     'YEAR(date) AS year',
@@ -66,11 +68,16 @@ $select_valids = [
     'user',
 ];
 
-$SELECT = (isset($_GET['select'])) ? filter_input(INPUT_GET, 'select', FILTER_SANITIZE_SPECIAL_CHARS) : '*';
+// $SELECT = (isset($_GET['select'])) ? filter_input(INPUT_GET, 'select', FILTER_SANITIZE_SPECIAL_CHARS) : '*';
+$SELECT = (isset($_GET['select'])) ? $_GET['select'] : '*';
 
 if (!in_array($SELECT, $select_valids)) {
     $SELECT = '*';
 };
+
+if (isset($_GET['select']) && strtolower($_GET['select']) == 'count(*)') {
+    $SELECT = 'COUNT(*) as count';
+}
 
 // load endpoint_params.json
 $endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
