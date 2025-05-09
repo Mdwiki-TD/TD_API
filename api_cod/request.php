@@ -209,16 +209,27 @@ switch ($get) {
         break;
 
     case 'users_by_wiki':
+        $query = <<<SQL
+            SELECT user, lang, YEAR(pupdate) AS year, COUNT(target) AS target_count
+            FROM pages
+            LEFT JOIN users u
+                ON user = u.username
+        SQL;
+        // ---
+        $tab = add_li_params($query, [], $endpoint_params);
+        $params = $tab['params'];
+        // ---
+        $query = $tab['qua'];
+        $query .= " GROUP BY user, lang";
+        // ---
         // , sum(target_count) AS sum_target
-        $qua = <<<SQL
-            SELECT user, lang, MAX(target_count) AS max_target
+        $query = <<<SQL
+            SELECT user, lang, year, MAX(target_count) AS max_target
                 FROM (
-                    SELECT user, lang, COUNT(target) AS target_count
-                    FROM pages
-                    GROUP BY user, lang
+                    $query
                 ) AS subquery
             GROUP BY user
-            ORDER BY 3 DESC
+            ORDER BY 4 DESC
         SQL;
         break;
 
