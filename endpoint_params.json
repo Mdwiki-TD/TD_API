@@ -247,9 +247,9 @@
     },
     "users_by_wiki": {
         "params": [
-            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "year of date" },
-            { "name": "user_group", "column": "u.user_group", "type": "text", "placeholder": "User group" },
-            { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category" }
+            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "year of date", "no_empty_value": true },
+            { "name": "user_group", "column": "u.user_group", "type": "text", "placeholder": "User group", "no_empty_value": true },
+            { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category", "no_empty_value": true }
         ]
     }
 }
