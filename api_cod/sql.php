@@ -23,19 +23,30 @@ class Database
     private $user;
     private $password;
     private $dbname;
+    private $db_suffix;
 
-    public function __construct($server_name)
+    public function __construct($server_name, $db_suffix = 'mdwiki')
+    {
+        if (empty($db_suffix)) {
+            $db_suffix = 'mdwiki';
+        }
+        // ---
+        $this->db_suffix = $db_suffix;
+        $this->set_db($server_name);
+    }
+
+    private function set_db($server_name)
     {
         if ($server_name === 'localhost' || !getenv('HOME')) {
             $this->host = 'localhost:3306';
-            $this->dbname = 'mdwiki';
+            $this->dbname = $this->db_suffix;
             $this->user = 'root';
             $this->password = 'root11';
         } else {
             $ts_pw = posix_getpwuid(posix_getuid());
             $ts_mycnf = parse_ini_file($ts_pw['dir'] . "/confs/db.ini");
             $this->host = 'tools.db.svc.wikimedia.cloud';
-            $this->dbname = $ts_mycnf['user'] . "__mdwiki";
+            $this->dbname = $ts_mycnf['user'] . "__" . $this->db_suffix;
             $this->user = $ts_mycnf['user'];
             $this->password = $ts_mycnf['password'];
             unset($ts_mycnf, $ts_pw);
@@ -127,8 +138,16 @@ function fetch_query_new($sql_query, $params, $get)
         }
     }
     // ---
+    $dbname = 'mdwiki';
+    // ---
+    $gets_new_db = ["missing", "missing_qids"];
+    // ---
+    if (in_array($get, $gets_new_db)) {
+        $dbname = 'mdwiki_new';
+    }
+    // ---
     // Create a new database object
-    $db = new Database($_SERVER['SERVER_NAME'] ?? '');
+    $db = new Database($_SERVER['SERVER_NAME'] ?? '', $dbname);
 
     // Execute a SQL query
     $results = $db->fetch_query($sql_query, $params);
@@ -144,18 +163,3 @@ function fetch_query_new($sql_query, $params, $get)
 
     return ['results' => $results, "source" => "db"];
 }
-
-function fetch_query_old($sql_query, $params = null)
-{
-
-    // Create a new database object
-    $db = new Database($_SERVER['SERVER_NAME'] ?? '');
-
-    // Execute a SQL query
-    $results = $db->fetch_query($sql_query, $params);
-
-    // Destroy the database object
-    $db = null;
-
-    return ['results' => $results, "source" => "db"];
-};

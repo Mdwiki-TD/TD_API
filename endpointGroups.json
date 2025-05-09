@@ -12,6 +12,7 @@
         "pages",
         "pages_users",
         "pages_with_views",
+        "pages_users_to_main",
         "in_process"
     ],
     "identifiers": [

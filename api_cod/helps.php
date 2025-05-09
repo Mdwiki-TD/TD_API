@@ -7,6 +7,7 @@ use function API\Helps\sanitize_input;
 use function API\Helps\add_order;
 use function API\Helps\add_group;
 use function API\Helps\add_limit;
+use function API\Helps\add_offset;
 use function API\Helps\add_li_params;
 */
 
@@ -41,13 +42,29 @@ function add_order($qua)
     }
     return $qua;
 }
+function add_offset($qua)
+{
+    // if $qua has OFFSET then return
+    if (strpos($qua, 'OFFSET') !== false || strpos($qua, 'offset') !== false) return $qua;
+    if (isset($_GET['offset'])) {
+        $added = filter_input(INPUT_GET, 'offset', FILTER_SANITIZE_SPECIAL_CHARS);
+        $added = (int) $added;
+        if ($added > 0) {
+            $qua .= " OFFSET $added";
+        }
+    }
+    return $qua;
+}
 function add_limit($qua)
 {
     // if $qua has LIMIT then return
     if (strpos($qua, 'LIMIT') !== false || strpos($qua, 'limit') !== false) return $qua;
     if (isset($_GET['limit'])) {
         $added = filter_input(INPUT_GET, 'limit', FILTER_SANITIZE_SPECIAL_CHARS);
-        $qua .= " LIMIT $added";
+        $added = (int) $added;
+        if ($added > 0) {
+            $qua .= " LIMIT $added";
+        }
     }
     return $qua;
 }

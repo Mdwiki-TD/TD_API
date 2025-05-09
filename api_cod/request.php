@@ -19,6 +19,7 @@ use function API\Helps\add_li_params;
 use function API\Helps\add_group;
 use function API\Helps\add_order;
 use function API\Helps\add_limit;
+use function API\Helps\add_offset;
 use function API\Qids\qids_qua;
 use function API\Leaderboard\leaderboard_table_format;
 use function API\Status\make_status_query;
@@ -53,6 +54,8 @@ $results = [];
 $execution_time = 0;
 
 $select_valids = [
+    'COUNT(*) as count',
+    'count(*) as count',
     'count(title) as count',
     'count(p.title) as count',
     'YEAR(date) AS year',
@@ -65,11 +68,16 @@ $select_valids = [
     'user',
 ];
 
-$SELECT = (isset($_GET['select'])) ? filter_input(INPUT_GET, 'select', FILTER_SANITIZE_SPECIAL_CHARS) : '*';
+// $SELECT = (isset($_GET['select'])) ? filter_input(INPUT_GET, 'select', FILTER_SANITIZE_SPECIAL_CHARS) : '*';
+$SELECT = (isset($_GET['select'])) ? $_GET['select'] : '*';
 
 if (!in_array($SELECT, $select_valids)) {
     $SELECT = '*';
 };
+
+if (isset($_GET['select']) && strtolower($_GET['select']) == 'count(*)') {
+    $SELECT = 'COUNT(*) as count';
+}
 
 // load endpoint_params.json
 $endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
@@ -112,6 +120,18 @@ switch ($get) {
         $query = $tab['qua'];
         $params = $tab['params'];
         // echo json_encode($tab);
+        break;
+
+    case 'pages_users_to_main':
+        $query = "SELECT * FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
+        $params = [];
+        if (isset($_GET['lang'])) {
+            $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
+            if ($added !== null) {
+                $query .= " AND pu.lang = ?";
+                $params[] = $added;
+            }
+        }
         break;
 
     case 'coordinator':
@@ -412,11 +432,13 @@ if ($results === [] && ($qua !== "" || $query !== "")) {
     $results_tab = [];
     if ($query !== "") {
         $query = add_limit($query);
+        $query = add_offset($query);
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
         $results_tab = fetch_query_new($query, $params, $get);
     } else {
         $qua = add_limit($qua);
+        $qua = add_offset($qua);
         $results_tab = fetch_query_new($qua, [], $get);
     }
     // ---

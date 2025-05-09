@@ -26,8 +26,11 @@
     <div class="container">
         <h1>MDWiki API Test Interface</h1>
 
-        <div id="endpoints-container">
-            <!-- Endpoints will be generated here -->
+        <ul class="nav nav-tabs" id="endpointTabs" role="tablist">
+            <!-- Tab headers will be generated here by script.js -->
+        </ul>
+        <div class="tab-content" id="endpointTabContent">
+            <!-- Tab content will be generated here by script.js -->
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

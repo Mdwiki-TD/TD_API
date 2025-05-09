@@ -19,9 +19,13 @@ function createParamInput(param) {
     // Special handling for distinct parameter
     if (param.type === 'switch') {
         div.innerHTML = `
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="${param.name}-switch" name="${param.name}" role="switch" value="1">
-                <label class="check-label" for="${param.name}-switch">&nbsp;${param.name}</label>
+            <div class="input-group form-control mb-3">
+                <div class="input-group-prepend">
+                    <span class="me-3">&nbsp;${param.name}:</span>
+                </div>
+                <div class="form-check form-switch form-inline">
+                    <input class="form-check-input" type="checkbox" name="${param.name}" value="1">
+                </div>
             </div>`;
         return div;
     }
@@ -51,6 +55,7 @@ function createParamInput(param) {
     var value = param.value || '';
     // ---
     var names_no_more = [
+        "offset",
         "limit",
         "order",
         "select",
@@ -269,26 +274,43 @@ async function loadEndpointParams() {
 }
 
 // Generate endpoints
+
 function generateEndpoints(endpointParams) {
-    const container = document.getElementById('endpoints-container');
+    const tabHeadersContainer = document.getElementById('endpointTabs');
+    const tabContentContainer = document.getElementById('endpointTabContent');
 
-    // Create groups and add endpoints
+    let isFirstGroup = true;
+
     for (const [groupName, groupEndpoints] of Object.entries(endpointGroups)) {
-        // Create group header
-        const groupHeader = document.createElement('h3');
-        groupHeader.id = groupName;
-        groupHeader.textContent = groupName.charAt(0).toUpperCase() + groupName.slice(1);
-        const link = document.createElement('a');
-        link.innerHTML = `<a href="#${groupName}"><i class="bi bi-link-45deg"></i></a>`;
-        groupHeader.insertAdjacentElement('afterbegin', link);
-        container.appendChild(groupHeader);
+        const groupId = groupName.replace(/\s+/g, '-').toLowerCase(); // Create a valid ID
 
-        // Create group container
-        const groupContainer = document.createElement('div');
-        groupContainer.className = 'endpoint-group';
-        container.appendChild(groupContainer);
+        // Create tab header (li element)
+        const tabHeaderLi = document.createElement('li');
+        tabHeaderLi.className = 'nav-item';
+        tabHeaderLi.setAttribute('role', 'presentation');
 
-        // Add endpoints for this group
+        const tabHeaderButton = document.createElement('button');
+        tabHeaderButton.className = `nav-link ${isFirstGroup ? 'active' : ''}`;
+        tabHeaderButton.id = `${groupId}-tab`;
+        tabHeaderButton.setAttribute('data-bs-toggle', 'tab');
+        tabHeaderButton.setAttribute('data-bs-target', `#${groupId}`);
+        tabHeaderButton.setAttribute('type', 'button');
+        tabHeaderButton.setAttribute('role', 'tab');
+        tabHeaderButton.setAttribute('aria-controls', groupId);
+        tabHeaderButton.setAttribute('aria-selected', isFirstGroup ? 'true' : 'false');
+        tabHeaderButton.textContent = groupName.charAt(0).toUpperCase() + groupName.slice(1);
+
+        tabHeaderLi.appendChild(tabHeaderButton);
+        tabHeadersContainer.appendChild(tabHeaderLi);
+
+        // Create tab content (div element)
+        const tabContentDiv = document.createElement('div');
+        tabContentDiv.className = `tab-pane fade show ${isFirstGroup ? 'active' : ''}`;
+        tabContentDiv.id = groupId;
+        tabContentDiv.setAttribute('role', 'tabpanel');
+        tabContentDiv.setAttribute('aria-labelledby', `${groupId}-tab`);
+
+        // Add endpoints for this group within the tab content
         groupEndpoints.forEach(endpoint => {
             const div = createEndpoint(endpoint);
             const paramsContainer = div.querySelector('.params-container');
@@ -307,6 +329,18 @@ function generateEndpoints(endpointParams) {
             }
 
             // check if paramsContainer has limit before appending
+            if (!paramsContainer.querySelector(`input[name="offset"]`)) {
+                // Add common parameter for offset
+                const limitParam = {
+                    name: 'offset',
+                    type: 'number',
+                    placeholder: 'Offset of results',
+                    value: '0'
+                };
+                paramsContainer.appendChild(createParamInput(limitParam));
+            }
+
+            // check if paramsContainer has limit before appending
             if (!paramsContainer.querySelector(`input[name="limit"]`)) {
                 // Add common parameter for limit
                 const limitParam = {
@@ -318,8 +352,12 @@ function generateEndpoints(endpointParams) {
                 paramsContainer.appendChild(createParamInput(limitParam));
             }
 
-            groupContainer.appendChild(div);
+            tabContentDiv.appendChild(div);
         });
+
+        tabContentContainer.appendChild(tabContentDiv);
+
+        isFirstGroup = false; // Only the first group is active initially
     }
 }
 

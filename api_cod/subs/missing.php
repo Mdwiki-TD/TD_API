@@ -52,7 +52,7 @@ function missing_qids_query($endpoint_params)
             FROM all_qids_titles a
             WHERE NOT EXISTS (
                 SELECT 1
-                FROM all_qidsexists t
+                FROM all_qids_exists t
                 WHERE t.qid = a.qid
 
     SQL;
