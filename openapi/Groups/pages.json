@@ -1,0 +1,180 @@
+{
+    "pages": {
+        "params": [
+            {
+                "name": "title",
+                "type": "text",
+                "placeholder": "Title"
+            },
+            {
+                "name": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "target",
+                "type": "text",
+                "placeholder": "Target"
+            },
+            {
+                "name": "cat",
+                "type": "text",
+                "placeholder": "Category"
+            },
+            {
+                "name": "group",
+                "type": "text",
+                "placeholder": "Group by field"
+            },
+            {
+                "name": "order",
+                "type": "text",
+                "placeholder": "Order by field"
+            },
+            {
+                "name": "pupdate",
+                "type": "pupdate",
+                "placeholder": "Date of publication"
+            },
+            {
+                "name": "add_date",
+                "type": "text",
+                "placeholder": "Date of addition to DB"
+            },
+            {
+                "name": "limit",
+                "type": "number",
+                "placeholder": "Limit results",
+                "value": "50"
+            },
+            {
+                "name": "offset",
+                "type": "number",
+                "placeholder": "Offset results",
+                "value": "0"
+            },
+            {
+                "name": "year",
+                "type": "number",
+                "placeholder": "year of date"
+            },
+            {
+                "name": "YEAR(date)",
+                "type": "number",
+                "placeholder": "year of date"
+            },
+            {
+                "name": "select",
+                "type": "text",
+                "placeholder": "Select fields"
+            },
+            {
+                "name": "translate_type",
+                "type": "select",
+                "options": [
+                    "all",
+                    "lead"
+                ]
+            },
+            {
+                "name": "distinct",
+                "type": "switch"
+            },
+            {
+                "name": "Deleted",
+                "type": "switch",
+                "placeholder": "0 or 1"
+            }
+        ]
+    },
+    "pages_users": {
+        "params": [
+            {
+                "name": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "target",
+                "type": "text",
+                "placeholder": "Target"
+            },
+            {
+                "name": "title",
+                "type": "text",
+                "placeholder": "Title"
+            },
+            {
+                "name": "order",
+                "type": "text",
+                "placeholder": "Order by field"
+            },
+            {
+                "name": "pupdate",
+                "type": "text",
+                "placeholder": "Date of publication"
+            },
+            {
+                "name": "add_date",
+                "type": "text",
+                "placeholder": "Date of addition to DB"
+            },
+            {
+                "name": "group",
+                "type": "text",
+                "placeholder": "Group by field"
+            },
+            {
+                "name": "limit",
+                "type": "number",
+                "placeholder": "Limit results",
+                "value": "50"
+            },
+            {
+                "name": "offset",
+                "type": "number",
+                "placeholder": "Offset results",
+                "value": "0"
+            },
+            {
+                "name": "select",
+                "type": "text",
+                "placeholder": "Select fields"
+            },
+            {
+                "name": "distinct",
+                "type": "switch"
+            }
+        ]
+    },
+    "pages_with_views": {
+        "redirect": "pages"
+    },
+    "pages_users_to_main": {
+        "params": []
+    },
+    "in_process": {
+        "params": [
+            {
+                "name": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "user",
+                "type": "text",
+                "placeholder": "Username"
+            }
+        ]
+    }
+}

@@ -1,0 +1,142 @@
+{
+    "missing": {
+        "params": [
+            {
+                "name": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "category",
+                "type": "text",
+                "placeholder": "Category"
+            }
+        ]
+    },
+    "missing_qids": {
+        "params": [
+            {
+                "name": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            }
+        ]
+    },
+    "titles": {
+        "params": [
+            {
+                "name": "title",
+                "type": "text",
+                "placeholder": "Title"
+            },
+            {
+                "name": "importance",
+                "type": "text",
+                "placeholder": "Importance"
+            }
+        ]
+    },
+    "assessments": {
+        "params": [
+            {
+                "name": "title",
+                "type": "text",
+                "placeholder": "Title"
+            },
+            {
+                "name": "importance",
+                "type": "text",
+                "placeholder": "Importance"
+            },
+            {
+                "name": "distinct",
+                "type": "switch"
+            }
+        ]
+    },
+    "enwiki_pageviews": {
+        "params": [
+            {
+                "name": "title",
+                "type": "text",
+                "placeholder": "Page Title"
+            },
+            {
+                "name": "en_views",
+                "type": "number",
+                "placeholder": "Views Count"
+            }
+        ]
+    },
+    "refs_counts": {
+        "params": [
+            {
+                "name": "title",
+                "type": "text",
+                "placeholder": "Page Title"
+            },
+            {
+                "name": "lead",
+                "type": "number",
+                "placeholder": "Lead Refs Count"
+            },
+            {
+                "name": "all",
+                "type": "number",
+                "placeholder": "All Refs Count"
+            }
+        ]
+    },
+    "words": {
+        "params": [
+            {
+                "name": "title",
+                "type": "text",
+                "placeholder": "Page Title"
+            },
+            {
+                "name": "lead_words",
+                "type": "number",
+                "placeholder": "Lead words Count"
+            },
+            {
+                "name": "all_words",
+                "type": "number",
+                "placeholder": "Total words Count"
+            }
+        ]
+    },
+    "translate_type": {
+        "params": [
+            {
+                "name": "Lead",
+                "type": "number",
+                "placeholder": "Lead Translation (0 or 1)"
+            },
+            {
+                "name": "Full",
+                "type": "number",
+                "placeholder": "Full Translation (0 or 1)"
+            }
+        ]
+    },
+    "pages_by_user_or_lang": {
+        "params": [
+            {
+                "name": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "year",
+                "type": "number",
+                "placeholder": "year of date"
+            }
+        ]
+    }
+}

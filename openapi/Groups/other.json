@@ -1,0 +1,20 @@
+{
+    "projects": {
+        "params": []
+    },
+    "inter_wiki": {
+        "params": []
+    },
+    "categories": {
+        "params": [
+            {
+                "name": "Depth",
+                "type": "number",
+                "placeholder": "Depth Level"
+            }
+        ]
+    },
+    "settings": {
+        "params": []
+    }
+}

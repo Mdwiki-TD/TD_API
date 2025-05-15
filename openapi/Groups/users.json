@@ -1,0 +1,67 @@
+{
+    "users": {
+        "params": [
+            {
+                "name": "userlike",
+                "type": "text",
+                "placeholder": "Username starts with"
+            },
+            {
+                "name": "wiki",
+                "type": "text",
+                "placeholder": "Wiki Name"
+            },
+            {
+                "name": "group",
+                "type": "text",
+                "placeholder": "Group Name"
+            }
+        ]
+    },
+    "user_access": {
+        "params": [
+            {
+                "name": "user_name",
+                "type": "text",
+                "placeholder": "Username"
+            }
+        ]
+    },
+    "users_by_last_pupdate": {
+        "params": []
+    },
+    "users_by_wiki": {
+        "params": [
+            {
+                "name": "year",
+                "type": "number",
+                "placeholder": "year of date"
+            },
+            {
+                "name": "user_group",
+                "type": "text",
+                "placeholder": "User group"
+            },
+            {
+                "name": "cat",
+                "type": "text",
+                "placeholder": "Category"
+            }
+        ]
+    },
+    "users_no_inprocess": {
+        "params": []
+    },
+    "full_translators": {
+        "params": []
+    },
+    "coordinator": {
+        "params": [
+            {
+                "name": "User",
+                "type": "text",
+                "placeholder": "Coordinator Username"
+            }
+        ]
+    }
+}

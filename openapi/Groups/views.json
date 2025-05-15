@@ -1,0 +1,111 @@
+{
+    "lang_views": {
+        "params": [
+            {
+                "name": "user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "year",
+                "type": "number",
+                "placeholder": "Year"
+            }
+        ]
+    },
+    "lang_views2": {
+        "params": [
+            {
+                "name": "user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "year",
+                "type": "number",
+                "placeholder": "Year"
+            }
+        ]
+    },
+    "user_views": {
+        "params": [
+            {
+                "name": "user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "year",
+                "type": "number",
+                "placeholder": "Year"
+            }
+        ]
+    },
+    "user_views2": {
+        "params": [
+            {
+                "name": "user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "year",
+                "type": "number",
+                "placeholder": "Year"
+            }
+        ]
+    },
+    "views": {
+        "params": [
+            {
+                "name": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "year",
+                "type": "number",
+                "placeholder": "Year"
+            }
+        ]
+    },
+    "views_new": {
+        "params": [
+            {
+                "name": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "year",
+                "type": "number",
+                "placeholder": "Year"
+            },
+            {
+                "name": "views",
+                "type": "number",
+                "placeholder": "Views"
+            }
+        ]
+    }
+}

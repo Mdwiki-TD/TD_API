@@ -5,4 +5,5 @@ api_cod/request_countall.php
 t.php
 test/script.js.backup
 /test2
-/openapi
+openapi/deepwiki.md
+openapi/script_docs.md

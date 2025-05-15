@@ -1,0 +1,30 @@
+{
+    "qids": {
+        "params": [
+            {
+                "name": "dis",
+                "type": "select",
+                "options": [
+                    "",
+                    "empty",
+                    "all",
+                    "duplicate"
+                ]
+            }
+        ]
+    },
+    "qids_others": {
+        "params": [
+            {
+                "name": "dis",
+                "type": "select",
+                "options": [
+                    "",
+                    "empty",
+                    "all",
+                    "duplicate"
+                ]
+            }
+        ]
+    }
+}
