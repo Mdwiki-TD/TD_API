@@ -325,14 +325,32 @@
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "data": {
+                                "time": {
+                                    "type": "string",
+                                    "example": "0.26"
+                                },
+                                "query": {
+                                    "type": "string"
+                                },
+                                "source": {
+                                    "type": "string",
+                                    "example": "db"
+                                },
+                                "length": {
+                                    "type": "integer",
+                                    "example": 50
+                                },
+                                "results": {
                                     "type": "array",
                                     "items": {
                                         "type": "object"
                                     }
                                 },
-                                "count": {
-                                    "type": "integer"
+                                "supported_params": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
                                 }
                             }
                         }
