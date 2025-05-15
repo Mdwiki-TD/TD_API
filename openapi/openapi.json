@@ -5,6 +5,18 @@
         "version": "1.0.0",
         "description": "API for accessing group pages data"
     },
+    "servers": [
+        {
+            "url": "/",
+            "description": "MdWiki API."
+        }
+    ],
+    "tags": [
+        {
+            "name": "pages",
+            "description": "Endpoints related to page lists and details."
+        }
+    ],
     "paths": {
         "/api.php?get=pages": {
             "get": {
@@ -66,7 +78,10 @@
                     "200": {
                         "$ref": "#/components/responses/Success"
                     }
-                }
+                },
+                "tags": [
+                    "pages"
+                ]
             }
         },
         "/api.php?get=pages_users": {
@@ -114,7 +129,10 @@
                     "200": {
                         "$ref": "#/components/responses/Success"
                     }
-                }
+                },
+                "tags": [
+                    "pages"
+                ]
             }
         },
         "/api.php?get=pages_with_views": {
@@ -124,7 +142,10 @@
                     "200": {
                         "$ref": "#/components/responses/Success"
                     }
-                }
+                },
+                "tags": [
+                    "pages"
+                ]
             }
         },
         "/api.php?get=pages_users_to_main": {
@@ -134,7 +155,10 @@
                     "200": {
                         "$ref": "#/components/responses/Success"
                     }
-                }
+                },
+                "tags": [
+                    "pages"
+                ]
             }
         },
         "/api.php?get=in_process": {
@@ -152,7 +176,10 @@
                     "200": {
                         "$ref": "#/components/responses/Success"
                     }
-                }
+                },
+                "tags": [
+                    "pages"
+                ]
             }
         }
     },
