@@ -1,0 +1,462 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "MDwiki API",
+    "description": "API for accessing MDwiki data including pages, translations, views, and more",
+    "version": "1.0.0",
+    "contact": {
+      "name": "MDwiki Team"
+    }
+  },
+  "servers": [
+    {
+      "url": "/api",
+      "description": "MDwiki API"
+    }
+  ],
+  "paths": {
+    "/index.php": {
+      "get": {
+        "summary": "Access MDwiki API endpoints",
+        "description": "Main entry point for all API requests",
+        "parameters": [
+          {
+            "name": "get",
+            "in": "query",
+            "description": "The endpoint to query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "missing",
+                "missing_qids",
+                "titles",
+                "assessments",
+                "refs_counts",
+                "enwiki_pageviews",
+                "categories",
+                "coordinator",
+                "pages",
+                "pages_with_views",
+                "pages_users",
+                "in_process",
+                "pages_by_user_or_lang",
+                "user_access",
+                "qids",
+                "qids_others",
+                "count_pages",
+                "status",
+                "leaderboard_table",
+                "leaderboard_table_formated",
+                "lang_views",
+                "lang_views2",
+                "views",
+                "views_new"
+              ]
+            }
+          },
+          {
+            "name": "distinct",
+            "in": "query",
+            "description": "Return distinct results",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit the number of results",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          {
+            "name": "select",
+            "in": "query",
+            "description": "Fields to select",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "Order by field",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "description": "Group by field",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "time": {
+                      "type": "number",
+                      "description": "Execution time in seconds"
+                    },
+                    "source": {
+                      "type": "string",
+                      "description": "Data source (db or cache)"
+                    },
+                    "length": {
+                      "type": "integer",
+                      "description": "Number of results"
+                    },
+                    "supported_params": {
+                      "type": "array",
+                      "description": "List of supported parameters for this endpoint",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "results": {
+                      "type": "array",
+                      "description": "Query results",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "EndpointParameters": {
+        "type": "object",
+        "properties": {
+          "missing": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "missing_qids": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "titles": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "assessments": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "refs_counts": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "enwiki_pageviews": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "categories": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "coordinator": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "pages": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "pages_with_views": {
+            "type": "object",
+            "properties": {
+              "redirect": {
+                "type": "string"
+              }
+            }
+          },
+          "pages_users": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "in_process": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "pages_by_user_or_lang": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "user_access": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "qids": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "qids_others": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "count_pages": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "status": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "leaderboard_table": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "leaderboard_table_formated": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "lang_views": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          },
+          "lang_views2": {
+            "type": "object",
+            "properties": {
+              "params": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Parameter"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Parameter": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Parameter name"
+          },
+          "column": {
+            "type": "string",
+            "description": "Database column name"
+          },
+          "type": {
+            "type": "string",
+            "description": "Parameter type",
+            "enum": [
+              "text",
+              "number",
+              "select",
+              "switch",
+              "pupdate"
+            ]
+          },
+          "placeholder": {
+            "type": "string",
+            "description": "Parameter placeholder text"
+          },
+          "options": {
+            "type": "array",
+            "description": "Options for select type parameters",
+            "items": {
+              "type": "string"
+            }
+          },
+          "no_select": {
+            "type": "boolean",
+            "description": "Whether the parameter should be excluded from select queries"
+          },
+          "no_mt_options": {
+            "type": "boolean",
+            "description": "Whether the parameter should exclude machine translation options"
+          },
+          "value_can_be_null": {
+            "type": "boolean",
+            "description": "Whether the parameter value can be null"
+          },
+          "value": {
+            "type": "string",
+            "description": "Default value for the parameter"
+          }
+        }
+      }
+    }
+  }
+}
