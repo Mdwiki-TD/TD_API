@@ -20,7 +20,8 @@
     "paths": {
         "/api.php?get=pages": {
             "get": {
-                "summary": "Get pages data",
+                "summary": "Retrieve pages list",
+                "description": "Corresponds to calling `api.php?get=pages` with query parameters.",
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/title"
