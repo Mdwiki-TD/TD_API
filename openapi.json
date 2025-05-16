@@ -1237,28 +1237,6 @@
                 }
             }
         },
-        "/api.php?get=user_access": {
-            "get": {
-                "summary": "Retrieve user access information",
-                "description": "Corresponds to calling `api.php?get=user_access` with query parameters.",
-                "tags": [
-                    "users"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/UserNameParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
         "/api.php?get=user_views2": {
             "get": {
                 "summary": "Retrieve user view statistics (type 2)",
