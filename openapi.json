@@ -367,7 +367,7 @@
             },
             "YearDateParam": {
                 "in": "query",
-                "name": "YEAR(date)",
+                "name": "date_year",
                 "description": "Year",
                 "required": false,
                 "schema": {

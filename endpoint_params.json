@@ -60,7 +60,7 @@
             { "name": "limit", "column": "p.limit", "type": "number", "placeholder": "Limit results", "value": "50", "no_select": true },
             { "name": "offset", "column": "p.offset", "type": "number", "placeholder": "Offset results", "value": "0", "no_select": true },
             { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year of publication" },
-            { "name": "YEAR(date)", "column": "YEAR(p.date)", "type": "number", "placeholder": "year of date" },
+            { "name": "date_year", "column": "YEAR(p.date)", "type": "number", "placeholder": "year of date" },
             { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
             { "name": "translate_type", "column": "p.translate_type", "type": "select", "options": ["all", "lead"]},
             { "name": "distinct", "column": "p.distinct", "type": "switch", "no_select": true },
