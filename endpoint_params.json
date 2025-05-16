@@ -170,7 +170,7 @@
     },
     "users": {
         "params": [
-            { "name": "userlike", "column": "userlike", "type": "text", "placeholder": "Username starts with" },
+            { "name": "userlike", "column": "userlike", "type": "text", "placeholder": "Username starts with", "required": true },
             { "name": "wiki", "column": "wiki", "type": "text", "placeholder": "Wiki Name" },
             { "name": "user_group", "column": "user_group", "type": "text", "placeholder": "User Group Name", "no_select": true }
         ]

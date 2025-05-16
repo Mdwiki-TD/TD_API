@@ -324,7 +324,7 @@
                 "in": "query",
                 "name": "userlike",
                 "description": "Username starts with",
-                "required": false,
+                "required": true,
                 "schema": {
                     "type": "string"
                 }
