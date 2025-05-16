@@ -20,7 +20,7 @@
         "params": [
             { "name": "title", "column": "title", "type": "text", "placeholder": "Title" },
             { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" },
-            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true}
+            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true }
         ]
     },
     "refs_counts": {
@@ -53,17 +53,17 @@
             { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
             { "name": "target", "column": "p.target", "type": "text", "placeholder": "Target" },
             { "name": "cat", "column": "p.cat", "type": "text", "placeholder": "Category" },
-            { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field", "no_select": true},
+            { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field", "no_select": true },
             { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field", "no_select": true },
-            { "name": "pupdate", "column": "p.pupdate", "type": "pupdate", "placeholder": "Date of publication" },
+            { "name": "pupdate", "column": "p.pupdate", "type": "text", "placeholder": "Date of publication" },
             { "name": "add_date", "column": "p.add_date", "type": "text", "placeholder": "Date of addition to DB" },
             { "name": "limit", "column": "p.limit", "type": "number", "placeholder": "Limit results", "value": "50", "no_select": true },
             { "name": "offset", "column": "p.offset", "type": "number", "placeholder": "Offset results", "value": "0", "no_select": true },
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "year of date" },
+            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year of publication" },
             { "name": "YEAR(date)", "column": "YEAR(p.date)", "type": "number", "placeholder": "year of date" },
             { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
             { "name": "translate_type", "column": "p.translate_type", "type": "select", "options": ["all", "lead"]},
-            { "name": "distinct", "column": "p.distinct", "type": "switch", "no_select": true},
+            { "name": "distinct", "column": "p.distinct", "type": "switch", "no_select": true },
             { "name": "Deleted", "column": "p.deleted", "type": "switch", "placeholder": "0 or 1" }
         ]
     },
@@ -83,7 +83,7 @@
             { "name": "limit", "column": "limit", "type": "number", "placeholder": "Limit results", "value": "50", "no_select": true },
             { "name": "offset", "column": "p.offset", "type": "number", "placeholder": "Offset results", "value": "0", "no_select": true },
             { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
-            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true}
+            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true }
         ]
     },
     "in_process": {
@@ -128,14 +128,14 @@
     },
     "leaderboard_table": {
         "params": [
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year" },
+            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year of publication" },
             { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category", "value_can_be_null": true },
             { "name": "user_group", "column": "u.user_group", "type": "text", "placeholder": "User group" }
         ]
     },
     "leaderboard_table_formated": {
         "params": [
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year" },
+            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year of publication" },
             { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category", "value_can_be_null": true },
             { "name": "user_group", "column": "u.user_group", "type": "text", "placeholder": "User group" }
         ]
@@ -172,19 +172,19 @@
         "params": [
             { "name": "userlike", "column": "userlike", "type": "text", "placeholder": "Username starts with" },
             { "name": "wiki", "column": "wiki", "type": "text", "placeholder": "Wiki Name" },
-            { "name": "group", "column": "user_group", "type": "text", "placeholder": "Group Name", "no_select": true }
+            { "name": "user_group", "column": "user_group", "type": "text", "placeholder": "Group Name", "no_select": true }
         ]
     },
     "views": {
         "params": [
             { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year" }
+            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year of publication" }
         ]
     },
     "views_new": {
         "params": [
             { "name": "lang", "column": "v.lang", "type": "text", "placeholder": "Language code" },
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year" },
+            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year of publication" },
             { "name": "views", "column": "v.views", "type": "number", "placeholder": "Views" }
         ]
     },
