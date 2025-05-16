@@ -85,10 +85,13 @@ function add_one_param($qua, $column, $added, $tabe)
     // ---
     if ($added == "not_mt" || $added == "not_empty") {
         $add_str = " $where_or_and ($column != '' AND $column IS NOT NULL) ";
+        // ---
     } elseif ($added == "mt" || $added == "empty") {
         $add_str = " $where_or_and ($column = '' OR $column IS NULL) ";
+        // ---
     } elseif ($added == ">0" || $added == "&#62;0") {
         $add_str = " $where_or_and $column > 0 ";
+        // ---
     } else {
         $params[] = $added;
         $add_str = " $where_or_and $column = ? ";
@@ -96,7 +99,7 @@ function add_one_param($qua, $column, $added, $tabe)
         $value_can_be_null = isset($tabe['value_can_be_null']) ? $tabe['value_can_be_null'] : false;
         // ---
         if ($value_can_be_null) {
-            $add_str = " $where_or_and  ($column = ? OR $column IS NULL OR $column = '') ";
+            $add_str = " $where_or_and ($column = ? OR $column IS NULL OR $column = '') ";
         }
     }
     // ---
@@ -147,6 +150,10 @@ function add_li_params(string $qua, array $types, array $endpoint_params = []): 
             // ---
             // if "limit" in endpoint_params remove it
             if ($column == "limit" || $column == "select" || strtolower($added) == "all") {
+                continue;
+            }
+            // ---
+            if (isset($tabe['no_empty_value']) && empty($added)) {
                 continue;
             }
             // ---
