@@ -7,11 +7,11 @@ if (isset($_REQUEST['test'])) {
 }
 
 if (!isset($_GET['get'])) {
-    if ($_SERVER['SERVER_NAME'] === 'localhost') {
-        // header("Location: test/index.php");
-        header("Location: test.html");
-        exit();
-    };
+    // if ($_SERVER['SERVER_NAME'] === 'localhost') {
+    // header("Location: test/index.php");
+    header("Location: test.html");
+    exit();
+    // };
 }
 
 include_once __DIR__ . '/api_cod/request.php';
