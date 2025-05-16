@@ -13,177 +13,38 @@
     ],
     "tags": [
         {
+            "name": "pages_infos",
+            "description": "Endpoints providing information about pages."
+        },
+        {
             "name": "pages",
             "description": "Endpoints related to page lists and details."
+        },
+        {
+            "name": "identifiers",
+            "description": "Endpoints for identifiers like QIDs."
+        },
+        {
+            "name": "views",
+            "description": "Endpoints providing page view statistics."
+        },
+        {
+            "name": "users",
+            "description": "Endpoints related to users and their activity."
+        },
+        {
+            "name": "statistics",
+            "description": "General statistics and leaderboard data."
+        },
+        {
+            "name": "languages",
+            "description": "Endpoints providing language information."
+        },
+        {
+            "name": "other",
+            "description": "Miscellaneous endpoints."
         }
     ],
-    "paths": {
-        "/api.php?get=pages": {
-            "get": {
-                "summary": "Retrieve pages list",
-                "description": "Corresponds to calling `api.php?get=pages` with query parameters.",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/title"
-                    },
-                    {
-                        "$ref": "#/components/parameters/lang"
-                    },
-                    {
-                        "$ref": "#/components/parameters/user"
-                    },
-                    {
-                        "$ref": "#/components/parameters/target"
-                    },
-                    {
-                        "$ref": "#/components/parameters/cat"
-                    },
-                    {
-                        "$ref": "#/components/parameters/group"
-                    },
-                    {
-                        "$ref": "#/components/parameters/order"
-                    },
-                    {
-                        "$ref": "#/components/parameters/pupdate"
-                    },
-                    {
-                        "$ref": "#/components/parameters/add_date"
-                    },
-                    {
-                        "$ref": "#/components/parameters/limit"
-                    },
-                    {
-                        "$ref": "#/components/parameters/offset"
-                    },
-                    {
-                        "$ref": "#/components/parameters/year"
-                    },
-                    {
-                        "$ref": "#/components/parameters/YEAR_date"
-                    },
-                    {
-                        "$ref": "#/components/parameters/select"
-                    },
-                    {
-                        "$ref": "#/components/parameters/translate_type"
-                    },
-                    {
-                        "$ref": "#/components/parameters/distinct"
-                    },
-                    {
-                        "$ref": "#/components/parameters/Deleted"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                },
-                "tags": [
-                    "pages"
-                ]
-            }
-        },
-        "/api.php?get=pages_users": {
-            "get": {
-                "summary": "Get pages users data",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/lang"
-                    },
-                    {
-                        "$ref": "#/components/parameters/user"
-                    },
-                    {
-                        "$ref": "#/components/parameters/target"
-                    },
-                    {
-                        "$ref": "#/components/parameters/title"
-                    },
-                    {
-                        "$ref": "#/components/parameters/order"
-                    },
-                    {
-                        "$ref": "#/components/parameters/pupdate"
-                    },
-                    {
-                        "$ref": "#/components/parameters/add_date"
-                    },
-                    {
-                        "$ref": "#/components/parameters/group"
-                    },
-                    {
-                        "$ref": "#/components/parameters/limit"
-                    },
-                    {
-                        "$ref": "#/components/parameters/offset"
-                    },
-                    {
-                        "$ref": "#/components/parameters/select"
-                    },
-                    {
-                        "$ref": "#/components/parameters/distinct"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                },
-                "tags": [
-                    "pages"
-                ]
-            }
-        },
-        "/api.php?get=pages_with_views": {
-            "get": {
-                "summary": "Get pages with views data",
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                },
-                "tags": [
-                    "pages"
-                ]
-            }
-        },
-        "/api.php?get=pages_users_to_main": {
-            "get": {
-                "summary": "Get pages users to main data",
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                },
-                "tags": [
-                    "pages"
-                ]
-            }
-        },
-        "/api.php?get=in_process": {
-            "get": {
-                "summary": "Get in process data",
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/lang"
-                    },
-                    {
-                        "$ref": "#/components/parameters/user"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                },
-                "tags": [
-                    "pages"
-                ]
-            }
-        }
-    },
     "components": {
         "parameters": {
             "Depth": {
@@ -384,6 +245,186 @@
                         }
                     }
                 }
+            }
+        }
+    },
+    "paths": {
+        "/api.php?get=pages": {
+            "get": {
+                "summary": "Retrieve pages list",
+                "description": "Corresponds to calling `api.php?get=pages` with query parameters.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/title"
+                    },
+                    {
+                        "$ref": "#/components/parameters/lang"
+                    },
+                    {
+                        "$ref": "#/components/parameters/user"
+                    },
+                    {
+                        "$ref": "#/components/parameters/target"
+                    },
+                    {
+                        "$ref": "#/components/parameters/cat"
+                    },
+                    {
+                        "$ref": "#/components/parameters/group"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/pupdate"
+                    },
+                    {
+                        "$ref": "#/components/parameters/add_date"
+                    },
+                    {
+                        "$ref": "#/components/parameters/offset"
+                    },
+                    {
+                        "$ref": "#/components/parameters/year"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YEAR_date"
+                    },
+                    {
+                        "$ref": "#/components/parameters/select"
+                    },
+                    {
+                        "$ref": "#/components/parameters/translate_type"
+                    },
+                    {
+                        "$ref": "#/components/parameters/distinct"
+                    },
+                    {
+                        "$ref": "#/components/parameters/Deleted"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                },
+                "tags": [
+                    "pages"
+                ]
+            }
+        },
+        "/api.php?get=pages_users": {
+            "get": {
+                "summary": "Get pages users data",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/lang"
+                    },
+                    {
+                        "$ref": "#/components/parameters/user"
+                    },
+                    {
+                        "$ref": "#/components/parameters/target"
+                    },
+                    {
+                        "$ref": "#/components/parameters/title"
+                    },
+                    {
+                        "$ref": "#/components/parameters/order"
+                    },
+                    {
+                        "$ref": "#/components/parameters/pupdate"
+                    },
+                    {
+                        "$ref": "#/components/parameters/add_date"
+                    },
+                    {
+                        "$ref": "#/components/parameters/group"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    },
+                    {
+                        "$ref": "#/components/parameters/offset"
+                    },
+                    {
+                        "$ref": "#/components/parameters/select"
+                    },
+                    {
+                        "$ref": "#/components/parameters/distinct"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                },
+                "tags": [
+                    "pages"
+                ]
+            }
+        },
+        "/api.php?get=pages_with_views": {
+            "get": {
+                "summary": "Get pages with views data",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                },
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "tags": [
+                    "pages"
+                ]
+            }
+        },
+        "/api.php?get=pages_users_to_main": {
+            "get": {
+                "summary": "Get pages users to main data",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                },
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "tags": [
+                    "pages"
+                ]
+            }
+        },
+        "/api.php?get=in_process": {
+            "get": {
+                "summary": "Get in process data",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/lang"
+                    },
+                    {
+                        "$ref": "#/components/parameters/user"
+                    },
+                    {
+                        "$ref": "#/components/parameters/limit"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                },
+                "tags": [
+                    "pages"
+                ]
             }
         }
     }
