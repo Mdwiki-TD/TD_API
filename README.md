@@ -15,4 +15,4 @@ The **OpenAPI** interface (formerly known as Swagger) provides an interactive an
 ## 📄 Interactive UI
 
 You can access the OpenAPI interactive UI here:
-👉 [https://mdwiki.toolforge.org/api/test.html](https://mdwiki.toolforge.org/api/test.html)
+👉 [https://mdwiki.toolforge.org/api/test.html](https://mdwiki.toolforge.org/api)
