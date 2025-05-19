@@ -1215,6 +1215,15 @@
                     },
                     {
                         "$ref": "#/components/parameters/ImportanceParam"
+                    },
+                    {
+                        "in": "query",
+                        "name": "titles",
+                        "description": "list of titles",
+                        "required": false,
+                        "schema": {
+                            "type": "array"
+                        }
                     }
                 ],
                 "responses": {

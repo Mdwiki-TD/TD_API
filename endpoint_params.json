@@ -13,7 +13,8 @@
     "titles": {
         "params": [
             { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
-            { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" }
+            { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" },
+            { "name": "titles", "column": "titles", "type": "array" }
         ]
     },
     "assessments": {
