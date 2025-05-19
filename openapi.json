@@ -593,6 +593,9 @@
                 ],
                 "parameters": [
                     {
+                        "$ref": "#/components/parameters/DistinctParam"
+                    },
+                    {
                         "$ref": "#/components/parameters/LimitParam"
                     },
                     {
@@ -600,6 +603,15 @@
                     },
                     {
                         "$ref": "#/components/parameters/UserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/GroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/SelectParam"
                     }
                 ],
                 "responses": {

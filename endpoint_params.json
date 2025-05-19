@@ -89,7 +89,11 @@
     "in_process": {
         "params": [
             { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" },
-            { "name": "user", "column": "user", "type": "text", "placeholder": "Username" }
+            { "name": "user", "column": "user", "type": "text", "placeholder": "Username" },
+            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
+            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true },
+            { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field", "no_select": true },
+            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field", "no_select": true }
         ]
     },
     "pages_by_user_or_lang": {

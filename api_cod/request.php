@@ -42,7 +42,7 @@ $other_tables = [
     // 'pages_users',
 ];
 
-$DISTINCT = (isset($_GET['distinct'])) ? 'DISTINCT ' : '';
+$DISTINCT = (isset($_GET['distinct']) && $_GET['distinct'] != 'false' && $_GET['distinct'] != '0') ? 'DISTINCT ' : '';
 $get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_SPECIAL_CHARS); //$_GET['get']
 
 // if (!isset($_GET['limit'])) $_GET['limit'] = '50';
@@ -54,6 +54,7 @@ $results = [];
 $execution_time = 0;
 
 $select_valids = [
+    'count',
     'COUNT(*) as count',
     'count(*) as count',
     'count(title) as count',
@@ -69,15 +70,18 @@ $select_valids = [
 ];
 
 // $SELECT = (isset($_GET['select'])) ? filter_input(INPUT_GET, 'select', FILTER_SANITIZE_SPECIAL_CHARS) : '*';
-$SELECT = (isset($_GET['select'])) ? $_GET['select'] : '*';
+$SELECT = (isset($_GET['select']) && $_GET['select'] != 'false' && $_GET['select'] != '0') ? $_GET['select'] : '*';
 
-if (!in_array($SELECT, $select_valids)) {
-    $SELECT = '*';
-};
+$select_alias = [
+    "count" => "*, count(*) as count",
+    "count(*)" => "count(*) as count",
+];
+// ---
+$SELECT = $select_alias[strtolower($SELECT)] ?? $SELECT;
+// ---
+// if (!in_array($SELECT, $select_valids)) $SELECT = '*';
 
-if (isset($_GET['select']) && strtolower($_GET['select']) == 'count(*)') {
-    $SELECT = 'COUNT(*) as count';
-}
+// if (isset($_GET['select']) && strtolower($_GET['select']) == 'count(*)') $SELECT = 'COUNT(*) as count';
 
 // load endpoint_params.json
 $endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
@@ -106,7 +110,7 @@ switch ($get) {
 
     case 'users':
         $query = "SELECT username FROM users";
-        if (isset($_GET['userlike'])) {
+        if (isset($_GET['userlike']) && $_GET['userlike'] != 'false' && $_GET['userlike'] != '0') {
             $added = filter_input(INPUT_GET, 'userlike', FILTER_SANITIZE_SPECIAL_CHARS);
             if ($added !== null) {
                 $query .= " WHERE username like ?";
@@ -125,7 +129,7 @@ switch ($get) {
     case 'pages_users_to_main':
         $query = "SELECT * FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
         $params = [];
-        if (isset($_GET['lang'])) {
+        if (isset($_GET['lang']) && $_GET['lang'] != 'false' && $_GET['lang'] != '0') {
             $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
             if ($added !== null) {
                 $query .= " AND pu.lang = ?";
@@ -273,7 +277,7 @@ switch ($get) {
 
     case 'user_views':
     case 'user_views2':
-        if (isset($_GET['user'])) {
+        if (isset($_GET['user']) && $_GET['user'] != 'false' && $_GET['user'] != '0') {
             $query = <<<SQL
                 SELECT p.title, v.target, v.lang, v.views
                 FROM views_new_all v
@@ -295,7 +299,7 @@ switch ($get) {
 
     case 'lang_views':
     case 'lang_views2':
-        if (isset($_GET['lang'])) {
+        if (isset($_GET['lang']) && $_GET['lang'] != 'false' && $_GET['lang'] != '0') {
             $query = <<<SQL
                 SELECT v.target, v.lang, v.views
                 FROM views_new_all v
@@ -387,7 +391,7 @@ switch ($get) {
         $query = $tab['qua'];
         $params = $tab['params'];
         // ---
-        $title_not_in_pages = (isset($_GET['title_not_in_pages'])) ? true : false;
+        $title_not_in_pages = (isset($_GET['title_not_in_pages']) && $_GET['title_not_in_pages'] != 'false' && $_GET['title_not_in_pages'] != '0') ? true : false;
         // ---
         if ($title_not_in_pages) {
             $query .= " and p.title not in (select p2.title from pages p2 WHERE p2.lang = p.lang and p2.target != '') ";
@@ -418,6 +422,22 @@ switch ($get) {
         // ---
         $query = $query_start . $query;
         // ---
+        $params = $tab['params'];
+        // ---
+        $query = add_group($query);
+        $query = add_order($query);
+        // ---
+        break;
+
+    case 'in_process':
+        // ---
+        $qua = <<<SQL
+            SELECT $DISTINCT $SELECT from in_process
+        SQL;
+        // ---
+        $tab = add_li_params($qua, [], $endpoint_params);
+        // ---
+        $query = $tab['qua'];
         $params = $tab['params'];
         // ---
         $query = add_group($query);

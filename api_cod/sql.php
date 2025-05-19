@@ -63,10 +63,12 @@ class Database
             exit();
         }
     }
-
     public function fetch_query($sql_query, $params = null)
     {
         try {
+            // إزالة ONLY_FULL_GROUP_BY مرة واحدة لكل جلسة
+            $this->db->exec("SET SESSION sql_mode=(SELECT REPLACE(@@SESSION.sql_mode,'ONLY_FULL_GROUP_BY',''))");
+
             $q = $this->db->prepare($sql_query);
             if ($params) {
                 $q->execute($params);
