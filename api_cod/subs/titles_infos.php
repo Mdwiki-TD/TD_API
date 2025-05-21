@@ -4,6 +4,7 @@ namespace API\TitlesInfos;
 /*
 Usage:
 use function API\TitlesInfos\titles_query;
+use function API\TitlesInfos\mdwiki_revids;
 */
 
 use function API\Helps\add_li_params;
@@ -54,6 +55,22 @@ function titles_query($endpoint_params)
         $qua .= " $where_or_and title IN ($placeholders)";
         $params = array_merge($params, $titles);
     }
+    // ---
+    return ["qua" => $qua, "params" => $params];
+}
+
+function mdwiki_revids($endpoint_params)
+{
+    // ---
+    $qua = <<<SQL
+        SELECT *
+        FROM mdwiki_revids
+    SQL;
+    // ---
+    $tab = add_li_params($qua, [], $endpoint_params);
+    // ---
+    $qua = $tab['qua'];
+    $params = $tab['params'];
     // ---
     return ["qua" => $qua, "params" => $params];
 }

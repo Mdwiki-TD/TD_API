@@ -17,6 +17,12 @@
             { "name": "titles", "column": "titles", "type": "array" }
         ]
     },
+    "revids": {
+        "params": [
+            { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
+            { "name": "titles", "column": "titles", "type": "array" }
+        ]
+    },
     "assessments": {
         "params": [
             { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },

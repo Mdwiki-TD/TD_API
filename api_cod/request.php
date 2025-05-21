@@ -24,6 +24,7 @@ use function API\Qids\qids_qua;
 use function API\Leaderboard\leaderboard_table_format;
 use function API\Status\make_status_query;
 use function API\TitlesInfos\titles_query;
+use function API\TitlesInfos\mdwiki_revids;
 use function API\Missing\missing_query;
 use function API\Missing\missing_qids_query;
 
@@ -117,6 +118,13 @@ switch ($get) {
                 $params[] = "$added%";
             }
         }
+        break;
+
+    case 'revids':
+        $tab = mdwiki_revids($endpoint_params);
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        // echo json_encode($tab);
         break;
 
     case 'titles':

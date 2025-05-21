@@ -6,7 +6,8 @@
         "assessments",
         "enwiki_pageviews",
         "refs_counts",
-        "words"
+        "words",
+        "revids"
     ],
     "pages": [
         "pages",

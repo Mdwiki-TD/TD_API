@@ -298,6 +298,15 @@
                     "type": "string"
                 }
             },
+            "TitlesParam": {
+                "in": "query",
+                "name": "titles",
+                "description": "list of titles",
+                "required": false,
+                "schema": {
+                    "type": "array"
+                }
+            },
             "TranslateTypeParam": {
                 "in": "query",
                 "name": "translate_type",
@@ -1217,13 +1226,7 @@
                         "$ref": "#/components/parameters/ImportanceParam"
                     },
                     {
-                        "in": "query",
-                        "name": "titles",
-                        "description": "list of titles",
-                        "required": false,
-                        "schema": {
-                            "type": "array"
-                        }
+                        "$ref": "#/components/parameters/TitlesParam"
                     }
                 ],
                 "responses": {
@@ -1427,6 +1430,28 @@
                     },
                     {
                         "$ref": "#/components/parameters/AllWordsParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=revids": {
+            "get": {
+                "summary": "",
+                "description": "",
+                "tags": [
+                    "pages_infos"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/TitleParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TitlesParam"
                     }
                 ],
                 "responses": {
