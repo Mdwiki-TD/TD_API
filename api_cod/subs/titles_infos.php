@@ -61,16 +61,27 @@ function titles_query($endpoint_params)
 
 function mdwiki_revids($endpoint_params)
 {
-    // ---
+    // --- remove 'titles' so add_li_params only handles non-array params
+    $endpoint_params = array_filter($endpoint_params, function ($param) {
+        return $param['name'] !== 'titles';
+    });
+    // --- build clause for scalar params
     $qua = <<<SQL
         SELECT *
         FROM mdwiki_revids
     SQL;
-    // ---
-    $tab = add_li_params($qua, [], $endpoint_params);
-    // ---
-    $qua = $tab['qua'];
+    $tab   = add_li_params($qua, [], $endpoint_params);
+    $qua   = $tab['qua'];
     $params = $tab['params'];
+
+    // --- manual array handling for `titles`
+    $titles = $_GET['titles'] ?? [];
+    if (!empty($titles) && is_array($titles)) {
+        $where_or_and = (strpos(strtolower($qua), 'where') !== false) ? ' AND ' : ' where ';
+        $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
+        $qua .= " $where_or_and title IN ($placeholders)";
+        $params = array_merge($params, $titles);
+    }
     // ---
     return ["qua" => $qua, "params" => $params];
 }
