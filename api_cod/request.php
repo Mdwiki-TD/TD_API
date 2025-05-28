@@ -305,6 +305,20 @@ switch ($get) {
         };
         break;
 
+    case 'publish_reports':
+        $query = <<<SQL
+            SELECT *
+            FROM publish_reports
+            SQL;
+        // ---
+        $tab = add_li_params($query, [], $endpoint_params);
+        // ---
+        $query = $tab['qua'];
+        // ---
+        $params = $tab['params'];
+        // ---
+        break;
+
     case 'lang_views':
     case 'lang_views2':
         if (isset($_GET['lang']) && $_GET['lang'] != 'false' && $_GET['lang'] != '0') {

@@ -49,6 +49,7 @@
         "translate_type"
     ],
     "other": [
+        "publish_reports",
         "categories",
         "projects",
         "settings",

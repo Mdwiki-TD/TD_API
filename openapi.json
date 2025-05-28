@@ -1460,6 +1460,64 @@
                     }
                 }
             }
+        },
+        "/api.php?get=publish_reports": {
+            "get": {
+                "summary": "publish reports",
+                "description": "",
+                "tags": [
+                    "other"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TitleParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YearParam"
+                    },
+                    {
+                        "in": "query",
+                        "name": "month",
+                        "description": "month of date",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "sourcetitle",
+                        "description": "sourcetitle",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "result",
+                        "description": "result",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
         }
     }
 }
