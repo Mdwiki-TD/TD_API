@@ -285,7 +285,7 @@ switch ($get) {
 
     case 'publish_reports':
         $query = <<<SQL
-            SELECT *
+            SELECT $DISTINCT $SELECT
             FROM publish_reports
             SQL;
         // ---

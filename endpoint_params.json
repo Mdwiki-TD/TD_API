@@ -6,7 +6,9 @@
             { "name": "user", "column": "user", "type": "text", "placeholder": "user"},
             { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code"},
             { "name": "sourcetitle", "column": "sourcetitle", "type": "text", "placeholder": "sourcetitle"},
-            { "name": "result", "column": "result", "type": "text", "placeholder": "result"}
+            { "name": "result", "column": "result", "type": "text", "placeholder": "result"},
+            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
+            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true }
         ]
     },
     "missing": {

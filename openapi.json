@@ -1485,6 +1485,9 @@
                         "$ref": "#/components/parameters/YearParam"
                     },
                     {
+                        "$ref": "#/components/parameters/SelectParam"
+                    },
+                    {
                         "in": "query",
                         "name": "month",
                         "description": "month of date",
@@ -1510,6 +1513,9 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/DistinctParam"
                     }
                 ],
                 "responses": {
