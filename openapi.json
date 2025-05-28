@@ -304,7 +304,11 @@
                 "description": "list of titles",
                 "required": false,
                 "schema": {
-                    "type": "array"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "maxItems": 50
                 }
             },
             "TranslateTypeParam": {
