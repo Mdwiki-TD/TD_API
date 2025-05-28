@@ -1441,8 +1441,8 @@
         },
         "/api.php?get=revids": {
             "get": {
-                "summary": "",
-                "description": "",
+                "summary": "Retrieve revision IDs",
+                "description": "Retrieve revision IDs for specified titles or title arrays",
                 "tags": [
                     "pages_infos"
                 ],
