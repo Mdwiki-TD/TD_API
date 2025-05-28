@@ -27,6 +27,7 @@ use function API\TitlesInfos\titles_query;
 use function API\TitlesInfos\mdwiki_revids;
 use function API\Missing\missing_query;
 use function API\Missing\missing_qids_query;
+use function API\SelectHelps\get_select;
 
 $other_tables = [
     'in_process',
@@ -54,36 +55,6 @@ $params = [];
 $results = [];
 $execution_time = 0;
 
-$select_valids = [
-    'count',
-    'COUNT(*) as count',
-    'count(*) as count',
-    'count(title) as count',
-    'count(p.title) as count',
-    'YEAR(date) AS year',
-    'YEAR(p.date) AS year',
-    'YEAR(pupdate) AS year',
-    'YEAR(p.pupdate) AS year',
-    'lang',
-    'p.lang',
-    'p.user',
-    'user',
-];
-
-// $SELECT = (isset($_GET['select'])) ? filter_input(INPUT_GET, 'select', FILTER_SANITIZE_SPECIAL_CHARS) : '*';
-$SELECT = (isset($_GET['select']) && $_GET['select'] != 'false' && $_GET['select'] != '0') ? $_GET['select'] : '*';
-
-$select_alias = [
-    "count" => "*, count(*) as count",
-    "count(*)" => "count(*) as count",
-];
-// ---
-$SELECT = $select_alias[strtolower($SELECT)] ?? $SELECT;
-// ---
-// if (!in_array($SELECT, $select_valids)) $SELECT = '*';
-
-// if (isset($_GET['select']) && strtolower($_GET['select']) == 'count(*)') $SELECT = 'COUNT(*) as count';
-
 // load endpoint_params.json
 $endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
 $endpoint_params = $endpoint_params_tab[$get]['params'] ?? [];
@@ -92,6 +63,13 @@ if (isset($endpoint_params_tab[$get]['redirect'])) {
     $redirect = $endpoint_params_tab[$get]['redirect'];
     $endpoint_params = $endpoint_params_tab[$redirect]['params'] ?? [];
 };
+// ---
+$supported_params = [];
+foreach ($endpoint_params as $param) {
+    $supported_params[] = $param["name"];
+};
+// ---
+$SELECT = get_select($supported_params);
 // ---
 switch ($get) {
 
@@ -526,9 +504,6 @@ if ($_SERVER['SERVER_NAME'] !== 'localhost') {
     unset($out["query"]);
 };
 
-$out["supported_params"] = [];
-foreach ($endpoint_params as $param) {
-    $out["supported_params"][] = $param["name"];
-};
+$out["supported_params"] = $supported_params;
 
 echo json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
