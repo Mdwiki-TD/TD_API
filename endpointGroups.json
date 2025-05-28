@@ -6,7 +6,8 @@
         "assessments",
         "enwiki_pageviews",
         "refs_counts",
-        "words"
+        "words",
+        "revids"
     ],
     "pages": [
         "pages",
@@ -48,6 +49,7 @@
         "translate_type"
     ],
     "other": [
+        "publish_reports",
         "categories",
         "projects",
         "settings",

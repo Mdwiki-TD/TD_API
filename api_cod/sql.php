@@ -142,7 +142,7 @@ function fetch_query_new($sql_query, $params, $get)
     // ---
     $dbname = 'mdwiki';
     // ---
-    $gets_new_db = ["missing", "missing_qids"];
+    $gets_new_db = ["missing", "missing_qids", "publish_reports"];
     // ---
     if (in_array($get, $gets_new_db)) {
         $dbname = 'mdwiki_new';

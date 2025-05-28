@@ -130,7 +130,16 @@ function change_types($types, $endpoint_params)
     // ---
     return $types;
 }
-
+/*
+$titles = $_GET['titles'] ?? [];
+// ---
+if (!empty($titles) && is_array($titles)) {
+    $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
+    $qua .= " $where_or_and title IN ($placeholders)";
+    $params = array_merge($params, $titles);
+}
+// ---
+*/
 function add_li_params(string $qua, array $types, array $endpoint_params = []): array
 {
     $types = change_types($types, $endpoint_params);
@@ -146,7 +155,8 @@ function add_li_params(string $qua, array $types, array $endpoint_params = []): 
         if (isset($_GET[$type]) || isset($_GET[$column])) {
             // ---
             // filter input
-            $added = filter_input(INPUT_GET, $type, FILTER_SANITIZE_SPECIAL_CHARS) ?? filter_input(INPUT_GET, $column, FILTER_SANITIZE_SPECIAL_CHARS);
+            $added = filter_input(INPUT_GET, $type, FILTER_SANITIZE_SPECIAL_CHARS) ?? '';
+            $added = (!empty($added)) ? $added : filter_input(INPUT_GET, $column, FILTER_SANITIZE_SPECIAL_CHARS);
             // ---
             // if "limit" in endpoint_params remove it
             if ($column == "limit" || $column == "select" || strtolower($added) == "all") {

@@ -298,6 +298,19 @@
                     "type": "string"
                 }
             },
+            "TitlesParam": {
+                "in": "query",
+                "name": "titles",
+                "description": "list of titles",
+                "required": false,
+                "schema": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "maxItems": 50
+                }
+            },
             "TranslateTypeParam": {
                 "in": "query",
                 "name": "translate_type",
@@ -1217,13 +1230,7 @@
                         "$ref": "#/components/parameters/ImportanceParam"
                     },
                     {
-                        "in": "query",
-                        "name": "titles",
-                        "description": "list of titles",
-                        "required": false,
-                        "schema": {
-                            "type": "array"
-                        }
+                        "$ref": "#/components/parameters/TitlesParam"
                     }
                 ],
                 "responses": {
@@ -1427,6 +1434,92 @@
                     },
                     {
                         "$ref": "#/components/parameters/AllWordsParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=revids": {
+            "get": {
+                "summary": "Retrieve revision IDs",
+                "description": "Retrieve revision IDs for specified titles or title arrays",
+                "tags": [
+                    "pages_infos"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/TitleParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TitlesParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=publish_reports": {
+            "get": {
+                "summary": "publish reports",
+                "description": "",
+                "tags": [
+                    "other"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TitleParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/SelectParam"
+                    },
+                    {
+                        "in": "query",
+                        "name": "month",
+                        "description": "month of date",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "sourcetitle",
+                        "description": "sourcetitle",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "result",
+                        "description": "result",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/DistinctParam"
                     }
                 ],
                 "responses": {

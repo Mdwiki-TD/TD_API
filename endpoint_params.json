@@ -1,4 +1,16 @@
-{
+{   "publish_reports": {
+        "params": [
+            { "name": "year", "column": "YEAR(date)", "type": "number", "placeholder": "year of date" },
+            { "name": "month", "column": "MONTH(date)", "type": "number", "placeholder": "month of date" },
+            { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title"},
+            { "name": "user", "column": "user", "type": "text", "placeholder": "user"},
+            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code"},
+            { "name": "sourcetitle", "column": "sourcetitle", "type": "text", "placeholder": "sourcetitle"},
+            { "name": "result", "column": "result", "type": "text", "placeholder": "result"},
+            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
+            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true }
+        ]
+    },
     "missing": {
         "params": [
             { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
@@ -14,6 +26,12 @@
         "params": [
             { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
             { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" },
+            { "name": "titles", "column": "titles", "type": "array" }
+        ]
+    },
+    "revids": {
+        "params": [
+            { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
             { "name": "titles", "column": "titles", "type": "array" }
         ]
     },
