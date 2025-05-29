@@ -24,6 +24,7 @@ class Database
     private $password;
     private $dbname;
     private $db_suffix;
+    private $groupByModeDisabled = false;
 
     public function __construct($server_name, $db_suffix = 'mdwiki')
     {
@@ -63,11 +64,19 @@ class Database
             exit();
         }
     }
+    public function disableFullGroupByMode($sql_query)
+    {
+        // if the query contains "GROUP BY", disable ONLY_FULL_GROUP_BY, strtoupper() is for case insensitive
+        if (strpos(strtoupper($sql_query), 'GROUP BY') !== false && !$this->groupByModeDisabled) {
+            $this->db->exec("SET SESSION sql_mode=(SELECT REPLACE(@@SESSION.sql_mode,'ONLY_FULL_GROUP_BY',''))");
+            $this->groupByModeDisabled = true;
+        }
+    }
+
     public function fetch_query($sql_query, $params = null)
     {
         try {
-            // إزالة ONLY_FULL_GROUP_BY مرة واحدة لكل جلسة
-            $this->db->exec("SET SESSION sql_mode=(SELECT REPLACE(@@SESSION.sql_mode,'ONLY_FULL_GROUP_BY',''))");
+            $this->disableFullGroupByMode($sql_query);
 
             $q = $this->db->prepare($sql_query);
             if ($params) {
@@ -142,7 +151,7 @@ function fetch_query_new($sql_query, $params, $get)
     // ---
     $dbname = 'mdwiki';
     // ---
-    $gets_new_db = ["missing", "missing_qids", "publish_reports"];
+    $gets_new_db = ["missing", "missing_qids", "publish_reports", "login_attempts"];
     // ---
     if (in_array($get, $gets_new_db)) {
         $dbname = 'mdwiki_new';
