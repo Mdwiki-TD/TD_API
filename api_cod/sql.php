@@ -6,12 +6,12 @@ Usage:
 use function API\SQL\fetch_query;
 */
 
-if (isset($_REQUEST['test'])) {
+if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 };
-
+//---
 use PDO;
 use PDOException;
 
@@ -73,7 +73,35 @@ class Database
         }
     }
 
-    public function fetch_query($sql_query, $params = null)
+    public function execute_query($sql_query, $params = null)
+    {
+        try {
+            $this->disableFullGroupByMode($sql_query);
+
+            $q = $this->db->prepare($sql_query);
+            if ($params) {
+                $q->execute($params);
+            } else {
+                $q->execute();
+            }
+
+            // Check if the query starts with "SELECT"
+            $query_type = strtoupper(substr(trim((string) $sql_query), 0, 6));
+            if ($query_type === 'SELECT') {
+                // Fetch the results if it's a SELECT query
+                $result = $q->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            } else {
+                // Otherwise, return null
+                return [];
+            }
+        } catch (PDOException $e) {
+            echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;
+            return [];
+        }
+    }
+
+    public function fetchquery($sql_query, $params = null)
     {
         try {
             $this->disableFullGroupByMode($sql_query);
@@ -91,7 +119,7 @@ class Database
         } catch (PDOException $e) {
             // echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;
             error_log("SQL Error: " . $e->getMessage() . " | Query: " . $sql_query);
-            return array();
+            return [];
         }
     }
 
@@ -139,6 +167,20 @@ function add_to_apcu($sql_query, $params, $results)
     apcu_store($cache_key, $results, $cache_ttl);
 }
 
+function get_dbname($table_name)
+{
+    // ---
+    $dbname = 'mdwiki';
+    // ---
+    $gets_new_db = ["missing", "missing_qids", "publish_reports", "login_attempts", "publish_reports_stats"];
+    // ---
+    if (in_array($table_name, $gets_new_db)) {
+        $dbname = 'mdwiki_new';
+    }
+    // ---
+    return $dbname;
+}
+
 function fetch_query_new($sql_query, $params, $get)
 {
     if ($get != 'settings' && isset($_REQUEST['apcu'])) {
@@ -149,19 +191,13 @@ function fetch_query_new($sql_query, $params, $get)
         }
     }
     // ---
-    $dbname = 'mdwiki';
-    // ---
-    $gets_new_db = ["missing", "missing_qids", "publish_reports", "login_attempts", "publish_reports_stats"];
-    // ---
-    if (in_array($get, $gets_new_db)) {
-        $dbname = 'mdwiki_new';
-    }
+    $dbname = get_dbname($get);
     // ---
     // Create a new database object
     $db = new Database($_SERVER['SERVER_NAME'] ?? '', $dbname);
 
     // Execute a SQL query
-    $results = $db->fetch_query($sql_query, $params);
+    $results = $db->fetchquery($sql_query, $params);
 
     // Destroy the database object
     $db = null;
