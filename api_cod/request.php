@@ -283,6 +283,20 @@ switch ($get) {
         };
         break;
 
+    case 'publish_reports_stats':
+        $query = <<<SQL
+            SELECT DISTINCT YEAR(date), MONTH(date), lang, user, result
+            FROM publish_reports
+            GROUP BY YEAR(date), MONTH(date), lang, user, result
+            SQL;
+        // ---
+        $tab = add_li_params($query, [], $endpoint_params);
+        // ---
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        // ---
+        break;
+
     case 'publish_reports':
         $query = <<<SQL
             SELECT $DISTINCT $SELECT
@@ -446,7 +460,7 @@ switch ($get) {
         break;
 
     default:
-        if (in_array($get, $other_tables)) {
+        if (in_array($get, $other_tables) || isset($endpoint_params_tab[$get])) {
             $query = "SELECT * FROM $get";
             $tab = add_li_params($query, [], $endpoint_params);
             $query = $tab['qua'];
