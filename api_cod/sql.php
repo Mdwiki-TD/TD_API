@@ -11,7 +11,27 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 };
-//---
+
+
+if (!extension_loaded('apcu')) {
+    function apcu_exists($key)
+    {
+        return false;
+    }
+    function apcu_fetch($key)
+    {
+        return false;
+    }
+    function apcu_store($key, $value, $ttl = 0)
+    {
+        return false;
+    }
+    function apcu_delete($key)
+    {
+        return false;
+    }
+}
+
 use PDO;
 use PDOException;
 
