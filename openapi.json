@@ -1528,6 +1528,21 @@
                     }
                 }
             }
+        },
+        "/api.php?get=publish_reports_stats": {
+            "get": {
+                "summary": "publish reports stats",
+                "description": "",
+                "tags": [
+                    "other"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
         }
     }
 }
