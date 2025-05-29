@@ -285,10 +285,10 @@ switch ($get) {
 
     case 'publish_reports_stats':
         $query = <<<SQL
-            SELECT DISTINCT YEAR(date), MONTH(date), lang, user, result
+            SELECT DISTINCT YEAR(date) as year, MONTH(date) as month, lang, user, result
             FROM publish_reports
-            GROUP BY YEAR(date), MONTH(date), lang, user, result
-            SQL;
+            GROUP BY year, month, lang, user, result
+        SQL;
         // ---
         $tab = add_li_params($query, [], $endpoint_params);
         // ---
