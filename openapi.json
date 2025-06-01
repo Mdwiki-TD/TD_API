@@ -1543,6 +1543,31 @@
                     }
                 }
             }
+        },
+        "/api.php?get=language_settings": {
+            "get": {
+                "summary": "language settings",
+                "description": "",
+                "tags": [
+                    "other"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "lang_code",
+                        "description": "Language code",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
         }
     }
 }
