@@ -12,6 +12,11 @@
             { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true }
         ]
     },
+    "language_settings": {
+        "params": [
+            { "name": "lang_code", "column": "lang_code", "type": "text", "placeholder": "Language code"}
+        ]
+    },
     "publish_reports_stats": {
         "params": []
     },
