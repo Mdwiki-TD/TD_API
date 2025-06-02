@@ -192,7 +192,7 @@ function get_dbname($table_name)
     // ---
     $dbname = 'mdwiki';
     // ---
-    $gets_new_db = ["missing", "missing_qids", "publish_reports", "login_attempts", "publish_reports_stats"];
+    $gets_new_db = ["missing", "missing_qids", "publish_reports", "login_attempts", "logins", "publish_reports_stats"];
     // ---
     if (in_array($table_name, $gets_new_db)) {
         $dbname = 'mdwiki_new';
