@@ -233,6 +233,41 @@ switch ($get) {
         // ---
         break;
 
+    case 'top_users':
+        $query = <<<SQL
+                SELECT
+                    p.user,
+                    p.lang,
+                    MAX(YEAR(p.pupdate)) AS year,
+                    COUNT(p.target) AS max_target,
+                    SUM(CASE
+                        WHEN p.word IS NOT NULL AND p.word != 0 AND p.word != '' THEN p.word
+                        WHEN translate_type = 'all' THEN w.w_all_words
+                        ELSE w.w_lead_words
+                    END) AS words,
+                    SUM(CAST(v.views AS UNSIGNED)) as views
+
+                FROM pages p
+
+                LEFT JOIN users u
+                    ON p.user = u.username
+
+                LEFT JOIN words w
+                    ON w.w_title = p.title
+
+                LEFT JOIN views_new_all v
+                    ON p.target = v.target AND p.lang = v.lang
+
+            SQL;
+        // ---
+        $tab = add_li_params($query, [], $endpoint_params);
+        $params = $tab['params'];
+        // ---
+        $query = $tab['qua'];
+        $query .= " GROUP BY p.user, p.lang ORDER BY 4 DESC";
+        // ---
+        break;
+
 
     case 'users_by_last_pupdate':
         $qua = <<<SQL
