@@ -198,7 +198,7 @@ switch ($get) {
         $query .= " group by user order by count desc";
         break;
 
-    case 'users_by_wiki2':
+    case 'users_by_wiki':
         $query = <<<SQL
                 SELECT
                     p.user,
@@ -233,45 +233,6 @@ switch ($get) {
         // ---
         break;
 
-
-    case 'users_by_wiki':
-        $query = <<<SQL
-            SELECT
-                p.user,
-                p.lang,
-                -- YEAR(p.pupdate) AS year,
-                MAX(YEAR(p.pupdate)) AS year,
-                COUNT(p.target) AS target_count,
-                SUM(CASE
-                    WHEN p.word IS NOT NULL AND p.word != 0 AND p.word != '' THEN p.word
-                    WHEN translate_type = 'all' THEN w.w_all_words
-                    ELSE w.w_lead_words
-                END) AS words
-            FROM pages p
-
-            LEFT JOIN users u
-                ON p.user = u.username
-
-            LEFT JOIN words w
-                ON w.w_title = p.title
-        SQL;
-        // ---
-        $tab = add_li_params($query, [], $endpoint_params);
-        $params = $tab['params'];
-        // ---
-        $query = $tab['qua'];
-        $query .= " GROUP BY p.user, p.lang";
-        // ---
-        // , SUM(target_count) AS sum_target
-        $query = <<<SQL
-            SELECT user, lang, year, MAX(target_count) AS max_target, words
-                FROM (
-                    $query
-                ) AS subquery
-            GROUP BY user
-            ORDER BY 4 DESC
-        SQL;
-        break;
 
     case 'users_by_last_pupdate':
         $qua = <<<SQL
