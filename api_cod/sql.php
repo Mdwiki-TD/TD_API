@@ -84,6 +84,23 @@ class Database
             exit();
         }
     }
+
+    public function test_print($s)
+    {
+        if (isset($_COOKIE['test']) && $_COOKIE['test'] == 'x') {
+            return;
+        }
+
+        $print_t = (isset($_REQUEST['test']) || isset($_COOKIE['test'])) ? true : false;
+
+        if ($print_t && gettype($s) == 'string') {
+            echo "\n<br>\n$s";
+        } elseif ($print_t) {
+            echo "\n<br>\n";
+            print_r($s);
+        }
+    }
+
     public function disableFullGroupByMode($sql_query)
     {
         // if the query contains "GROUP BY", disable ONLY_FULL_GROUP_BY, strtoupper() is for case insensitive
@@ -117,13 +134,15 @@ class Database
             }
         } catch (PDOException $e) {
             echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;
-            return [];
+            return false;
         }
     }
 
     public function fetchquery($sql_query, $params = null)
     {
         try {
+            // $this->test_print($sql_query);
+
             $this->disableFullGroupByMode($sql_query);
 
             $q = $this->db->prepare($sql_query);
@@ -137,7 +156,7 @@ class Database
             $result = $q->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (PDOException $e) {
-            // echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;
+            // echo "SQL Error:" . $e->getMessage() . "<br>" . $sql_query;
             error_log("SQL Error: " . $e->getMessage() . " | Query: " . $sql_query);
             return [];
         }
