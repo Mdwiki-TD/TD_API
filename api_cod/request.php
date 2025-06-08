@@ -200,17 +200,17 @@ switch ($get) {
 
     case 'users_by_wiki':
         $query = <<<SQL
-            SELECT user, lang, YEAR(pupdate) AS year, COUNT(target) AS target_count
-            FROM pages
+            SELECT p.user, p.lang, YEAR(p.pupdate) AS year, COUNT(p.target) AS target_count
+            FROM pages p
             LEFT JOIN users u
-                ON user = u.username
+                ON p.user = u.username
         SQL;
         // ---
         $tab = add_li_params($query, [], $endpoint_params);
         $params = $tab['params'];
         // ---
         $query = $tab['qua'];
-        $query .= " GROUP BY user, lang";
+        $query .= " GROUP BY p.user, p.lang";
         // ---
         // , sum(target_count) AS sum_target
         $query = <<<SQL
@@ -225,36 +225,39 @@ switch ($get) {
 
     case 'top_users':
         $query = <<<SQL
-                SELECT
-                    p.user,
-                    p.lang,
-                    MAX(YEAR(p.pupdate)) AS year,
-                    COUNT(p.target) AS max_target,
-                    SUM(CASE
-                        WHEN p.word IS NOT NULL AND p.word != 0 AND p.word != '' THEN p.word
-                        WHEN translate_type = 'all' THEN w.w_all_words
-                        ELSE w.w_lead_words
-                    END) AS words,
-                    SUM(CAST(v.views AS UNSIGNED)) as views
+            SELECT
+                p.user,
+                COUNT(p.target) AS targets,
+                SUM(CASE
+                    WHEN p.word IS NOT NULL AND p.word != 0 AND p.word != '' THEN p.word
+                    WHEN translate_type = 'all' THEN w.w_all_words
+                    ELSE w.w_lead_words
+                END) AS words,
+                SUM(
+                    CASE
+                        WHEN v.views IS NULL OR v.views = '' THEN 0
+                        ELSE CAST(v.views AS UNSIGNED)
+                    END
+                    ) AS views
 
-                FROM pages p
 
-                LEFT JOIN users u
-                    ON p.user = u.username
+            FROM pages p
 
-                LEFT JOIN words w
-                    ON w.w_title = p.title
+            LEFT JOIN users u
+                ON p.user = u.username
 
-                LEFT JOIN views_new_all v
-                    ON p.target = v.target AND p.lang = v.lang
+            LEFT JOIN words w
+                ON w.w_title = p.title
 
+            LEFT JOIN views_new_all v
+                ON p.target = v.target AND p.lang = v.lang
             SQL;
         // ---
         $tab = add_li_params($query, [], $endpoint_params);
         $params = $tab['params'];
         // ---
         $query = $tab['qua'];
-        $query .= " GROUP BY p.user, p.lang ORDER BY 4 DESC";
+        $query .= " GROUP BY p.user ORDER BY 2 DESC";
         // ---
         break;
 
