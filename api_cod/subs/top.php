@@ -126,3 +126,33 @@ function top_langs($endpoint_params)
     // ---
     return ["qua" => $query, "params" => $params];
 }
+
+function top_lang_of_users($endpoint_params)
+{
+    $params = [];
+    $titles = $_GET['titles'] ?? [];
+    $query_line = "";
+
+    if (!empty($titles) && is_array($titles)) {
+        $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
+        $query_line = " AND p.user IN ($placeholders)";
+        $params = $titles;
+    }
+
+    $query = <<<SQL
+        SELECT user, lang, cnt
+        FROM (
+            SELECT p.user, p.lang, COUNT(p.target) AS cnt,
+                ROW_NUMBER() OVER (PARTITION BY p.user ORDER BY COUNT(p.target) DESC) AS rn
+            FROM pages p
+            WHERE p.target != ''
+            AND p.target IS NOT NULL
+            $query_line
+            GROUP BY p.user, p.lang
+        ) AS ranked
+        WHERE rn = 1
+        ORDER BY cnt DESC;
+    SQL;
+
+    return ["qua" => $query, "params" => $params];
+}

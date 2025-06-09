@@ -29,6 +29,7 @@ use function API\Missing\missing_query;
 use function API\Missing\missing_qids_query;
 use function API\SelectHelps\get_select;
 use function API\Top\top_langs;
+use function API\Top\top_lang_of_users;
 use function API\Top\top_users;
 use function API\Top\top_langs_format;
 
@@ -227,6 +228,11 @@ switch ($get) {
             WHERE rn = 1
             ORDER BY cnt DESC;
         SQL;
+        // ---
+        $tab = top_lang_of_users($endpoint_params);
+        // ---
+        $query = $tab['qua'];
+        $params = $tab['params'];
         // ---
         break;
 
