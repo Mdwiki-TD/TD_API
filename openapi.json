@@ -1624,6 +1624,25 @@
                     }
                 }
             }
+        },
+        "/api.php?get=top_lang_of_users": {
+            "get": {
+                "summary": "",
+                "description": "",
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/TitlesParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
         }
     }
 }
