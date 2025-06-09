@@ -129,16 +129,17 @@ function top_langs($endpoint_params)
 
 function top_lang_of_users($endpoint_params)
 {
+    // ---
     $params = [];
     $titles = $_GET['titles'] ?? [];
     $query_line = "";
-
+    // ---
     if (!empty($titles) && is_array($titles)) {
         $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
         $query_line = " AND p.user IN ($placeholders)";
         $params = $titles;
     }
-
+    // ---
     $query = <<<SQL
         SELECT user, lang, cnt
         FROM (
@@ -153,6 +154,6 @@ function top_lang_of_users($endpoint_params)
         WHERE rn = 1
         ORDER BY cnt DESC;
     SQL;
-
+    // ---
     return ["qua" => $query, "params" => $params];
 }
