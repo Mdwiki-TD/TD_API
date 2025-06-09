@@ -1340,34 +1340,6 @@
                 }
             }
         },
-        "/api.php?get=users_by_wiki": {
-            "get": {
-                "summary": "Retrieve users by wiki",
-                "description": "Corresponds to calling `api.php?get=users_by_wiki` with query parameters.",
-                "tags": [
-                    "users"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/YearParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/UserGroupParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CatParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
         "/api.php?get=users_no_inprocess": {
             "get": {
                 "summary": "Retrieve users not in process",
@@ -1560,6 +1532,109 @@
                         "schema": {
                             "type": "string"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=users_by_wiki": {
+            "get": {
+                "summary": "Retrieve users by wiki",
+                "description": "",
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserGroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CatParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=top_users": {
+            "get": {
+                "summary": "Retrieve Top users",
+                "description": "",
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserGroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CatParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=top_langs": {
+            "get": {
+                "summary": "Retrieve Top langs",
+                "description": "",
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserGroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CatParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=top_lang_of_users": {
+            "get": {
+                "summary": "",
+                "description": "",
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/TitlesParam"
                     }
                 ],
                 "responses": {

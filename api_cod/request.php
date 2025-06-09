@@ -28,6 +28,10 @@ use function API\TitlesInfos\mdwiki_revids;
 use function API\Missing\missing_query;
 use function API\Missing\missing_qids_query;
 use function API\SelectHelps\get_select;
+use function API\Top\top_langs;
+use function API\Top\top_lang_of_users;
+use function API\Top\top_users;
+use function API\Top\top_langs_format;
 
 $other_tables = [
     'in_process',
@@ -198,19 +202,28 @@ switch ($get) {
         $query .= " group by user order by count desc";
         break;
 
+    case 'top_lang_of_users':
+        // ---
+        $tab = top_lang_of_users($endpoint_params);
+        // ---
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        // ---
+        break;
+
     case 'users_by_wiki':
         $query = <<<SQL
-            SELECT user, lang, YEAR(pupdate) AS year, COUNT(target) AS target_count
-            FROM pages
+            SELECT p.user, p.lang, YEAR(p.pupdate) AS year, COUNT(p.target) AS target_count
+            FROM pages p
             LEFT JOIN users u
-                ON user = u.username
+                ON p.user = u.username
         SQL;
         // ---
         $tab = add_li_params($query, [], $endpoint_params);
         $params = $tab['params'];
         // ---
         $query = $tab['qua'];
-        $query .= " GROUP BY user, lang";
+        $query .= " GROUP BY p.user, p.lang";
         // ---
         // , sum(target_count) AS sum_target
         $query = <<<SQL
@@ -221,6 +234,25 @@ switch ($get) {
             GROUP BY user
             ORDER BY 4 DESC
         SQL;
+        break;
+
+
+    case 'top_langs':
+        // ---
+        $tab = top_langs($endpoint_params);
+        // ---
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        // ---
+        break;
+
+    case 'top_users':
+        // ---
+        $tab = top_users($endpoint_params);
+        // ---
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        // ---
         break;
 
     case 'users_by_last_pupdate':
@@ -516,7 +548,11 @@ switch ($get) {
     case 'leaderboard_table_formated':
         $results = leaderboard_table_format($results);
         break;
+    case 'top_langs':
+        $results = top_langs_format($results);
+        break;
 }
+
 $out = [
     "time" => $execution_time,
     "query" => $qua,

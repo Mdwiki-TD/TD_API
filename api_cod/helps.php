@@ -106,7 +106,7 @@ function add_one_param($qua, $column, $added, $tabe)
     return ["add_str" => $add_str, "params" => $params];
 }
 
-function change_types($types, $endpoint_params)
+function change_types($types, $endpoint_params, $ignore_params)
 {
     // ---
     // $types = array_flip($types);
@@ -128,6 +128,10 @@ function change_types($types, $endpoint_params)
         }
     }
     // ---
+    foreach ($ignore_params as $param) {
+        if (isset($types[$param])) unset($types[$param]);
+    }
+    // ---
     return $types;
 }
 /*
@@ -140,9 +144,9 @@ if (!empty($titles) && is_array($titles)) {
 }
 // ---
 */
-function add_li_params(string $qua, array $types, array $endpoint_params = []): array
+function add_li_params(string $qua, array $types, array $endpoint_params = [], array $ignore_params = []): array
 {
-    $types = change_types($types, $endpoint_params);
+    $types = change_types($types, $endpoint_params, $ignore_params);
     // ---
     $params = [];
     // ---
