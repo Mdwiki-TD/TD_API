@@ -1596,6 +1596,34 @@
                     }
                 }
             }
+        },
+        "/api.php?get=top_langs": {
+            "get": {
+                "summary": "Retrieve Top langs",
+                "description": "",
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserGroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CatParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
         }
     }
 }

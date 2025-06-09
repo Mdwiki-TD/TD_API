@@ -21,8 +21,6 @@ function make_status_query()
     $pa_rams = [];
 
     $year       = sanitize_input($_GET['year'] ?? '', '/^\d+$/');
-    $user_group = sanitize_input($_GET['user_group'] ?? '', '/^[a-zA-Z ]+$/');
-    $campaign   = sanitize_input($_GET['campaign'] ?? '', '/^[a-zA-Z ]+$/');
 
     if ($year !== null) {
         $added = $year;
@@ -30,11 +28,13 @@ function make_status_query()
         $pa_rams[] = $added;
     }
 
+    $user_group = sanitize_input($_GET['user_group'] ?? '', '/^[a-zA-Z ]+$/');
     if ($user_group !== null) {
         $qu_ery .= " AND p.user IN (SELECT username FROM users WHERE user_group = ?)";
         $pa_rams[] = $user_group;
     }
 
+    $campaign   = sanitize_input($_GET['campaign'] ?? '', '/^[a-zA-Z ]+$/');
     if ($campaign !== null) {
         $qu_ery .= " AND p.cat IN (SELECT category FROM categories WHERE campaign = ?)";
         $pa_rams[] = $campaign;

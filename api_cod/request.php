@@ -28,6 +28,9 @@ use function API\TitlesInfos\mdwiki_revids;
 use function API\Missing\missing_query;
 use function API\Missing\missing_qids_query;
 use function API\SelectHelps\get_select;
+use function API\Top\top_langs;
+use function API\Top\top_users;
+use function API\Top\top_langs_format;
 
 $other_tables = [
     'in_process',
@@ -198,6 +201,39 @@ switch ($get) {
         $query .= " group by user order by count desc";
         break;
 
+    case 'top_lang_of_users':
+        $query = <<<SQL
+
+            SELECT p.user, p.lang, COUNT(p.target) AS cnt,
+                ROW_NUMBER() OVER (PARTITION BY p.user ORDER BY COUNT(p.target) DESC) AS rn
+            FROM pages p
+            WHERE p.target != ''
+            AND p.target IS NOT NULL
+        SQL;
+        // ---
+        $params = [];
+        // ---
+        $titles = $_GET['titles'] ?? [];
+        // ---
+        if (!empty($titles) && is_array($titles)) {
+            $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
+            $query .= " AND p.user IN ($placeholders)";
+            $params = $titles;
+        }
+        // ---
+        $query .= " GROUP BY p.user, p.lang";
+        // ---
+        $query = <<<SQL
+            SELECT user, lang, cnt
+            FROM (
+                $query
+            ) AS ranked
+            WHERE rn = 1
+            ORDER BY cnt DESC;
+        SQL;
+        // ---
+        break;
+
     case 'users_by_wiki':
         $query = <<<SQL
             SELECT p.user, p.lang, YEAR(p.pupdate) AS year, COUNT(p.target) AS target_count
@@ -223,44 +259,24 @@ switch ($get) {
         SQL;
         break;
 
-    case 'top_users':
-        $query = <<<SQL
-            SELECT
-                p.user,
-                COUNT(p.target) AS targets,
-                SUM(CASE
-                    WHEN p.word IS NOT NULL AND p.word != 0 AND p.word != '' THEN p.word
-                    WHEN translate_type = 'all' THEN w.w_all_words
-                    ELSE w.w_lead_words
-                END) AS words,
-                SUM(
-                    CASE
-                        WHEN v.views IS NULL OR v.views = '' THEN 0
-                        ELSE CAST(v.views AS UNSIGNED)
-                    END
-                    ) AS views
 
-
-            FROM pages p
-
-            LEFT JOIN users u
-                ON p.user = u.username
-
-            LEFT JOIN words w
-                ON w.w_title = p.title
-
-            LEFT JOIN views_new_all v
-                ON p.target = v.target AND p.lang = v.lang
-            SQL;
+    case 'top_langs':
         // ---
-        $tab = add_li_params($query, [], $endpoint_params);
-        $params = $tab['params'];
+        $tab = top_langs($endpoint_params);
         // ---
         $query = $tab['qua'];
-        $query .= " GROUP BY p.user ORDER BY 2 DESC";
+        $params = $tab['params'];
         // ---
         break;
 
+    case 'top_users':
+        // ---
+        $tab = top_users($endpoint_params);
+        // ---
+        $query = $tab['qua'];
+        $params = $tab['params'];
+        // ---
+        break;
 
     case 'users_by_last_pupdate':
         $qua = <<<SQL
@@ -555,7 +571,11 @@ switch ($get) {
     case 'leaderboard_table_formated':
         $results = leaderboard_table_format($results);
         break;
+    case 'top_langs':
+        $results = top_langs_format($results);
+        break;
 }
+
 $out = [
     "time" => $execution_time,
     "query" => $qua,
