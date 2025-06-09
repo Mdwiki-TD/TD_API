@@ -1203,6 +1203,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/CampaignParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CategoryParam"
                     }
                 ],
                 "responses": {

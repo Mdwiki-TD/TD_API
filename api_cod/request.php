@@ -158,7 +158,7 @@ switch ($get) {
         break;
 
     case 'status':
-        $status = make_status_query();
+        $status = make_status_query($endpoint_params);
         $query = $status['qua'];
         $params = $status['params'];
         break;

@@ -155,7 +155,8 @@
         "params": [
             { "name": "year", "column": "year", "type": "number", "placeholder": "Year" },
             { "name": "user_group", "column": "user_group", "type": "text", "placeholder": "User Group Name" },
-            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" }
+            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
+            { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category", "value_can_be_null": true }
         ]
     },
     "leaderboard_table": {
