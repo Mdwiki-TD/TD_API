@@ -202,31 +202,27 @@ switch ($get) {
         break;
 
     case 'top_lang_of_users':
-        $query = <<<SQL
-
-            SELECT p.user, p.lang, COUNT(p.target) AS cnt,
-                ROW_NUMBER() OVER (PARTITION BY p.user ORDER BY COUNT(p.target) DESC) AS rn
-            FROM pages p
-            WHERE p.target != ''
-            AND p.target IS NOT NULL
-        SQL;
         // ---
         $params = [];
-        // ---
         $titles = $_GET['titles'] ?? [];
+        $query_line = "";
         // ---
         if (!empty($titles) && is_array($titles)) {
             $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
-            $query .= " AND p.user IN ($placeholders)";
+            $query_line = " AND p.user IN ($placeholders)";
             $params = $titles;
         }
-        // ---
-        $query .= " GROUP BY p.user, p.lang";
         // ---
         $query = <<<SQL
             SELECT user, lang, cnt
             FROM (
-                $query
+                SELECT p.user, p.lang, COUNT(p.target) AS cnt,
+                    ROW_NUMBER() OVER (PARTITION BY p.user ORDER BY COUNT(p.target) DESC) AS rn
+                FROM pages p
+                WHERE p.target != ''
+                AND p.target IS NOT NULL
+                $query_line
+                GROUP BY p.user, p.lang
             ) AS ranked
             WHERE rn = 1
             ORDER BY cnt DESC;
