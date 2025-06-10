@@ -9,7 +9,6 @@ use function API\Helps\add_group;
 use function API\Helps\add_limit;
 use function API\Helps\add_offset;
 use function API\Helps\add_li_params;
-use function API\Helps\add_li_params_o;
 use function API\Helps\add_array_params;
 */
 
@@ -201,15 +200,6 @@ function add_li_params(string $qua, array $types, array $endpoint_params = [], a
             }
         }
     }
-    // ---
-    return [$qua, $params];
-}
-
-function add_li_params_o(string $qua, array $types, array $endpoint_params = [], array $ignore_params = []): array
-{
-    // list($qua, $params) = add_li_params_o(
-    // ---
-    list($qua, $params) = add_li_params($qua, $types, $endpoint_params, $ignore_params);
     // ---
     return [$qua, $params];
 }

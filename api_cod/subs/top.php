@@ -12,7 +12,7 @@ use function API\Top\langs_names;
 */
 
 use function API\Helps\add_array_params;
-use function API\Helps\add_li_params_o;
+use function API\Helps\add_li_params;
 
 function langs_names()
 {
@@ -87,7 +87,7 @@ function top_users($endpoint_params)
     // ---
     $query = top_query('user');
     // ---
-    list($query, $params) = add_li_params_o($query, [], $endpoint_params, [""]);
+    list($query, $params) = add_li_params($query, [], $endpoint_params, []);
     // ---
     /*
     $cat   = sanitize_input($_GET['cat'] ?? '', '/^[a-zA-Z ]+$/');
@@ -107,7 +107,7 @@ function top_langs($endpoint_params)
     // ---
     $query = top_query('lang');
     // ---
-    list($query, $params) = add_li_params_o($query, [], $endpoint_params, [""]);
+    list($query, $params) = add_li_params($query, [], $endpoint_params, [""]);
     // ---
     /*
     $cat   = sanitize_input($_GET['cat'] ?? '', '/^[a-zA-Z ]+$/');

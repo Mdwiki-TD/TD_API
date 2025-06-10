@@ -16,7 +16,7 @@ use function API\InterWiki\get_inter_wiki;
 use function API\SiteMatrix\get_site_matrix;
 use function API\Helps\sanitize_input;
 use function API\Helps\add_group;
-use function API\Helps\add_li_params_o;
+use function API\Helps\add_li_params;
 use function API\Helps\add_order;
 use function API\Helps\add_limit;
 use function API\Helps\add_offset;
@@ -135,7 +135,7 @@ switch ($get) {
             WHERE p.target != ''
         ";
         // ---
-        list($query, $params) = add_li_params_o($query, [], $endpoint_params);
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         // ---
         // $query .= " \n group by v.target, v.lang";
         $query .= " ORDER BY 1 DESC";
@@ -155,14 +155,14 @@ switch ($get) {
                 ON p.target = v.target
                 AND p.lang = v.lang
         SQL;
-        list($query, $params) = add_li_params_o($query, [], $endpoint_params);
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         // $query .= " group by v.target, v.lang"; // used with views_new and sum(v.views)
         $query .= " ORDER BY 1 DESC";
         break;
 
     case 'user_access':
         $query = "SELECT id, user_name, created_at FROM access_keys";
-        list($query, $params) = add_li_params_o($query, [], $endpoint_params);
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         break;
 
     case 'qids':
@@ -175,7 +175,7 @@ switch ($get) {
 
     case 'count_pages':
         $query = "SELECT DISTINCT user, count(target) as count from pages";
-        list($query, $params) = add_li_params_o($query, [], $endpoint_params);
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         $query .= " group by user order by count desc";
         break;
 
@@ -246,7 +246,7 @@ switch ($get) {
                     AND p.lang = v.lang
             SQL;
             // ---
-            list($query, $params) = add_li_params_o($query, [], $endpoint_params);
+            list($query, $params) = add_li_params($query, [], $endpoint_params);
             // ---
             // $query .= " GROUP BY v.target, v.lang";
             // ---
@@ -259,7 +259,7 @@ switch ($get) {
             FROM language_settings
         SQL;
         // ---
-        list($query, $params) = add_li_params_o($query, [], $endpoint_params);
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         // ---
         break;
 
@@ -270,7 +270,7 @@ switch ($get) {
             GROUP BY year, month, lang, user, result
         SQL;
         // ---
-        list($query, $params) = add_li_params_o($query, [], $endpoint_params);
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         // ---
         break;
 
@@ -280,7 +280,7 @@ switch ($get) {
             FROM publish_reports
             SQL;
         // ---
-        list($query, $params) = add_li_params_o($query, [], $endpoint_params);
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         // ---
         break;
 
@@ -295,7 +295,7 @@ switch ($get) {
                     AND p.lang = v.lang
             SQL;
             // ---
-            list($query, $params) = add_li_params_o($query, [], $endpoint_params);
+            list($query, $params) = add_li_params($query, [], $endpoint_params);
             // ---
             // $query .= " GROUP BY v.target, v.lang";
             // ---
@@ -316,7 +316,7 @@ switch ($get) {
         $params = [];
         $query = "SELECT * FROM words ";
         // ---
-        list($query, $params) = add_li_params_o($query, [], $endpoint_params);
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         // ---
         /*
         // التحقق من عنوان الكلمات
@@ -353,7 +353,7 @@ switch ($get) {
                 AND p.lang = v.lang
         SQL;
         // ---
-        list($query, $params) = add_li_params_o($qua, [], $endpoint_params);
+        list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
         $query = add_group($query);
         $query = add_order($query);
@@ -365,7 +365,7 @@ switch ($get) {
         // ---
         $qua = "SELECT $DISTINCT $SELECT FROM $get p";
         // ---
-        list($query, $params) = add_li_params_o($qua, [], $endpoint_params);
+        list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
         $title_not_in_pages = (isset($_GET['title_not_in_pages']) && $_GET['title_not_in_pages'] != 'false' && $_GET['title_not_in_pages'] != '0') ? true : false;
         // ---
@@ -385,7 +385,7 @@ switch ($get) {
             WHERE p.target != ''
         SQL;
         // ---
-        list($query, $params) = add_li_params_o($qua, [], $endpoint_params);
+        list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
         $query_start = <<<SQL
             select distinct
@@ -408,7 +408,7 @@ switch ($get) {
             SELECT $DISTINCT $SELECT from in_process
         SQL;
         // ---
-        list($query, $params) = add_li_params_o($qua, [], $endpoint_params);
+        list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
         $query = add_group($query);
         $query = add_order($query);
@@ -418,7 +418,7 @@ switch ($get) {
     default:
         if (in_array($get, $other_tables) || isset($endpoint_params_tab[$get])) {
             $query = "SELECT $DISTINCT $SELECT FROM $get";
-            list($query, $params) = add_li_params_o($query, [], $endpoint_params);
+            list($query, $params) = add_li_params($query, [], $endpoint_params);
             break;
         }
         $results = ["error" => "invalid get request"];
