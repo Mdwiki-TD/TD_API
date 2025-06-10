@@ -278,13 +278,6 @@
         "params": [
         ]
     },
-    "users_by_wiki": {
-        "params": [
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "year of date", "no_empty_value": true },
-            { "name": "user_group", "column": "u.user_group", "type": "text", "placeholder": "User Group Name", "no_empty_value": true },
-            { "name": "cat", "column": "p.cat", "type": "text", "placeholder": "Category", "no_empty_value": true }
-        ]
-    },
     "top_users": {
         "params": [
             { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "year of date", "no_empty_value": true },

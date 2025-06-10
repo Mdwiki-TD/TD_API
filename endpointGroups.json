@@ -29,7 +29,6 @@
     "users": [
         "users",
         "user_access",
-        "users_by_wiki",
         "users_by_last_pupdate",
         "full_translators",
         "users_no_inprocess",
