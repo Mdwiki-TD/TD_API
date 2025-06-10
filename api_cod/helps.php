@@ -93,7 +93,7 @@ function add_one_param($qua, $column, $added, $tabe)
     } elseif ($added == ">0" || $added == "&#62;0") {
         $add_str = " $where_or_and $column > 0 ";
         // ---
-    } elseif ($tabe['type'] ?? '' == 'array') {
+    } elseif (($tabe['type'] ?? '') == 'array') {
         list($add_str, $params) = add_array_params($add_str, $params, $tabe['name'], $column, $where_or_and);
     } else {
         $params[] = $added;
