@@ -226,7 +226,7 @@ function fetch_query_new($sql_query, $params, $get)
         $in_apcu = get_from_apcu($sql_query, $params);
         // ---
         if ($in_apcu && is_array($in_apcu) && !empty($in_apcu)) {
-            return ['results' => $in_apcu, "source" => "apcu"];
+            return [$in_apcu, "apcu"];
         }
     }
     // ---
@@ -247,5 +247,5 @@ function fetch_query_new($sql_query, $params, $get)
         }
     }
 
-    return ['results' => $results, "source" => "db"];
+    return [$results, "db"];
 }

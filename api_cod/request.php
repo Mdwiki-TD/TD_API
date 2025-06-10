@@ -427,24 +427,25 @@ switch ($get) {
 $source = "db";
 
 if ($results === [] && ($qua !== "" || $query !== "")) {
+    // ---
     $start_time = microtime(true);
-    $results_tab = [];
+    // ---
     if ($query !== "") {
         $query = add_limit($query);
         $query = add_offset($query);
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
-        $results_tab = fetch_query_new($query, $params, $get);
+        // ---
+        list($results, $source) = fetch_query_new($query, $params, $get);
     } else {
         $qua = add_limit($qua);
         $qua = add_offset($qua);
-        $results_tab = fetch_query_new($qua, [], $get);
+        // ---
+        list($results, $source) = fetch_query_new($qua, [], $get);
     }
     // ---
-    $results = $results_tab['results'];
-    $source = $results_tab['source'];
-    // ---
     $end_time = microtime(true);
+    // ---
     $execution_time = $end_time - $start_time;
     $execution_time = number_format($execution_time, 2);
 }
