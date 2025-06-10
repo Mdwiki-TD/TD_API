@@ -30,6 +30,8 @@ function get_select($supported_params)
         'p.lang',
         'p.user',
         'user',
+        'g_title',
+        'campaign',
     ];
     // ---
     $select_alias = [

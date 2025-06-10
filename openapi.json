@@ -481,6 +481,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/DepthParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/SelectParam"
                     }
                 ],
                 "responses": {

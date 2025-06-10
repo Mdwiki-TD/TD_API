@@ -480,7 +480,7 @@ switch ($get) {
 
     default:
         if (in_array($get, $other_tables) || isset($endpoint_params_tab[$get])) {
-            $query = "SELECT * FROM $get";
+            $query = "SELECT $DISTINCT $SELECT FROM $get";
             $tab = add_li_params($query, [], $endpoint_params);
             $query = $tab['qua'];
             $params = $tab['params'];
