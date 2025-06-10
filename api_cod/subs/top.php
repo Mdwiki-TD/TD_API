@@ -11,7 +11,8 @@ use function API\Top\langs_names;
 
 */
 
-use function API\Helps\add_li_params;
+use function API\Helps\add_array_params;
+use function API\Helps\add_li_params_o;
 
 function langs_names()
 {
@@ -86,10 +87,7 @@ function top_users($endpoint_params)
     // ---
     $query = top_query('user');
     // ---
-    $tab = add_li_params($query, [], $endpoint_params, [""]);
-    // ---
-    $params = $tab['params'];
-    $query = $tab['qua'];
+    list($query, $params) = add_li_params_o($query, [], $endpoint_params, [""]);
     // ---
     /*
     $cat   = sanitize_input($_GET['cat'] ?? '', '/^[a-zA-Z ]+$/');
@@ -101,7 +99,7 @@ function top_users($endpoint_params)
     */
     $query .= " GROUP BY p.user ORDER BY 2 DESC";
     // ---
-    return ["qua" => $query, "params" => $params];
+    return [$query, $params];
 }
 
 function top_langs($endpoint_params)
@@ -109,10 +107,7 @@ function top_langs($endpoint_params)
     // ---
     $query = top_query('lang');
     // ---
-    $tab = add_li_params($query, [], $endpoint_params, [""]);
-    // ---
-    $params = $tab['params'];
-    $query = $tab['qua'];
+    list($query, $params) = add_li_params_o($query, [], $endpoint_params, [""]);
     // ---
     /*
     $cat   = sanitize_input($_GET['cat'] ?? '', '/^[a-zA-Z ]+$/');
@@ -124,21 +119,16 @@ function top_langs($endpoint_params)
     */
     $query .= " GROUP BY p.lang ORDER BY 2 DESC";
     // ---
-    return ["qua" => $query, "params" => $params];
+    return [$query, $params];
 }
 
 function top_lang_of_users($endpoint_params)
 {
     // ---
     $params = [];
-    $titles = $_GET['titles'] ?? [];
     $query_line = "";
     // ---
-    if (!empty($titles) && is_array($titles)) {
-        $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
-        $query_line = " AND p.user IN ($placeholders)";
-        $params = $titles;
-    }
+    list($query_line, $params) = add_array_params($query_line, $params, 'users', 'p.user', "AND");
     // ---
     $query = <<<SQL
         SELECT user, lang, cnt
@@ -148,12 +138,14 @@ function top_lang_of_users($endpoint_params)
             FROM pages p
             WHERE p.target != ''
             AND p.target IS NOT NULL
+
             $query_line
+
             GROUP BY p.user, p.lang
         ) AS ranked
         WHERE rn = 1
         ORDER BY cnt DESC;
     SQL;
     // ---
-    return ["qua" => $query, "params" => $params];
+    return [$query, $params];
 }

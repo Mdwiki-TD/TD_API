@@ -35,13 +35,13 @@
         "params": [
             { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
             { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" },
-            { "name": "titles", "column": "titles", "type": "array" }
+            { "name": "titles", "column": "title", "type": "array" }
         ]
     },
     "revids": {
         "params": [
             { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
-            { "name": "titles", "column": "titles", "type": "array" }
+            { "name": "titles", "column": "title", "type": "array" }
         ]
     },
     "assessments": {
@@ -296,7 +296,7 @@
     },
     "top_lang_of_users": {
         "params": [
-            { "name": "titles", "column": "titles", "type": "array" }
+            { "name": "users", "column": "p.user", "type": "array" }
         ]
     }
 }

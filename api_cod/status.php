@@ -56,5 +56,5 @@ function make_status_query($endpoint_params)
         ORDER BY 1 ASC;
     SQL;
 
-    return ["qua" => $qu_ery, "params" => $pa_rams];
+    return [$qu_ery, $pa_rams];
 }
