@@ -9,6 +9,7 @@ use function API\Helps\add_group;
 use function API\Helps\add_limit;
 use function API\Helps\add_offset;
 use function API\Helps\add_li_params;
+use function API\Helps\add_array_params;
 */
 
 function sanitize_input($input, $pattern)
@@ -81,7 +82,7 @@ function add_one_param($qua, $column, $added, $tabe)
     $add_str = "";
     $params = [];
     // ---
-    $where_or_and = (strpos($qua, 'WHERE') !== false) ? ' AND ' : ' WHERE ';
+    $where_or_and = (strpos(strtoupper($qua), 'WHERE') !== false) ? ' AND ' : ' WHERE ';
     // ---
     if ($added == "not_mt" || $added == "not_empty") {
         $add_str = " $where_or_and ($column != '' AND $column IS NOT NULL) ";
@@ -92,6 +93,8 @@ function add_one_param($qua, $column, $added, $tabe)
     } elseif ($added == ">0" || $added == "&#62;0") {
         $add_str = " $where_or_and $column > 0 ";
         // ---
+    } elseif (($tabe['type'] ?? '') == 'array') {
+        list($add_str, $params) = add_array_params($add_str, $params, $tabe['name'], $column, $where_or_and);
     } else {
         $params[] = $added;
         $add_str = " $where_or_and $column = ? ";
@@ -103,7 +106,7 @@ function add_one_param($qua, $column, $added, $tabe)
         }
     }
     // ---
-    return ["add_str" => $add_str, "params" => $params];
+    return [$add_str, $params];
 }
 
 function change_types($types, $endpoint_params, $ignore_params)
@@ -134,16 +137,29 @@ function change_types($types, $endpoint_params, $ignore_params)
     // ---
     return $types;
 }
-/*
-$titles = $_GET['titles'] ?? [];
-// ---
-if (!empty($titles) && is_array($titles)) {
-    $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
-    $qua .= " $where_or_and title IN ($placeholders)";
-    $params = array_merge($params, $titles);
+function add_array_params($qua, $params, $param = "titles", $column = "title", $where_or_and = "")
+{
+    // ---
+    // list($query, $params) = add_array_params($query, $params, 'titles', 'title', "AND");
+    // ---
+    if (empty($where_or_and)) {
+        $where_or_and = (strpos(strtoupper($qua), 'WHERE') !== false) ? ' AND ' : ' WHERE ';
+    }
+    // ---
+    $titles = $_GET[$param] ?? [];
+    // ---
+    if (!empty($titles) && is_array($titles)) {
+        // ---
+        $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
+        // ---
+        $qua .= " $where_or_and $column IN ($placeholders)";
+        // ---
+        $params = array_merge($params, $titles);
+    }
+    // ---
+    return [$qua, $params];
 }
-// ---
-*/
+
 function add_li_params(string $qua, array $types, array $endpoint_params = [], array $ignore_params = []): array
 {
     $types = change_types($types, $endpoint_params, $ignore_params);
@@ -176,15 +192,14 @@ function add_li_params(string $qua, array $types, array $endpoint_params = [], a
                     $qua = add_distinct($qua);
                 }
             } else {
-                $tab = add_one_param($qua, $column, $added, $tabe);
+                list($add_str, $new_params) = add_one_param($qua, $column, $added, $tabe);
                 // ---
-                $add_str = $tab['add_str'];
-                $params = array_merge($params, $tab['params']);
+                $params = array_merge($params, $new_params);
                 // ---
                 $qua .= $add_str;
             }
         }
     }
     // ---
-    return ["qua" => $qua, "params" => $params];
+    return [$qua, $params];
 }

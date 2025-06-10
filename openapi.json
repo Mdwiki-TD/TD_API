@@ -1612,7 +1612,17 @@
                 ],
                 "parameters": [
                     {
-                        "$ref": "#/components/parameters/TitlesParam"
+                        "in": "query",
+                        "name": "users",
+                        "description": "list of users",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "maxItems": 50
+                        }
                     }
                 ],
                 "responses": {

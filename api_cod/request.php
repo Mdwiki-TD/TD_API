@@ -15,8 +15,8 @@ use function API\SQL\fetch_query_new;
 use function API\InterWiki\get_inter_wiki;
 use function API\SiteMatrix\get_site_matrix;
 use function API\Helps\sanitize_input;
-use function API\Helps\add_li_params;
 use function API\Helps\add_group;
+use function API\Helps\add_li_params;
 use function API\Helps\add_order;
 use function API\Helps\add_limit;
 use function API\Helps\add_offset;
@@ -78,17 +78,11 @@ $SELECT = get_select($supported_params);
 switch ($get) {
 
     case 'missing':
-        $tab = missing_query($endpoint_params);
-        $query = $tab['qua'];
-        $params = $tab['params'];
-        // echo json_encode($tab);
+        list($query, $params) = missing_query($endpoint_params);
         break;
 
     case 'missing_qids':
-        $tab = missing_qids_query($endpoint_params);
-        $query = $tab['qua'];
-        $params = $tab['params'];
-        // echo json_encode($tab);
+        list($query, $params) = missing_qids_query($endpoint_params);
         break;
 
     case 'users':
@@ -103,17 +97,11 @@ switch ($get) {
         break;
 
     case 'revids':
-        $tab = mdwiki_revids($endpoint_params);
-        $query = $tab['qua'];
-        $params = $tab['params'];
-        // echo json_encode($tab);
+        list($query, $params) = mdwiki_revids($endpoint_params);
         break;
 
     case 'titles':
-        $tab = titles_query($endpoint_params);
-        $query = $tab['qua'];
-        $params = $tab['params'];
-        // echo json_encode($tab);
+        list($query, $params) = titles_query($endpoint_params);
         break;
 
     case 'pages_users_to_main':
@@ -147,20 +135,15 @@ switch ($get) {
             WHERE p.target != ''
         ";
         // ---
-        $tab = add_li_params($query, [], $endpoint_params);
-        // ---
-        $query = $tab["qua"];
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         // ---
         // $query .= " \n group by v.target, v.lang";
         $query .= " ORDER BY 1 DESC";
         //---
-        $params = $tab["params"];
         break;
 
     case 'status':
-        $status = make_status_query($endpoint_params);
-        $query = $status['qua'];
-        $params = $status['params'];
+        list($query, $params) = make_status_query($endpoint_params);
         break;
 
     case 'views':
@@ -172,18 +155,14 @@ switch ($get) {
                 ON p.target = v.target
                 AND p.lang = v.lang
         SQL;
-        $tab = add_li_params($query, [], $endpoint_params);
-        $query = $tab['qua'];
-        $params = $tab['params'];
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         // $query .= " group by v.target, v.lang"; // used with views_new and sum(v.views)
         $query .= " ORDER BY 1 DESC";
         break;
 
     case 'user_access':
         $query = "SELECT id, user_name, created_at FROM access_keys";
-        $tab = add_li_params($query, [], $endpoint_params);
-        $query = $tab['qua'];
-        $params = $tab['params'];
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         break;
 
     case 'qids':
@@ -196,36 +175,25 @@ switch ($get) {
 
     case 'count_pages':
         $query = "SELECT DISTINCT user, count(target) as count from pages";
-        $tab = add_li_params($query, [], $endpoint_params);
-        $query = $tab['qua'];
-        $params = $tab['params'];
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         $query .= " group by user order by count desc";
         break;
 
     case 'top_lang_of_users':
         // ---
-        $tab = top_lang_of_users($endpoint_params);
-        // ---
-        $query = $tab['qua'];
-        $params = $tab['params'];
+        list($query, $params) = top_lang_of_users($endpoint_params);
         // ---
         break;
 
     case 'top_langs':
         // ---
-        $tab = top_langs($endpoint_params);
-        // ---
-        $query = $tab['qua'];
-        $params = $tab['params'];
+        list($query, $params) = top_langs($endpoint_params);
         // ---
         break;
 
     case 'top_users':
         // ---
-        $tab = top_users($endpoint_params);
-        // ---
-        $query = $tab['qua'];
-        $params = $tab['params'];
+        list($query, $params) = top_users($endpoint_params);
         // ---
         break;
 
@@ -278,13 +246,9 @@ switch ($get) {
                     AND p.lang = v.lang
             SQL;
             // ---
-            $tab = add_li_params($query, [], $endpoint_params);
-            // ---
-            $query = $tab['qua'];
+            list($query, $params) = add_li_params($query, [], $endpoint_params);
             // ---
             // $query .= " GROUP BY v.target, v.lang";
-            // ---
-            $params = $tab['params'];
             // ---
         };
         break;
@@ -295,10 +259,7 @@ switch ($get) {
             FROM language_settings
         SQL;
         // ---
-        $tab = add_li_params($query, [], $endpoint_params);
-        // ---
-        $query = $tab['qua'];
-        $params = $tab['params'];
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         // ---
         break;
 
@@ -309,10 +270,7 @@ switch ($get) {
             GROUP BY year, month, lang, user, result
         SQL;
         // ---
-        $tab = add_li_params($query, [], $endpoint_params);
-        // ---
-        $query = $tab['qua'];
-        $params = $tab['params'];
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         // ---
         break;
 
@@ -322,11 +280,7 @@ switch ($get) {
             FROM publish_reports
             SQL;
         // ---
-        $tab = add_li_params($query, [], $endpoint_params);
-        // ---
-        $query = $tab['qua'];
-        // ---
-        $params = $tab['params'];
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         // ---
         break;
 
@@ -341,12 +295,10 @@ switch ($get) {
                     AND p.lang = v.lang
             SQL;
             // ---
-            $tab = add_li_params($query, [], $endpoint_params);
+            list($query, $params) = add_li_params($query, [], $endpoint_params);
             // ---
-            $query = $tab['qua'];
             // $query .= " GROUP BY v.target, v.lang";
             // ---
-            $params = $tab['params'];
         };
         break;
 
@@ -364,10 +316,7 @@ switch ($get) {
         $params = [];
         $query = "SELECT * FROM words ";
         // ---
-        $tab = add_li_params($query, [], $endpoint_params);
-        // ---
-        $query = $tab['qua'];
-        $params = $tab['params'];
+        list($query, $params) = add_li_params($query, [], $endpoint_params);
         // ---
         /*
         // التحقق من عنوان الكلمات
@@ -404,10 +353,7 @@ switch ($get) {
                 AND p.lang = v.lang
         SQL;
         // ---
-        $tab = add_li_params($qua, [], $endpoint_params);
-        // ---
-        $query = $tab['qua'];
-        $params = $tab['params'];
+        list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
         $query = add_group($query);
         $query = add_order($query);
@@ -419,10 +365,7 @@ switch ($get) {
         // ---
         $qua = "SELECT $DISTINCT $SELECT FROM $get p";
         // ---
-        $tab = add_li_params($qua, [], $endpoint_params);
-        // ---
-        $query = $tab['qua'];
-        $params = $tab['params'];
+        list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
         $title_not_in_pages = (isset($_GET['title_not_in_pages']) && $_GET['title_not_in_pages'] != 'false' && $_GET['title_not_in_pages'] != '0') ? true : false;
         // ---
@@ -442,9 +385,7 @@ switch ($get) {
             WHERE p.target != ''
         SQL;
         // ---
-        $tab = add_li_params($qua, [], $endpoint_params);
-        // ---
-        $query = $tab['qua'];
+        list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
         $query_start = <<<SQL
             select distinct
@@ -455,7 +396,6 @@ switch ($get) {
         // ---
         $query = $query_start . $query;
         // ---
-        $params = $tab['params'];
         // ---
         $query = add_group($query);
         $query = add_order($query);
@@ -468,10 +408,7 @@ switch ($get) {
             SELECT $DISTINCT $SELECT from in_process
         SQL;
         // ---
-        $tab = add_li_params($qua, [], $endpoint_params);
-        // ---
-        $query = $tab['qua'];
-        $params = $tab['params'];
+        list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
         $query = add_group($query);
         $query = add_order($query);
@@ -481,9 +418,7 @@ switch ($get) {
     default:
         if (in_array($get, $other_tables) || isset($endpoint_params_tab[$get])) {
             $query = "SELECT $DISTINCT $SELECT FROM $get";
-            $tab = add_li_params($query, [], $endpoint_params);
-            $query = $tab['qua'];
-            $params = $tab['params'];
+            list($query, $params) = add_li_params($query, [], $endpoint_params);
             break;
         }
         $results = ["error" => "invalid get request"];
@@ -492,24 +427,25 @@ switch ($get) {
 $source = "db";
 
 if ($results === [] && ($qua !== "" || $query !== "")) {
+    // ---
     $start_time = microtime(true);
-    $results_tab = [];
+    // ---
     if ($query !== "") {
         $query = add_limit($query);
         $query = add_offset($query);
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
-        $results_tab = fetch_query_new($query, $params, $get);
+        // ---
+        list($results, $source) = fetch_query_new($query, $params, $get);
     } else {
         $qua = add_limit($qua);
         $qua = add_offset($qua);
-        $results_tab = fetch_query_new($qua, [], $get);
+        // ---
+        list($results, $source) = fetch_query_new($qua, [], $get);
     }
     // ---
-    $results = $results_tab['results'];
-    $source = $results_tab['source'];
-    // ---
     $end_time = microtime(true);
+    // ---
     $execution_time = $end_time - $start_time;
     $execution_time = number_format($execution_time, 2);
 }

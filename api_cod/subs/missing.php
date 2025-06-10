@@ -9,7 +9,6 @@ use function API\Missing\missing_query;
 
 */
 
-// use function API\Helps\add_li_params;
 
 function missing_query($endpoint_params)
 {
@@ -41,7 +40,7 @@ function missing_query($endpoint_params)
         }
     }
     // ---
-    return ["qua" => $query, "params" => $params];
+    return [$query, $params];
 }
 
 function missing_qids_query($endpoint_params)
@@ -73,5 +72,5 @@ function missing_qids_query($endpoint_params)
         }
     }
     // ---
-    return ["qua" => $query, "params" => $params];
+    return [$query, $params];
 }

@@ -8,6 +8,7 @@ use function API\TitlesInfos\mdwiki_revids;
 */
 
 use function API\Helps\add_li_params;
+use function API\Helps\add_array_params;
 
 $qua_old = <<<SQL
     SELECT
@@ -34,54 +35,28 @@ function titles_query($endpoint_params)
         FROM titles_infos
     SQL;
     // ---
-    // remove titles from $endpoint_params { "name": "titles", "column": "titles", "type": "array" }
-    $endpoint_params = array_filter($endpoint_params, function ($param) {
-        return $param['name'] !== 'titles';
-    });
+    // list($qua, $params) = add_li_params($qua, [], $endpoint_params, ['titles']);
     // ---
-    $tab = add_li_params($qua, [], $endpoint_params);
+    list($qua, $params) = add_li_params($qua, [], $endpoint_params);
     // ---
-    $qua = $tab['qua'];
-    $params = $tab['params'];
+    // list($qua, $params) = add_array_params($qua, $params, 'titles', 'title');
     // ---
-    $where_or_and = (strpos(strtolower($qua), 'where') !== false) ? ' AND ' : ' where ';
-    // ---
-    // var_export($_GET);
-    // ---
-    $titles = $_GET['titles'] ?? [];
-    // ---
-    if (!empty($titles) && is_array($titles)) {
-        $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
-        $qua .= " $where_or_and title IN ($placeholders)";
-        $params = array_merge($params, $titles);
-    }
-    // ---
-    return ["qua" => $qua, "params" => $params];
+    return [$qua, $params];
 }
 
 function mdwiki_revids($endpoint_params)
 {
-    // --- remove 'titles' so add_li_params only handles non-array params
-    $endpoint_params = array_filter($endpoint_params, function ($param) {
-        return $param['name'] !== 'titles';
-    });
-    // --- build clause for scalar params
+    // ---
     $qua = <<<SQL
         SELECT *
         FROM mdwiki_revids
     SQL;
-    $tab   = add_li_params($qua, [], $endpoint_params);
-    $qua   = $tab['qua'];
-    $params = $tab['params'];
-
-    // --- manual array handling for `titles`
-    $titles = $_GET['titles'] ?? [];
-    if (!empty($titles) && is_array($titles)) {
-        $where_or_and = (strpos(strtolower($qua), 'where') !== false) ? ' AND ' : ' where ';
-        $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
-        $qua .= " $where_or_and title IN ($placeholders)";
-        $params = array_merge($params, $titles);
-    }
     // ---
-    return ["qua" => $qua, "params" => $params];
+    // list($qua, $params) = add_li_params($qua, [], $endpoint_params, ['titles']);
+    // ---
+    list($qua, $params) = add_li_params($qua, [], $endpoint_params);
+    // ---
+    // list($qua, $params) = add_array_params($qua, $params, 'titles', 'title');
+    // ---
+    return [$qua, $params];
 }
