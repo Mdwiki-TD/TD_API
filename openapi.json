@@ -481,6 +481,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/DepthParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/SelectParam"
                     }
                 ],
                 "responses": {
@@ -1203,6 +1206,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/CampaignParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CategoryParam"
                     }
                 ],
                 "responses": {
@@ -1532,34 +1538,6 @@
                         "schema": {
                             "type": "string"
                         }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=users_by_wiki": {
-            "get": {
-                "summary": "Retrieve users by wiki",
-                "description": "",
-                "tags": [
-                    "users"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/YearParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/UserGroupParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CatParam"
                     }
                 ],
                 "responses": {

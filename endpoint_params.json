@@ -66,7 +66,9 @@
     },
     "categories": {
         "params": [
-            { "name": "Depth", "column": "depth", "type": "number", "placeholder": "Depth Level" }
+            { "name": "Depth", "column": "depth", "type": "number", "placeholder": "Depth Level" },
+            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
+            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true }
         ]
     },
     "coordinator": {
@@ -155,7 +157,8 @@
         "params": [
             { "name": "year", "column": "year", "type": "number", "placeholder": "Year" },
             { "name": "user_group", "column": "user_group", "type": "text", "placeholder": "User Group Name" },
-            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" }
+            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
+            { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category", "value_can_be_null": true }
         ]
     },
     "leaderboard_table": {
@@ -275,13 +278,6 @@
     },
     "users_by_last_pupdate": {
         "params": [
-        ]
-    },
-    "users_by_wiki": {
-        "params": [
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "year of date", "no_empty_value": true },
-            { "name": "user_group", "column": "u.user_group", "type": "text", "placeholder": "User Group Name", "no_empty_value": true },
-            { "name": "cat", "column": "p.cat", "type": "text", "placeholder": "Category", "no_empty_value": true }
         ]
     },
     "top_users": {
