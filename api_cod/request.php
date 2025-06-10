@@ -79,12 +79,10 @@ switch ($get) {
 
     case 'missing':
         list($query, $params) = missing_query($endpoint_params);
-        // echo json_encode($tab);
         break;
 
     case 'missing_qids':
         list($query, $params) = missing_qids_query($endpoint_params);
-        // echo json_encode($tab);
         break;
 
     case 'users':
@@ -100,12 +98,10 @@ switch ($get) {
 
     case 'revids':
         list($query, $params) = mdwiki_revids($endpoint_params);
-        // echo json_encode($tab);
         break;
 
     case 'titles':
         list($query, $params) = titles_query($endpoint_params);
-        // echo json_encode($tab);
         break;
 
     case 'pages_users_to_main':
