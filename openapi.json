@@ -1654,6 +1654,15 @@
                     },
                     {
                         "in": "query",
+                        "name": "lang",
+                        "description": "Language code",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
                         "name": "select",
                         "description": "Select fields",
                         "required": false,

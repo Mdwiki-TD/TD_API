@@ -302,7 +302,8 @@
     },
     "user_status": {
         "params": [
-            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
+            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username", "no_empty_value": false },
+            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code", "no_empty_value": false },
             { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "options": ["lang", "campaign", "cat", "year"] }
         ]
     }
