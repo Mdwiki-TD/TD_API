@@ -124,7 +124,8 @@
             { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
             { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true },
             { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field", "no_select": true },
-            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field", "no_select": true }
+            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field", "no_select": true },
+            { "name": "year", "column": "YEAR(add_date)", "type": "number", "placeholder": "year of date" }
         ]
     },
     "pages_by_user_or_lang": {

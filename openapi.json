@@ -627,6 +627,9 @@
                         "$ref": "#/components/parameters/OrderParam"
                     },
                     {
+                        "$ref": "#/components/parameters/YearParam"
+                    },
+                    {
                         "$ref": "#/components/parameters/SelectParam"
                     }
                 ],
