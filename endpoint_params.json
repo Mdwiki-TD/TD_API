@@ -306,5 +306,8 @@
             { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code", "no_empty_value": false },
             { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "options": ["lang", "campaign", "cat", "year"] }
         ]
+    },
+    "user_lang_status": {
+        "redirect": "user_status"
     }
 }

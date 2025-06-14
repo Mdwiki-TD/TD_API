@@ -4,7 +4,7 @@ let endpoints = [];
 // Load endpoint groups from JSON file
 async function loadEndpointGroups() {
     try {
-        const response = await fetch('../endpointGroups.json');
+        const response = await fetch('endpointGroups.json');
         endpointGroups = await response.json();
         // Flatten endpoints array for compatibility with existing code
         endpoints = Object.values(endpointGroups).flat();

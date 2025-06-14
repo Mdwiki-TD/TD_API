@@ -384,6 +384,7 @@ switch ($get) {
         // ---
         break;
 
+    case 'user_lang_status':
     case 'user_status':
         // ---
         $SELECT = ($SELECT == "*" || $SELECT == "year") ? "YEAR(p.pupdate) as year" : $SELECT;
