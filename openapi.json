@@ -852,6 +852,9 @@
                         "$ref": "#/components/parameters/CatParam"
                     },
                     {
+                        "$ref": "#/components/parameters/CampaignParam"
+                    },
+                    {
                         "$ref": "#/components/parameters/GroupParam"
                     },
                     {
@@ -1622,6 +1625,46 @@
                                 "type": "string"
                             },
                             "maxItems": 50
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=user_status": {
+            "get": {
+                "summary": "",
+                "description": "list of users (langs, campaigns, categories)",
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "User",
+                        "description": "Username",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "select",
+                        "description": "Select fields",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "lang",
+                                "campaign",
+                                "category",
+                                "year"
+                            ]
                         }
                     }
                 ],
