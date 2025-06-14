@@ -83,6 +83,7 @@
             { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
             { "name": "target", "column": "p.target", "type": "text", "placeholder": "Target" },
             { "name": "cat", "column": "p.cat", "type": "text", "placeholder": "Category" },
+            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
             { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field", "no_select": true },
             { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field", "no_select": true },
             { "name": "pupdate", "column": "p.pupdate", "type": "text", "placeholder": "Date of publication" },
@@ -123,7 +124,8 @@
             { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
             { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true },
             { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field", "no_select": true },
-            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field", "no_select": true }
+            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by field", "no_select": true },
+            { "name": "year", "column": "YEAR(add_date)", "type": "number", "placeholder": "year of date" }
         ]
     },
     "pages_by_user_or_lang": {
@@ -298,5 +300,15 @@
         "params": [
             { "name": "users", "column": "p.user", "type": "array" }
         ]
+    },
+    "user_status": {
+        "params": [
+            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username", "no_empty_value": false },
+            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code", "no_empty_value": false },
+            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "options": ["lang", "campaign", "cat", "year"] }
+        ]
+    },
+    "user_lang_status": {
+        "redirect": "user_status"
     }
 }

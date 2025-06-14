@@ -68,12 +68,7 @@ if (isset($endpoint_params_tab[$get]['redirect'])) {
     $endpoint_params = $endpoint_params_tab[$redirect]['params'] ?? [];
 };
 // ---
-$supported_params = [];
-foreach ($endpoint_params as $param) {
-    $supported_params[] = $param["name"];
-};
-// ---
-$SELECT = get_select($supported_params);
+$SELECT = get_select($endpoint_params);
 // ---
 switch ($get) {
 
@@ -365,7 +360,7 @@ switch ($get) {
         // ---
         $qua = "SELECT $DISTINCT $SELECT FROM $get p";
         // ---
-        list($query, $params) = add_li_params($qua, [], $endpoint_params);
+        list($query, $params) = add_li_params($qua, [], $endpoint_params, ['campaign', 'title_not_in_pages', 'cat']);
         // ---
         $title_not_in_pages = (isset($_GET['title_not_in_pages']) && $_GET['title_not_in_pages'] != 'false' && $_GET['title_not_in_pages'] != '0') ? true : false;
         // ---
@@ -373,8 +368,36 @@ switch ($get) {
             $query .= " and p.title not in (select p2.title from pages p2 WHERE p2.lang = p.lang and p2.target != '') ";
         }
         // ---
+        $campaign   = sanitize_input($_GET['campaign'] ?? '', '/^[a-zA-Z ]+$/');
+        $category   = sanitize_input($_GET['cat'] ?? '', '/^[a-zA-Z ]+$/');
+        // ---
+        if ($category !== null) {
+            $query .= " AND p.cat = ?";
+            $params[] = $category;
+        } elseif ($campaign !== null) {
+            $query .= " AND p.cat IN (SELECT category FROM categories WHERE campaign = ?)";
+            $params[] = $campaign;
+        }
+        // ---
         $query = add_group($query);
         $query = add_order($query);
+        // ---
+        break;
+
+    case 'user_lang_status':
+    case 'user_status':
+        // ---
+        $SELECT = ($SELECT == "*" || $SELECT == "year") ? "YEAR(p.pupdate) as year" : $SELECT;
+        // ---
+        $qua = "SELECT DISTINCT $SELECT
+            FROM pages p
+            LEFT JOIN categories ca
+            ON p.cat = ca.category
+            ";
+        // ---
+        list($query, $params) = add_li_params($qua, [], $endpoint_params);
+        // ---
+        // $params = [sanitize_input($_GET['user'] ?? '', '/^[a-zA-Z ]+$/')];
         // ---
         break;
 
@@ -477,6 +500,13 @@ if ($_SERVER['SERVER_NAME'] !== 'localhost') {
     unset($out["query"]);
 };
 
-$out["supported_params"] = $supported_params;
+$out["supported_params"] = array_column($endpoint_params, "name");
 
+foreach ($endpoint_params as $param) {
+    // ---
+    if ($param["name"] == "select") {
+        $out["supported_select"] = $param["options"] ?? [];
+    }
+}
+// ---
 echo json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
