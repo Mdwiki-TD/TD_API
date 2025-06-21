@@ -105,11 +105,16 @@ class Database
     {
         // if the query contains "GROUP BY", disable ONLY_FULL_GROUP_BY, strtoupper() is for case insensitive
         if (strpos(strtoupper($sql_query), 'GROUP BY') !== false && !$this->groupByModeDisabled) {
-            $this->db->exec("SET SESSION sql_mode=(SELECT REPLACE(@@SESSION.sql_mode,'ONLY_FULL_GROUP_BY',''))");
-            $this->groupByModeDisabled = true;
+            try {
+                // More precise SQL mode modification
+                $this->db->exec("SET SESSION sql_mode=(SELECT REPLACE(@@SESSION.sql_mode,'ONLY_FULL_GROUP_BY',''))");
+                $this->groupByModeDisabled = true;
+            } catch (PDOException $e) {
+                // Log error but don't fail the query
+                error_log("Failed to disable ONLY_FULL_GROUP_BY: " . $e->getMessage());
+            }
         }
     }
-
     public function execute_query($sql_query, $params = null)
     {
         try {
