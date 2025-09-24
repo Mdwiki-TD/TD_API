@@ -414,7 +414,7 @@ switch ($get) {
             select distinct
                 p.id, p.title, p.word, p.translate_type, p.cat,
                 p.lang, p.user, p.target, p.date, p.pupdate,
-                p.add_date, p.deleted, p.mdwiki_revid, p.target, p.lang,
+                p.add_date, p.deleted, p.mdwiki_revid,
                 (select v.views from views_new_all v WHERE p.target = v.target AND p.lang = v.lang) as views
         SQL;
         // ---
