@@ -5,7 +5,6 @@ namespace API\Langs;
 Usage:
 use function API\Langs\get_url_result_curl;
 
-use function API\Langs\get_lang_names_all;
 use function API\Langs\get_lang_names;
 */
 
@@ -19,13 +18,6 @@ if (isset($_REQUEST['test'])) {
 }
 
 define('print_te', $print_t);
-
-$lang_tables = [];
-// load langs_table.json
-if (file_exists(__DIR__ . '/langs_table.json')) {
-    $lang_tables = json_decode(file_get_contents(__DIR__ . '/langs_table.json'), true);
-    ksort($lang_tables);
-}
 
 function test_print($s)
 {
@@ -80,6 +72,7 @@ function get_names()
 
     return $result['query']['wbcontentlanguages'];
 }
+
 function get_langs_list()
 {
     $url = "https://cxserver.wikimedia.org/v2/list/languagepairs";
@@ -103,8 +96,12 @@ function get_langs_list()
 
 function get_lang_names()
 {
-    global $lang_tables;
-
+    $lang_tables = [];
+    // load langs_table.json
+    if (file_exists(__DIR__ . '/langs_table.json')) {
+        $lang_tables = json_decode(file_get_contents(__DIR__ . '/langs_table.json'), true);
+        ksort($lang_tables);
+    }
     return $lang_tables;
 };
 
