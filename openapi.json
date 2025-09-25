@@ -806,10 +806,10 @@
                 }
             }
         },
-        "/api.php?get=missing_qids": {
+        "/api.php?get=missing_by_qids": {
             "get": {
-                "summary": "Retrieve pages with missing QIDs",
-                "description": "Corresponds to calling `api.php?get=missing_qids` with query parameters.",
+                "summary": "Retrieve missing pages",
+                "description": "Corresponds to calling `api.php?get=missing_by_qids` with query parameters.",
                 "tags": [
                     "pages_infos"
                 ],
@@ -819,6 +819,43 @@
                     },
                     {
                         "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CategoryParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CampaignParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=exists_by_qids": {
+            "get": {
+                "summary": "Retrieve exists pages",
+                "description": "Corresponds to calling `api.php?get=exists_by_qids` with query parameters.",
+                "tags": [
+                    "pages_infos"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CategoryParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CampaignParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TargetParam"
                     }
                 ],
                 "responses": {

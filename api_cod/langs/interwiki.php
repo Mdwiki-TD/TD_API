@@ -22,7 +22,7 @@ function inter_wiki()
     ];
     $end_point = "https://en.wikipedia.org/w/api.php";
 
-    $url = $end_point . "?" . http_build_query($params);
+    $url = $end_point . "?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
 
     $result = get_url_result_curl($url);
 

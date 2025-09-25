@@ -2,20 +2,22 @@
 
 namespace API\Missing;
 /*
+
 Usage:
 use function API\Missing\missing_query;
-
-
+use function API\Missing\exists_by_qids_query;
 
 */
 
+use function API\Helps\add_li_params;
+use function API\Helps\sanitize_input;
 
 function missing_query($endpoint_params)
 {
     // ---
     // FROM all_articles a
     $query = <<<SQL
-        SELECT *
+        SELECT a.qid, a.title, a.category
             FROM all_articles_titles a
             WHERE NOT EXISTS (
                 SELECT 1
@@ -43,11 +45,11 @@ function missing_query($endpoint_params)
     return [$query, $params];
 }
 
-function missing_qids_query($endpoint_params)
+function missing_by_qids_query($endpoint_params)
 {
     // ---
     $query = <<<SQL
-        SELECT *
+        SELECT a.qid, a.title, a.category
             FROM all_qids_titles a
             WHERE NOT EXISTS (
                 SELECT 1
@@ -73,4 +75,31 @@ function missing_qids_query($endpoint_params)
     }
     // ---
     return [$query, $params];
+}
+
+
+function exists_by_qids_query($endpoint_params)
+{
+    // ---
+    // exists_by_qids
+    // ---
+    $qua = <<<SQL
+        SELECT a.qid, a.title, a.category, t.code, t.target
+            FROM all_qids_titles a
+            JOIN all_qids_exists t
+            ON t.qid = a.qid
+    SQL;
+    // ---
+    list($qua, $params) = add_li_params($qua, [], $endpoint_params);
+    // ---
+    $campaign   = sanitize_input($_GET['campaign'] ?? '', '/^[a-zA-Z ]+$/');
+    $category   = sanitize_input($_GET['category'] ?? '', '/^[a-zA-Z ]+$/');
+    // ---
+    if ($category === null && $campaign !== null) {
+        $qua .= " AND a.category IN (SELECT category FROM categories WHERE campaign = ?)";
+        $params[] = $campaign;
+    }
+    // ---
+    return [$qua, $params];
+    // ---
 }

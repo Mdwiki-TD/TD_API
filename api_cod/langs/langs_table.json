@@ -362,7 +362,7 @@
 	"dga": {
 		"code": "dga",
 		"autonym": "Dagaare",
-		"name": "Dagaare"
+		"name": "Southern Dagaare"
 	},
 	"din": {
 		"code": "din",
@@ -372,7 +372,7 @@
 	"diq": {
 		"code": "diq",
 		"autonym": "Zazaki",
-		"name": "Zazaki"
+		"name": "Dimli"
 	},
 	"dsb": {
 		"code": "dsb",
@@ -851,7 +851,7 @@
 	},
 	"ks": {
 		"code": "ks",
-		"autonym": "कॉशुर \/ کٲشُر",
+		"autonym": "کٲشُر",
 		"name": "Kashmiri"
 	},
 	"ksh": {
@@ -1106,7 +1106,7 @@
 	},
 	"nan": {
 		"code": "nan",
-		"autonym": "閩南語 \/ Bân-lâm-gú",
+		"autonym": "閩南語 \/ Bân-lâm-gí",
 		"name": "Minnan"
 	},
 	"nap": {
@@ -1267,7 +1267,7 @@
 	"pih": {
 		"code": "pih",
 		"autonym": "Norfuk \/ Pitkern",
-		"name": "Norfuk \/ Pitkern"
+		"name": "Pitcairn-Norfolk"
 	},
 	"pl": {
 		"code": "pl",
@@ -1793,5 +1793,45 @@
 		"code": "zu",
 		"autonym": "isiZulu",
 		"name": "Zulu"
+	},
+	"ann": {
+		"code": "ann",
+		"autonym": "Obolo",
+		"name": "Obolo"
+	},
+	"knc": {
+		"code": "knc",
+		"autonym": "Yerwa Kanuri",
+		"name": "Central Kanuri"
+	},
+	"nr": {
+		"code": "nr",
+		"autonym": "isiNdebele seSewula",
+		"name": "South Ndebele"
+	},
+	"nup": {
+		"code": "nup",
+		"autonym": "Nupe",
+		"name": "Nupe"
+	},
+	"rki": {
+		"code": "rki",
+		"autonym": "ရခိုင်",
+		"name": "Arakanese"
+	},
+	"syl": {
+		"code": "syl",
+		"autonym": "ꠍꠤꠟꠐꠤ",
+		"name": "Sylheti"
+	},
+	"tig": {
+		"code": "tig",
+		"autonym": "ትግሬ",
+		"name": "Tigre"
+	},
+	"tok": {
+		"code": "tok",
+		"autonym": "toki pona",
+		"name": "Toki Pona"
 	}
 }
