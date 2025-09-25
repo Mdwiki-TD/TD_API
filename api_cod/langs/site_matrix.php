@@ -22,7 +22,7 @@ function site_matrix()
     ];
     $end_point = "https://meta.wikimedia.org/w/api.php";
 
-    $url = $end_point . "?" . http_build_query($params);
+    $url = $end_point . "?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
 
     $result = get_url_result_curl($url);
 

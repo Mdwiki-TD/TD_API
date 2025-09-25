@@ -64,7 +64,7 @@ function get_names()
         "wbclprop" => "code|autonym|name"
     ];
 
-    $url = "https://www.wikidata.org/w/api.php?" . http_build_query($params);
+    $url = "https://www.wikidata.org/w/api.php?" . http_build_query($params, '', '&', PHP_QUERY_RFC3986);
 
     $result = get_url_result_curl($url);
 

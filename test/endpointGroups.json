@@ -2,6 +2,7 @@
     "pages_infos": [
         "missing",
         "missing_qids",
+        "exists_qids",
         "titles",
         "assessments",
         "enwiki_pageviews",

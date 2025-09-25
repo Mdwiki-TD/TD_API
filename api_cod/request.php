@@ -26,6 +26,7 @@ use function API\Status\make_status_query;
 use function API\TitlesInfos\titles_query;
 use function API\TitlesInfos\mdwiki_revids;
 use function API\Missing\missing_query;
+use function API\Missing\exists_qids_query;
 use function API\Missing\missing_qids_query;
 use function API\SelectHelps\get_select;
 use function API\Top\top_langs;
@@ -78,6 +79,10 @@ switch ($get) {
 
     case 'missing_qids':
         list($query, $params) = missing_qids_query($endpoint_params);
+        break;
+
+    case 'exists_qids':
+        list($query, $params) = exists_qids_query($endpoint_params);
         break;
 
     case 'users':

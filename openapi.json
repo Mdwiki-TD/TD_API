@@ -808,8 +808,30 @@
         },
         "/api.php?get=missing_qids": {
             "get": {
-                "summary": "Retrieve pages with missing QIDs",
+                "summary": "Retrieve missing pages",
                 "description": "Corresponds to calling `api.php?get=missing_qids` with query parameters.",
+                "tags": [
+                    "pages_infos"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=exists_qids": {
+            "get": {
+                "summary": "Retrieve exists pages",
+                "description": "Corresponds to calling `api.php?get=exists_qids` with query parameters.",
                 "tags": [
                     "pages_infos"
                 ],
