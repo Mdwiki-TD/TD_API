@@ -1,8 +1,8 @@
 {
     "pages_infos": [
         "missing",
-        "missing_qids",
-        "exists_qids",
+        "missing_by_qids",
+        "exists_by_qids",
         "titles",
         "assessments",
         "enwiki_pageviews",

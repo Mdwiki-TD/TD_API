@@ -26,16 +26,18 @@
             { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true }
         ]
     },
-    "missing_qids": {
+    "missing_by_qids": {
         "params": [
             { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
-            { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true }
+            { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
+            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" }
         ]
     },
-    "exists_qids": {
+    "exists_by_qids": {
         "params": [
             { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
-            { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true }
+            { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
+            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" }
         ]
     },
     "titles": {

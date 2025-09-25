@@ -31,7 +31,7 @@ function titles_query($endpoint_params)
 {
     // ---
     $qua = <<<SQL
-        SELECT *
+        SELECT title, importance, r_lead_refs, r_all_refs, en_views, w_lead_words, w_all_words, qid
         FROM titles_infos
     SQL;
     // ---
@@ -48,7 +48,7 @@ function mdwiki_revids($endpoint_params)
 {
     // ---
     $qua = <<<SQL
-        SELECT *
+        SELECT title, revid
         FROM mdwiki_revids
     SQL;
     // ---

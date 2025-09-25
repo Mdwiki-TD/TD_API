@@ -26,8 +26,8 @@ use function API\Status\make_status_query;
 use function API\TitlesInfos\titles_query;
 use function API\TitlesInfos\mdwiki_revids;
 use function API\Missing\missing_query;
-use function API\Missing\exists_qids_query;
-use function API\Missing\missing_qids_query;
+use function API\Missing\exists_by_qids_query;
+use function API\Missing\missing_by_qids_query;
 use function API\SelectHelps\get_select;
 use function API\Top\top_langs;
 use function API\Top\top_lang_of_users;
@@ -77,12 +77,12 @@ switch ($get) {
         list($query, $params) = missing_query($endpoint_params);
         break;
 
-    case 'missing_qids':
-        list($query, $params) = missing_qids_query($endpoint_params);
+    case 'missing_by_qids':
+        list($query, $params) = missing_by_qids_query($endpoint_params);
         break;
 
-    case 'exists_qids':
-        list($query, $params) = exists_qids_query($endpoint_params);
+    case 'exists_by_qids':
+        list($query, $params) = exists_by_qids_query($endpoint_params);
         break;
 
     case 'users':
@@ -105,7 +105,7 @@ switch ($get) {
         break;
 
     case 'pages_users_to_main':
-        $query = "SELECT * FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
+        $query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
         $params = [];
         if (isset($_GET['lang']) && $_GET['lang'] != 'false' && $_GET['lang'] != '0') {
             $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -314,7 +314,7 @@ switch ($get) {
 
     case 'words':
         $params = [];
-        $query = "SELECT * FROM words ";
+        $query = "SELECT w_id, w_title, w_lead_words, w_all_words FROM words ";
         // ---
         list($query, $params) = add_li_params($query, [], $endpoint_params);
         // ---

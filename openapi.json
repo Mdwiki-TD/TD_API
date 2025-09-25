@@ -806,10 +806,10 @@
                 }
             }
         },
-        "/api.php?get=missing_qids": {
+        "/api.php?get=missing_by_qids": {
             "get": {
                 "summary": "Retrieve missing pages",
-                "description": "Corresponds to calling `api.php?get=missing_qids` with query parameters.",
+                "description": "Corresponds to calling `api.php?get=missing_by_qids` with query parameters.",
                 "tags": [
                     "pages_infos"
                 ],
@@ -819,6 +819,12 @@
                     },
                     {
                         "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CategoryParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CampaignParam"
                     }
                 ],
                 "responses": {
@@ -828,10 +834,10 @@
                 }
             }
         },
-        "/api.php?get=exists_qids": {
+        "/api.php?get=exists_by_qids": {
             "get": {
                 "summary": "Retrieve exists pages",
-                "description": "Corresponds to calling `api.php?get=exists_qids` with query parameters.",
+                "description": "Corresponds to calling `api.php?get=exists_by_qids` with query parameters.",
                 "tags": [
                     "pages_infos"
                 ],
@@ -841,6 +847,12 @@
                     },
                     {
                         "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CategoryParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CampaignParam"
                     }
                 ],
                 "responses": {

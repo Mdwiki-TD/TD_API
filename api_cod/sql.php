@@ -229,8 +229,8 @@ function get_dbname($table_name)
     // ---
     $gets_new_db = [
         "missing",
-        "missing_qids",
-        "exists_qids",
+        "missing_by_qids",
+        "exists_by_qids",
         "publish_reports",
         "login_attempts",
         "logins",
