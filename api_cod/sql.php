@@ -229,6 +229,7 @@ function get_dbname($table_name)
         'mdwiki_new' => [
             "missing",
             "missing_by_qids",
+            "exists_by_qids",
             "publish_reports",
             "login_attempts",
             "logins",
