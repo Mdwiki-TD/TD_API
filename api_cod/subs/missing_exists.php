@@ -49,7 +49,7 @@ function missing_by_qids_query($endpoint_params)
 {
     // ---
     $query = <<<SQL
-        SELECT a.qid, q.title, q.category
+        SELECT a.qid, a.title, a.category
             FROM all_qids_titles a
             WHERE NOT EXISTS (
                 SELECT 1
@@ -82,7 +82,7 @@ function exists_by_qids_query($endpoint_params)
 {
     // ---
     $qua = <<<SQL
-        SELECT a.qid, q.title, q.category
+        SELECT a.qid, a.title, a.category, t.code, t.target
             FROM all_qids_titles a
             JOIN all_qids_exists t
             ON t.qid = a.qid
