@@ -224,24 +224,27 @@ function add_to_apcu($sql_query, $params, $results)
 
 function get_dbname($table_name)
 {
-    // ---
-    $dbname = 'mdwiki';
-    // ---
-    $gets_new_db = [
-        "missing",
-        "missing_by_qids",
-        "exists_by_qids",
-        "publish_reports",
-        "login_attempts",
-        "logins",
-        "publish_reports_stats"
+    // Load from configuration file or define as class constant
+    $table_db_mapping = [
+        'mdwiki_new' => [
+            "missing",
+            "missing_by_qids",
+            "publish_reports",
+            "login_attempts",
+            "logins",
+            "publish_reports_stats",
+            "all_qids_titles"
+        ],
+        'mdwiki' => [] // default
     ];
-    // ---
-    if (in_array($table_name, $gets_new_db)) {
-        $dbname = 'mdwiki_new';
+
+    foreach ($table_db_mapping as $db => $tables) {
+        if (in_array($table_name, $tables)) {
+            return $db;
+        }
     }
-    // ---
-    return $dbname;
+
+    return 'mdwiki'; // default
 }
 
 function fetch_query_new($sql_query, $params, $get)
