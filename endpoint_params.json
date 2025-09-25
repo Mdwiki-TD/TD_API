@@ -37,7 +37,8 @@
         "params": [
             { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
             { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
-            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" }
+            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
+            { "name": "target", "column": "t.target", "type": "text", "placeholder": "Target" }
         ]
     },
     "titles": {

@@ -853,6 +853,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/CampaignParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TargetParam"
                     }
                 ],
                 "responses": {

@@ -81,6 +81,8 @@ function missing_by_qids_query($endpoint_params)
 function exists_by_qids_query($endpoint_params)
 {
     // ---
+    // exists_by_qids
+    // ---
     $qua = <<<SQL
         SELECT a.qid, a.title, a.category, t.code, t.target
             FROM all_qids_titles a
