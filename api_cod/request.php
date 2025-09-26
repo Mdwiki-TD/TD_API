@@ -353,8 +353,23 @@ switch ($get) {
                 AND p.lang = v.lang
         SQL;
         // ---
-        list($query, $params) = add_li_params($qua, [], $endpoint_params);
+        list($query, $params) = add_li_params($qua, [], $endpoint_params, ['year']);
         // ---
+        if (isset($_GET['year'])) {
+            $added = filter_input(INPUT_GET, 'year', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $added = (int) $added;
+            if ($added && $added > 0) {
+                // ---
+                // $query .= " AND (YEAR(p.date) = ? OR YEAR(p.pupdate) = ? OR YEAR(p.add_date) = ?)";
+                // // ---
+                // $params[] = $added;
+                // $params[] = $added;
+                // $params[] = $added;
+                // ---
+                $query .= " AND ? IN (YEAR(p.date), YEAR(p.pupdate), YEAR(p.add_date))";
+                $params[] = $added;
+            }
+        }
         $query = add_group($query);
         $query = add_order($query);
         // ---
