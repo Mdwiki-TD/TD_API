@@ -50,7 +50,7 @@ $other_tables = [
 ];
 
 $DISTINCT = (isset($_GET['distinct']) && $_GET['distinct'] != 'false' && $_GET['distinct'] != '0') ? 'DISTINCT ' : '';
-$get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_SPECIAL_CHARS); //$_GET['get']
+$get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_FULL_SPECIAL_CHARS); //$_GET['get']
 
 // if (!isset($_GET['limit'])) $_GET['limit'] = '50';
 
@@ -108,7 +108,7 @@ switch ($get) {
         $query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
         $params = [];
         if (isset($_GET['lang']) && $_GET['lang'] != 'false' && $_GET['lang'] != '0') {
-            $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
+            $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             if ($added !== null) {
                 $query .= " AND pu.lang = ?";
                 $params[] = $added;

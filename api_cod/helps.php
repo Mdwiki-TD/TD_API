@@ -23,7 +23,7 @@ function sanitize_input($input, $pattern)
 function add_group($qua)
 {
     if (isset($_GET['group'])) {
-        $added = filter_input(INPUT_GET, 'group', FILTER_SANITIZE_SPECIAL_CHARS);
+        $added = filter_input(INPUT_GET, 'group', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $qua .= " GROUP BY $added";
     }
     return $qua;
@@ -35,7 +35,7 @@ function add_order($qua)
     ];
     // ---
     if (isset($_GET['order'])) {
-        $added = filter_input(INPUT_GET, 'order', FILTER_SANITIZE_SPECIAL_CHARS);
+        $added = filter_input(INPUT_GET, 'order', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         // ---
         $added = $orders[$added] ?? $added;
         // ---
@@ -48,7 +48,7 @@ function add_offset($qua)
     // if $qua has OFFSET then return
     if (strpos($qua, 'OFFSET') !== false || strpos($qua, 'offset') !== false) return $qua;
     if (isset($_GET['offset'])) {
-        $added = filter_input(INPUT_GET, 'offset', FILTER_SANITIZE_SPECIAL_CHARS);
+        $added = filter_input(INPUT_GET, 'offset', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $added = (int) $added;
         if ($added > 0) {
             $qua .= " OFFSET $added";
@@ -61,7 +61,7 @@ function add_limit($qua)
     // if $qua has LIMIT then return
     if (strpos($qua, 'LIMIT') !== false || strpos($qua, 'limit') !== false) return $qua;
     if (isset($_GET['limit'])) {
-        $added = filter_input(INPUT_GET, 'limit', FILTER_SANITIZE_SPECIAL_CHARS);
+        $added = filter_input(INPUT_GET, 'limit', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $added = (int) $added;
         if ($added > 0) {
             $qua .= " LIMIT $added";

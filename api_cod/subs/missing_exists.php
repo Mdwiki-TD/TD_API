@@ -27,7 +27,7 @@ function missing_query($endpoint_params)
     SQL;
     $params = [];
     if (isset($_GET['lang'])) {
-        $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
+        $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if ($added !== null) {
             $query .= " AND t.code = ?";
             $params[] = $added;
@@ -35,7 +35,7 @@ function missing_query($endpoint_params)
     }
     $query .= ")";
     if (isset($_GET['category'])) {
-        $added = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_SPECIAL_CHARS);
+        $added = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if ($added !== null) {
             $query .= " AND a.category = ?";
             $params[] = $added;
@@ -59,7 +59,7 @@ function missing_by_qids_query($endpoint_params)
     SQL;
     $params = [];
     if (isset($_GET['lang'])) {
-        $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
+        $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if ($added !== null) {
             $query .= " AND t.code = ?";
             $params[] = $added;
@@ -67,7 +67,7 @@ function missing_by_qids_query($endpoint_params)
     }
     $query .= ")";
     if (isset($_GET['category'])) {
-        $added = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_SPECIAL_CHARS);
+        $added = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if ($added !== null) {
             $query .= " AND a.category = ?";
             $params[] = $added;
