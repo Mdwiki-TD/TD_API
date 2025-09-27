@@ -1,5 +1,14 @@
 {
     "publish_reports": {
+        "columns": [
+            "date",
+            "title",
+            "user",
+            "lang",
+            "sourcetitle",
+            "result",
+            "data"
+        ],
         "params": [
             {
                 "name": "year",
@@ -59,6 +68,13 @@
         ]
     },
     "language_settings": {
+        "columns": [
+            "lang_code",
+            "move_dots",
+            "expend",
+            "add_en_lang",
+            "add_en_lng"
+        ],
         "params": [
             {
                 "name": "lang_code",
@@ -69,9 +85,11 @@
         ]
     },
     "publish_reports_stats": {
+        "columns": [],
         "params": []
     },
     "missing": {
+        "columns": [],
         "params": [
             {
                 "name": "lang",
@@ -98,6 +116,7 @@
         ]
     },
     "missing_by_qids": {
+        "columns": [],
         "params": [
             {
                 "name": "lang",
@@ -130,6 +149,7 @@
         ]
     },
     "exists_by_qids": {
+        "columns": [],
         "params": [
             {
                 "name": "lang",
@@ -167,6 +187,7 @@
         ]
     },
     "titles": {
+        "columns": [],
         "params": [
             {
                 "name": "title",
@@ -188,6 +209,10 @@
         ]
     },
     "revids": {
+        "columns": [
+            "title",
+            "revid"
+        ],
         "params": [
             {
                 "name": "title",
@@ -203,6 +228,10 @@
         ]
     },
     "assessments": {
+        "columns": [
+            "title",
+            "importance"
+        ],
         "params": [
             {
                 "name": "title",
@@ -225,6 +254,12 @@
         ]
     },
     "refs_counts": {
+        "columns": [
+            "r_id",
+            "r_title",
+            "r_lead_refs",
+            "r_all_refs"
+        ],
         "params": [
             {
                 "name": "title",
@@ -247,6 +282,10 @@
         ]
     },
     "enwiki_pageviews": {
+        "columns": [
+            "title",
+            "en_views"
+        ],
         "params": [
             {
                 "name": "title",
@@ -263,6 +302,14 @@
         ]
     },
     "categories": {
+        "columns": [
+            "category",
+            "category2",
+            "display",
+            "campaign",
+            "depth",
+            "def"
+        ],
         "params": [
             {
                 "name": "Depth",
@@ -286,6 +333,10 @@
         ]
     },
     "coordinator": {
+        "columns": [
+            "user",
+            "active"
+        ],
         "params": [
             {
                 "name": "User",
@@ -296,6 +347,20 @@
         ]
     },
     "pages": {
+        "columns": [
+            "title",
+            "word",
+            "translate_type",
+            "cat",
+            "lang",
+            "user",
+            "target",
+            "date",
+            "pupdate",
+            "add_date",
+            "deleted",
+            "mdwiki_revid"
+        ],
         "params": [
             {
                 "name": "title",
@@ -425,6 +490,20 @@
         "redirect": "pages"
     },
     "pages_users": {
+        "columns": [
+            "title",
+            "word",
+            "translate_type",
+            "cat",
+            "lang",
+            "user",
+            "target",
+            "date",
+            "pupdate",
+            "add_date",
+            "deleted",
+            "mdwiki_revid"
+        ],
         "params": [
             {
                 "name": "lang",
@@ -567,6 +646,7 @@
         ]
     },
     "pages_by_user_or_lang": {
+        "columns": [],
         "params": [
             {
                 "name": "lang",
@@ -596,6 +676,7 @@
         ]
     },
     "user_access": {
+        "columns": [],
         "params": [
             {
                 "name": "user_name",
@@ -606,6 +687,10 @@
         ]
     },
     "qids": {
+        "columns": [
+            "title",
+            "qid"
+        ],
         "params": [
             {
                 "name": "dis",
@@ -621,6 +706,10 @@
         ]
     },
     "qids_others": {
+        "columns": [
+            "title",
+            "qid"
+        ],
         "params": [
             {
                 "name": "dis",
@@ -636,6 +725,7 @@
         ]
     },
     "count_pages": {
+        "columns": [],
         "params": [
             {
                 "name": "target",
@@ -646,6 +736,7 @@
         ]
     },
     "status": {
+        "columns": [],
         "params": [
             {
                 "name": "year",
@@ -675,6 +766,7 @@
         ]
     },
     "leaderboard_table": {
+        "columns": [],
         "params": [
             {
                 "name": "year",
@@ -698,6 +790,7 @@
         ]
     },
     "leaderboard_table_formated": {
+        "columns": [],
         "params": [
             {
                 "name": "year",
@@ -721,6 +814,7 @@
         ]
     },
     "lang_views": {
+        "columns": [],
         "params": [
             {
                 "name": "user",
@@ -743,6 +837,7 @@
         ]
     },
     "lang_views2": {
+        "columns": [],
         "params": [
             {
                 "name": "user",
@@ -765,6 +860,7 @@
         ]
     },
     "user_views": {
+        "columns": [],
         "params": [
             {
                 "name": "user",
@@ -787,6 +883,7 @@
         ]
     },
     "user_views2": {
+        "columns": [],
         "params": [
             {
                 "name": "user",
@@ -809,6 +906,14 @@
         ]
     },
     "users": {
+        "columns": [
+            "user_id",
+            "username",
+            "email",
+            "wiki",
+            "user_group",
+            "reg_date"
+        ],
         "params": [
             {
                 "name": "userlike",
@@ -833,6 +938,7 @@
         ]
     },
     "views": {
+        "columns": [],
         "params": [
             {
                 "name": "lang",
@@ -849,6 +955,12 @@
         ]
     },
     "views_new": {
+        "columns": [
+            "target",
+            "lang",
+            "year",
+            "views"
+        ],
         "params": [
             {
                 "name": "lang",
@@ -871,6 +983,12 @@
         ]
     },
     "words": {
+        "columns": [
+            "w_id",
+            "w_title",
+            "w_lead_words",
+            "w_all_words"
+        ],
         "params": [
             {
                 "name": "title",
@@ -893,6 +1011,12 @@
         ]
     },
     "translate_type": {
+        "columns": [
+            "tt_id",
+            "tt_title",
+            "tt_lead",
+            "tt_full"
+        ],
         "params": [
             {
                 "name": "Lead",
@@ -909,39 +1033,70 @@
         ]
     },
     "lang_names": {
+        "columns": [],
         "params": []
     },
     "lang_names_new": {
+        "columns": [],
         "params": []
     },
     "site_matrix": {
+        "columns": [],
         "params": []
     },
     "projects": {
+        "columns": [
+            "g_id",
+            "g_title"
+        ],
         "params": []
     },
     "inter_wiki": {
+        "columns": [],
         "params": []
     },
     "pages_users_to_main": {
+        "columns": [
+            "new_target",
+            "new_user",
+            "new_qid"
+        ],
         "params": []
     },
     "users_no_inprocess": {
+        "columns": [
+            "user",
+            "active"
+        ],
         "params": []
     },
     "full_translators": {
+        "columns": [
+            "user",
+            "active"
+        ],
         "params": []
     },
     "settings": {
+        "columns": [
+            "title",
+            "displayed",
+            "Type",
+            "value",
+            "ignored"
+        ],
         "params": []
     },
     "graph_data": {
+        "columns": [],
         "params": []
     },
     "users_by_last_pupdate": {
+        "columns": [],
         "params": []
     },
     "top_users": {
+        "columns": [],
         "params": [
             {
                 "name": "year",
@@ -967,6 +1122,7 @@
         ]
     },
     "top_langs": {
+        "columns": [],
         "params": [
             {
                 "name": "year",
@@ -992,6 +1148,7 @@
         ]
     },
     "top_lang_of_users": {
+        "columns": [],
         "params": [
             {
                 "name": "users",
@@ -1001,6 +1158,7 @@
         ]
     },
     "user_status": {
+        "columns": [],
         "params": [
             {
                 "name": "user",
