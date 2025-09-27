@@ -459,7 +459,7 @@ switch ($get) {
         break;
 
     default:
-        if (in_array($get, $other_tables) || isset($endpoint_data)) {
+        if (in_array($get, $other_tables) || !empty($endpoint_data)) {
             $query = "SELECT $DISTINCT $SELECT FROM $get";
             list($query, $params) = add_li_params($query, [], $endpoint_params);
             break;
