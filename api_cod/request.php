@@ -513,7 +513,10 @@ $out = [
     "query" => $qua,
     "source" => $source,
     "length" => count($results),
-    "results" => $results
+    "results" => $results,
+    // "endpoint_params" => $endpoint_params,
+    "supported_params" => [],
+    "supported_values" => [],
 ];
 
 // if server is localhost then add query to out
@@ -524,11 +527,6 @@ if ($_SERVER['SERVER_NAME'] !== 'localhost') {
 
 $out["supported_params"] = array_column($endpoint_params, "name");
 
-foreach ($endpoint_params as $param) {
-    // ---
-    if ($param["name"] == "select") {
-        $out["supported_select"] = $param["options"] ?? [];
-    }
-}
+$out["supported_values"] = array_column($endpoint_params, "options", 'name');
 // ---
 echo json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);

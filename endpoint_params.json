@@ -1,20 +1,71 @@
 {
     "publish_reports": {
         "params": [
-            { "name": "year", "column": "YEAR(date)", "type": "number", "placeholder": "year of date" },
-            { "name": "month", "column": "MONTH(date)", "type": "number", "placeholder": "month of date" },
-            { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title"},
-            { "name": "user", "column": "user", "type": "text", "placeholder": "user"},
-            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code"},
-            { "name": "sourcetitle", "column": "sourcetitle", "type": "text", "placeholder": "sourcetitle"},
-            { "name": "result", "column": "result", "type": "text", "placeholder": "result"},
-            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
-            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true }
+            {
+                "name": "year",
+                "column": "YEAR(date)",
+                "type": "number",
+                "placeholder": "year of date"
+            },
+            {
+                "name": "month",
+                "column": "MONTH(date)",
+                "type": "number",
+                "placeholder": "month of date"
+            },
+            {
+                "name": "title",
+                "column": "title",
+                "type": "text",
+                "placeholder": "Page Title"
+            },
+            {
+                "name": "user",
+                "column": "user",
+                "type": "text",
+                "placeholder": "user"
+            },
+            {
+                "name": "lang",
+                "column": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "sourcetitle",
+                "column": "sourcetitle",
+                "type": "text",
+                "placeholder": "sourcetitle"
+            },
+            {
+                "name": "result",
+                "column": "result",
+                "type": "text",
+                "placeholder": "result"
+            },
+            {
+                "name": "select",
+                "column": "select",
+                "type": "text",
+                "placeholder": "Select fields",
+                "no_select": true
+            },
+            {
+                "name": "distinct",
+                "column": "distinct",
+                "type": "switch",
+                "no_select": true
+            }
         ]
     },
     "language_settings": {
         "params": [
-            { "name": "lang_code", "column": "lang_code", "type": "text", "placeholder": "Language code"}
+            {
+                "name": "lang_code",
+                "column": "lang_code",
+                "type": "text",
+                "placeholder": "Language code"
+            }
         ]
     },
     "publish_reports_stats": {
@@ -22,93 +73,348 @@
     },
     "missing": {
         "params": [
-            { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
-            { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
-            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "no_select": true, "default": "a.title" }
+            {
+                "name": "lang",
+                "column": "t.code",
+                "type": "text",
+                "placeholder": "Language code",
+                "no_mt_options": true
+            },
+            {
+                "name": "category",
+                "column": "a.category",
+                "type": "text",
+                "placeholder": "Category",
+                "no_mt_options": true
+            },
+            {
+                "name": "order",
+                "column": "order",
+                "type": "text",
+                "placeholder": "Order by",
+                "no_select": true,
+                "default": "a.title"
+            }
         ]
     },
     "missing_by_qids": {
         "params": [
-            { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
-            { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
-            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
-            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "default": "a.title" , "no_select": true }
+            {
+                "name": "lang",
+                "column": "t.code",
+                "type": "text",
+                "placeholder": "Language code",
+                "no_mt_options": true
+            },
+            {
+                "name": "category",
+                "column": "a.category",
+                "type": "text",
+                "placeholder": "Category",
+                "no_mt_options": true
+            },
+            {
+                "name": "campaign",
+                "column": "campaign",
+                "type": "text",
+                "placeholder": "Campaign"
+            },
+            {
+                "name": "order",
+                "column": "order",
+                "type": "text",
+                "placeholder": "Order by",
+                "default": "a.title",
+                "no_select": true
+            }
         ]
     },
     "exists_by_qids": {
         "params": [
-            { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
-            { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
-            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
-            { "name": "target", "column": "t.target", "type": "text", "placeholder": "Target" },
-            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "no_select": true }
+            {
+                "name": "lang",
+                "column": "t.code",
+                "type": "text",
+                "placeholder": "Language code",
+                "no_mt_options": true
+            },
+            {
+                "name": "category",
+                "column": "a.category",
+                "type": "text",
+                "placeholder": "Category",
+                "no_mt_options": true
+            },
+            {
+                "name": "campaign",
+                "column": "campaign",
+                "type": "text",
+                "placeholder": "Campaign"
+            },
+            {
+                "name": "target",
+                "column": "t.target",
+                "type": "text",
+                "placeholder": "Target"
+            },
+            {
+                "name": "order",
+                "column": "order",
+                "type": "text",
+                "placeholder": "Order by",
+                "no_select": true
+            }
         ]
     },
     "titles": {
         "params": [
-            { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
-            { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" },
-            { "name": "titles", "column": "title", "type": "array" }
+            {
+                "name": "title",
+                "column": "title",
+                "type": "text",
+                "placeholder": "Page Title"
+            },
+            {
+                "name": "importance",
+                "column": "importance",
+                "type": "text",
+                "placeholder": "Importance"
+            },
+            {
+                "name": "titles",
+                "column": "title",
+                "type": "array"
+            }
         ]
     },
     "revids": {
         "params": [
-            { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
-            { "name": "titles", "column": "title", "type": "array" }
+            {
+                "name": "title",
+                "column": "title",
+                "type": "text",
+                "placeholder": "Page Title"
+            },
+            {
+                "name": "titles",
+                "column": "title",
+                "type": "array"
+            }
         ]
     },
     "assessments": {
         "params": [
-            { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
-            { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" },
-            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true }
+            {
+                "name": "title",
+                "column": "title",
+                "type": "text",
+                "placeholder": "Page Title"
+            },
+            {
+                "name": "importance",
+                "column": "importance",
+                "type": "text",
+                "placeholder": "Importance"
+            },
+            {
+                "name": "distinct",
+                "column": "distinct",
+                "type": "switch",
+                "no_select": true
+            }
         ]
     },
     "refs_counts": {
         "params": [
-            { "name": "title", "column": "r_title", "type": "text", "placeholder": "Page Title" },
-            { "name": "lead", "column": "r_lead_refs", "type": "number", "placeholder": "Lead Refs Count" },
-            { "name": "all", "column": "r_all_refs", "type": "number", "placeholder": "All Refs Count" }
+            {
+                "name": "title",
+                "column": "r_title",
+                "type": "text",
+                "placeholder": "Page Title"
+            },
+            {
+                "name": "lead",
+                "column": "r_lead_refs",
+                "type": "number",
+                "placeholder": "Lead Refs Count"
+            },
+            {
+                "name": "all",
+                "column": "r_all_refs",
+                "type": "number",
+                "placeholder": "All Refs Count"
+            }
         ]
     },
     "enwiki_pageviews": {
         "params": [
-            { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
-            { "name": "en_views", "column": "en_views", "type": "number", "placeholder": "Views Count" }
+            {
+                "name": "title",
+                "column": "title",
+                "type": "text",
+                "placeholder": "Page Title"
+            },
+            {
+                "name": "en_views",
+                "column": "en_views",
+                "type": "number",
+                "placeholder": "Views Count"
+            }
         ]
     },
     "categories": {
         "params": [
-            { "name": "Depth", "column": "depth", "type": "number", "placeholder": "Depth Level" },
-            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
-            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true }
+            {
+                "name": "Depth",
+                "column": "depth",
+                "type": "number",
+                "placeholder": "Depth Level"
+            },
+            {
+                "name": "campaign",
+                "column": "campaign",
+                "type": "text",
+                "placeholder": "Campaign"
+            },
+            {
+                "name": "select",
+                "column": "select",
+                "type": "text",
+                "placeholder": "Select fields",
+                "no_select": true
+            }
         ]
     },
     "coordinator": {
         "params": [
-            { "name": "User", "column": "user", "type": "text", "placeholder": "Coordinator Username" }
+            {
+                "name": "User",
+                "column": "user",
+                "type": "text",
+                "placeholder": "Coordinator Username"
+            }
         ]
     },
     "pages": {
         "params": [
-            { "name": "title", "column": "p.title", "type": "text", "placeholder": "Page Title" },
-            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
-            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
-            { "name": "target", "column": "p.target", "type": "text", "placeholder": "Target" },
-            { "name": "cat", "column": "p.cat", "type": "text", "placeholder": "Category" },
-            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
-            { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field", "no_select": true },
-            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "no_select": true },
-            { "name": "pupdate", "column": "p.pupdate", "type": "text", "placeholder": "Date of publication" },
-            { "name": "add_date", "column": "p.add_date", "type": "text", "placeholder": "Date of addition to DB" },
-            { "name": "limit", "column": "p.limit", "type": "number", "placeholder": "Limit results", "value": "50", "no_select": true },
-            { "name": "offset", "column": "p.offset", "type": "number", "placeholder": "Offset results", "value": "0", "no_select": true },
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year of publication" },
-            { "name": "date_year", "column": "YEAR(p.date)", "type": "number", "placeholder": "year of date" },
-            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
-            { "name": "translate_type", "column": "p.translate_type", "type": "select", "options": ["all", "lead"]},
-            { "name": "distinct", "column": "p.distinct", "type": "switch", "no_select": true },
-            { "name": "Deleted", "column": "p.deleted", "type": "switch", "placeholder": "0 or 1" }
+            {
+                "name": "title",
+                "column": "p.title",
+                "type": "text",
+                "placeholder": "Page Title"
+            },
+            {
+                "name": "lang",
+                "column": "p.lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "user",
+                "column": "p.user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "target",
+                "column": "p.target",
+                "type": "text",
+                "placeholder": "Target"
+            },
+            {
+                "name": "cat",
+                "column": "p.cat",
+                "type": "text",
+                "placeholder": "Category"
+            },
+            {
+                "name": "campaign",
+                "column": "campaign",
+                "type": "text",
+                "placeholder": "Campaign"
+            },
+            {
+                "name": "group",
+                "column": "group",
+                "type": "text",
+                "placeholder": "Group by field",
+                "no_select": true
+            },
+            {
+                "name": "order",
+                "column": "order",
+                "type": "text",
+                "placeholder": "Order by",
+                "no_select": true
+            },
+            {
+                "name": "pupdate",
+                "column": "p.pupdate",
+                "type": "text",
+                "placeholder": "Date of publication"
+            },
+            {
+                "name": "add_date",
+                "column": "p.add_date",
+                "type": "text",
+                "placeholder": "Date of addition to DB"
+            },
+            {
+                "name": "limit",
+                "column": "p.limit",
+                "type": "number",
+                "placeholder": "Limit results",
+                "value": "50",
+                "no_select": true
+            },
+            {
+                "name": "offset",
+                "column": "p.offset",
+                "type": "number",
+                "placeholder": "Offset results",
+                "value": "0",
+                "no_select": true
+            },
+            {
+                "name": "year",
+                "column": "YEAR(p.pupdate)",
+                "type": "number",
+                "placeholder": "Year of publication"
+            },
+            {
+                "name": "date_year",
+                "column": "YEAR(p.date)",
+                "type": "number",
+                "placeholder": "year of date"
+            },
+            {
+                "name": "select",
+                "column": "select",
+                "type": "text",
+                "placeholder": "Select fields",
+                "no_select": true
+            },
+            {
+                "name": "translate_type",
+                "column": "p.translate_type",
+                "type": "select",
+                "options": [
+                    "all",
+                    "lead"
+                ]
+            },
+            {
+                "name": "distinct",
+                "column": "p.distinct",
+                "type": "switch",
+                "no_select": true
+            },
+            {
+                "name": "Deleted",
+                "column": "p.deleted",
+                "type": "switch",
+                "placeholder": "0 or 1"
+            }
         ]
     },
     "pages_with_views": {
@@ -116,210 +422,598 @@
     },
     "pages_users": {
         "params": [
-            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" },
-            { "name": "user", "column": "user", "type": "text", "placeholder": "Username" },
-            { "name": "target", "column": "target", "type": "text", "placeholder": "Target" },
-            { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
-            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "no_select": true },
-            { "name": "pupdate", "column": "pupdate", "type": "text", "placeholder": "Date of publication" },
-            { "name": "add_date", "column": "add_date", "type": "text", "placeholder": "Date of addition to DB" },
-            { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field", "no_select": true },
-            { "name": "limit", "column": "limit", "type": "number", "placeholder": "Limit results", "value": "50", "no_select": true },
-            { "name": "offset", "column": "p.offset", "type": "number", "placeholder": "Offset results", "value": "0", "no_select": true },
-            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
-            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true }
+            {
+                "name": "lang",
+                "column": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "user",
+                "column": "user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "target",
+                "column": "target",
+                "type": "text",
+                "placeholder": "Target"
+            },
+            {
+                "name": "title",
+                "column": "title",
+                "type": "text",
+                "placeholder": "Page Title"
+            },
+            {
+                "name": "order",
+                "column": "order",
+                "type": "text",
+                "placeholder": "Order by",
+                "no_select": true
+            },
+            {
+                "name": "pupdate",
+                "column": "pupdate",
+                "type": "text",
+                "placeholder": "Date of publication"
+            },
+            {
+                "name": "add_date",
+                "column": "add_date",
+                "type": "text",
+                "placeholder": "Date of addition to DB"
+            },
+            {
+                "name": "group",
+                "column": "group",
+                "type": "text",
+                "placeholder": "Group by field",
+                "no_select": true
+            },
+            {
+                "name": "limit",
+                "column": "limit",
+                "type": "number",
+                "placeholder": "Limit results",
+                "value": "50",
+                "no_select": true
+            },
+            {
+                "name": "offset",
+                "column": "p.offset",
+                "type": "number",
+                "placeholder": "Offset results",
+                "value": "0",
+                "no_select": true
+            },
+            {
+                "name": "select",
+                "column": "select",
+                "type": "text",
+                "placeholder": "Select fields",
+                "no_select": true
+            },
+            {
+                "name": "distinct",
+                "column": "distinct",
+                "type": "switch",
+                "no_select": true
+            }
         ]
     },
     "in_process": {
         "params": [
-            { "name": "lang", "column": "lang", "type": "text", "placeholder": "Language code" },
-            { "name": "user", "column": "user", "type": "text", "placeholder": "Username" },
-            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "no_select": true },
-            { "name": "distinct", "column": "distinct", "type": "switch", "no_select": true },
-            { "name": "group", "column": "group", "type": "text", "placeholder": "Group by field", "no_select": true },
-            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "no_select": true },
-            { "name": "year", "column": "YEAR(add_date)", "type": "number", "placeholder": "year of date" }
+            {
+                "name": "lang",
+                "column": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "user",
+                "column": "user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "select",
+                "column": "select",
+                "type": "text",
+                "placeholder": "Select fields",
+                "no_select": true
+            },
+            {
+                "name": "distinct",
+                "column": "distinct",
+                "type": "switch",
+                "no_select": true
+            },
+            {
+                "name": "group",
+                "column": "group",
+                "type": "text",
+                "placeholder": "Group by field",
+                "no_select": true
+            },
+            {
+                "name": "order",
+                "column": "order",
+                "type": "text",
+                "placeholder": "Order by",
+                "no_select": true
+            },
+            {
+                "name": "year",
+                "column": "YEAR(add_date)",
+                "type": "number",
+                "placeholder": "year of date"
+            }
         ]
     },
     "pages_by_user_or_lang": {
         "params": [
-            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
-            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
-            { "name": "year", "column": "YEAR(p.date)", "type": "number", "placeholder": "year of date" },
-            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "no_select": true }
+            {
+                "name": "lang",
+                "column": "p.lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "user",
+                "column": "p.user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "year",
+                "column": "YEAR(p.date)",
+                "type": "number",
+                "placeholder": "year of date"
+            },
+            {
+                "name": "order",
+                "column": "order",
+                "type": "text",
+                "placeholder": "Order by",
+                "no_select": true
+            }
         ]
     },
     "user_access": {
         "params": [
-            { "name": "user_name", "column": "user_name", "type": "text", "placeholder": "Username" }
+            {
+                "name": "user_name",
+                "column": "user_name",
+                "type": "text",
+                "placeholder": "Username"
+            }
         ]
     },
     "qids": {
         "params": [
-            { "name": "dis", "column": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
+            {
+                "name": "dis",
+                "column": "dis",
+                "type": "select",
+                "options": [
+                    "",
+                    "empty",
+                    "all",
+                    "duplicate"
+                ]
+            }
         ]
     },
     "qids_others": {
         "params": [
-            { "name": "dis", "column": "dis", "type": "select", "options": ["", "empty", "all", "duplicate"] }
+            {
+                "name": "dis",
+                "column": "dis",
+                "type": "select",
+                "options": [
+                    "",
+                    "empty",
+                    "all",
+                    "duplicate"
+                ]
+            }
         ]
     },
     "count_pages": {
         "params": [
-            { "name": "target", "column": "target", "type": "text", "placeholder": "Target" }
+            {
+                "name": "target",
+                "column": "target",
+                "type": "text",
+                "placeholder": "Target"
+            }
         ]
     },
     "status": {
         "params": [
-            { "name": "year", "column": "year", "type": "number", "placeholder": "Year" },
-            { "name": "user_group", "column": "user_group", "type": "text", "placeholder": "User Group Name" },
-            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
-            { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category", "value_can_be_null": true }
+            {
+                "name": "year",
+                "column": "year",
+                "type": "number",
+                "placeholder": "Year"
+            },
+            {
+                "name": "user_group",
+                "column": "user_group",
+                "type": "text",
+                "placeholder": "User Group Name"
+            },
+            {
+                "name": "campaign",
+                "column": "campaign",
+                "type": "text",
+                "placeholder": "Campaign"
+            },
+            {
+                "name": "cat",
+                "column": "cat",
+                "type": "text",
+                "placeholder": "Category",
+                "value_can_be_null": true
+            }
         ]
     },
     "leaderboard_table": {
         "params": [
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year of publication" },
-            { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category", "value_can_be_null": true },
-            { "name": "user_group", "column": "u.user_group", "type": "text", "placeholder": "User Group Name" }
+            {
+                "name": "year",
+                "column": "YEAR(p.pupdate)",
+                "type": "number",
+                "placeholder": "Year of publication"
+            },
+            {
+                "name": "cat",
+                "column": "cat",
+                "type": "text",
+                "placeholder": "Category",
+                "value_can_be_null": true
+            },
+            {
+                "name": "user_group",
+                "column": "u.user_group",
+                "type": "text",
+                "placeholder": "User Group Name"
+            }
         ]
     },
     "leaderboard_table_formated": {
         "params": [
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year of publication" },
-            { "name": "cat", "column": "cat", "type": "text", "placeholder": "Category", "value_can_be_null": true },
-            { "name": "user_group", "column": "u.user_group", "type": "text", "placeholder": "User Group Name" }
+            {
+                "name": "year",
+                "column": "YEAR(p.pupdate)",
+                "type": "number",
+                "placeholder": "Year of publication"
+            },
+            {
+                "name": "cat",
+                "column": "cat",
+                "type": "text",
+                "placeholder": "Category",
+                "value_can_be_null": true
+            },
+            {
+                "name": "user_group",
+                "column": "u.user_group",
+                "type": "text",
+                "placeholder": "User Group Name"
+            }
         ]
     },
     "lang_views": {
         "params": [
-            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
-            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
-            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "Year" }
+            {
+                "name": "user",
+                "column": "p.user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "lang",
+                "column": "p.lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "year",
+                "column": "YEAR(pupdate)",
+                "type": "number",
+                "placeholder": "Year"
+            }
         ]
     },
     "lang_views2": {
         "params": [
-            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
-            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
-            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "Year" }
+            {
+                "name": "user",
+                "column": "p.user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "lang",
+                "column": "p.lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "year",
+                "column": "YEAR(pupdate)",
+                "type": "number",
+                "placeholder": "Year"
+            }
         ]
     },
     "user_views": {
         "params": [
-            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
-            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
-            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "Year" }
+            {
+                "name": "user",
+                "column": "p.user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "lang",
+                "column": "p.lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "year",
+                "column": "YEAR(pupdate)",
+                "type": "number",
+                "placeholder": "Year"
+            }
         ]
     },
     "user_views2": {
         "params": [
-            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username" },
-            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
-            { "name": "year", "column": "YEAR(pupdate)", "type": "number", "placeholder": "Year" }
+            {
+                "name": "user",
+                "column": "p.user",
+                "type": "text",
+                "placeholder": "Username"
+            },
+            {
+                "name": "lang",
+                "column": "p.lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "year",
+                "column": "YEAR(pupdate)",
+                "type": "number",
+                "placeholder": "Year"
+            }
         ]
     },
     "users": {
         "params": [
-            { "name": "userlike", "column": "userlike", "type": "text", "placeholder": "Username starts with", "required": true },
-            { "name": "wiki", "column": "wiki", "type": "text", "placeholder": "Wiki Name" },
-            { "name": "user_group", "column": "user_group", "type": "text", "placeholder": "User Group Name", "no_select": true }
+            {
+                "name": "userlike",
+                "column": "userlike",
+                "type": "text",
+                "placeholder": "Username starts with",
+                "required": true
+            },
+            {
+                "name": "wiki",
+                "column": "wiki",
+                "type": "text",
+                "placeholder": "Wiki Name"
+            },
+            {
+                "name": "user_group",
+                "column": "user_group",
+                "type": "text",
+                "placeholder": "User Group Name",
+                "no_select": true
+            }
         ]
     },
     "views": {
         "params": [
-            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code" },
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year of publication" }
+            {
+                "name": "lang",
+                "column": "p.lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "year",
+                "column": "YEAR(p.pupdate)",
+                "type": "number",
+                "placeholder": "Year of publication"
+            }
         ]
     },
     "views_new": {
         "params": [
-            { "name": "lang", "column": "v.lang", "type": "text", "placeholder": "Language code" },
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "Year of publication" },
-            { "name": "views", "column": "v.views", "type": "number", "placeholder": "Views" }
+            {
+                "name": "lang",
+                "column": "v.lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "year",
+                "column": "YEAR(p.pupdate)",
+                "type": "number",
+                "placeholder": "Year of publication"
+            },
+            {
+                "name": "views",
+                "column": "v.views",
+                "type": "number",
+                "placeholder": "Views"
+            }
         ]
     },
     "words": {
         "params": [
-            { "name": "title", "column": "w_title", "type": "text", "placeholder": "Page Title" },
-            { "name": "lead_words", "column": "w_lead_words", "type": "number", "placeholder": "Lead words Count" },
-            { "name": "all_words", "column": "w_all_words", "type": "number", "placeholder": "Total words Count" }
+            {
+                "name": "title",
+                "column": "w_title",
+                "type": "text",
+                "placeholder": "Page Title"
+            },
+            {
+                "name": "lead_words",
+                "column": "w_lead_words",
+                "type": "number",
+                "placeholder": "Lead words Count"
+            },
+            {
+                "name": "all_words",
+                "column": "w_all_words",
+                "type": "number",
+                "placeholder": "Total words Count"
+            }
         ]
     },
     "translate_type": {
         "params": [
-            { "name": "Lead", "column": "tt_lead", "type": "number", "placeholder": "Lead Translation (0 or 1)" },
-            { "name": "Full", "column": "tt_full", "type": "number", "placeholder": "Full Translation (0 or 1)" }
+            {
+                "name": "Lead",
+                "column": "tt_lead",
+                "type": "number",
+                "placeholder": "Lead Translation (0 or 1)"
+            },
+            {
+                "name": "Full",
+                "column": "tt_full",
+                "type": "number",
+                "placeholder": "Full Translation (0 or 1)"
+            }
         ]
     },
     "lang_names": {
-        "params": [
-        ]
+        "params": []
     },
     "lang_names_new": {
-        "params": [
-        ]
+        "params": []
     },
     "site_matrix": {
-        "params": [
-        ]
+        "params": []
     },
     "projects": {
-        "params": [
-        ]
+        "params": []
     },
     "inter_wiki": {
-        "params": [
-        ]
+        "params": []
     },
     "pages_users_to_main": {
-        "params": [
-        ]
+        "params": []
     },
     "users_no_inprocess": {
-        "params": [
-        ]
+        "params": []
     },
     "full_translators": {
-        "params": [
-        ]
+        "params": []
     },
     "settings": {
-        "params": [
-        ]
+        "params": []
     },
     "graph_data": {
-        "params": [
-        ]
+        "params": []
     },
     "users_by_last_pupdate": {
-        "params": [
-        ]
+        "params": []
     },
     "top_users": {
         "params": [
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "year of date", "no_empty_value": true },
-            { "name": "user_group", "column": "u.user_group", "type": "text", "placeholder": "User Group Name", "no_empty_value": true },
-            { "name": "cat", "column": "p.cat", "type": "text", "placeholder": "Category", "no_empty_value": true }
+            {
+                "name": "year",
+                "column": "YEAR(p.pupdate)",
+                "type": "number",
+                "placeholder": "year of date",
+                "no_empty_value": true
+            },
+            {
+                "name": "user_group",
+                "column": "u.user_group",
+                "type": "text",
+                "placeholder": "User Group Name",
+                "no_empty_value": true
+            },
+            {
+                "name": "cat",
+                "column": "p.cat",
+                "type": "text",
+                "placeholder": "Category",
+                "no_empty_value": true
+            }
         ]
     },
     "top_langs": {
         "params": [
-            { "name": "year", "column": "YEAR(p.pupdate)", "type": "number", "placeholder": "year of date", "no_empty_value": true },
-            { "name": "user_group", "column": "u.user_group", "type": "text", "placeholder": "User Group Name", "no_empty_value": true },
-            { "name": "cat", "column": "p.cat", "type": "text", "placeholder": "Category", "no_empty_value": true }
+            {
+                "name": "year",
+                "column": "YEAR(p.pupdate)",
+                "type": "number",
+                "placeholder": "year of date",
+                "no_empty_value": true
+            },
+            {
+                "name": "user_group",
+                "column": "u.user_group",
+                "type": "text",
+                "placeholder": "User Group Name",
+                "no_empty_value": true
+            },
+            {
+                "name": "cat",
+                "column": "p.cat",
+                "type": "text",
+                "placeholder": "Category",
+                "no_empty_value": true
+            }
         ]
     },
     "top_lang_of_users": {
         "params": [
-            { "name": "users", "column": "p.user", "type": "array" }
+            {
+                "name": "users",
+                "column": "p.user",
+                "type": "array"
+            }
         ]
     },
     "user_status": {
         "params": [
-            { "name": "user", "column": "p.user", "type": "text", "placeholder": "Username", "no_empty_value": false },
-            { "name": "lang", "column": "p.lang", "type": "text", "placeholder": "Language code", "no_empty_value": false },
-            { "name": "select", "column": "select", "type": "text", "placeholder": "Select fields", "options": ["lang", "campaign", "cat", "year"] }
+            {
+                "name": "user",
+                "column": "p.user",
+                "type": "text",
+                "placeholder": "Username",
+                "no_empty_value": false
+            },
+            {
+                "name": "lang",
+                "column": "p.lang",
+                "type": "text",
+                "placeholder": "Language code",
+                "no_empty_value": false
+            },
+            {
+                "name": "select",
+                "column": "select",
+                "type": "text",
+                "placeholder": "Select fields",
+                "options": [
+                    "lang",
+                    "campaign",
+                    "cat",
+                    "year"
+                ]
+            }
         ]
     },
     "user_lang_status": {

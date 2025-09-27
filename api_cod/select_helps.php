@@ -49,15 +49,9 @@ function get_select($endpoint_params)
     // ---
     $supported_params = array_column($endpoint_params, "name");
     // ---
-    $select_options = [];
+    $params_key_to_data = array_column($endpoint_params, null, 'name');
     // ---
-    foreach ($endpoint_params as $param) {
-        // ---
-        if ($param["name"] == "select") {
-            $select_options = $param["options"] ?? [];
-            break;
-        }
-    }
+    $select_options = $params_key_to_data["select"]["options"] ?? [];
     // ---
     if (!in_array($SELECT, $select_valids) && !in_array($SELECT, $supported_params) && !in_array($SELECT, $select_options)) {
         $SELECT = '*';
