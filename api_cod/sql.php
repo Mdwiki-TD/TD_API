@@ -239,9 +239,11 @@ function get_dbname($table_name)
         'mdwiki' => [] // default
     ];
 
-    foreach ($table_db_mapping as $db => $tables) {
-        if (in_array($table_name, $tables)) {
-            return $db;
+    if ($table_name) {
+        foreach ($table_db_mapping as $db => $tables) {
+            if (in_array($table_name, $tables)) {
+                return $db;
+            }
         }
     }
 

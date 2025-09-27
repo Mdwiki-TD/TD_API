@@ -50,7 +50,7 @@ $other_tables = [
 ];
 
 $DISTINCT = (isset($_GET['distinct']) && $_GET['distinct'] != 'false' && $_GET['distinct'] != '0') ? 'DISTINCT ' : '';
-$get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_SPECIAL_CHARS); //$_GET['get']
+$get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_FULL_SPECIAL_CHARS); //$_GET['get']
 
 // if (!isset($_GET['limit'])) $_GET['limit'] = '50';
 
@@ -62,14 +62,17 @@ $execution_time = 0;
 
 // load endpoint_params.json
 $endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
-$endpoint_params = $endpoint_params_tab[$get]['params'] ?? [];
 // ---
-if (isset($endpoint_params_tab[$get]['redirect'])) {
-    $redirect = $endpoint_params_tab[$get]['redirect'];
-    $endpoint_params = $endpoint_params_tab[$redirect]['params'] ?? [];
+$endpoint_data = $endpoint_params_tab[$get] ?? [];
+// ---
+if (isset($endpoint_data['redirect'])) {
+    $endpoint_data = $endpoint_params_tab[$endpoint_data['redirect']] ?? [];
 };
 // ---
-$SELECT = get_select($endpoint_params);
+$endpoint_params = $endpoint_data['params'] ?? [];
+$endpoint_columns = $endpoint_data['columns'] ?? [];
+// ---
+$SELECT = get_select($endpoint_params, $endpoint_columns);
 // ---
 switch ($get) {
 
@@ -108,7 +111,7 @@ switch ($get) {
         $query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
         $params = [];
         if (isset($_GET['lang']) && $_GET['lang'] != 'false' && $_GET['lang'] != '0') {
-            $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_SPECIAL_CHARS);
+            $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             if ($added !== null) {
                 $query .= " AND pu.lang = ?";
                 $params[] = $added;
@@ -353,10 +356,24 @@ switch ($get) {
                 AND p.lang = v.lang
         SQL;
         // ---
-        list($query, $params) = add_li_params($qua, [], $endpoint_params);
+        list($query, $params) = add_li_params($qua, [], $endpoint_params, ['year']);
         // ---
-        $query = add_group($query);
-        $query = add_order($query);
+        if (isset($_GET['year'])) {
+            $added = filter_input(INPUT_GET, 'year', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $added = (int) $added;
+            if ($added && $added > 0) {
+                // ---
+                // $query .= " AND (YEAR(p.date) = ? OR YEAR(p.pupdate) = ? OR YEAR(p.add_date) = ?)";
+                // // ---
+                // $params[] = $added;
+                // $params[] = $added;
+                // $params[] = $added;
+                // ---
+                $query .= " AND ? IN (YEAR(p.date), YEAR(p.pupdate), YEAR(p.add_date))";
+                $params[] = $added;
+            }
+        }
+        $query = add_group($query, $endpoint_data);
         // ---
         break;
 
@@ -384,8 +401,7 @@ switch ($get) {
             $params[] = $campaign;
         }
         // ---
-        $query = add_group($query);
-        $query = add_order($query);
+        $query = add_group($query, $endpoint_data);
         // ---
         break;
 
@@ -426,8 +442,7 @@ switch ($get) {
         $query = $query_start . $query;
         // ---
         // ---
-        $query = add_group($query);
-        $query = add_order($query);
+        $query = add_group($query, $endpoint_data);
         // ---
         break;
 
@@ -439,13 +454,12 @@ switch ($get) {
         // ---
         list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
-        $query = add_group($query);
-        $query = add_order($query);
+        $query = add_group($query, $endpoint_data);
         // ---
         break;
 
     default:
-        if (in_array($get, $other_tables) || isset($endpoint_params_tab[$get])) {
+        if (in_array($get, $other_tables) || !empty($endpoint_data)) {
             $query = "SELECT $DISTINCT $SELECT FROM $get";
             list($query, $params) = add_li_params($query, [], $endpoint_params);
             break;
@@ -460,8 +474,12 @@ if ($results === [] && ($qua !== "" || $query !== "")) {
     $start_time = microtime(true);
     // ---
     if ($query !== "") {
+        // ---
+        $query = add_order($query, $endpoint_data);
+        // ---
         $query = add_limit($query);
         $query = add_offset($query);
+        // ---
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
         // ---
@@ -497,7 +515,10 @@ $out = [
     "query" => $qua,
     "source" => $source,
     "length" => count($results),
-    "results" => $results
+    "results" => $results,
+    // "endpoint_params" => $endpoint_params,
+    "supported_params" => [],
+    "supported_values" => [],
 ];
 
 // if server is localhost then add query to out
@@ -508,11 +529,7 @@ if ($_SERVER['SERVER_NAME'] !== 'localhost') {
 
 $out["supported_params"] = array_column($endpoint_params, "name");
 
-foreach ($endpoint_params as $param) {
-    // ---
-    if ($param["name"] == "select") {
-        $out["supported_select"] = $param["options"] ?? [];
-    }
-}
+$out["supported_values"] = array_column($endpoint_params, "options", 'name');
+$out["columns"] = $endpoint_columns;
 // ---
 echo json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);

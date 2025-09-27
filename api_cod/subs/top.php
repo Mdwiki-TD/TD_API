@@ -89,14 +89,6 @@ function top_users($endpoint_params)
     // ---
     list($query, $params) = add_li_params($query, [], $endpoint_params, []);
     // ---
-    /*
-    $cat   = sanitize_input($_GET['cat'] ?? '', '/^[a-zA-Z ]+$/');
-    if ($cat !== null) {
-        $query .= " AND p.title IN (SELECT article_id FROM articles_cats WHERE category = ?)";
-        $params[] = $cat;
-    }
-    // ---
-    */
     $query .= " GROUP BY p.user ORDER BY 2 DESC";
     // ---
     return [$query, $params];
@@ -109,14 +101,6 @@ function top_langs($endpoint_params)
     // ---
     list($query, $params) = add_li_params($query, [], $endpoint_params, [""]);
     // ---
-    /*
-    $cat   = sanitize_input($_GET['cat'] ?? '', '/^[a-zA-Z ]+$/');
-    if ($cat !== null) {
-        $query .= " AND p.title IN (SELECT article_id FROM articles_cats WHERE category = ?)";
-        $params[] = $cat;
-    }
-    // ---
-    */
     $query .= " GROUP BY p.lang ORDER BY 2 DESC";
     // ---
     return [$query, $params];

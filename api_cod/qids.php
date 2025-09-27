@@ -31,7 +31,7 @@ function qids_qua($get)
         SQL
     ];
     //---
-    $dis = filter_input(INPUT_GET, 'dis', FILTER_SANITIZE_SPECIAL_CHARS);
+    $dis = filter_input(INPUT_GET, 'dis', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     //---
     $qua = $quaries[$dis] ?? $quaries['all'];
     //---

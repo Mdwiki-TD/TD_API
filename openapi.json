@@ -1,14 +1,14 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "MdWiki API",
+        "title": "MDwiki API",
         "description": "API for accessing MDwiki data including pages, translations, views, and more",
         "version": "1.0.0"
     },
     "servers": [
         {
             "url": "/",
-            "description": "MdWiki API."
+            "description": "MDwiki API."
         }
     ],
     "tags": [
@@ -247,7 +247,7 @@
             "OrderParam": {
                 "in": "query",
                 "name": "order",
-                "description": "Order by field",
+                "description": "Order by",
                 "required": false,
                 "schema": {
                     "type": "string"
@@ -621,16 +621,16 @@
                         "$ref": "#/components/parameters/UserParam"
                     },
                     {
-                        "$ref": "#/components/parameters/GroupParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/OrderParam"
-                    },
-                    {
                         "$ref": "#/components/parameters/YearParam"
                     },
                     {
                         "$ref": "#/components/parameters/SelectParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/GroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
                     }
                 ],
                 "responses": {
@@ -797,6 +797,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/CategoryParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
                     }
                 ],
                 "responses": {
@@ -825,6 +828,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/CampaignParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
                     }
                 ],
                 "responses": {
@@ -856,6 +862,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/TargetParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
                     }
                 ],
                 "responses": {
@@ -895,12 +904,6 @@
                         "$ref": "#/components/parameters/CampaignParam"
                     },
                     {
-                        "$ref": "#/components/parameters/GroupParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/OrderParam"
-                    },
-                    {
                         "$ref": "#/components/parameters/PupdateParam"
                     },
                     {
@@ -926,6 +929,12 @@
                     },
                     {
                         "$ref": "#/components/parameters/DeletedParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/GroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
                     }
                 ],
                 "responses": {
@@ -954,6 +963,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/YearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
                     }
                 ],
                 "responses": {
@@ -1061,12 +1073,6 @@
                         "$ref": "#/components/parameters/CatParam"
                     },
                     {
-                        "$ref": "#/components/parameters/GroupParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/OrderParam"
-                    },
-                    {
                         "$ref": "#/components/parameters/PupdateParam"
                     },
                     {
@@ -1092,6 +1098,12 @@
                     },
                     {
                         "$ref": "#/components/parameters/DeletedParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/GroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
                     }
                 ],
                 "responses": {
