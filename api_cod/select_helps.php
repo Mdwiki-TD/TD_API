@@ -6,7 +6,9 @@ Usage:
 use function API\SelectHelps\get_select;
 */
 
-function get_select($endpoint_params)
+use function API\Helps\filter_order;
+
+function get_select($endpoint_params, $endpoint_columns)
 {
     // ---
     $false_selects = [
@@ -24,28 +26,28 @@ function get_select($endpoint_params)
     // ---
     $select_valids = [
         'count',
-        'COUNT(*) as count',
         'count(*) as count',
         'count(title) as count',
         'count(p.title) as count',
-        'YEAR(date) AS year',
-        'YEAR(p.date) AS year',
-        'YEAR(pupdate) AS year',
-        'YEAR(p.pupdate) AS year',
+        'year(date) as year',
+        'year(p.date) as year',
+        'year(pupdate) as year',
+        'year(p.pupdate) as year',
         'lang',
         'p.lang',
         'p.user',
         'user',
         'g_title',
-        'campaign',
     ];
     // ---
     $select_alias = [
-        "count" => "*, count(*) as count",
         "count(*)" => "count(*) as count",
+        "year" => "year(pupdate) as year",
     ];
     // ---
-    $SELECT = $select_alias[strtolower($SELECT)] ?? $SELECT;
+    $select_lower = strtolower($SELECT);
+    // ---
+    $SELECT = $select_alias[$select_lower] ?? $SELECT;
     // ---
     $supported_params = array_column($endpoint_params, "name");
     // ---
@@ -53,11 +55,20 @@ function get_select($endpoint_params)
     // ---
     $select_options = $params_key_to_data["select"]["options"] ?? [];
     // ---
-    if (!in_array($SELECT, $select_valids) && !in_array($SELECT, $supported_params) && !in_array($SELECT, $select_options)) {
+    if (
+        !in_array($select_lower, $select_valids) &&
+        !in_array($select_lower, $supported_params) &&
+        !in_array($select_lower, $select_options) &&
+        !in_array($select_lower, $endpoint_columns)
+    ) {
         $SELECT = '*';
     };
     // ---
-    // if (isset($_GET['select']) && strtolower($_GET['select']) == 'count(*)') $SELECT = 'COUNT(*) as count';
+    $count = isset($_GET['count']) ? filter_input(INPUT_GET, 'count', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : false;
+    // ---
+    if ($count == '*' || in_array($count, $endpoint_columns)) {
+        $SELECT .= ", COUNT($count) as count";
+    }
     // ---
     return $SELECT;
 }

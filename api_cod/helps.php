@@ -10,6 +10,7 @@ use function API\Helps\add_limit;
 use function API\Helps\add_offset;
 use function API\Helps\add_li_params;
 use function API\Helps\add_array_params;
+use function API\Helps\filter_order;
 */
 
 function sanitize_input($input, $pattern)
@@ -20,12 +21,53 @@ function sanitize_input($input, $pattern)
     return null;
 }
 
-function add_group($qua)
+function filter_order($key, $endpoint_data)
 {
-    if (isset($_GET['group'])) {
-        $added = filter_input(INPUT_GET, 'group', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    // ---
+    $endpoint_params = $endpoint_data['params'] ?? [];
+    $endpoint_columns = $endpoint_data['columns'] ?? [];
+    // ---
+    if (!isset($_GET[$key])) {
+        return null;
+    }
+    // ---
+    $added = filter_input(INPUT_GET, $key, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    // ---
+    if (in_array($added, $endpoint_columns) || in_array($added, $endpoint_params)) {
+        return $added;
+    }
+    // ---
+    // split $added or ,
+    $added_array = explode(",", $added);
+    // ---
+    foreach ($added_array as $key => $value) {
+        $value = trim($value);
+        // if its number okay
+        if (
+            !in_array($value, $endpoint_columns) &&
+            !in_array($value, $endpoint_params) &&
+            !is_numeric($value)
+        ) {
+            unset($added_array[$key]);
+        }
+    }
+    // ---
+    if (count($added_array) > 0) {
+        return implode(", ", $added_array);
+    }
+    // ---
+    return null;
+}
+
+function add_group($qua, $endpoint_data)
+{
+    // ---
+    $added = isset($_GET['group']) ? filter_order('group', $endpoint_data) : "";
+    // ---
+    if ($added) {
         $qua .= " GROUP BY $added";
     }
+    // ---
     return $qua;
 }
 
@@ -51,8 +93,13 @@ function get_order_direction($param_order_direction)
     return $order_direction;
 }
 
-function add_order($qua, $params_key_to_data)
+function add_order($qua, $endpoint_data)
 {
+    // ---
+    $endpoint_params = $endpoint_data['params'] ?? [];
+    $endpoint_columns = $endpoint_data['columns'] ?? [];
+    // ---
+    $params_key_to_data = array_column($endpoint_params, null, 'name');
     // ---
     $param_order_direction = $params_key_to_data["order_direction"] ?? [];
     $param_order = $params_key_to_data["order"] ?? [];
@@ -62,7 +109,7 @@ function add_order($qua, $params_key_to_data)
     }
     // ---
     $added = isset($_GET['order']) ?
-        filter_input(INPUT_GET, 'order', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : ($param_order["default"] ?? "");
+        filter_order('order', $endpoint_data) : ($param_order["default"] ?? "");
     // ---
     if (!$added) {
         return $qua;

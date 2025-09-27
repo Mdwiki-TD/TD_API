@@ -62,14 +62,17 @@ $execution_time = 0;
 
 // load endpoint_params.json
 $endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
-$endpoint_params = $endpoint_params_tab[$get]['params'] ?? [];
 // ---
-if (isset($endpoint_params_tab[$get]['redirect'])) {
-    $redirect = $endpoint_params_tab[$get]['redirect'];
-    $endpoint_params = $endpoint_params_tab[$redirect]['params'] ?? [];
+$endpoint_data = $endpoint_params_tab[$get] ?? [];
+// ---
+if (isset($endpoint_data['redirect'])) {
+    $endpoint_data = $endpoint_params_tab[$endpoint_data['redirect']] ?? [];
 };
 // ---
-$SELECT = get_select($endpoint_params);
+$endpoint_params = $endpoint_data['params'] ?? [];
+$endpoint_columns = $endpoint_data['columns'] ?? [];
+// ---
+$SELECT = get_select($endpoint_params, $endpoint_columns);
 // ---
 switch ($get) {
 
@@ -370,7 +373,7 @@ switch ($get) {
                 $params[] = $added;
             }
         }
-        $query = add_group($query);
+        $query = add_group($query, $endpoint_data);
         // ---
         break;
 
@@ -398,7 +401,7 @@ switch ($get) {
             $params[] = $campaign;
         }
         // ---
-        $query = add_group($query);
+        $query = add_group($query, $endpoint_data);
         // ---
         break;
 
@@ -439,7 +442,7 @@ switch ($get) {
         $query = $query_start . $query;
         // ---
         // ---
-        $query = add_group($query);
+        $query = add_group($query, $endpoint_data);
         // ---
         break;
 
@@ -451,12 +454,12 @@ switch ($get) {
         // ---
         list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
-        $query = add_group($query);
+        $query = add_group($query, $endpoint_data);
         // ---
         break;
 
     default:
-        if (in_array($get, $other_tables) || isset($endpoint_params_tab[$get])) {
+        if (in_array($get, $other_tables) || isset($endpoint_data)) {
             $query = "SELECT $DISTINCT $SELECT FROM $get";
             list($query, $params) = add_li_params($query, [], $endpoint_params);
             break;
@@ -472,8 +475,7 @@ if ($results === [] && ($qua !== "" || $query !== "")) {
     // ---
     if ($query !== "") {
         // ---
-        $params_key_to_data = array_column($endpoint_params, null, 'name');
-        $query = add_order($query, $params_key_to_data);
+        $query = add_order($query, $endpoint_data);
         // ---
         $query = add_limit($query);
         $query = add_offset($query);
@@ -528,5 +530,6 @@ if ($_SERVER['SERVER_NAME'] !== 'localhost') {
 $out["supported_params"] = array_column($endpoint_params, "name");
 
 $out["supported_values"] = array_column($endpoint_params, "options", 'name');
+$out["columns"] = $endpoint_columns;
 // ---
 echo json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);

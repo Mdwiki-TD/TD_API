@@ -393,7 +393,10 @@
                 "column": "select",
                 "type": "text",
                 "placeholder": "Select fields",
-                "no_select": true
+                "no_select": true,
+                "options": [
+                    "count(*)"
+                ]
             },
             {
                 "name": "translate_type",
@@ -506,6 +509,15 @@
         ]
     },
     "in_process": {
+        "columns": [
+            "title",
+            "user",
+            "lang",
+            "cat",
+            "translate_type",
+            "word",
+            "add_date"
+        ],
         "params": [
             {
                 "name": "lang",
@@ -537,8 +549,7 @@
                 "column": "group",
                 "type": "text",
                 "placeholder": "Group by field",
-                "no_select": true,
-                "options": []
+                "no_select": true
             },
             {
                 "name": "order",
