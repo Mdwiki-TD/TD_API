@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test Interface</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        .endpoint {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .endpoint h3 {
+            margin-top: 0;
+        }
+
+        .param {
+            margin-bottom: 10px;
+        }
+
+        .param label {
+            display: inline-block;
+            width: 120px;
+        }
+
+        .response {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            /* Set max height */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+            /* Monospace font for code */
+        }
+
+        /* Basic JSON highlighting */
+        .response .json-key {
+            color: #a31515;
+            /* Red color for keys */
+        }
+
+        .response .json-string {
+            color: #008000;
+            /* Green color for strings */
+        }
+
+        .response .json-number {
+            color: #0000ff;
+            /* Blue color for numbers */
+        }
+
+        .response .json-boolean {
+            color: #0000ff;
+            /* Blue color for booleans */
+        }
+
+        .response .json-null {
+            color: #0000ff;
+            /* Blue color for null */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mb-4">API Test Interface</h1>
+
+        <ul class="nav nav-tabs" id="endpointTabs" role="tablist">
+            <!-- Tab navigation will be loaded here by JavaScript -->
+        </ul>
+        <div class="tab-content" id="endpointTabContent">
+            <!-- Tab content will be loaded here by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

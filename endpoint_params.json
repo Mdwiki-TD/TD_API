@@ -338,7 +338,8 @@
                 "column": "group",
                 "type": "text",
                 "placeholder": "Group by field",
-                "no_select": true
+                "no_select": true,
+                "options": []
             },
             {
                 "name": "order",
@@ -470,7 +471,8 @@
                 "column": "group",
                 "type": "text",
                 "placeholder": "Group by field",
-                "no_select": true
+                "no_select": true,
+                "options": []
             },
             {
                 "name": "limit",
@@ -535,7 +537,8 @@
                 "column": "group",
                 "type": "text",
                 "placeholder": "Group by field",
-                "no_select": true
+                "no_select": true,
+                "options": []
             },
             {
                 "name": "order",
