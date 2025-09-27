@@ -77,11 +77,15 @@ function createParamInput(param) {
     // ---
     input = document.createElement('div');
     // ---
+    let placeholderDis = param.placeholder || '';
+    if (param.default) {
+        placeholderDis += ` (default: ${param.default})`;
+    }
     // default
     var innerHTML = `
     <div class="param-group">
         <label>${param.name}</label>
-        <input name="${param.name}" type="${type}" placeholder="${param.placeholder}" value="${value}">
+        <input name="${param.name}" type="${type}" placeholder="${placeholderDis}" value="${value}">
     </div>`;
     // ---
     let randomNumber = Math.floor(Math.random() * 1000);
@@ -95,7 +99,7 @@ function createParamInput(param) {
                     <div class="form-check form-check-inline">
                         <input type="radio" class="form-check-input" id="manualInput_${randomNumber}" name="${param.name}" value="manual" checked="">
                         <label class="form-check-label" for="manualInput_${randomNumber}">
-                            <input name="!" type="${type}" class="textInput" id="manual_value" placeholder="${param.placeholder}" value="${value}">
+                            <input name="!" type="${type}" class="textInput" id="manual_value" placeholder="${placeholderDis}" value="${value}">
                         </label>
                     </div>
                     <div class="form-check form-check-inline">
@@ -117,7 +121,7 @@ function createParamInput(param) {
                     <div class="form-check form-check-inline">
                         <input type="radio" class="form-check-input" id="manualInput_${randomNumber}" name="${param.name}" value="manual" checked>
                         <label class="form-check-label" for="manualInput_${randomNumber}">
-                            <input name="!" type="${type}" class="textInput" id="manual_value" placeholder="${param.placeholder}" value="${value}">
+                            <input name="!" type="${type}" class="textInput" id="manual_value" placeholder="${placeholderDis}" value="${value}">
                         </label>
                     </div>
                     <div class="form-check form-check-inline">

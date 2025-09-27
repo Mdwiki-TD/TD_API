@@ -15,7 +15,6 @@ use function API\Helps\sanitize_input;
 function missing_query($endpoint_params)
 {
     // ---
-    // FROM all_articles a
     $query = <<<SQL
         SELECT a.qid, a.title, a.category
             FROM all_articles_titles a

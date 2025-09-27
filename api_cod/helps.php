@@ -28,21 +28,59 @@ function add_group($qua)
     }
     return $qua;
 }
-function add_order($qua)
+
+function get_order_direction($param_order_direction)
 {
+    // ---
+    $order_direction = isset($_GET['order_direction']) ?
+        filter_input(INPUT_GET, 'order_direction', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : ($param_order_direction["default"] ?? "");
+    // ---
+    if (!$order_direction) {
+        return "DESC";
+    }
+    // ---
+    $valid_orders = ["ASC", "DESC"];
+    // ---
+    // $order_direction upper
+    $order_direction = strtoupper($order_direction);
+    // ---
+    if (!in_array($order_direction, $valid_orders)) {
+        $order_direction = "DESC";
+    }
+    // ---
+    return $order_direction;
+}
+
+function add_order($qua, $params_key_to_data)
+{
+    // ---
+    $param_order_direction = $params_key_to_data["order_direction"] ?? [];
+    $param_order = $params_key_to_data["order"] ?? [];
+    // ---
+    if (!$param_order) {
+        return $qua;
+    }
+    // ---
+    $added = isset($_GET['order']) ?
+        filter_input(INPUT_GET, 'order', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : ($param_order["default"] ?? "");
+    // ---
+    if (!$added) {
+        return $qua;
+    }
+    // ---
     $orders = [
         "pupdate_or_add_date" => "GREATEST(UNIX_TIMESTAMP(pupdate), UNIX_TIMESTAMP(add_date))",
     ];
     // ---
-    if (isset($_GET['order'])) {
-        $added = filter_input(INPUT_GET, 'order', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        // ---
-        $added = $orders[$added] ?? $added;
-        // ---
-        $qua .= " ORDER BY $added DESC";
-    }
+    $added = $orders[$added] ?? $added;
+    // ---
+    $order_direction = get_order_direction($param_order_direction);
+    // ---
+    $qua .= " ORDER BY $added $order_direction";
+    // ---
     return $qua;
 }
+
 function add_offset($qua)
 {
     // if $qua has OFFSET then return

@@ -28,7 +28,7 @@ function inter_wiki()
 
     $result = json_decode($result, true);
 
-    $data =  $result['query']['interwikimap'];
+    $data =  $result['query']['interwikimap'] ?? [];
 
     return $data;
 }
@@ -126,7 +126,7 @@ function filter_codes($data)
 
 function get_inter_wiki($ty)
 {
-    $data = inter_wiki();
+    $data = inter_wiki() ?? [];
     $data = filter_data($data);
 
     $data = by_code($data);

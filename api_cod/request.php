@@ -371,7 +371,6 @@ switch ($get) {
             }
         }
         $query = add_group($query);
-        $query = add_order($query);
         // ---
         break;
 
@@ -400,7 +399,6 @@ switch ($get) {
         }
         // ---
         $query = add_group($query);
-        $query = add_order($query);
         // ---
         break;
 
@@ -442,7 +440,6 @@ switch ($get) {
         // ---
         // ---
         $query = add_group($query);
-        $query = add_order($query);
         // ---
         break;
 
@@ -455,7 +452,6 @@ switch ($get) {
         list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
         $query = add_group($query);
-        $query = add_order($query);
         // ---
         break;
 
@@ -475,8 +471,13 @@ if ($results === [] && ($qua !== "" || $query !== "")) {
     $start_time = microtime(true);
     // ---
     if ($query !== "") {
+        // ---
+        $params_key_to_data = array_column($endpoint_params, null, 'name');
+        $query = add_order($query, $params_key_to_data);
+        // ---
         $query = add_limit($query);
         $query = add_offset($query);
+        // ---
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
         // ---
