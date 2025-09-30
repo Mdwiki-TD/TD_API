@@ -59,6 +59,11 @@
 		"autonym": "Ænglisc",
 		"name": "Old English"
 	},
+	"ann": {
+		"code": "ann",
+		"autonym": "Obolo",
+		"name": "Obolo"
+	},
 	"anp": {
 		"code": "anp",
 		"autonym": "अंगिका",
@@ -829,6 +834,11 @@
 		"autonym": "ಕನ್ನಡ",
 		"name": "Kannada"
 	},
+	"knc": {
+		"code": "knc",
+		"autonym": "Yerwa Kanuri",
+		"name": "Central Kanuri"
+	},
 	"ko": {
 		"code": "ko",
 		"autonym": "한국어",
@@ -1114,11 +1124,6 @@
 		"autonym": "Napulitano",
 		"name": "Neapolitan"
 	},
-	"no": {
-		"code": "no",
-		"autonym": "norsk",
-		"name": "Norwegian"
-	},
 	"nb": {
 		"code": "nb",
 		"autonym": "norsk bokmål",
@@ -1164,6 +1169,11 @@
 		"autonym": "norsk nynorsk",
 		"name": "Norwegian Nynorsk"
 	},
+	"no": {
+		"code": "no",
+		"autonym": "norsk",
+		"name": "Norwegian"
+	},
 	"nov": {
 		"code": "nov",
 		"autonym": "Novial",
@@ -1174,6 +1184,11 @@
 		"autonym": "ߒߞߏ",
 		"name": "N’Ko"
 	},
+	"nr": {
+		"code": "nr",
+		"autonym": "isiNdebele seSewula",
+		"name": "South Ndebele"
+	},
 	"nrm": {
 		"code": "nrm",
 		"autonym": "Nouormand",
@@ -1183,6 +1198,11 @@
 		"code": "nso",
 		"autonym": "Sesotho sa Leboa",
 		"name": "Northern Sotho"
+	},
+	"nup": {
+		"code": "nup",
+		"autonym": "Nupe",
+		"name": "Nupe"
 	},
 	"nv": {
 		"code": "nv",
@@ -1308,6 +1328,11 @@
 		"code": "qu",
 		"autonym": "Runa Simi",
 		"name": "Quechua"
+	},
+	"rki": {
+		"code": "rki",
+		"autonym": "ရခိုင်",
+		"name": "Arakanese"
 	},
 	"rm": {
 		"code": "rm",
@@ -1519,6 +1544,11 @@
 		"autonym": "Kiswahili",
 		"name": "Swahili"
 	},
+	"syl": {
+		"code": "syl",
+		"autonym": "ꠍꠤꠟꠐꠤ",
+		"name": "Sylheti"
+	},
 	"szl": {
 		"code": "szl",
 		"autonym": "ślůnski",
@@ -1574,6 +1604,11 @@
 		"autonym": "ትግርኛ",
 		"name": "Tigrinya"
 	},
+	"tig": {
+		"code": "tig",
+		"autonym": "ትግሬ",
+		"name": "Tigre"
+	},
 	"tk": {
 		"code": "tk",
 		"autonym": "Türkmençe",
@@ -1598,6 +1633,11 @@
 		"code": "to",
 		"autonym": "lea faka-Tonga",
 		"name": "Tongan"
+	},
+	"tok": {
+		"code": "tok",
+		"autonym": "toki pona",
+		"name": "Toki Pona"
 	},
 	"tpi": {
 		"code": "tpi",
@@ -1793,45 +1833,5 @@
 		"code": "zu",
 		"autonym": "isiZulu",
 		"name": "Zulu"
-	},
-	"ann": {
-		"code": "ann",
-		"autonym": "Obolo",
-		"name": "Obolo"
-	},
-	"knc": {
-		"code": "knc",
-		"autonym": "Yerwa Kanuri",
-		"name": "Central Kanuri"
-	},
-	"nr": {
-		"code": "nr",
-		"autonym": "isiNdebele seSewula",
-		"name": "South Ndebele"
-	},
-	"nup": {
-		"code": "nup",
-		"autonym": "Nupe",
-		"name": "Nupe"
-	},
-	"rki": {
-		"code": "rki",
-		"autonym": "ရခိုင်",
-		"name": "Arakanese"
-	},
-	"syl": {
-		"code": "syl",
-		"autonym": "ꠍꠤꠟꠐꠤ",
-		"name": "Sylheti"
-	},
-	"tig": {
-		"code": "tig",
-		"autonym": "ትግሬ",
-		"name": "Tigre"
-	},
-	"tok": {
-		"code": "tok",
-		"autonym": "toki pona",
-		"name": "Toki Pona"
 	}
 }
