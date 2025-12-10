@@ -32,7 +32,6 @@ function make_status_query($endpoint_params)
         $qu_ery .= " AND YEAR(p.pupdate) = ?";
         $pa_rams[] = $added;
     }
-
     $user_group = sanitize_input($_GET['user_group'] ?? '', '/^[a-zA-Z ]+$/');
     if ($user_group !== null) {
         // $qu_ery .= " AND p.user IN (SELECT username FROM users WHERE user_group = ?)";

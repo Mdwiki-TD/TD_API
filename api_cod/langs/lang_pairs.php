@@ -31,25 +31,40 @@ function test_print($s)
 
 function get_url_result_curl(string $url): string
 {
-    global $usr_agent;
+    $usr_agent = "WikiProjectMed Translation Dashboard/1.0 (https://mdwiki.toolforge.org/; tools.mdwiki@toolforge.org)";
 
     $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    // curl_setopt($ch, CURLOPT_COOKIEJAR, "cookie.txt");
-    // curl_setopt($ch, CURLOPT_COOKIEFILE, "cookie.txt");
-
-    curl_setopt($ch, CURLOPT_USERAGENT, $usr_agent);
-
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-
+    // ---
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_USERAGENT => $usr_agent,
+        CURLOPT_CONNECTTIMEOUT => 7,
+        CURLOPT_TIMEOUT => 13,
+        // CURLOPT_COOKIEJAR => "cookie.txt",
+        // CURLOPT_COOKIEFILE => "cookie.txt",
+    ]);
+    // ---
     $output = curl_exec($ch);
+    // ---
+    $url = "<a target='_blank' href='$url'>$url</a>";
+    //---
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    //---
+    if ($http_code !== 200) {
+        test_print('post_url_mdwiki: Error: API request failed with status code ' . $http_code);
+    }
+    //---
+    test_print("post_url_mdwiki: (http_code: $http_code) $url");
+    // ---
     if ($output === FALSE) {
-        echo ("<br>cURL Error: " . curl_error($ch) . "<br>$url");
+        test_print("post_url_mdwiki: cURL Error: " . curl_error($ch));
+    }
+
+    if (curl_errno($ch)) {
+        test_print('post_url_mdwiki: Error:' . curl_error($ch));
     }
 
     curl_close($ch);
-
     return $output;
 }
 
@@ -70,7 +85,7 @@ function get_names()
 
     $result = json_decode($result, true);
 
-    return $result['query']['wbcontentlanguages'];
+    return $result['query']['wbcontentlanguages'] ?? [];
 }
 
 function get_langs_list()
@@ -79,9 +94,9 @@ function get_langs_list()
 
     $pairs = get_url_result_curl($url);
 
-    $results = json_decode($pairs, true);
-    $source = $results['source'];
-    $target = $results['target'];
+    $results = json_decode($pairs, true) ?: [];
+    $source = $results['source'] ?? [];
+    $target = $results['target'] ?? [];
 
     $results = array_merge($source, $target);
     $results = array_unique($results);
@@ -99,7 +114,7 @@ function get_lang_names()
     $lang_tables = [];
     // load langs_table.json
     if (file_exists(__DIR__ . '/langs_table.json')) {
-        $lang_tables = json_decode(file_get_contents(__DIR__ . '/langs_table.json'), true);
+        $lang_tables = json_decode(file_get_contents(__DIR__ . '/langs_table.json'), true) ?: [];
         ksort($lang_tables);
     }
     return $lang_tables;
@@ -477,12 +492,13 @@ function get_lang_names_new()
 
     $results = array();
 
-    ksort($pairs);
-
     foreach ($pairs as $pair) {
         $data = ["code" => $pair, "autonym" => "", "name" => ""];
 
         $results[$pair] = $names[$pair] ?? $data;
     };
+
+    ksort($results);
+
     return $results;
 };

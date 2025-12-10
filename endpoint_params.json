@@ -1106,6 +1106,13 @@
                 "no_empty_value": true
             },
             {
+                "name": "month",
+                "column": "MONTH(p.pupdate)",
+                "type": "number",
+                "placeholder": "month of date",
+                "no_empty_value": true
+            },
+            {
                 "name": "user_group",
                 "column": "u.user_group",
                 "type": "text",
@@ -1129,6 +1136,13 @@
                 "column": "YEAR(p.pupdate)",
                 "type": "number",
                 "placeholder": "year of date",
+                "no_empty_value": true
+            },
+            {
+                "name": "month",
+                "column": "MONTH(p.pupdate)",
+                "type": "number",
+                "placeholder": "month of date",
                 "no_empty_value": true
             },
             {
