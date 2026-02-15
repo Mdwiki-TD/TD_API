@@ -1,5 +1,9 @@
 <?php
+$env = getenv('APP_ENV') ?: 'development';
 
+if ($env === 'development') {
+    include_once __DIR__ . '/load_env.php';
+}
 include_once __DIR__ . '/helps.php';
 include_once __DIR__ . '/sql.php';
 include_once __DIR__ . '/langs/interwiki.php';
