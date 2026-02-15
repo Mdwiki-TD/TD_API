@@ -11,3 +11,4 @@ openapi_o.json
 /x
 /old
 test2/script.js.backup
+.env
