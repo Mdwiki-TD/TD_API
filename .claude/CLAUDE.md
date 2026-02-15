@@ -65,7 +65,7 @@ Common parameters: `limit` (default 50), `offset`, `order`, `order_direction`, `
 ### Local Development
 
 The project runs on PHP with MySQL. For local development:
-- Database config is loaded from `~/confs/db.ini` (or `$HOME/confs/db.ini`)
+- Database configuration is loaded from environment variables. For local development, create a `.env` file based on `.env.example`.
 - Local server detection uses `$_SERVER['SERVER_NAME'] === 'localhost'`
 - Add `?test` parameter to enable error reporting: `api.php?get=pages&test`
 
