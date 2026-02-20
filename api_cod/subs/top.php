@@ -65,7 +65,7 @@ function top_query($select)
 
         FROM pages p
 
-        LEFT JOIN users u
+        LEFT JOIN users_list u
             ON p.user = u.username
 
         LEFT JOIN words w
