@@ -76,10 +76,6 @@ class HelpsTest extends TestCase
         $this->assertSame('DESC', $result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testGetOrderDirectionAsc(): void
     {
         $_GET['order_direction'] = 'ASC';
@@ -87,10 +83,6 @@ class HelpsTest extends TestCase
         $this->assertSame('ASC', $result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testGetOrderDirectionCaseInsensitive(): void
     {
         $_GET['order_direction'] = 'asc';
@@ -98,10 +90,6 @@ class HelpsTest extends TestCase
         $this->assertSame('ASC', $result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testGetOrderDirectionInvalidDefaultsToDesc(): void
     {
         $_GET['order_direction'] = 'INVALID';
@@ -215,10 +203,6 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages ORDER BY date DESC', $result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testAddOrderWithGetParameter(): void
     {
         $_GET['order'] = 'title';
@@ -235,10 +219,6 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages ORDER BY title ASC', $result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testAddOrderWithSpecialPupdateOrAddDate(): void
     {
         $_GET['order'] = 'pupdate_or_add_date';
@@ -361,10 +341,6 @@ class HelpsTest extends TestCase
 
     // ========== add_group tests ==========
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testAddGroupWithValidColumn(): void
     {
         $_GET['group'] = 'lang';
@@ -413,10 +389,6 @@ class HelpsTest extends TestCase
         $this->assertSame(['SELECT * FROM pages', []], $result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testAddLiParamsWithSimpleWhere(): void
     {
         $_GET['title'] = 'TestPage';
@@ -424,16 +396,11 @@ class HelpsTest extends TestCase
         // Types should be an array of strings, not an associative array
         $types = ['title'];
         $result = add_li_params($query, $types, [], []);
-        // Note: filter_input() doesn't read from $_GET in PHPUnit test environment
-        // The function returns the query unchanged when filter_input returns null
-        $this->assertSame('SELECT * FROM pages', $result[0]);
-        $this->assertSame([], $result[1]);
+        // filter_input() reads values in test environment
+        $this->assertStringContainsString('title = ?', $result[0]);
+        $this->assertSame(['TestPage'], $result[1]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testAddLiParamsWithMultipleConditions(): void
     {
         $_GET['title'] = 'TestPage';
@@ -442,16 +409,12 @@ class HelpsTest extends TestCase
         // Types should be an array of strings, not an associative array
         $types = ['title', 'lang'];
         $result = add_li_params($query, $types, [], []);
-        // Note: filter_input() doesn't read from $_GET in PHPUnit test environment
-        // The function returns the query unchanged when filter_input returns null
-        $this->assertSame('SELECT * FROM pages', $result[0]);
-        $this->assertSame([], $result[1]);
+        // filter_input() reads values in test environment
+        $this->assertStringContainsString('title = ?', $result[0]);
+        $this->assertStringContainsString('lang = ?', $result[0]);
+        $this->assertSame(['TestPage', 'en'], $result[1]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testAddLiParamsIgnoresLimitColumn(): void
     {
         $_GET['limit'] = '10';
@@ -463,10 +426,6 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result[0]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testAddLiParamsIgnoresSelectColumn(): void
     {
         $_GET['select'] = 'title';
@@ -477,10 +436,6 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result[0]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testAddLiParamsWithNotEmptyValue(): void
     {
         $_GET['filter'] = 'not_empty';
@@ -488,15 +443,10 @@ class HelpsTest extends TestCase
         // Types should be an array of strings
         $types = ['filter'];
         $result = add_li_params($query, $types, [], []);
-        // Note: filter_input() doesn't read from $_GET in PHPUnit test environment
-        // The function returns the query unchanged when filter_input returns null
-        $this->assertSame('SELECT * FROM pages', $result[0]);
+        // 'not_empty' is a special value that adds IS NOT NULL condition
+        $this->assertStringContainsString("(filter != '' AND filter IS NOT NULL)", $result[0]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testAddLiParamsWithEmptyValue(): void
     {
         $_GET['filter'] = 'empty';
@@ -504,13 +454,10 @@ class HelpsTest extends TestCase
         // Types should be an array of strings
         $types = ['filter'];
         $result = add_li_params($query, $types, [], []);
+        // 'empty' is a special value that adds IS NULL condition
         $this->assertStringContainsString("(filter = '' OR filter IS NULL)", $result[0]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testAddLiParamsWithGreaterThanZero(): void
     {
         $_GET['count'] = '>0';
@@ -518,13 +465,10 @@ class HelpsTest extends TestCase
         // Types should be an array of strings
         $types = ['count'];
         $result = add_li_params($query, $types, [], []);
+        // '>0' is a special value that adds > 0 condition
         $this->assertStringContainsString('count > 0', $result[0]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
     public function testAddLiParamsWithDistinctFlag(): void
     {
         $_GET['distinct'] = '1';
@@ -532,6 +476,7 @@ class HelpsTest extends TestCase
         // Types should be an array of strings
         $types = ['distinct'];
         $result = add_li_params($query, $types, [], []);
+        // 'distinct' with value '1' adds DISTINCT to SELECT
         $this->assertStringContainsString('SELECT DISTINCT', $result[0]);
     }
 
