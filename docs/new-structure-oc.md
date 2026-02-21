@@ -10,7 +10,7 @@ This document proposes a modern, scalable directory structure for the TD_API PHP
 
 ### Existing Organization
 
-```
+```text
 TD_API/
 ├── api_cod/           # Core application code (mixed concerns)
 │   ├── langs/         # Language-related functionality
