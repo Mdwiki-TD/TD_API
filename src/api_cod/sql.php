@@ -13,7 +13,7 @@ if (isset($_REQUEST['test']) || isset($_COOKIE['test'])) {
 };
 
 
-if (!extension_loaded('apcu')) {
+if (!extension_loaded('apcu') || !function_exists('apcu_exists')) {
     function apcu_exists($key)
     {
         return false;
