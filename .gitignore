@@ -17,3 +17,4 @@ src/api/proxy.php
 *.js.backup
 .claude/settings.local.json
 .phpunit.result.cache
+.claude/settings.json
