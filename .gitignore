@@ -15,3 +15,5 @@ TD_API.zip
 /vendor
 src/api/proxy.php
 *.js.backup
+.claude/settings.local.json
+.phpunit.result.cache
