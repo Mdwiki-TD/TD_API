@@ -16,6 +16,11 @@ use function API\Helps\add_distinct;
 use function API\Helps\add_li_params;
 use function API\Helps\get_order_direction;
 
+/**
+ * Tests for helper functions in api_cod/helps.php
+ * Note: Tests using $_GET run in separate processes because filter_input()
+ * doesn't work with direct $_GET assignments in PHPUnit.
+ */
 class HelpsTest extends TestCase
 {
     protected function setUp(): void
@@ -71,6 +76,10 @@ class HelpsTest extends TestCase
         $this->assertSame('DESC', $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testGetOrderDirectionAsc(): void
     {
         $_GET['order_direction'] = 'ASC';
@@ -78,6 +87,10 @@ class HelpsTest extends TestCase
         $this->assertSame('ASC', $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testGetOrderDirectionCaseInsensitive(): void
     {
         $_GET['order_direction'] = 'asc';
@@ -85,6 +98,10 @@ class HelpsTest extends TestCase
         $this->assertSame('ASC', $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testGetOrderDirectionInvalidDefaultsToDesc(): void
     {
         $_GET['order_direction'] = 'INVALID';
@@ -101,6 +118,10 @@ class HelpsTest extends TestCase
 
     // ========== filter_order tests ==========
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testFilterOrderWithValidColumn(): void
     {
         $_GET['order'] = 'title';
@@ -112,6 +133,10 @@ class HelpsTest extends TestCase
         $this->assertSame('title', $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testFilterOrderWithValidParam(): void
     {
         $_GET['order'] = 'user';
@@ -133,6 +158,10 @@ class HelpsTest extends TestCase
         $this->assertNull($result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testFilterOrderWithInvalidValueReturnsNull(): void
     {
         $_GET['order'] = 'invalid_column';
@@ -144,6 +173,10 @@ class HelpsTest extends TestCase
         $this->assertNull($result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testFilterOrderWithCommaSeparatedValues(): void
     {
         $_GET['order'] = 'title,id,999';
