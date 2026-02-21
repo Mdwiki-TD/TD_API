@@ -7,24 +7,28 @@
     },
     "authors": [
         {
-            "name": "Ibrahem",
+            "name": "Mr. Ibrahem",
             "email": "ibrahem.al-radaei@outlook.com"
         }
     ],
+    "scripts": {
+        "test": [
+            "vendor/bin/phpstan analyse",
+            "vendor/bin/phpunit tests --testdox --colors=always -c phpunit.xml"
+        ]
+    },
     "autoload-dev": {
         "psr-4": {
             "MyLibrary\\Tests\\": "tests/"
         }
     },
     "require-dev": {
+        "phpstan/phpstan": "*",
         "phpunit/phpunit": "^11.0"
     },
     "require": {
         "php": "^8.2",
         "ext-curl": "*",
         "ext-json": "*"
-    },
-    "scripts": {
-        "test": "phpunit"
     }
 }
