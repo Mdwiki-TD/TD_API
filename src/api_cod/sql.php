@@ -241,7 +241,7 @@ function fetch_query_new($sql_query, $params, $get)
     if ($get != 'settings' && isset($_REQUEST['apcu'])) {
         $in_apcu = get_from_apcu($sql_query, $params);
         // ---
-        if ($in_apcu && is_array($in_apcu) && !empty($in_apcu)) {
+        if ($in_apcu && is_array($in_apcu)) {
             return [$in_apcu, "apcu"];
         }
     }
@@ -258,7 +258,7 @@ function fetch_query_new($sql_query, $params, $get)
     $db = null;
 
     if ($get != 'settings' && isset($_REQUEST['apcu'])) {
-        if ($results && !empty($results)) {
+        if ($results) {
             add_to_apcu($sql_query, $params, $results);
         }
     }
