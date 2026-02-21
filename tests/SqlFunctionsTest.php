@@ -100,15 +100,6 @@ class SqlFunctionsTest extends TestCase
 
     // ========== APCu stub behavior tests ==========
 
-    public function testApcuStubsAreCallable(): void
-    {
-        // The stub functions should always be callable
-        $this->assertTrue(function_exists('apcu_exists'));
-        $this->assertTrue(function_exists('apcu_fetch'));
-        $this->assertTrue(function_exists('apcu_store'));
-        $this->assertTrue(function_exists('apcu_delete'));
-    }
-
     public function testGetFromApcuFunctionExists(): void
     {
         $this->assertTrue(function_exists('API\SQL\get_from_apcu'));

@@ -7,7 +7,7 @@ namespace Tests;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests for SQL functions and APCu stubs in api_cod/sql.php
+ * Tests for SQL functions in api_cod/sql.php
  */
 class SqlTest extends TestCase
 {
@@ -23,47 +23,6 @@ class SqlTest extends TestCase
         $_GET = [];
         $_REQUEST = [];
         parent::tearDown();
-    }
-
-    // ========== APCu stub tests ==========
-
-    public function testApcuStubFunctionsExist(): void
-    {
-        // These functions should exist - either native APCu or stubs from sql.php
-        $this->assertTrue(\function_exists('apcu_exists'));
-        $this->assertTrue(\function_exists('apcu_fetch'));
-        $this->assertTrue(\function_exists('apcu_store'));
-        $this->assertTrue(\function_exists('apcu_delete'));
-    }
-
-    public function testApcuStubsReturnFalseWhenExtensionNotLoaded(): void
-    {
-        // When APCu is not loaded, the stub functions should return false
-        if (!\extension_loaded('apcu')) {
-            $this->assertFalse(\apcu_exists('test_key'));
-            $this->assertFalse(\apcu_fetch('test_key'));
-            $this->assertFalse(\apcu_store('test_key', 'value'));
-            $this->assertFalse(\apcu_delete('test_key'));
-        } else {
-            $this->markTestSkipped('APCu extension is loaded, skipping stub tests');
-        }
-    }
-
-    // ========== SQL function existence tests ==========
-
-    public function testCreateApcuKeyFunctionExists(): void
-    {
-        $this->assertTrue(\function_exists('API\SQL\create_apcu_key'));
-    }
-
-    public function testGetFromApcuFunctionExists(): void
-    {
-        $this->assertTrue(\function_exists('API\SQL\get_from_apcu'));
-    }
-
-    public function testAddToApcuFunctionExists(): void
-    {
-        $this->assertTrue(\function_exists('API\SQL\add_to_apcu'));
     }
 
     public function testGetDbnameFunctionExists(): void
