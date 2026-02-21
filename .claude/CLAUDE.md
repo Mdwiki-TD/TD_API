@@ -71,7 +71,7 @@ The project runs on PHP with MySQL. For local development:
 
 ### Testing Endpoints
 
-Interactive test UI available at `test.html` or `test/index.php`
+Interactive test UI available at `openapi.html` or `test/index.php`
 
 Example API calls:
 ```
