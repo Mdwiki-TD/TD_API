@@ -1,0 +1,30 @@
+{
+    "name": "mdwiki/td_api",
+    "description": "A PHP library for the Translation Dashboard API, providing functionalities for managing translations, handling API interactions, and facilitating translation workflows.",
+    "autoload": {
+        "psr-4": {},
+        "files": []
+    },
+    "authors": [
+        {
+            "name": "Ibrahem",
+            "email": "ibrahem.al-radaei@outlook.com"
+        }
+    ],
+    "autoload-dev": {
+        "psr-4": {
+            "MyLibrary\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "require": {
+        "php": "^8.2",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

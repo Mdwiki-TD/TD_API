@@ -377,7 +377,7 @@ if (isset($_REQUEST['test'])) {
 
 // Redirect to test interface if no endpoint specified
 if (!isset($_GET['get'])) {
-    header('Location: test.html');
+    header('Location: openapi.html');
     exit();
 }
 
