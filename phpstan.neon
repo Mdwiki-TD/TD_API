@@ -1,0 +1,8 @@
+parameters:
+    level: 5
+    paths:
+        - src/
+
+    # Scan files for class definitions
+    scanFiles:
+        - src/include_all.php

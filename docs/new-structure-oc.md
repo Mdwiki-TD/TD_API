@@ -65,7 +65,7 @@ td_api/
 │   ├── index.php                 # Front controller (replaces index.php & api.php)
 │   ├── .htaccess                 # Apache rewrite rules
 │   ├── swagger-ui/               # API documentation UI
-│   │   └── index.html            # (moved from test.html)
+│   │   └── index.html            # (moved from openapi.html)
 │   └── openapi.json              # API spec (symlink or copy from docs/)
 │
 ├── resources/                    # Non-code resources
@@ -341,7 +341,7 @@ tests/
 
 ### 5. API Documentation
 
-**Current**: `test.html` at root, `openapi.json` separate
+**Current**: `openapi.html` at root, `openapi.json` separate
 
 **Proposed**: Organized documentation
 ```
@@ -419,7 +419,7 @@ resources/schemas/     # OpenAPI JSON specs
 | `api_cod/status.php` | `src/Application/Queries/GetTranslationStatusQuery.php` | CQRS query |
 | `endpoint_params.json` | `config/endpoints/params.php` | PHP config for better caching |
 | `index.php`, `api.php` | `public/index.php` | Single entry point with routing |
-| `test.html` | `public/swagger-ui/index.html` | Organized documentation |
+| `openapi.html` | `public/swagger-ui/index.html` | Organized documentation |
 | `test/`, `test2/` | `tests/Functional/`, `public/assets/` | Separate test suite from frontend assets |
 | `x/` | `bin/`, `var/temp/` | Scripts in bin/, temp files in var/ |
 

@@ -1,15 +1,17 @@
 
 test/script copy.js
 /test1
-api_cod/request_countall.php
+src/api_cod/request_countall.php
 t.php
-test/script.js.backup
 openapi/deepwiki.md
 openapi/script_docs.md
 openapi/x.json
 openapi_o.json
 /x
 /old
-test2/script.js.backup
 .env
 TD_API.zip
+
+/vendor
+src/api/proxy.php
+*.js.backup

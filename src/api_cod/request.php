@@ -7,8 +7,6 @@ if (isset($_REQUEST['test'])) {
 }
 header('Content-Type: application/json');
 
-include_once __DIR__ . '/include.php';
-
 use function API\Langs\get_lang_names_new;
 use function API\Langs\get_lang_names;
 use function API\SQL\fetch_query_new;
