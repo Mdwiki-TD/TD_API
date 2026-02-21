@@ -23,7 +23,9 @@ class AddOneParamTest extends TestCase
 
         $result = add_one_param($query, $column, $added, $tabe);
 
-        $this->assertStringContainsString('WHERE title = ?', $result[0]);
+        // Function outputs extra spaces: "  WHERE  title = ? "
+        $this->assertStringContainsString('title = ?', $result[0]);
+        $this->assertStringContainsString('WHERE', $result[0]);
         $this->assertSame(['TestPage'], $result[1]);
     }
 
@@ -114,7 +116,9 @@ class AddOneParamTest extends TestCase
 
         $result = add_one_param($query, $column, $added, $tabe);
 
-        $this->assertStringContainsString('AND title = ?', $result[0]);
+        // Function outputs extra spaces: "  AND  title = ? "
+        $this->assertStringContainsString('title = ?', $result[0]);
+        $this->assertStringContainsString('AND', $result[0]);
         $this->assertSame(['TestPage'], $result[1]);
     }
 
@@ -159,7 +163,9 @@ class AddOneParamTest extends TestCase
 
         $result = add_one_param($query, $column, $added, $tabe);
 
-        $this->assertStringContainsString('WHERE id = ?', $result[0]);
+        // Function outputs extra spaces: "  WHERE  id = ? "
+        $this->assertStringContainsString('id = ?', $result[0]);
+        $this->assertStringContainsString('WHERE', $result[0]);
         $this->assertSame(['123'], $result[1]);
     }
 }

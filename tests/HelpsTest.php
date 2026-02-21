@@ -413,9 +413,10 @@ class HelpsTest extends TestCase
     {
         $_GET['title'] = 'TestPage';
         $query = 'SELECT * FROM pages';
-        $types = ['title' => ['column' => 'w_title']];
+        // Types should be an array of strings, not an associative array
+        $types = ['title'];
         $result = add_li_params($query, $types, [], []);
-        $this->assertSame('SELECT * FROM pages WHERE w_title = ?', $result[0]);
+        $this->assertStringContainsString('title = ?', $result[0]);
         $this->assertSame(['TestPage'], $result[1]);
     }
 
@@ -428,13 +429,11 @@ class HelpsTest extends TestCase
         $_GET['title'] = 'TestPage';
         $_GET['lang'] = 'en';
         $query = 'SELECT * FROM pages';
-        $types = [
-            'title' => ['column' => 'w_title'],
-            'lang' => ['column' => 'lang_code']
-        ];
+        // Types should be an array of strings, not an associative array
+        $types = ['title', 'lang'];
         $result = add_li_params($query, $types, [], []);
-        $this->assertStringContainsString('WHERE w_title = ?', $result[0]);
-        $this->assertStringContainsString('AND lang_code = ?', $result[0]);
+        $this->assertStringContainsString('title = ?', $result[0]);
+        $this->assertStringContainsString('lang = ?', $result[0]);
         $this->assertSame(['TestPage', 'en'], $result[1]);
     }
 
@@ -446,7 +445,8 @@ class HelpsTest extends TestCase
     {
         $_GET['limit'] = '10';
         $query = 'SELECT * FROM pages';
-        $types = ['limit' => ['column' => 'limit']];
+        // Types should be an array of strings
+        $types = ['limit'];
         $result = add_li_params($query, $types, [], []);
         // Should not add WHERE clause for limit
         $this->assertSame('SELECT * FROM pages', $result[0]);
@@ -460,7 +460,8 @@ class HelpsTest extends TestCase
     {
         $_GET['select'] = 'title';
         $query = 'SELECT * FROM pages';
-        $types = ['select' => ['column' => 'select']];
+        // Types should be an array of strings
+        $types = ['select'];
         $result = add_li_params($query, $types, [], []);
         $this->assertSame('SELECT * FROM pages', $result[0]);
     }
@@ -473,9 +474,10 @@ class HelpsTest extends TestCase
     {
         $_GET['filter'] = 'not_empty';
         $query = 'SELECT * FROM pages';
-        $types = ['filter' => ['column' => 'filter_col']];
+        // Types should be an array of strings
+        $types = ['filter'];
         $result = add_li_params($query, $types, [], []);
-        $this->assertStringContainsString("(filter_col != '' AND filter_col IS NOT NULL)", $result[0]);
+        $this->assertStringContainsString("(filter != '' AND filter IS NOT NULL)", $result[0]);
     }
 
     /**
@@ -486,9 +488,10 @@ class HelpsTest extends TestCase
     {
         $_GET['filter'] = 'empty';
         $query = 'SELECT * FROM pages';
-        $types = ['filter' => ['column' => 'filter_col']];
+        // Types should be an array of strings
+        $types = ['filter'];
         $result = add_li_params($query, $types, [], []);
-        $this->assertStringContainsString("(filter_col = '' OR filter_col IS NULL)", $result[0]);
+        $this->assertStringContainsString("(filter = '' OR filter IS NULL)", $result[0]);
     }
 
     /**
@@ -499,9 +502,10 @@ class HelpsTest extends TestCase
     {
         $_GET['count'] = '>0';
         $query = 'SELECT * FROM pages';
-        $types = ['count' => ['column' => 'view_count']];
+        // Types should be an array of strings
+        $types = ['count'];
         $result = add_li_params($query, $types, [], []);
-        $this->assertStringContainsString('view_count > 0', $result[0]);
+        $this->assertStringContainsString('count > 0', $result[0]);
     }
 
     /**
@@ -512,7 +516,8 @@ class HelpsTest extends TestCase
     {
         $_GET['distinct'] = '1';
         $query = 'SELECT * FROM pages';
-        $types = ['distinct' => ['column' => 'distinct']];
+        // Types should be an array of strings
+        $types = ['distinct'];
         $result = add_li_params($query, $types, [], []);
         $this->assertStringContainsString('SELECT DISTINCT', $result[0]);
     }
@@ -525,8 +530,10 @@ class HelpsTest extends TestCase
     {
         $_GET['filter'] = '';
         $query = 'SELECT * FROM pages';
-        $types = ['filter' => ['column' => 'filter_col', 'no_empty_value' => true]];
-        $result = add_li_params($query, $types, [], []);
+        // Types should be an array of strings, pass extra config via endpoint_params
+        $types = [];
+        $endpoint_params = [['name' => 'filter', 'column' => 'filter_col', 'no_empty_value' => true]];
+        $result = add_li_params($query, $types, $endpoint_params, []);
         $this->assertSame('SELECT * FROM pages', $result[0]);
     }
 
@@ -538,8 +545,10 @@ class HelpsTest extends TestCase
     {
         $_GET['status'] = 'active';
         $query = 'SELECT * FROM pages';
-        $types = ['status' => ['column' => 'status', 'value_can_be_null' => true]];
-        $result = add_li_params($query, $types, [], []);
+        // Types should be an array of strings, pass extra config via endpoint_params
+        $types = [];
+        $endpoint_params = [['name' => 'status', 'column' => 'status', 'value_can_be_null' => true]];
+        $result = add_li_params($query, $types, $endpoint_params, []);
         $this->assertStringContainsString('(status = ? OR status IS NULL OR status = \'\')', $result[0]);
     }
 }

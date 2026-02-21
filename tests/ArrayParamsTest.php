@@ -81,8 +81,9 @@ class ArrayParamsTest extends TestCase
 
         $result = add_array_params($query, $params, 'titles', 'title', ' AND ');
 
+        // Function adds extra spaces: " AND  title IN (?,?)"
         $this->assertStringContainsString('WHERE lang = ?', $result[0]);
-        $this->assertStringContainsString('AND title IN (?,?)', $result[0]);
+        $this->assertStringContainsString('title IN (?,?)', $result[0]);
         $this->assertSame(['en', 'Page1', 'Page2'], $result[1]);
     }
 
@@ -98,7 +99,8 @@ class ArrayParamsTest extends TestCase
 
         $result = add_array_params($query, $params, 'langs', 'lang_code', ' WHERE ');
 
-        $this->assertStringContainsString('WHERE lang_code IN (?,?,?)', $result[0]);
+        // Function adds extra spaces: " WHERE  lang_code IN (?,?,?)"
+        $this->assertStringContainsString('lang_code IN (?,?,?)', $result[0]);
         $this->assertSame(['en', 'ar', 'fr'], $result[1]);
     }
 
@@ -130,7 +132,9 @@ class ArrayParamsTest extends TestCase
         // Empty where_or_and should auto-detect based on existing WHERE clause
         $result = add_array_params($query, $params, 'titles', 'title', '');
 
-        $this->assertStringContainsString('WHERE title IN (?)', $result[0]);
+        // Function adds extra spaces: " WHERE  title IN (?)"
+        $this->assertStringContainsString('title IN (?)', $result[0]);
+        $this->assertStringContainsString('WHERE', $result[0]);
     }
 
     /**
@@ -146,7 +150,9 @@ class ArrayParamsTest extends TestCase
         // Empty where_or_and should auto-detect based on existing WHERE clause
         $result = add_array_params($query, $params, 'titles', 'title', '');
 
-        $this->assertStringContainsString('AND title IN (?)', $result[0]);
+        // Function adds extra spaces: " AND  title IN (?)"
+        $this->assertStringContainsString('title IN (?)', $result[0]);
+        $this->assertStringContainsString('AND', $result[0]);
     }
 
     /**

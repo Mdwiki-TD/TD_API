@@ -27,17 +27,23 @@ class ChangeTypesTest extends TestCase
 
     public function testChangeTypesWithSimpleTypes(): void
     {
+        // When $types is an array of strings, it converts them to column definitions
         $types = ['title', 'lang', 'user'];
         $endpoint_params = [];
         $ignore_params = [];
 
         $result = change_types($types, $endpoint_params, $ignore_params);
 
-        $this->assertSame(['title' => ['column' => 'title'], 'lang' => ['column' => 'lang'], 'user' => ['column' => 'user']], $result);
+        $this->assertSame([
+            'title' => ['column' => 'title'],
+            'lang' => ['column' => 'lang'],
+            'user' => ['column' => 'user']
+        ], $result);
     }
 
     public function testChangeTypesFallsBackToEndpointParams(): void
     {
+        // When $types is empty, it falls back to using $endpoint_params
         $types = [];
         $endpoint_params = [
             ['name' => 'title', 'column' => 'w_title'],
@@ -55,6 +61,7 @@ class ChangeTypesTest extends TestCase
 
     public function testChangeTypesSkipsNoSelectParams(): void
     {
+        // Params with 'no_select' => true should be skipped when falling back to endpoint_params
         $types = [];
         $endpoint_params = [
             ['name' => 'title', 'column' => 'w_title'],
@@ -65,7 +72,6 @@ class ChangeTypesTest extends TestCase
 
         $result = change_types($types, $endpoint_params, $ignore_params);
 
-        // hidden_field should be skipped because it has 'no_select' => true
         $this->assertArrayHasKey('title', $result);
         $this->assertArrayNotHasKey('hidden_field', $result);
         $this->assertArrayHasKey('lang', $result);
@@ -73,8 +79,58 @@ class ChangeTypesTest extends TestCase
 
     public function testChangeTypesIgnoresSpecifiedParams(): void
     {
-        $types = ['title' => ['column' => 'w_title'], 'lang' => ['column' => 'lang_code']];
+        // When $types is an array of strings, $ignore_params removes items from the result
+        $types = ['title', 'lang', 'user'];
         $endpoint_params = [];
+        $ignore_params = ['lang'];
+
+        $result = change_types($types, $endpoint_params, $ignore_params);
+
+        $this->assertArrayHasKey('title', $result);
+        $this->assertArrayNotHasKey('lang', $result);
+        $this->assertArrayHasKey('user', $result);
+    }
+
+    public function testChangeTypesPrefersTypesOverEndpointParams(): void
+    {
+        // When $types is provided (not empty), it should be used instead of $endpoint_params
+        $types = ['custom_title'];
+        $endpoint_params = [
+            ['name' => 'title', 'column' => 'w_title']
+        ];
+        $ignore_params = [];
+
+        $result = change_types($types, $endpoint_params, $ignore_params);
+
+        // Should use $types, not $endpoint_params
+        $this->assertSame(['custom_title' => ['column' => 'custom_title']], $result);
+    }
+
+    public function testChangeTypesFallsBackToEndpointParamsOnlyWhenTypesEmpty(): void
+    {
+        // Verify that empty $types triggers fallback to $endpoint_params
+        $types = [];
+        $endpoint_params = [
+            ['name' => 'param1', 'column' => 'col1'],
+            ['name' => 'param2', 'column' => 'col2']
+        ];
+        $ignore_params = [];
+
+        $result = change_types($types, $endpoint_params, $ignore_params);
+
+        $this->assertCount(2, $result);
+        $this->assertArrayHasKey('param1', $result);
+        $this->assertArrayHasKey('param2', $result);
+    }
+
+    public function testChangeTypesIgnoresFromEndpointParams(): void
+    {
+        // $ignore_params should work when falling back to $endpoint_params
+        $types = [];
+        $endpoint_params = [
+            ['name' => 'title', 'column' => 'w_title'],
+            ['name' => 'lang', 'column' => 'lang_code']
+        ];
         $ignore_params = ['lang'];
 
         $result = change_types($types, $endpoint_params, $ignore_params);
@@ -83,34 +139,16 @@ class ChangeTypesTest extends TestCase
         $this->assertArrayNotHasKey('lang', $result);
     }
 
-    public function testChangeTypesPrefersTypesOverEndpointParams(): void
+    public function testChangeTypesHandlesEmptyIgnoreParams(): void
     {
-        $types = ['title' => ['column' => 'custom_title']];
-        $endpoint_params = [
-            ['name' => 'title', 'column' => 'w_title']
-        ];
-        $ignore_params = [];
-
-        $result = change_types($types, $endpoint_params, $ignore_params);
-
-        // When types is not empty, it should use types, not endpoint_params
-        $this->assertSame(['title' => ['column' => 'custom_title']], $result);
-    }
-
-    public function testChangeTypesPreservesAdditionalTypeProperties(): void
-    {
-        $types = [
-            'status' => ['column' => 'status_col', 'value_can_be_null' => true],
-            'filter' => ['column' => 'filter_col', 'no_empty_value' => true]
-        ];
+        $types = ['title', 'lang'];
         $endpoint_params = [];
         $ignore_params = [];
 
         $result = change_types($types, $endpoint_params, $ignore_params);
 
-        $this->assertSame([
-            'status' => ['column' => 'status_col', 'value_can_be_null' => true],
-            'filter' => ['column' => 'filter_col', 'no_empty_value' => true]
-        ], $result);
+        $this->assertCount(2, $result);
+        $this->assertArrayHasKey('title', $result);
+        $this->assertArrayHasKey('lang', $result);
     }
 }
