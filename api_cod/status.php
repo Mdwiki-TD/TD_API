@@ -16,7 +16,7 @@ function make_status_query($endpoint_params)
         SELECT LEFT(p.pupdate, 7) as date, COUNT(*) as count
         FROM pages p
 
-        LEFT JOIN users u
+        LEFT JOIN users_list u
             ON p.user = u.username
 
         WHERE p.target != ''
@@ -34,7 +34,7 @@ function make_status_query($endpoint_params)
     }
     $user_group = sanitize_input($_GET['user_group'] ?? '', '/^[a-zA-Z ]+$/');
     if ($user_group !== null) {
-        // $qu_ery .= " AND p.user IN (SELECT username FROM users WHERE user_group = ?)";
+        // $qu_ery .= " AND p.user IN (SELECT username FROM users_list WHERE user_group = ?)";
         $qu_ery .= " AND u.user_group = ?";
         $pa_rams[] = $user_group;
     }

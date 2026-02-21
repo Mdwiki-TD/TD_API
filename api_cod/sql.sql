@@ -111,4 +111,5 @@ CREATE TABLE `words` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+CREATE VIEW `users_list` AS SELECT `user_id`, `username`, `wiki`, `user_group`, `reg_date` FROM `users`;
 -- 2024-11-29 22:26:59
