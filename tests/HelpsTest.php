@@ -215,6 +215,10 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages ORDER BY date DESC', $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddOrderWithGetParameter(): void
     {
         $_GET['order'] = 'title';
@@ -231,6 +235,10 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages ORDER BY title ASC', $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddOrderWithSpecialPupdateOrAddDate(): void
     {
         $_GET['order'] = 'pupdate_or_add_date';
@@ -256,6 +264,10 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLimitWithGetParameter(): void
     {
         $_GET['limit'] = '10';
@@ -264,6 +276,10 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages LIMIT 10', $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLimitWithZeroDoesNotAdd(): void
     {
         $_GET['limit'] = '0';
@@ -272,6 +288,10 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLimitWithNegativeDoesNotAdd(): void
     {
         $_GET['limit'] = '-5';
@@ -280,6 +300,10 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLimitSkipsIfAlreadyPresent(): void
     {
         $_GET['limit'] = '10';
@@ -291,6 +315,10 @@ class HelpsTest extends TestCase
 
     // ========== add_offset tests ==========
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddOffsetWithGetParameter(): void
     {
         $_GET['offset'] = '20';
@@ -299,6 +327,10 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages OFFSET 20', $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddOffsetWithZeroDoesNotAdd(): void
     {
         $_GET['offset'] = '0';
@@ -307,6 +339,10 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddOffsetSkipsIfAlreadyPresent(): void
     {
         $_GET['offset'] = '20';
@@ -317,6 +353,10 @@ class HelpsTest extends TestCase
 
     // ========== add_group tests ==========
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddGroupWithValidColumn(): void
     {
         $_GET['group'] = 'lang';
@@ -365,6 +405,10 @@ class HelpsTest extends TestCase
         $this->assertSame(['SELECT * FROM pages', []], $result);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLiParamsWithSimpleWhere(): void
     {
         $_GET['title'] = 'TestPage';
@@ -375,6 +419,10 @@ class HelpsTest extends TestCase
         $this->assertSame(['TestPage'], $result[1]);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLiParamsWithMultipleConditions(): void
     {
         $_GET['title'] = 'TestPage';
@@ -390,6 +438,10 @@ class HelpsTest extends TestCase
         $this->assertSame(['TestPage', 'en'], $result[1]);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLiParamsIgnoresLimitColumn(): void
     {
         $_GET['limit'] = '10';
@@ -400,6 +452,10 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result[0]);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLiParamsIgnoresSelectColumn(): void
     {
         $_GET['select'] = 'title';
@@ -409,6 +465,10 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result[0]);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLiParamsWithNotEmptyValue(): void
     {
         $_GET['filter'] = 'not_empty';
@@ -418,6 +478,10 @@ class HelpsTest extends TestCase
         $this->assertStringContainsString("(filter_col != '' AND filter_col IS NOT NULL)", $result[0]);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLiParamsWithEmptyValue(): void
     {
         $_GET['filter'] = 'empty';
@@ -427,6 +491,10 @@ class HelpsTest extends TestCase
         $this->assertStringContainsString("(filter_col = '' OR filter_col IS NULL)", $result[0]);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLiParamsWithGreaterThanZero(): void
     {
         $_GET['count'] = '>0';
@@ -436,6 +504,10 @@ class HelpsTest extends TestCase
         $this->assertStringContainsString('view_count > 0', $result[0]);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLiParamsWithDistinctFlag(): void
     {
         $_GET['distinct'] = '1';
@@ -445,6 +517,10 @@ class HelpsTest extends TestCase
         $this->assertStringContainsString('SELECT DISTINCT', $result[0]);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLiParamsWithNoEmptyValueSkipsEmpty(): void
     {
         $_GET['filter'] = '';
@@ -454,6 +530,10 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result[0]);
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
     public function testAddLiParamsWithValueCanBeNull(): void
     {
         $_GET['status'] = 'active';
