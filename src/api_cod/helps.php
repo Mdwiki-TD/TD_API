@@ -31,7 +31,7 @@ function filter_order($key, $endpoint_data)
         return null;
     }
     // ---
-    $added = filter_var($_GET[$key], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $added = filter_input(INPUT_GET, $key, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     // ---
     if (in_array($added, $endpoint_columns) || in_array($added, $endpoint_params)) {
         return $added;
@@ -74,12 +74,8 @@ function add_group($qua, $endpoint_data)
 function get_order_direction($param_order_direction)
 {
     // ---
-    $order_direction = "";
-    if (isset($_GET['order_direction'])) {
-        $order_direction = filter_var($_GET['order_direction'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    } elseif (isset($param_order_direction["default"])) {
-        $order_direction = $param_order_direction["default"];
-    }
+    $order_direction = isset($_GET['order_direction']) ?
+        filter_input(INPUT_GET, 'order_direction', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : ($param_order_direction["default"] ?? "");
     // ---
     if (!$order_direction) {
         return "DESC";
