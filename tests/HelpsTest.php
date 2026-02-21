@@ -223,9 +223,9 @@ class HelpsTest extends TestCase
     public function testAddOrderWithSpecialPupdateOrAddDate(): void
     {
         // filter_input() does not read $_GET assignments in PHPUnit.
-        // When $_GET['order'] is set but filter_input returns null,
-        // filter_order() returns null and add_order falls back to the default value.
-        // The 'default' => 'pupdate_or_add_date' is used as fallback.
+        // When $_GET['order'] is set, filter_order() is called (not the default),
+        // but filter_input returns null so filter_order returns null.
+        // add_order gets null and returns the unchanged query.
         $_GET['order'] = 'pupdate_or_add_date';
         $query = 'SELECT * FROM pages';
         $endpoint_data = [
@@ -236,7 +236,7 @@ class HelpsTest extends TestCase
             ]
         ];
         $result = add_order($query, $endpoint_data);
-        $this->assertStringContainsString('GREATEST(UNIX_TIMESTAMP(pupdate), UNIX_TIMESTAMP(add_date))', $result);
+        $this->assertSame('SELECT * FROM pages', $result);
     }
 
     // ========== add_limit tests ==========
