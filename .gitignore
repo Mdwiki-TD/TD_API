@@ -10,6 +10,7 @@ openapi_o.json
 /x
 /old
 .env
+*.env.*
 TD_API.zip
 
 /vendor
