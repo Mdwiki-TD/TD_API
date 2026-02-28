@@ -19,3 +19,4 @@ src/api/proxy.php
 .phpunit.result.cache
 .claude/settings.json
 tests_output.txt
+src/load_env.php
