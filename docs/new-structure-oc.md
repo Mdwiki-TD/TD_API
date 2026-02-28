@@ -279,7 +279,7 @@ return [
     'default' => $_ENV['DB_CONNECTION'] ?? 'mysql',
     'connections' => [
         'mysql' => [
-            'host' => $_ENV['DB_HOST'],
+            'host' => $_ENV['DB_HOST_TOOLS'],
             'database' => $_ENV['DB_DATABASE'],
             'username' => $_ENV['DB_USERNAME'],
             'password' => $_ENV['DB_PASSWORD'],
