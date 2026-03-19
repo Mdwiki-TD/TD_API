@@ -32,10 +32,6 @@ api.php (entry)
         │   ├── missing_exists.php
         │   ├── titles_infos.php
         │   └── top.php
-        ├── api_cod/langs/ (external API wrappers)
-        │   ├── interwiki.php
-        │   ├── site_matrix.php
-        │   └── lang_pairs.php
         └── endpoint_params.json (configuration)
 ```
 
@@ -329,11 +325,9 @@ public function disableFullGroupByMode($sql_query)
 
 ```
 request.php → include.php
-include.php → helps.php, sql.php, subs/*.php, langs/*.php
+include.php → helps.php, sql.php, subs/*.php
 helps.php → (uses $_GET directly)
 subs/missing_exists.php → helps.php
-langs/interwiki.php → langs/lang_pairs.php (get_lang_names)
-langs/site_matrix.php → langs/lang_pairs.php (get_lang_names)
 ```
 
 ### 3.2 High Coupling Score
@@ -344,7 +338,6 @@ langs/site_matrix.php → langs/lang_pairs.php (get_lang_names)
 | helps.php | 0 (no imports) | 8 (used by all subs) | 0.00 |
 | sql.php | 0 (PDO only) | 2 (request.php, external) | 0.00 |
 | subs/missing_exists.php | 2 (helps, sanitize) | 1 (request.php) | 0.67 |
-| langs/lang_pairs.php | 0 | 3 (interwiki, site_matrix, top) | 1.00 |
 
 **Interpretation:** `helps.php` is highly stable (no dependencies) but creates a utility black hole. `langs/lang_pairs.php` has no dependencies but is used by 3 modules (I=1.0 suggests it should be stable but it's just a data file).
 

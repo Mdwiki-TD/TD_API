@@ -7,11 +7,7 @@ if (isset($_REQUEST['test'])) {
 }
 header('Content-Type: application/json');
 
-use function API\Langs\get_lang_names_new;
-use function API\Langs\get_lang_names;
 use function API\SQL\fetch_query_new;
-use function API\InterWiki\get_inter_wiki;
-use function API\SiteMatrix\get_site_matrix;
 use function API\Helps\sanitize_input;
 use function API\Helps\add_group;
 use function API\Helps\add_li_params;
@@ -217,22 +213,11 @@ switch ($get) {
         SQL;
         break;
 
-    case 'lang_names':
-        $results = get_lang_names();
-        break;
-
-    case 'lang_names_new':
-        $results = get_lang_names_new();
-        break;
-
-    case 'inter_wiki':
-        $ty = sanitize_input($_GET['type'] ?? 'all', '/^[a-zA-Z ]+$/');
-        $results = get_inter_wiki($ty);
-        break;
-
-    case 'site_matrix':
-        $ty = sanitize_input($_GET['type'] ?? 'all', '/^[a-zA-Z ]+$/');
-        $results = get_site_matrix($ty);
+    case 'langs':
+        $qua = <<<SQL
+            SELECT code, autonym, name
+            FROM langs
+        SQL;
         break;
 
     case 'user_views':

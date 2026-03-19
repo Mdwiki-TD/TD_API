@@ -122,26 +122,6 @@ $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
 
 ---
 
-### 2.2 Duplicate Language Filtering Functions
-**Locations**:
-- `api_cod/langs/interwiki.php:100-109`
-- `api_cod/langs/site_matrix.php:62-71`
-
-**Problem**: Identical `filter_last()` function in both files
-
-**Action Items**:
-- [ ] Create `api_cod/langs/helpers.php` for shared language utilities
-- [ ] Move common functions to helpers
-- [ ] Update both files to use shared functions
-- [ ] Add tests for filter functions
-
-**Related Duplicates**:
-- `filter_data()` - duplicated
-- `filter_codes()` - duplicated
-- `get_lang_names()` - multiple implementations
-
----
-
 ## 3. Architecture Improvements (P1 - High)
 
 ### 3.1 Refactor Monolithic request.php
@@ -423,8 +403,6 @@ $other_tables = ['in_process', 'assessments', 'refs_counts', ...];
 |------|-------|--------|----------|
 | `api_cod/sql.php` | 277 | Hardcoded credentials, error disclosure | P0 |
 | `api_cod/request.php` | 535 | Too long, mixed concerns, SQL injection risk | P0/P1 |
-| `api_cod/langs/interwiki.php` | ~150 | Duplicate functions | P1 |
-| `api_cod/langs/site_matrix.php` | ~120 | Duplicate functions | P1 |
 | `api.php` | 18 | Duplicate of index.php | P1 |
 | `index.php` | 18 | Duplicate of api.php | P1 |
 | `api_cod/helps.php` | 290 | Needs type hints, documentation | P2 |

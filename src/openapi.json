@@ -640,48 +640,10 @@
                 }
             }
         },
-        "/api.php?get=inter_wiki": {
-            "get": {
-                "summary": "Retrieve inter-wiki data",
-                "description": "Corresponds to calling `api.php?get=inter_wiki` with query parameters.",
-                "tags": [
-                    "other"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=lang_names": {
+        "/api.php?get=langs": {
             "get": {
                 "summary": "Retrieve language names",
-                "description": "Corresponds to calling `api.php?get=lang_names` with query parameters.",
-                "tags": [
-                    "languages"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=lang_names_new": {
-            "get": {
-                "summary": "Retrieve new language names",
-                "description": "Corresponds to calling `api.php?get=lang_names_new` with query parameters.",
+                "description": "Corresponds to calling `api.php?get=langs` with query parameters.",
                 "tags": [
                     "languages"
                 ],
@@ -1210,25 +1172,6 @@
                 "description": "Corresponds to calling `api.php?get=settings` with query parameters.",
                 "tags": [
                     "other"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=site_matrix": {
-            "get": {
-                "summary": "Retrieve site matrix data",
-                "description": "Corresponds to calling `api.php?get=site_matrix` with query parameters.",
-                "tags": [
-                    "languages"
                 ],
                 "parameters": [
                     {

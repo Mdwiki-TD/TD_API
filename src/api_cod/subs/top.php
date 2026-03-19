@@ -5,7 +5,6 @@ namespace API\Top;
 Usage:
 use function API\Top\top_langs;
 use function API\Top\top_users;
-use function API\Top\langs_names;
 
 
 
@@ -13,19 +12,6 @@ use function API\Top\langs_names;
 
 use function API\Helps\add_array_params;
 use function API\Helps\add_li_params;
-
-function langs_names()
-{
-    $lang_tables = [];
-    // load langs_table.json
-    $file_path = __DIR__ . '/../langs/langs_table.json';
-    if (file_exists($file_path)) {
-        $lang_tables = json_decode(file_get_contents($file_path), true);
-        ksort($lang_tables);
-    }
-    return $lang_tables;
-}
-
 
 function top_query($select)
 {

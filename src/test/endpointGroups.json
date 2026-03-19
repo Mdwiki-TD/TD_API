@@ -43,16 +43,13 @@
         "graph_data"
     ],
     "languages": [
-        "lang_names",
-        "lang_names_new",
-        "site_matrix",
+        "langs",
         "translate_type"
     ],
     "other": [
         "publish_reports",
         "categories",
         "projects",
-        "settings",
-        "inter_wiki"
+        "settings"
     ]
 }
