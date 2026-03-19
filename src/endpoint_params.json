@@ -600,13 +600,13 @@
         "params": [
             {
                 "name": "lang",
-                "column": "lang",
+                "column": "ip.lang",
                 "type": "text",
                 "placeholder": "Language code"
             },
             {
                 "name": "user",
-                "column": "user",
+                "column": "ip.user",
                 "type": "text",
                 "placeholder": "Username"
             },
@@ -639,7 +639,7 @@
             },
             {
                 "name": "year",
-                "column": "YEAR(add_date)",
+                "column": "YEAR(ip.add_date)",
                 "type": "number",
                 "placeholder": "year of date"
             }

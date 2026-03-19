@@ -1833,5 +1833,35 @@
 		"code": "zu",
 		"autonym": "isiZulu",
 		"name": "Zulu"
-	}
+	},
+    "ppl": {
+        "code": "ppl",
+        "autonym": "Nawat",
+        "name": "Nawat"
+    },
+    "kai": {
+        "code": "kai",
+        "autonym": "Karai-karai",
+        "name": "Karekare"
+    },
+    "kaj": {
+        "code": "kaj",
+        "autonym": "Jju",
+        "name": "Jju"
+    },
+    "be-x-old": {
+        "code": "be-x-old",
+        "autonym": "беларуская (тарашкевіца)",
+        "name": "Belarusian (Taraškievica orthography)"
+    },
+    "shy": {
+        "code": "shy",
+        "autonym": "tacawit",
+        "name": "Shawiya"
+    },
+    "mo": {
+        "code": "mo",
+        "autonym": "молдовеняскэ",
+        "name": "Moldovan"
+    }
 }

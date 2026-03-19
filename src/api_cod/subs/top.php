@@ -26,26 +26,11 @@ function langs_names()
     return $lang_tables;
 }
 
-function top_langs_format($results)
-{
-    $results2 = [];
-    // ---
-    $langs_ = langs_names();
-    // ---
-    foreach ($results as $key => $result) {
-        $lang_code = $result['lang'];
-        $result['lang_name'] = $langs_[$lang_code]['name'] ?? '';
-        // ---
-        $results2[] = $result;
-    }
-    // ---
-    return $results2;
-}
 
 function top_query($select)
 {
     // ---
-    $select_field = ($select === 'user') ? 'p.user' : 'p.lang';
+    $select_field = ($select === 'user') ? 'p.user' : 'p.lang, la.name as lang_name';
     // ---
     $query = <<<SQL
         SELECT
@@ -73,6 +58,9 @@ function top_query($select)
 
         LEFT JOIN views_new_all v
             ON p.target = v.target AND p.lang = v.lang
+
+        LEFT JOIN langs la
+            ON p.lang = la.code
 
         WHERE p.target != '' AND p.target IS NOT NULL
         AND p.user != '' AND p.user IS NOT NULL

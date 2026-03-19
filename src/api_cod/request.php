@@ -30,7 +30,6 @@ use function API\SelectHelps\get_select;
 use function API\Top\top_langs;
 use function API\Top\top_lang_of_users;
 use function API\Top\top_users;
-use function API\Top\top_langs_format;
 
 $other_tables = [
     'in_process',
@@ -447,7 +446,10 @@ switch ($get) {
     case 'in_process':
         // ---
         $qua = <<<SQL
-            SELECT $DISTINCT $SELECT from in_process
+            SELECT ip.id, ip.title, ip.user, ip.lang, ip.cat, ip.translate_type, ip.word, ip.add_date, ca.campaign, la.autonym
+            from in_process ip
+            LEFT JOIN categories ca ON ip.cat = ca.category
+            LEFT JOIN langs la ON ip.lang = la.code
         SQL;
         // ---
         list($query, $params) = add_li_params($qua, [], $endpoint_params);
@@ -502,9 +504,6 @@ $qua = preg_replace("/ +/", " ", $qua);
 switch ($get) {
     case 'leaderboard_table_formated':
         $results = leaderboard_table_format($results);
-        break;
-    case 'top_langs':
-        $results = top_langs_format($results);
         break;
 }
 
