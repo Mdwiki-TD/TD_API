@@ -423,7 +423,6 @@ switch ($get) {
         // ---
         $query = $query_start . $query;
         // ---
-        // ---
         $query = add_group($query, $endpoint_data);
         // ---
         break;
@@ -431,10 +430,10 @@ switch ($get) {
     case 'in_process':
         // ---
         $qua = <<<SQL
-            SELECT ip.id, ip.title, ip.user, ip.lang, ip.cat, ip.translate_type, ip.word, ip.add_date, ca.campaign, la.autonym
-            from in_process ip
-            LEFT JOIN categories ca ON ip.cat = ca.category
-            LEFT JOIN langs la ON ip.lang = la.code
+            SELECT title, user, lang, cat, translate_type, word, add_date, ca.campaign, la.autonym
+            from in_process
+            LEFT JOIN categories ca ON cat = ca.category
+            LEFT JOIN langs la ON lang = la.code
         SQL;
         // ---
         list($query, $params) = add_li_params($qua, [], $endpoint_params);
