@@ -7,11 +7,7 @@ if (isset($_REQUEST['test'])) {
 }
 header('Content-Type: application/json');
 
-use function API\Langs\get_lang_names_new;
-use function API\Langs\get_lang_names;
 use function API\SQL\fetch_query_new;
-use function API\InterWiki\get_inter_wiki;
-use function API\SiteMatrix\get_site_matrix;
 use function API\Helps\sanitize_input;
 use function API\Helps\add_group;
 use function API\Helps\add_li_params;
@@ -30,7 +26,6 @@ use function API\SelectHelps\get_select;
 use function API\Top\top_langs;
 use function API\Top\top_lang_of_users;
 use function API\Top\top_users;
-use function API\Top\top_langs_format;
 
 $other_tables = [
     'in_process',
@@ -218,22 +213,11 @@ switch ($get) {
         SQL;
         break;
 
-    case 'lang_names':
-        $results = get_lang_names();
-        break;
-
-    case 'lang_names_new':
-        $results = get_lang_names_new();
-        break;
-
-    case 'inter_wiki':
-        $ty = sanitize_input($_GET['type'] ?? 'all', '/^[a-zA-Z ]+$/');
-        $results = get_inter_wiki($ty);
-        break;
-
-    case 'site_matrix':
-        $ty = sanitize_input($_GET['type'] ?? 'all', '/^[a-zA-Z ]+$/');
-        $results = get_site_matrix($ty);
+    case 'langs':
+        $qua = <<<SQL
+            SELECT code, autonym, name
+            FROM langs
+        SQL;
         break;
 
     case 'user_views':
@@ -439,7 +423,6 @@ switch ($get) {
         // ---
         $query = $query_start . $query;
         // ---
-        // ---
         $query = add_group($query, $endpoint_data);
         // ---
         break;
@@ -447,7 +430,10 @@ switch ($get) {
     case 'in_process':
         // ---
         $qua = <<<SQL
-            SELECT $DISTINCT $SELECT from in_process
+            SELECT title, user, lang, cat, translate_type, word, add_date, ca.campaign, la.autonym
+            from in_process
+            LEFT JOIN categories ca ON cat = ca.category
+            LEFT JOIN langs la ON lang = la.code
         SQL;
         // ---
         list($query, $params) = add_li_params($qua, [], $endpoint_params);
@@ -502,9 +488,6 @@ $qua = preg_replace("/ +/", " ", $qua);
 switch ($get) {
     case 'leaderboard_table_formated':
         $results = leaderboard_table_format($results);
-        break;
-    case 'top_langs':
-        $results = top_langs_format($results);
         break;
 }
 

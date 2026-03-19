@@ -30,7 +30,6 @@ Core Files:
 
 Endpoint-specific modules:
   api_cod/subs/            - Endpoint query functions (missing_exists.php, titles_infos.php, top.php)
-  api_cod/langs/           - External API wrappers (interwiki.php, site_matrix.php, lang_pairs.php)
 
 Configuration:
   endpoint_params.json     - Per-endpoint parameter/column definitions
@@ -55,7 +54,7 @@ Key endpoint groups (see `openapi.json` for full specification):
 - **users**: users, coordinator, full_translators, top_users, user_status
 - **statistics**: status, leaderboard_table, graph_data, count_pages
 - **views**: views_new, user_views2, lang_views2
-- **languages**: lang_names, lang_names_new, site_matrix, translate_type
+- **languages**: langs, translate_type
 - **pages_infos**: titles, words, refs_counts, assessments, revids, missing
 
 Common parameters: `limit` (default 50), `offset`, `order`, `order_direction`, `distinct`, `select`
