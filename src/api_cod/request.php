@@ -393,6 +393,17 @@ switch ($get) {
         // ---
         break;
 
+    case 'pages_langs':
+    case 'pages_users_langs':
+        $table_name = ($get == 'pages_langs') ? 'pages' : 'pages_users';
+        $query = <<<SQL
+            SELECT lang, autonym
+            FROM $table_name p
+            LEFT JOIN langs la ON lang = la.code
+            GROUP BY lang
+        SQL;
+        break;
+
     case 'user_lang_status':
     case 'user_status':
         // ---
