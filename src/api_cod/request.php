@@ -361,8 +361,13 @@ switch ($get) {
 
     case 'pages':
     case 'pages_users':
-        // ---
-        $qua = "SELECT $DISTINCT $SELECT FROM $get p";
+        $select = ($SELECT == "*") ? "title, word, translate_type, cat, lang, user, target, date, pupdate, add_date, deleted, mdwiki_revid, campaign" : $SELECT;
+
+        $qua = <<<SQL
+            SELECT $DISTINCT $select
+            FROM $get p
+            LEFT JOIN categories ca ON p.cat = ca.category
+        SQL;
         // ---
         list($query, $params) = add_li_params($qua, [], $endpoint_params, ['campaign', 'title_not_in_pages', 'cat']);
         // ---
@@ -379,7 +384,8 @@ switch ($get) {
             $query .= " AND p.cat = ?";
             $params[] = $category;
         } elseif ($campaign !== null) {
-            $query .= " AND p.cat IN (SELECT category FROM categories WHERE campaign = ?)";
+            // $query .= " AND p.cat IN (SELECT category FROM categories WHERE campaign = ?)";
+            $query .= " AND ca.campaign = ?";
             $params[] = $campaign;
         }
         // ---
