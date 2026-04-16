@@ -28,23 +28,26 @@ function filter_order($key, $endpoint_data)
     $endpoint_columns = $endpoint_data['columns'] ?? [];
     // ---
     if (!isset($_GET[$key])) {
+        // error_log("No '$key' parameter defined in endpoint data");
         return null;
     }
     // ---
     $added = filter_input(INPUT_GET, $key, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     // ---
     if (!$added) {
+        // error_log("No '$key' parameter provided in the request");
         return null;
     }
     // ---
     if (in_array($added, $endpoint_columns) || in_array($added, $endpoint_params)) {
+        error_log("Added '$added' is valid for '$key'");
         return $added;
     }
     // ---
     // split $added or ,
     $added_array = explode(",", $added);
     // ---
-    foreach ($added_array as $key => $value) {
+    foreach ($added_array as $k => $value) {
         $value = trim($value);
         // if its number okay
         if (
@@ -52,7 +55,8 @@ function filter_order($key, $endpoint_data)
             !in_array($value, $endpoint_params) &&
             !is_numeric($value)
         ) {
-            unset($added_array[$key]);
+            error_log("order value '$value' is not valid for key '$key'");
+            unset($added_array[$k]);
         }
     }
     // ---
@@ -97,34 +101,45 @@ function get_order_direction($param_order_direction)
     return $order_direction;
 }
 
-function add_order($qua, $endpoint_data)
+function add_order($qua, $endpoint_data, $get_value)
 {
     // ---
     $endpoint_params = $endpoint_data['params'] ?? [];
-    $endpoint_columns = $endpoint_data['columns'] ?? [];
+    $order_values    = $endpoint_data['order_values'] ?? [];
     // ---
     $params_key_to_data = array_column($endpoint_params, null, 'name');
     // ---
-    $param_order_direction = $params_key_to_data["order_direction"] ?? [];
     $param_order = $params_key_to_data["order"] ?? [];
     // ---
     if (!$param_order) {
+        // error_log("No 'order' parameter defined in endpoint data");
         return $qua;
     }
     // ---
-    $added = isset($_GET['order']) ?
-        filter_order('order', $endpoint_data) : ($param_order["default"] ?? "");
+    $default_order = $param_order["default"] ?? "";
+    // ---
+    if (empty($get_value) && empty($default_order)) {
+        // error_log("No order required");
+        return $qua;
+    }
+    // ---
+    $added = $default_order;
+    // ---
+    if (!empty($get_value)) {
+        $added_value = $order_values[$get_value] ?? "";
+        // error_log("get_value: $get_value, added_value: $added_value");
+        if (!empty($added_value)) {
+            $added = $added_value;
+        } else {
+            $added = filter_order('order', $endpoint_data) ?? $default_order;
+        }
+    }
     // ---
     if (!$added) {
         return $qua;
     }
     // ---
-    $orders = [
-        "pupdate_or_add_date" => "GREATEST(UNIX_TIMESTAMP(pupdate), UNIX_TIMESTAMP(add_date))",
-    ];
-    // ---
-    $added = $orders[$added] ?? $added;
-    // ---
+    $param_order_direction = $params_key_to_data["order_direction"] ?? [];
     $order_direction = get_order_direction($param_order_direction);
     // ---
     $qua .= " ORDER BY $added $order_direction";

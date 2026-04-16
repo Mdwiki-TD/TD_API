@@ -476,7 +476,8 @@ if ($results === [] && ($qua !== "" || $query !== "")) {
     // ---
     if ($query !== "") {
         // ---
-        $query = add_order($query, $endpoint_data);
+        $order_value = filter_input(INPUT_GET, 'order', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $query = add_order($query, $endpoint_data, $order_value);
         // ---
         $query = add_limit($query);
         $query = add_offset($query);

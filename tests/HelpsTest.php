@@ -184,7 +184,7 @@ class HelpsTest extends TestCase
             'columns' => ['title'],
             'params' => []
         ];
-        $result = add_order($query, $endpoint_data);
+        $result = add_order($query, $endpoint_data, "");
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
@@ -198,7 +198,7 @@ class HelpsTest extends TestCase
                 ['name' => 'order_direction']
             ]
         ];
-        $result = add_order($query, $endpoint_data);
+        $result = add_order($query, $endpoint_data, "");
         $this->assertSame('SELECT * FROM pages ORDER BY date DESC', $result);
     }
 
@@ -216,7 +216,7 @@ class HelpsTest extends TestCase
                 ['name' => 'order_direction']
             ]
         ];
-        $result = add_order($query, $endpoint_data);
+        $result = add_order($query, $endpoint_data, "title");
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
@@ -231,12 +231,16 @@ class HelpsTest extends TestCase
         $endpoint_data = [
             'columns' => ['title'],
             'params' => [
-                ['name' => 'order', 'default' => 'pupdate_or_add_date'],
+                ["name" => "order", "column" => "order", "type" => "text", "placeholder" => "Order by", 'default' => ''],
+                ['name' => 'order', 'default' => ''],
                 ['name' => 'order_direction']
-            ]
+            ],
+            "order_values" => [
+                'pupdate_or_add_date' => 'GREATEST(UNIX_TIMESTAMP(pupdate), UNIX_TIMESTAMP(add_date))',
+            ],
         ];
-        $result = add_order($query, $endpoint_data);
-        $this->assertSame('SELECT * FROM pages', $result);
+        $result = add_order($query, $endpoint_data, "pupdate_or_add_date");
+        $this->assertSame('SELECT * FROM pages ORDER BY GREATEST(UNIX_TIMESTAMP(pupdate), UNIX_TIMESTAMP(add_date)) DESC', $result);
     }
 
     // ========== add_limit tests ==========
