@@ -33,6 +33,10 @@ function filter_order($key, $endpoint_data)
     // ---
     $added = filter_input(INPUT_GET, $key, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     // ---
+    if (!$added) {
+        return null;
+    }
+    // ---
     if (in_array($added, $endpoint_columns) || in_array($added, $endpoint_params)) {
         return $added;
     }
@@ -264,7 +268,7 @@ function add_li_params(string $qua, array $types, array $endpoint_params = [], a
             $added = (!empty($added)) ? $added : filter_input(INPUT_GET, $column, FILTER_SANITIZE_SPECIAL_CHARS);
             // ---
             // if "limit" in endpoint_params remove it
-            if ($column == "limit" || $column == "select" || strtolower($added) == "all") {
+            if ($column == "limit" || $column == "select" || ($added && strtolower($added) == "all")) {
                 continue;
             }
             // ---
