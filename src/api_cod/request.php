@@ -423,12 +423,12 @@ switch ($get) {
 
     case 'pages_with_views':
         // ---
-        $qua = <<<SQL
+        $_qua = <<<SQL
             from pages p
             WHERE p.target != ''
         SQL;
         // ---
-        list($query, $params) = add_li_params($qua, [], $endpoint_params);
+        list($query, $params) = add_li_params($_qua, [], $endpoint_params);
         // ---
         $query_start = <<<SQL
             select distinct
