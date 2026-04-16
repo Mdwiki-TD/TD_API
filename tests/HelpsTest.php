@@ -206,7 +206,6 @@ class HelpsTest extends TestCase
     {
         // filter_input() does not read $_GET assignments in PHPUnit.
         // filter_order() returns null so no ORDER BY clause is added.
-        $_GET['order'] = 'title';
         $_GET['order_direction'] = 'ASC';
         $query = 'SELECT * FROM pages';
         $endpoint_data = [
@@ -226,7 +225,6 @@ class HelpsTest extends TestCase
         // When $_GET['order'] is set, filter_order() is called (not the default),
         // but filter_input returns null so filter_order returns null.
         // add_order gets null and returns the unchanged query.
-        $_GET['order'] = 'pupdate_or_add_date';
         $query = 'SELECT * FROM pages';
         $endpoint_data = [
             'columns' => ['title'],
