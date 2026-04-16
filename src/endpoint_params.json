@@ -308,7 +308,7 @@
             "display",
             "campaign",
             "depth",
-            "def"
+            "is_default"
         ],
         "params": [
             {
