@@ -228,7 +228,6 @@ class HelpsTest extends TestCase
             'columns' => ['title'],
             'params' => [
                 ["name" => "order", "column" => "order", "type" => "text", "placeholder" => "Order by", 'default' => ''],
-                ['name' => 'order', 'default' => ''],
                 ['name' => 'order_direction']
             ],
             "order_values" => [
