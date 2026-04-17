@@ -21,7 +21,7 @@ function sanitize_input($input, $pattern)
     return null;
 }
 
-function filter_order($key, $endpoint_data)
+function filter_order($key, $endpoint_data, $get_value)
 {
     // ---
     $endpoint_params = $endpoint_data['params'] ?? [];
@@ -32,7 +32,7 @@ function filter_order($key, $endpoint_data)
         return null;
     }
     // ---
-    $added = filter_input(INPUT_GET, $key, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $added = $get_value;
     // ---
     if (!$added) {
         // error_log("No '$key' parameter provided in the request");
@@ -67,10 +67,10 @@ function filter_order($key, $endpoint_data)
     return null;
 }
 
-function add_group($qua, $endpoint_data)
+function add_group($qua, $endpoint_data, $get_value)
 {
     // ---
-    $added = isset($_GET['group']) ? filter_order('group', $endpoint_data) : "";
+    $added = filter_order('group', $endpoint_data, $get_value);
     // ---
     if ($added) {
         $qua .= " GROUP BY $added";
@@ -131,7 +131,7 @@ function add_order($qua, $endpoint_data, $get_value)
         if (!empty($added_value)) {
             $added = $added_value;
         } else {
-            $added = filter_order('order', $endpoint_data) ?? $default_order;
+            $added = filter_order('order', $endpoint_data, $get_value) ?? $default_order;
         }
     }
     // ---

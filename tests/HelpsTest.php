@@ -116,7 +116,7 @@ class HelpsTest extends TestCase
             'columns' => ['title', 'id', 'date'],
             'params' => []
         ];
-        $result = filter_order('order', $endpoint_data);
+        $result = filter_order('order', $endpoint_data, '');
         $this->assertNull($result);
     }
 
@@ -128,7 +128,7 @@ class HelpsTest extends TestCase
             'columns' => ['title', 'id'],
             'params' => ['user', 'lang']
         ];
-        $result = filter_order('order', $endpoint_data);
+        $result = filter_order('order', $endpoint_data, '');
         $this->assertNull($result);
     }
 
@@ -138,7 +138,7 @@ class HelpsTest extends TestCase
             'columns' => ['title'],
             'params' => []
         ];
-        $result = filter_order('order', $endpoint_data);
+        $result = filter_order('order', $endpoint_data, '');
         $this->assertNull($result);
     }
 
@@ -148,12 +148,11 @@ class HelpsTest extends TestCase
      */
     public function testFilterOrderWithInvalidValueReturnsNull(): void
     {
-        $_GET['order'] = 'invalid_column';
         $endpoint_data = [
             'columns' => ['title', 'id'],
             'params' => []
         ];
-        $result = filter_order('order', $endpoint_data);
+        $result = filter_order('order', $endpoint_data, 'invalid_column');
         $this->assertNull($result);
     }
 
@@ -166,12 +165,11 @@ class HelpsTest extends TestCase
         // filter_input() does not read from $_GET assignments in PHPUnit;
         // isset($_GET[$key]) is true but filter_input returns null,
         // so the function returns null after processing an empty result.
-        $_GET['order'] = 'title,id,999';
         $endpoint_data = [
             'columns' => ['title', 'id'],
             'params' => []
         ];
-        $result = filter_order('order', $endpoint_data);
+        $result = filter_order('order', $endpoint_data, 'title,id,999');
         $this->assertNull($result);
     }
 
@@ -352,13 +350,12 @@ class HelpsTest extends TestCase
     {
         // filter_input() does not read $_GET assignments in PHPUnit.
         // filter_order() returns null so no GROUP BY clause is added.
-        $_GET['group'] = 'lang';
         $query = 'SELECT * FROM pages';
         $endpoint_data = [
             'columns' => ['lang', 'title'],
             'params' => []
         ];
-        $result = add_group($query, $endpoint_data);
+        $result = add_group($query, $endpoint_data, 'lang');
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
@@ -369,7 +366,7 @@ class HelpsTest extends TestCase
             'columns' => ['lang'],
             'params' => []
         ];
-        $result = add_group($query, $endpoint_data);
+        $result = add_group($query, $endpoint_data, '');
         $this->assertSame('SELECT * FROM pages', $result);
     }
 

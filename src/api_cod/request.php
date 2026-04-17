@@ -67,6 +67,8 @@ $endpoint_columns = $endpoint_data['columns'] ?? [];
 // ---
 $SELECT = get_select($endpoint_params, $endpoint_columns);
 // ---
+$get_group_value = filter_input(INPUT_GET, 'group', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+// ---
 switch ($get) {
 
     case 'missing':
@@ -355,7 +357,7 @@ switch ($get) {
                 $params[] = $added;
             }
         }
-        $query = add_group($query, $endpoint_data);
+        $query = add_group($query, $endpoint_data, $get_group_value);
         // ---
         break;
 
@@ -389,7 +391,7 @@ switch ($get) {
             $params[] = $campaign;
         }
         // ---
-        $query = add_group($query, $endpoint_data);
+        $query = add_group($query, $endpoint_data, $get_group_value);
         // ---
         break;
 
@@ -440,7 +442,7 @@ switch ($get) {
         // ---
         $query = $query_start . $query;
         // ---
-        $query = add_group($query, $endpoint_data);
+        $query = add_group($query, $endpoint_data, $get_group_value);
         // ---
         break;
 
@@ -455,7 +457,7 @@ switch ($get) {
         // ---
         list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
-        $query = add_group($query, $endpoint_data);
+        $query = add_group($query, $endpoint_data, $get_group_value);
         // ---
         break;
 
