@@ -116,7 +116,7 @@ class HelpsTest extends TestCase
             'columns' => ['title', 'id', 'date'],
             'params' => []
         ];
-        $result = filter_order('order', $endpoint_data);
+        $result = filter_order('order', $endpoint_data, '');
         $this->assertNull($result);
     }
 
@@ -128,7 +128,7 @@ class HelpsTest extends TestCase
             'columns' => ['title', 'id'],
             'params' => ['user', 'lang']
         ];
-        $result = filter_order('order', $endpoint_data);
+        $result = filter_order('order', $endpoint_data, '');
         $this->assertNull($result);
     }
 
@@ -138,7 +138,7 @@ class HelpsTest extends TestCase
             'columns' => ['title'],
             'params' => []
         ];
-        $result = filter_order('order', $endpoint_data);
+        $result = filter_order('order', $endpoint_data, '');
         $this->assertNull($result);
     }
 
@@ -148,12 +148,11 @@ class HelpsTest extends TestCase
      */
     public function testFilterOrderWithInvalidValueReturnsNull(): void
     {
-        $_GET['order'] = 'invalid_column';
         $endpoint_data = [
             'columns' => ['title', 'id'],
             'params' => []
         ];
-        $result = filter_order('order', $endpoint_data);
+        $result = filter_order('order', $endpoint_data, 'invalid_column');
         $this->assertNull($result);
     }
 
@@ -166,12 +165,11 @@ class HelpsTest extends TestCase
         // filter_input() does not read from $_GET assignments in PHPUnit;
         // isset($_GET[$key]) is true but filter_input returns null,
         // so the function returns null after processing an empty result.
-        $_GET['order'] = 'title,id,999';
         $endpoint_data = [
             'columns' => ['title', 'id'],
             'params' => []
         ];
-        $result = filter_order('order', $endpoint_data);
+        $result = filter_order('order', $endpoint_data, 'title,id,999');
         $this->assertNull($result);
     }
 
@@ -184,7 +182,7 @@ class HelpsTest extends TestCase
             'columns' => ['title'],
             'params' => []
         ];
-        $result = add_order($query, $endpoint_data);
+        $result = add_order($query, $endpoint_data, "");
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
@@ -198,7 +196,7 @@ class HelpsTest extends TestCase
                 ['name' => 'order_direction']
             ]
         ];
-        $result = add_order($query, $endpoint_data);
+        $result = add_order($query, $endpoint_data, "");
         $this->assertSame('SELECT * FROM pages ORDER BY date DESC', $result);
     }
 
@@ -206,7 +204,6 @@ class HelpsTest extends TestCase
     {
         // filter_input() does not read $_GET assignments in PHPUnit.
         // filter_order() returns null so no ORDER BY clause is added.
-        $_GET['order'] = 'title';
         $_GET['order_direction'] = 'ASC';
         $query = 'SELECT * FROM pages';
         $endpoint_data = [
@@ -216,7 +213,7 @@ class HelpsTest extends TestCase
                 ['name' => 'order_direction']
             ]
         ];
-        $result = add_order($query, $endpoint_data);
+        $result = add_order($query, $endpoint_data, "title");
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
@@ -226,17 +223,19 @@ class HelpsTest extends TestCase
         // When $_GET['order'] is set, filter_order() is called (not the default),
         // but filter_input returns null so filter_order returns null.
         // add_order gets null and returns the unchanged query.
-        $_GET['order'] = 'pupdate_or_add_date';
         $query = 'SELECT * FROM pages';
         $endpoint_data = [
             'columns' => ['title'],
             'params' => [
-                ['name' => 'order', 'default' => 'pupdate_or_add_date'],
+                ["name" => "order", "column" => "order", "type" => "text", "placeholder" => "Order by", 'default' => ''],
                 ['name' => 'order_direction']
-            ]
+            ],
+            "order_values" => [
+                'pupdate_or_add_date' => 'GREATEST(UNIX_TIMESTAMP(pupdate), UNIX_TIMESTAMP(add_date))',
+            ],
         ];
-        $result = add_order($query, $endpoint_data);
-        $this->assertSame('SELECT * FROM pages', $result);
+        $result = add_order($query, $endpoint_data, "pupdate_or_add_date");
+        $this->assertSame('SELECT * FROM pages ORDER BY GREATEST(UNIX_TIMESTAMP(pupdate), UNIX_TIMESTAMP(add_date)) DESC', $result);
     }
 
     // ========== add_limit tests ==========
@@ -350,13 +349,12 @@ class HelpsTest extends TestCase
     {
         // filter_input() does not read $_GET assignments in PHPUnit.
         // filter_order() returns null so no GROUP BY clause is added.
-        $_GET['group'] = 'lang';
         $query = 'SELECT * FROM pages';
         $endpoint_data = [
             'columns' => ['lang', 'title'],
             'params' => []
         ];
-        $result = add_group($query, $endpoint_data);
+        $result = add_group($query, $endpoint_data, 'lang');
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
@@ -367,7 +365,7 @@ class HelpsTest extends TestCase
             'columns' => ['lang'],
             'params' => []
         ];
-        $result = add_group($query, $endpoint_data);
+        $result = add_group($query, $endpoint_data, '');
         $this->assertSame('SELECT * FROM pages', $result);
     }
 

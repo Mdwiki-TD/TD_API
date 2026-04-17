@@ -6,8 +6,6 @@ Usage:
 use function API\SelectHelps\get_select;
 */
 
-use function API\Helps\filter_order;
-
 function get_select($endpoint_params, $endpoint_columns)
 {
     // ---

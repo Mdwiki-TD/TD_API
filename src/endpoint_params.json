@@ -308,7 +308,7 @@
             "display",
             "campaign",
             "depth",
-            "def"
+            "is_default"
         ],
         "params": [
             {
@@ -484,7 +484,10 @@
                 "type": "switch",
                 "placeholder": "0 or 1"
             }
-        ]
+        ],
+        "order_values": {
+            "pupdate_or_add_date": "GREATEST(UNIX_TIMESTAMP(pupdate), UNIX_TIMESTAMP(add_date))"
+        }
     },
     "pages_with_views": {
         "redirect": "pages"
