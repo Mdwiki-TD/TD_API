@@ -339,7 +339,7 @@
         ],
         "params": [
             {
-                "name": "User",
+                "name": "Username",
                 "column": "username",
                 "type": "text",
                 "placeholder": "Coordinator Username"
