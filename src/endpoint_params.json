@@ -1057,14 +1057,14 @@
     "users_no_inprocess": {
         "columns": [
             "user",
-            "active"
+            "is_active"
         ],
         "params": []
     },
     "full_translators": {
         "columns": [
             "user",
-            "active"
+            "is_active"
         ],
         "params": []
     },
