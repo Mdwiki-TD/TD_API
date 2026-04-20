@@ -103,7 +103,7 @@
             },
             "CoordUserParam": {
                 "in": "query",
-                "name": "user",
+                "name": "username",
                 "description": "Coordinator Username",
                 "required": false,
                 "schema": {
@@ -493,10 +493,10 @@
                 }
             }
         },
-        "/api.php?get=coordinator": {
+        "/api.php?get=coordinators": {
             "get": {
-                "summary": "Retrieve coordinator information",
-                "description": "Corresponds to calling `api.php?get=coordinator` with query parameters.",
+                "summary": "Retrieve coordinators information",
+                "description": "Corresponds to calling `api.php?get=coordinators` with query parameters.",
                 "tags": [
                     "users"
                 ],

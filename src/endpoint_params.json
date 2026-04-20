@@ -332,15 +332,15 @@
             }
         ]
     },
-    "coordinator": {
+    "coordinators": {
         "columns": [
-            "user",
-            "active"
+            "username",
+            "is_active"
         ],
         "params": [
             {
-                "name": "User",
-                "column": "user",
+                "name": "Username",
+                "column": "username",
                 "type": "text",
                 "placeholder": "Coordinator Username"
             }
@@ -1057,14 +1057,14 @@
     "users_no_inprocess": {
         "columns": [
             "user",
-            "active"
+            "is_active"
         ],
         "params": []
     },
     "full_translators": {
         "columns": [
             "user",
-            "active"
+            "is_active"
         ],
         "params": []
     },
