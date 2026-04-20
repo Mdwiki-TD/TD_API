@@ -114,8 +114,8 @@ switch ($get) {
         }
         break;
 
-    case 'coordinator':
-        $qua = "SELECT $SELECT FROM coordinator";
+    case 'coordinators':
+        $qua = "SELECT $SELECT FROM coordinators";
         $qua = add_limit($qua);
         break;
 

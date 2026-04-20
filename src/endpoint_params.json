@@ -332,7 +332,7 @@
             }
         ]
     },
-    "coordinator": {
+    "coordinators": {
         "columns": [
             "user",
             "active"

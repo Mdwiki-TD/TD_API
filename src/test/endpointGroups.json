@@ -33,7 +33,7 @@
         "users_by_last_pupdate",
         "full_translators",
         "users_no_inprocess",
-        "coordinator"
+        "coordinators"
     ],
     "statistics": [
         "status",

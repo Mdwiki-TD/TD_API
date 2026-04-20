@@ -51,7 +51,7 @@ All endpoints are accessed via `api.php?get=<endpoint>` with optional query para
 
 Key endpoint groups (see `openapi.json` for full specification):
 - **pages**: pages, pages_users, pages_by_user_or_lang, pages_with_views
-- **users**: users, coordinator, full_translators, top_users, user_status
+- **users**: users, coordinators, full_translators, top_users, user_status
 - **statistics**: status, leaderboard_table, graph_data, count_pages
 - **views**: views_new, user_views2, lang_views2
 - **languages**: langs, translate_type
