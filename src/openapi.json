@@ -103,7 +103,7 @@
             },
             "CoordUserParam": {
                 "in": "query",
-                "name": "user",
+                "name": "username",
                 "description": "Coordinator Username",
                 "required": false,
                 "schema": {

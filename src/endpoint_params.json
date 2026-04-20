@@ -334,13 +334,13 @@
     },
     "coordinators": {
         "columns": [
-            "user",
-            "active"
+            "username",
+            "is_active"
         ],
         "params": [
             {
                 "name": "User",
-                "column": "user",
+                "column": "username",
                 "type": "text",
                 "placeholder": "Coordinator Username"
             }
