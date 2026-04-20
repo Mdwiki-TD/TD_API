@@ -115,7 +115,7 @@ switch ($get) {
         break;
 
     case 'coordinators':
-        $qua = "SELECT username FROM coordinators";
+        $qua = "SELECT id, username, is_active FROM coordinators order by id";
         $qua = add_limit($qua);
         break;
 
