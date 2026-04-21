@@ -1,140 +1,317 @@
--- Adminer 4.8.1 MySQL 8.0.11 dump
+-- Adminer 5.3.0 MariaDB 5.5.5-10.6.22-MariaDB-log dump
 SET
-  NAMES utf8;
-
-SET
-  time_zone = '+00:00';
+    NAMES utf8;
 
 SET
-  foreign_key_checks = 0;
+    time_zone = '+00:00';
 
 SET
-  NAMES utf8mb4;
+    foreign_key_checks = 0;
+
+SET
+    sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+
+SET
+    NAMES utf8mb4;
 
 CREATE TABLE
-  pages (
-    id int (6) unsigned NOT NULL AUTO_INCREMENT,
-    title varchar(120) NOT NULL,
-    word int (6) DEFAULT NULL,
-    translate_type varchar(20) DEFAULT NULL,
-    cat varchar(120) DEFAULT NULL,
-    lang varchar(30) DEFAULT NULL,
-    user varchar(120) DEFAULT NULL,
-    target varchar(120) DEFAULT NULL,
-    date date DEFAULT NULL,
-    pupdate varchar(120) DEFAULT NULL,
-    add_date timestamp NOT NULL DEFAULT current_timestamp(),
-    deleted int (11) DEFAULT 0,
-    mdwiki_revid int (11) DEFAULT NULL,
-    PRIMARY KEY (id),
-    KEY idx_title (title),
-    KEY target (target)
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    assessments (
+        id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        title varchar(120) NOT NULL,
+        importance varchar(120) DEFAULT NULL,
+        PRIMARY KEY (id),
+        UNIQUE KEY title (title),
+        KEY idx_assessments_title (title)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-  pages_users (
-    id int (6) unsigned NOT NULL AUTO_INCREMENT,
-    title varchar(120) NOT NULL,
-    lang varchar(30) DEFAULT NULL,
-    user varchar(120) DEFAULT NULL,
-    pupdate varchar(120) DEFAULT NULL,
-    target varchar(120) DEFAULT NULL,
-    add_date date DEFAULT NULL,
-    PRIMARY KEY (id)
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    categories (
+        id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        category varchar(120) NOT NULL,
+        category2 varchar(120) NOT NULL DEFAULT '',
+        display varchar(120) NOT NULL DEFAULT '',
+        campaign varchar(120) NOT NULL DEFAULT '',
+        depth int (2) DEFAULT 0,
+        is_default int (1) NOT NULL DEFAULT 0,
+        PRIMARY KEY (id),
+        UNIQUE KEY category (category)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-  projects (
-    g_id int (6) unsigned NOT NULL AUTO_INCREMENT,
-    g_title varchar(120) NOT NULL,
-    PRIMARY KEY (g_id),
-    UNIQUE KEY g_title (g_title)
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    coordinators (
+        id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        username varchar(120) NOT NULL,
+        is_active int (11) NOT NULL DEFAULT 1,
+        PRIMARY KEY (id),
+        UNIQUE KEY username (username)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-  qids (
-    id int (6) unsigned NOT NULL AUTO_INCREMENT,
-    title varchar(120) NOT NULL,
-    qid varchar(120) DEFAULT NULL,
-    PRIMARY KEY (id),
-    UNIQUE KEY title_qid (title, qid),
-    KEY idx_qids_title (title)
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    enwiki_pageviews (
+        id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        title varchar(120) NOT NULL,
+        en_views int (6) DEFAULT 0,
+        PRIMARY KEY (id),
+        UNIQUE KEY title (title),
+        KEY idx_enwiki_pageviews_title (title)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-  qids_others (
-    id int (6) unsigned NOT NULL AUTO_INCREMENT,
-    title varchar(120) NOT NULL,
-    qid varchar(120) DEFAULT NULL,
-    PRIMARY KEY (id),
-    UNIQUE KEY title_qid (title, qid),
-    KEY idx_title (title)
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    full_translators (
+        id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        user varchar(120) NOT NULL,
+        is_active int (11) NOT NULL DEFAULT 1,
+        PRIMARY KEY (id),
+        UNIQUE KEY user (user)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-  refs_counts (
-    r_id int (6) unsigned NOT NULL AUTO_INCREMENT,
-    r_title varchar(120) NOT NULL,
-    r_lead_refs int (6) DEFAULT NULL,
-    r_all_refs int (6) DEFAULT NULL,
-    PRIMARY KEY (r_id),
-    UNIQUE KEY r_title (r_title),
-    KEY idx_refs_counts_r_title (r_title)
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    in_process (
+        id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        title varchar(255) NOT NULL,
+        user varchar(255) NOT NULL,
+        lang varchar(30) NOT NULL,
+        cat varchar(255) DEFAULT 'RTT',
+        translate_type varchar(20) DEFAULT 'lead',
+        word int (6) DEFAULT 0,
+        add_date timestamp NOT NULL DEFAULT current_timestamp(),
+        PRIMARY KEY (id),
+        KEY title (title)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-  settings (
-    id int (11) NOT NULL AUTO_INCREMENT,
-    title varchar(500) NOT NULL,
-    displayed varchar(500) NOT NULL,
-    Type varchar(500) NOT NULL DEFAULT 'check',
-    value int (1) NOT NULL DEFAULT 0,
-    ignored int (1) NOT NULL DEFAULT 0,
-    PRIMARY KEY (id),
-    UNIQUE KEY title (title),
-    KEY idx_title (title)
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    langs (
+        lang_id int (11) NOT NULL AUTO_INCREMENT,
+        code varchar(20) NOT NULL,
+        autonym varchar(70) NOT NULL,
+        name varchar(70) NOT NULL,
+        PRIMARY KEY (lang_id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-  translate_type (
-    tt_id int (6) unsigned NOT NULL AUTO_INCREMENT,
-    tt_title varchar(120) NOT NULL,
-    tt_lead int (11) NOT NULL DEFAULT 1,
-    tt_full int (11) NOT NULL DEFAULT 0,
-    PRIMARY KEY (tt_id),
-    UNIQUE KEY tt_title (tt_title),
-    KEY idx_tt_title (tt_title)
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    language_settings (
+        id int (11) NOT NULL AUTO_INCREMENT,
+        lang_code varchar(20) DEFAULT NULL,
+        move_dots tinyint (4) DEFAULT 0,
+        expend tinyint (4) DEFAULT 0,
+        add_en_lang tinyint (4) DEFAULT 0,
+        PRIMARY KEY (id),
+        UNIQUE KEY lang_code (lang_code)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-  users (
-    user_id int (11) NOT NULL AUTO_INCREMENT,
-    username varchar(255) NOT NULL,
-    email varchar(255) NOT NULL DEFAULT '',
-    wiki varchar(255) NOT NULL DEFAULT '',
-    user_group varchar(120) NOT NULL DEFAULT 'Uncategorized',
-    reg_date timestamp NOT NULL DEFAULT current_timestamp(),
-    PRIMARY KEY (user_id)
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    mdwiki_revids (
+        title varchar(255) NOT NULL,
+        revid int (11) NOT NULL,
+        PRIMARY KEY (title)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE
+    pages (
+        id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        title varchar(120) NOT NULL,
+        word int (6) DEFAULT NULL,
+        translate_type varchar(20) DEFAULT NULL,
+        cat varchar(120) DEFAULT NULL,
+        lang varchar(30) DEFAULT NULL,
+        user varchar(120) DEFAULT NULL,
+        target varchar(120) DEFAULT NULL,
+        date date DEFAULT NULL,
+        pupdate varchar(120) DEFAULT NULL,
+        add_date timestamp NOT NULL DEFAULT current_timestamp(),
+        deleted int (11) DEFAULT 0,
+        mdwiki_revid int (11) DEFAULT NULL,
+        PRIMARY KEY (id),
+        KEY idx_title (title),
+        KEY target (target)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE
+    pages_users (
+        id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        title varchar(120) NOT NULL,
+        word int (6) DEFAULT NULL,
+        translate_type varchar(20) DEFAULT NULL,
+        cat varchar(20) DEFAULT NULL,
+        lang varchar(30) DEFAULT NULL,
+        user varchar(120) DEFAULT NULL,
+        target varchar(120) DEFAULT NULL,
+        date date DEFAULT NULL,
+        pupdate varchar(120) DEFAULT NULL,
+        add_date timestamp NOT NULL DEFAULT current_timestamp(),
+        deleted int (11) DEFAULT 0,
+        mdwiki_revid int (11) DEFAULT NULL,
+        PRIMARY KEY (id),
+        KEY idx_title (title),
+        KEY target (target)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE
+    pages_users_to_main (
+        id int (6) unsigned NOT NULL,
+        new_target varchar(255) NOT NULL DEFAULT '',
+        new_user varchar(255) NOT NULL DEFAULT '',
+        new_qid varchar(255) NOT NULL DEFAULT '',
+        KEY id (id),
+        CONSTRAINT pages_users_to_main_ibfk_1 FOREIGN KEY (id) REFERENCES pages_users (id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE
+    projects (
+        g_id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        g_title varchar(120) NOT NULL,
+        PRIMARY KEY (g_id),
+        UNIQUE KEY g_title (g_title)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE
+    qids (
+        id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        title varchar(120) NOT NULL,
+        qid varchar(120) DEFAULT NULL,
+        PRIMARY KEY (id),
+        UNIQUE KEY title_qid (title, qid),
+        KEY idx_qids_title (title)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE
+    qids_others (
+        id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        title varchar(120) NOT NULL,
+        qid varchar(120) DEFAULT NULL,
+        PRIMARY KEY (id),
+        UNIQUE KEY title_qid (title, qid),
+        KEY idx_title (title)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE
+    refs_counts (
+        r_id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        r_title varchar(120) NOT NULL,
+        r_lead_refs int (6) DEFAULT NULL,
+        r_all_refs int (6) DEFAULT NULL,
+        PRIMARY KEY (r_id),
+        UNIQUE KEY r_title (r_title),
+        KEY idx_refs_counts_r_title (r_title)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE
+    settings (
+        id int (11) NOT NULL AUTO_INCREMENT,
+        title varchar(500) NOT NULL,
+        displayed varchar(500) NOT NULL,
+        Type varchar(500) NOT NULL DEFAULT 'check',
+        value int (1) NOT NULL DEFAULT 0,
+        ignored int (1) NOT NULL DEFAULT 0,
+        PRIMARY KEY (id),
+        UNIQUE KEY title (title),
+        KEY idx_title (title)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE
+    translate_type (
+        tt_id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        tt_title varchar(120) NOT NULL,
+        tt_lead int (11) NOT NULL DEFAULT 1,
+        tt_full int (11) NOT NULL DEFAULT 0,
+        PRIMARY KEY (tt_id),
+        UNIQUE KEY tt_title (tt_title),
+        KEY idx_tt_title (tt_title)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE
+    users (
+        user_id int (11) NOT NULL AUTO_INCREMENT,
+        username varchar(255) NOT NULL,
+        email varchar(255) NOT NULL DEFAULT '',
+        wiki varchar(255) NOT NULL DEFAULT '',
+        user_group varchar(120) NOT NULL DEFAULT 'Uncategorized',
+        reg_date timestamp NOT NULL DEFAULT current_timestamp(),
+        PRIMARY KEY (user_id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE VIEW
-  users_list AS
+    users_list AS
 SELECT
-  user_id,
-  username,
-  wiki,
-  user_group,
-  reg_date
+    user_id,
+    username,
+    wiki,
+    user_group,
+    reg_date
 FROM
-  users;
+    users;
 
 CREATE TABLE
-  words (
-    w_id int (6) unsigned NOT NULL AUTO_INCREMENT,
-    w_title varchar(120) NOT NULL,
-    w_lead_words int (6) DEFAULT NULL,
-    w_all_words int (6) DEFAULT NULL,
-    PRIMARY KEY (w_id)
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    users_no_inprocess (
+        id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        user varchar(120) NOT NULL,
+        is_active int (11) NOT NULL DEFAULT 1,
+        PRIMARY KEY (id),
+        UNIQUE KEY user (user)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
--- 2024-11-29 22:26:59
+CREATE TABLE
+    views_new (
+        id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        target varchar(120) NOT NULL,
+        lang varchar(30) NOT NULL,
+        year int (4) NOT NULL,
+        views int (20) DEFAULT 0,
+        PRIMARY KEY (id),
+        UNIQUE KEY target_lang_year (target, lang, year),
+        KEY target (target)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE
+    words (
+        w_id int (6) unsigned NOT NULL AUTO_INCREMENT,
+        w_title varchar(120) NOT NULL,
+        w_lead_words int (6) DEFAULT NULL,
+        w_all_words int (6) DEFAULT NULL,
+        PRIMARY KEY (w_id),
+        UNIQUE KEY w_title (w_title),
+        KEY idx_words_w_title (w_title)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE VIEW
+    titles_infos AS
+select
+    ase.title AS title,
+    ase.importance AS importance,
+    rc.r_lead_refs AS r_lead_refs,
+    rc.r_all_refs AS r_all_refs,
+    ep.en_views AS en_views,
+    w.w_lead_words AS w_lead_words,
+    w.w_all_words AS w_all_words,
+    q.qid AS qid
+from
+    assessments ase
+    left join enwiki_pageviews ep on ase.title = ep.title
+    left join qids q on q.title = ase.title
+    left join refs_counts rc on rc.r_title = ase.title
+    left join words w on w.w_title = ase.title;
+
+CREATE VIEW
+    users_list AS
+select
+    users.user_id AS user_id,
+    users.username AS username,
+    users.wiki AS wiki,
+    users.user_group AS user_group,
+    users.reg_date AS reg_date
+from
+    users;
+
+CREATE VIEW
+    views_new_all AS
+select
+    v.target AS target,
+    v.lang AS lang,
+    sum(v.views) AS views
+from
+    views_new v
+group by
+    v.target,
+    v.lang;
+
+-- 2026-04-20 22:49:05 UTC
