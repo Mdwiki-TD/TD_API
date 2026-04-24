@@ -72,7 +72,7 @@
             "lang_code",
             "move_dots",
             "expend",
-            "add_en_lang",
+            "add_en_lang"
         ],
         "params": [
             {
@@ -605,6 +605,12 @@
                 "column": "lang",
                 "type": "text",
                 "placeholder": "Language code"
+            },
+            {
+                "name": "cat",
+                "column": "cat",
+                "type": "text",
+                "placeholder": "Category"
             },
             {
                 "name": "user",
