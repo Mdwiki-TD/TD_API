@@ -72,8 +72,7 @@
             "lang_code",
             "move_dots",
             "expend",
-            "add_en_lang",
-            "add_en_lng"
+            "add_en_lang"
         ],
         "params": [
             {
@@ -608,6 +607,12 @@
                 "placeholder": "Language code"
             },
             {
+                "name": "cat",
+                "column": "cat",
+                "type": "text",
+                "placeholder": "Category"
+            },
+            {
                 "name": "user",
                 "column": "user",
                 "type": "text",
@@ -1036,7 +1041,12 @@
         ]
     },
     "langs": {
-        "columns": [],
+        "columns": [
+            "code",
+            "autonym",
+            "name",
+            "redirects"
+        ],
         "params": []
     },
     "projects": {
