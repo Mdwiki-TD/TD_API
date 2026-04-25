@@ -1041,7 +1041,12 @@
         ]
     },
     "langs": {
-        "columns": [],
+        "columns": [
+            "code",
+            "autonym",
+            "name",
+            "redirects"
+        ],
         "params": []
     },
     "projects": {

@@ -3,8 +3,22 @@
 namespace API\Leaderboard;
 /*
 Usage:
+use function API\Leaderboard\langs_format;
 use function API\Leaderboard\leaderboard_table_format;
 */
+
+function langs_format($data)
+{
+    $result = [];
+    foreach ($data as $Key => $lang_info) {
+        // { "code": "bh", "autonym": "भोजपुरी", "name": "Bhojpuri", "redirects": "[\"bho\"]" }
+        $redirects = json_decode($lang_info["redirects"] ?? "[]", true);
+        $lang_info["redirects"] = $redirects;
+
+        $result[] = $lang_info;
+    }
+    return $result;
+}
 
 function leaderboard_table_format($data)
 {

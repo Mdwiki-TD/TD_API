@@ -16,6 +16,7 @@ use function API\Helps\add_limit;
 use function API\Helps\add_offset;
 use function API\Qids\qids_qua;
 use function API\Leaderboard\leaderboard_table_format;
+use function API\Leaderboard\langs_format;
 use function API\Status\make_status_query;
 use function API\TitlesInfos\titles_query;
 use function API\TitlesInfos\mdwiki_revids;
@@ -217,7 +218,7 @@ switch ($get) {
 
     case 'langs':
         $qua = <<<SQL
-            SELECT code, autonym, name
+            SELECT code, autonym, name, redirects
             FROM langs
         SQL;
         break;
@@ -508,6 +509,10 @@ $qua = preg_replace("/ +/", " ", $qua);
 switch ($get) {
     case 'leaderboard_table_formated':
         $results = leaderboard_table_format($results);
+        break;
+
+    case 'langs':
+        $results = langs_format($results);
         break;
 }
 

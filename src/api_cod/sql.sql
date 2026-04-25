@@ -78,6 +78,7 @@ CREATE TABLE langs (
         code varchar(20) NOT NULL,
         autonym varchar(70) NOT NULL,
         name varchar(70) NOT NULL,
+        redirects json DEFAULT NULL,
         PRIMARY KEY (lang_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
