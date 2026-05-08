@@ -140,7 +140,7 @@ if ($_SERVER['SERVER_NAME'] !== 'localhost') {
 
 #### 1. New Connection on Every Query (sql.php:262)
 ```php
-$db = new Database($_SERVER['SERVER_NAME'] ?? '', $dbname);
+$db = new Database('DB_NAME');
 $results = $db->fetchquery($sql_query, $params);
 $db = null;
 ```
@@ -781,7 +781,7 @@ function fetch_query_new(string $sql, array $params, string $endpointName, bool 
     }
 
     $dbname = get_dbname($endpointName);
-    $config = DatabaseConfig::fromEnvironment($_SERVER['SERVER_NAME'] ?? '', $dbname);
+    $config = DatabaseConfig::fromEnvironment('DB_NAME');
     $db = new Database($config);
 
     try {
