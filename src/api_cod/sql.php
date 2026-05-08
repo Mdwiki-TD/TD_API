@@ -208,34 +208,6 @@ function add_to_apcu($sql_query, $params, $results)
     apcu_store($cache_key, $results, $cache_ttl);
 }
 
-function get_dbname($table_name)
-{
-    // Load from configuration file or define as class constant
-    $table_db_mapping = [
-        'DB_NAME_NEW' => [
-            "missing",
-            "missing_by_qids",
-            "exists_by_qids",
-            "publish_reports",
-            "login_attempts",
-            "logins",
-            "publish_reports_stats",
-            "all_qids_titles"
-        ],
-        'DB_NAME' => [] // default
-    ];
-
-    if ($table_name) {
-        foreach ($table_db_mapping as $db => $tables) {
-            if (in_array($table_name, $tables)) {
-                return $db;
-            }
-        }
-    }
-
-    return 'DB_NAME'; // default
-}
-
 function fetch_query_new($sql_query, $params, $get)
 {
     if ($get != 'settings' && isset($_REQUEST['apcu'])) {
@@ -246,10 +218,8 @@ function fetch_query_new($sql_query, $params, $get)
         }
     }
     // ---
-    $dbname_var = get_dbname($get);
-    // ---
     // Create a new database object
-    $db = new Database($dbname_var);
+    $db = new Database('DB_NAME');
 
     // Execute a SQL query
     $results = $db->fetchquery($sql_query, $params);
