@@ -55,7 +55,7 @@ $get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_FULL_SPECIAL_CHARS); //$_G
 $qua = "";
 $query = "";
 $params = [];
-$results = [];
+
 $error_results = [];
 $execution_time = 0;
 
@@ -496,7 +496,9 @@ switch ($get) {
 }
 $source = "db";
 
-if ($results === [] && ($qua !== "" || $query !== "")) {
+$results = [];
+
+if ($qua !== "" || $query !== "") {
     // ---
     $start_time = microtime(true);
     // ---
