@@ -350,15 +350,6 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-    `users_list` (
-        `user_id` int,
-        `username` varchar(255),
-        `wiki` varchar(255),
-        `user_group` varchar(120),
-        `reg_date` timestamp
-    );
-
-CREATE TABLE
     `users_no_inprocess` (
         `id` int unsigned NOT NULL AUTO_INCREMENT,
         `user` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -423,18 +414,6 @@ from
         )
         left join `all_articles` `aa` on ((`aa`.`article_id` = `q`.`title`))
     );
-
-DROP TABLE IF EXISTS `users_list`;
-
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `users_list` AS
-select
-    `users`.`user_id` AS `user_id`,
-    `users`.`username` AS `username`,
-    `users`.`wiki` AS `wiki`,
-    `users`.`user_group` AS `user_group`,
-    `users`.`reg_date` AS `reg_date`
-from
-    `users`;
 
 DROP TABLE IF EXISTS `views_new_all`;
 

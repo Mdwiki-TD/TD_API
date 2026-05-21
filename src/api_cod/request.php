@@ -108,7 +108,7 @@ switch ($get) {
         break;
 
     case 'users':
-        $query = "SELECT username FROM users_list";
+        $query = "SELECT username FROM users";
         if (isset($_GET['userlike']) && $_GET['userlike'] != 'false' && $_GET['userlike'] != '0') {
             $added = filter_input(INPUT_GET, 'userlike', FILTER_SANITIZE_SPECIAL_CHARS);
             if ($added !== null) {
@@ -149,7 +149,7 @@ switch ($get) {
         $query = "SELECT p.title,
             p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, p.user, u.user_group, LEFT(p.pupdate, 7) as m, v.views
             FROM pages p
-            LEFT JOIN users_list u
+            LEFT JOIN users u
                 ON p.user = u.username
             LEFT JOIN views_new_all v
                 ON p.target = v.target
