@@ -23,6 +23,7 @@ use function API\TitlesInfos\mdwiki_revids;
 use function API\Missing\missing_query;
 use function API\Missing\exists_by_qids_query;
 use function API\Missing\missing_exists_statics;
+use function API\Missing\exists_statics_by_category;
 use function API\Missing\missing_by_lang_and_category;
 use function API\Missing\exists_by_lang_and_category;
 use function API\Missing\missing_by_qids_query;
@@ -90,6 +91,10 @@ switch ($get) {
 
     case 'missing_exists_statics':
         list($query, $params) = missing_exists_statics($endpoint_params);
+        break;
+
+    case 'exists_statics_by_category':
+        list($query, $params) = exists_statics_by_category($endpoint_params);
         break;
 
     case 'exists_by_lang_and_category':

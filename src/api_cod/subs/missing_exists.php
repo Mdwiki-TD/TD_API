@@ -128,17 +128,17 @@ function missing_exists_statics($endpoint_params)
             FROM category_members
             WHERE category = ?
         ) total
-        LEFT JOIN langs la ON la.code = a.code
+        JOIN langs la ON la.code = a.code
         WHERE
             a.article_id IN (
                 SELECT c.article_id
                 FROM category_members c
                 WHERE c.category = ?
             )
+        AND la.autonym IS NOT NULL
         GROUP BY
             a.code, la.autonym, la.name, total.total_rtt
-        ORDER BY
-            available_title_count DESC;
+        ORDER BY 4 DESC;
     SQL;
     // ---
     $params = [$category, $category];
@@ -147,6 +147,51 @@ function missing_exists_statics($endpoint_params)
     // ---
 }
 
+
+
+function exists_statics_by_category($endpoint_params)
+{
+    // ---
+    // NOTE: not ready yet
+    // ---
+    $category   = sanitize_input($_GET['category'] ?? '', '/^[a-zA-Z ]+$/');
+    // ---
+    if ($category === null) {
+        $category = "RTT";
+    }
+    // ---
+    $qua = <<<SQL
+        SELECT
+            t.code AS language_code,
+            la.autonym AS autonym,
+            la.name AS language_name,
+            COUNT(DISTINCT c.article_id) AS available_title_count,
+            (total.total_rtt - COUNT(c.article_id)) AS missing_title_count,
+            total.total_rtt as total
+        FROM
+            category_members c
+        CROSS JOIN (
+            SELECT COUNT(DISTINCT article_id) AS total_rtt
+            FROM category_members
+            WHERE category = ?
+        ) total
+            LEFT JOIN qids q ON q.title = c.article_id
+            INNER JOIN all_exists t ON t.article_id = c.article_id
+            INNER JOIN all_qids_exists aqe ON aqe.qid = q.qid AND aqe.code = t.code
+            JOIN langs la ON la.code = t.code
+        WHERE
+            c.category = ?
+        AND la.autonym IS NOT NULL
+        GROUP BY
+            t.code, la.autonym, la.name, total.total_rtt
+        ORDER BY 4 DESC;
+    SQL;
+    // ---
+    $params = [$category, $category];
+    // ---
+    return [$qua, $params];
+    // ---
+}
 
 function missing_by_lang_and_category($endpoint_params)
 {
