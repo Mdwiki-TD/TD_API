@@ -399,33 +399,27 @@ CREATE TABLE
         KEY `idx_words_w_title` (`w_title`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
-DROP TABLE IF EXISTS `all_qids_titles`;
-
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `all_qids_titles` AS
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW all_qids_titles AS
 select
-    `qq`.`qid` AS `qid`,
-    `q`.`title` AS `title`,
-    `aa`.`category` AS `category`
+    qq.qid AS qid,
+    q.title AS title,
+    aa.category AS category
 from
-    (
-        (
-            `all_qids` `qq`
-            left join `qids` `q` on ((`qq`.`qid` = `q`.`qid`))
-        )
-        left join `all_articles` `aa` on ((`aa`.`article_id` = `q`.`title`))
-    );
+    all_qids qq
+    left join qids q on qq.qid = q.qid
+    left join all_articles aa on aa.article_id = q.title;
 
-DROP TABLE IF EXISTS `views_new_all`;
+DROP TABLE IF EXISTS views_new_all;
 
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `views_new_all` AS
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW views_new_all AS
 select
-    `v`.`target` AS `target`,
-    `v`.`lang` AS `lang`,
-    sum(`v`.`views`) AS `views`
+    v.target AS target,
+    v.lang AS lang,
+    sumv.views AS views
 from
-    `views_new` `v`
+    views_new v
 group by
-    `v`.`target`,
-    `v`.`lang`;
+    v.target,
+    v.lang;
 
 -- 2026-05-21 02:23:09 UTC

@@ -15,6 +15,20 @@ use function API\Helps\sanitize_input;
 function missing_query($endpoint_params)
 {
     // ---
+    $lang_code  = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $category   = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    // ---
+    if ($lang_code === null) {
+        $error = "lang is missing";
+        return ["", [], $error];
+    };
+    // ---
+    if ($category === null) {
+        $category = "RTT";
+    }
+    // ---
+    $params = [$lang_code, $category];
+    // ---
     $query = <<<SQL
         SELECT q.qid, aa.article_id as title, aa.category
             FROM all_articles aa
@@ -23,30 +37,31 @@ function missing_query($endpoint_params)
                 SELECT 1
                 FROM all_exists t
                 WHERE t.article_id = aa.article_id
+                AND t.code = ?
+            )
+            AND aa.category = ?
 
     SQL;
-    $params = [];
-    if (isset($_GET['lang'])) {
-        $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if ($added !== null) {
-            $query .= " AND t.code = ?";
-            $params[] = $added;
-        }
-    }
-    $query .= ")";
-    if (isset($_GET['category'])) {
-        $added = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if ($added !== null) {
-            $query .= " AND aa.category = ?";
-            $params[] = $added;
-        }
-    }
     // ---
-    return [$query, $params];
+    return [$query, $params, ""];
 }
 
 function missing_by_qids_query($endpoint_params)
 {
+    // ---
+    $lang_code  = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $category   = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    // ---
+    if ($lang_code === null) {
+        $error = "lang is missing";
+        return ["", [], $error];
+    };
+    // ---
+    if ($category === null) {
+        $category = "RTT";
+    }
+    // ---
+    $params = [$lang_code, $category];
     // ---
     $query = <<<SQL
         SELECT a.qid, a.title, a.category
@@ -55,26 +70,13 @@ function missing_by_qids_query($endpoint_params)
                 SELECT 1
                 FROM all_qids_exists t
                 WHERE t.qid = a.qid
+                AND t.code = ?
+            )
+            AND a.category = ?
 
     SQL;
-    $params = [];
-    if (isset($_GET['lang'])) {
-        $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if ($added !== null) {
-            $query .= " AND t.code = ?";
-            $params[] = $added;
-        }
-    }
-    $query .= ")";
-    if (isset($_GET['category'])) {
-        $added = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if ($added !== null) {
-            $query .= " AND a.category = ?";
-            $params[] = $added;
-        }
-    }
     // ---
-    return [$query, $params];
+    return [$query, $params, ""];
 }
 
 
@@ -268,8 +270,6 @@ function exists_by_lang_and_category($endpoint_params)
     $lang_code  = sanitize_input($_GET['lang'] ?? '', '/^[a-zA-Z ]+$/');
     $category   = sanitize_input($_GET['category'] ?? '', '/^[a-zA-Z ]+$/');
     // ---
-    $error = "";
-    // ---
     if ($lang_code === null) {
         $error = "lang is missing";
         return ["", [], $error];
@@ -310,6 +310,6 @@ function exists_by_lang_and_category($endpoint_params)
     // ---
     $params = [$category, $lang_code];
     // ---
-    return [$qua, $params, $error];
+    return [$qua, $params, ""];
     // ---
 }

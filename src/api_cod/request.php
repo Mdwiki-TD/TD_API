@@ -78,11 +78,12 @@ $get_group_value = filter_input(INPUT_GET, 'group', FILTER_SANITIZE_FULL_SPECIAL
 switch ($get) {
 
     case 'missing':
-        list($query, $params) = missing_query($endpoint_params);
+        list($query, $params, $error) = missing_query($endpoint_params);
         break;
 
     case 'missing_by_qids':
-        list($query, $params) = missing_by_qids_query($endpoint_params);
+        list($query, $params, $error) = missing_by_qids_query($endpoint_params);
+
         break;
 
     case 'exists_by_qids':
@@ -99,12 +100,12 @@ switch ($get) {
 
     case 'exists_by_lang_and_category':
         list($query, $params, $error) = exists_by_lang_and_category($endpoint_params);
-        if ($error) $error_results = ["error" => $error];
+
         break;
 
     case 'missing_by_lang_and_category':
         list($query, $params, $error) = missing_by_lang_and_category($endpoint_params);
-        if ($error) $error_results = ["error" => $error];
+
         break;
 
     case 'users':
@@ -494,6 +495,7 @@ switch ($get) {
         $error_results = ["error" => "invalid get request"];
         break;
 }
+
 $source = "db";
 
 $results = [];
@@ -551,6 +553,9 @@ $out = [
     "supported_params" => [],
     "supported_values" => [],
 ];
+
+if ($error) $error_results = ["error" => $error];
+
 if ($error_results) {
     $out["error"] = $error_results;
 }
