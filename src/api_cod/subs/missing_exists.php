@@ -101,6 +101,16 @@ function exists_by_qids_query($endpoint_params)
     // ---
     // exists_by_qids
     // ---
+    /*
+        [
+            { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
+            { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
+            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
+            { "name": "target", "column": "t.target", "type": "text", "placeholder": "Target" },
+            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "no_select": true }
+        ]
+      */
+    // ---
     $qua = <<<SQL
         SELECT
             a.qid AS qid,
