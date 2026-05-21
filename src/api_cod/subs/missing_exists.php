@@ -16,12 +16,13 @@ function missing_query($endpoint_params)
 {
     // ---
     $query = <<<SQL
-        SELECT a.qid, a.title, a.category
-            FROM all_articles_titles a
+        SELECT q.qid, aa.article_id as title, aa.category
+            FROM all_articles aa
+            left join qids q on aa.article_id = q.title
             WHERE NOT EXISTS (
                 SELECT 1
                 FROM all_exists t
-                WHERE t.article_id = a.title
+                WHERE t.article_id = aa.article_id
 
     SQL;
     $params = [];
@@ -36,7 +37,7 @@ function missing_query($endpoint_params)
     if (isset($_GET['category'])) {
         $added = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if ($added !== null) {
-            $query .= " AND a.category = ?";
+            $query .= " AND aa.category = ?";
             $params[] = $added;
         }
     }

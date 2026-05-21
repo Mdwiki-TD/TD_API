@@ -109,8 +109,7 @@
                 "column": "order",
                 "type": "text",
                 "placeholder": "Order by",
-                "no_select": true,
-                "default": "a.title"
+                "no_select": true
             }
         ]
     },

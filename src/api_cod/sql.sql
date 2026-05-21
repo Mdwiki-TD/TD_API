@@ -40,13 +40,6 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-    `all_articles_titles` (
-        `qid` varchar(120),
-        `title` varchar(255),
-        `category` varchar(255)
-    );
-
-CREATE TABLE
     `all_exists` (
         `id` int NOT NULL AUTO_INCREMENT,
         `article_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -426,19 +419,6 @@ CREATE TABLE
         UNIQUE KEY `w_title` (`w_title`),
         KEY `idx_words_w_title` (`w_title`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-DROP TABLE IF EXISTS `all_articles_titles`;
-
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `all_articles_titles` AS
-select
-    `q`.`qid` AS `qid`,
-    `aa`.`article_id` AS `title`,
-    `aa`.`category` AS `category`
-from
-    (
-        `all_articles` `aa`
-        left join `qids` `q` on ((`aa`.`article_id` = `q`.`title`))
-    );
 
 DROP TABLE IF EXISTS `all_qids_titles`;
 
