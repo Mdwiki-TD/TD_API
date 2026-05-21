@@ -49,6 +49,15 @@ function missing_query($endpoint_params)
 function missing_by_qids_query($endpoint_params)
 {
     // ---
+    /*
+    [
+        { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
+        { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
+        { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
+        { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "default": "a.title", "no_select": true }
+    ]
+      */
+    // ---
     $lang_code  = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $category   = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     // ---

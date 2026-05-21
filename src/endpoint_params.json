@@ -135,14 +135,6 @@
                 "column": "campaign",
                 "type": "text",
                 "placeholder": "Campaign"
-            },
-            {
-                "name": "order",
-                "column": "order",
-                "type": "text",
-                "placeholder": "Order by",
-                "default": "a.title",
-                "no_select": true
             }
         ]
     },
