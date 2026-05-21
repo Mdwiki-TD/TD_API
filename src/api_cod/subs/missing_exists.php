@@ -93,10 +93,15 @@ function exists_by_qids_query($endpoint_params)
     // exists_by_qids
     // ---
     $qua = <<<SQL
-        SELECT a.qid, a.title, a.category, t.code, t.target
-            FROM all_qids_titles a
-            JOIN all_qids_exists t
-            ON t.qid = a.qid
+        SELECT
+            a.qid AS qid,
+            a.title AS title,
+            a.category AS category,
+            t.code AS code,
+            t.target AS target
+        FROM all_qids_titles a
+            JOIN all_qids_exists t ON t.qid = a.qid
+
     SQL;
     // ---
     list($qua, $params) = add_li_params($qua, [], $endpoint_params);
@@ -107,6 +112,9 @@ function exists_by_qids_query($endpoint_params)
     if ($category === null && $campaign !== null) {
         $qua .= " AND a.category IN (SELECT category FROM categories WHERE campaign = ?)";
         $params[] = $campaign;
+    } elseif ($category !== null) {
+        $qua .= " AND a.category = ?";
+        $params[] = $category;
     }
     // ---
     return [$qua, $params];
