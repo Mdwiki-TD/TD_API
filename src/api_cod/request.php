@@ -22,6 +22,8 @@ use function API\TitlesInfos\titles_query;
 use function API\TitlesInfos\mdwiki_revids;
 use function API\Missing\missing_query;
 use function API\Missing\exists_by_qids_query;
+use function API\Missing\missing_exists_statics;
+use function API\Missing\missing_by_lang_and_category;
 use function API\Missing\missing_by_qids_query;
 use function API\SelectHelps\get_select;
 use function API\Top\top_langs;
@@ -52,6 +54,7 @@ $qua = "";
 $query = "";
 $params = [];
 $results = [];
+$error_results = [];
 $execution_time = 0;
 
 // load endpoint_params.json
@@ -82,6 +85,15 @@ switch ($get) {
 
     case 'exists_by_qids':
         list($query, $params) = exists_by_qids_query($endpoint_params);
+        break;
+
+    case 'missing_exists_statics':
+        list($query, $params) = missing_exists_statics($endpoint_params);
+        break;
+
+    case 'missing_by_lang_and_category':
+        list($query, $params, $error) = missing_by_lang_and_category($endpoint_params);
+        if ($error) $error_results = ["error" => $error];
         break;
 
     case 'users':
@@ -468,7 +480,7 @@ switch ($get) {
             list($query, $params) = add_li_params($query, [], $endpoint_params);
             break;
         }
-        $results = ["error" => "invalid get request"];
+        $error_results = ["error" => "invalid get request"];
         break;
 }
 $source = "db";
@@ -526,7 +538,9 @@ $out = [
     "supported_params" => [],
     "supported_values" => [],
 ];
-
+if ($error_results) {
+    $out["error"] = $error_results;
+}
 // if server is localhost then add query to out
 if ($_SERVER['SERVER_NAME'] !== 'localhost') {
     // remove query from $out

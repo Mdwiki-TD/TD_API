@@ -802,6 +802,61 @@
                 }
             }
         },
+        "/api.php?get=missing_exists_statics": {
+            "get": {
+                "summary": "Retrieve missing statics",
+                "description": "Corresponds to calling `api.php?get=missing_exists_statics` with query parameters.",
+                "tags": [
+                    "pages_infos"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "category",
+                        "description": "Category",
+                        "required": false,
+                        "schema": {
+                            "default": "RTT",
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=missing_by_lang_and_category": {
+            "get": {
+                "summary": "Retrieve missing statics by language and category",
+                "description": "Corresponds to calling `api.php?get=missing_by_lang_and_category` with query parameters.",
+                "tags": [
+                    "pages_infos"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "in": "query",
+                        "name": "category",
+                        "description": "Category",
+                        "required": false,
+                        "schema": {
+                            "default": "RTT",
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
         "/api.php?get=exists_by_qids": {
             "get": {
                 "summary": "Retrieve exists pages",

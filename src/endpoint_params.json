@@ -147,6 +147,41 @@
             }
         ]
     },
+    "missing_exists_statics": {
+        "columns": [],
+        "params": [
+            {
+                "name": "category",
+                "column": "a.category",
+                "type": "text",
+                "placeholder": "Category",
+                "default": "RTT",
+                "no_mt_options": true,
+                "required": true
+            }
+        ]
+    },
+    "missing_by_lang_and_category": {
+        "columns": [],
+        "params": [
+            {
+                "name": "lang",
+                "column": "t.code",
+                "type": "text",
+                "placeholder": "Language code",
+                "no_mt_options": true,
+                "required": true
+            },
+            {
+                "name": "category",
+                "column": "a.category",
+                "type": "text",
+                "placeholder": "Category",
+                "default": "RTT",
+                "no_mt_options": true
+            }
+        ]
+    },
     "exists_by_qids": {
         "columns": [],
         "params": [

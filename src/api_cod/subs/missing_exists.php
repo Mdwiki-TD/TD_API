@@ -102,3 +102,90 @@ function exists_by_qids_query($endpoint_params)
     return [$qua, $params];
     // ---
 }
+
+
+function missing_exists_statics($endpoint_params)
+{
+    // ---
+    $category   = sanitize_input($_GET['category'] ?? '', '/^[a-zA-Z ]+$/');
+    // ---
+    if ($category === null) {
+        $category = "RTT";
+    }
+    // ---
+    $qua = <<<SQL
+        SELECT
+            a.code AS language_code,
+            la.autonym AS autonym,
+            la.name AS language_name,
+            COUNT(a.article_id) AS available_title_count,
+            (total.total_rtt - COUNT(a.article_id)) AS missing_title_count,
+            total.total_rtt as total
+        FROM
+            all_exists a
+        CROSS JOIN (
+            SELECT COUNT(DISTINCT article_id) AS total_rtt
+            FROM category_members
+            WHERE category = ?
+        ) total
+        LEFT JOIN langs la ON la.code = a.code
+        WHERE
+            a.article_id IN (
+                SELECT c.article_id
+                FROM category_members c
+                WHERE c.category = ?
+            )
+        GROUP BY
+            a.code, la.autonym, la.name, total.total_rtt
+        ORDER BY
+            available_title_count DESC;
+    SQL;
+    // ---
+    $params = [$category, $category];
+    // ---
+    return [$qua, $params];
+    // ---
+}
+
+
+function missing_by_lang_and_category($endpoint_params)
+{
+    // ---
+    $lang_code  = sanitize_input($_GET['lang'] ?? '', '/^[a-zA-Z ]+$/');
+    $category   = sanitize_input($_GET['category'] ?? '', '/^[a-zA-Z ]+$/');
+    // ---
+    $error = "";
+    // ---
+    if ($lang_code === null) {
+        $error = "lang is missing";
+        return ["", [], $error];
+    };
+    // ---
+    if ($category === null) {
+        $category = "RTT";
+    }
+    // ---
+    $qua = <<<SQL
+        SELECT
+            c.article_id
+        FROM
+            category_members c
+        WHERE
+            c.category = ?
+            AND NOT EXISTS (
+                SELECT
+                    1
+                FROM
+                    all_exists t
+                WHERE
+                    t.article_id = c.article_id
+                AND
+                t.code = ?
+            )
+    SQL;
+    // ---
+    $params = [$category, $lang_code];
+    // ---
+    return [$qua, $params, $error];
+    // ---
+}
