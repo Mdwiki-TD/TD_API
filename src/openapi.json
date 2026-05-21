@@ -857,6 +857,35 @@
                 }
             }
         },
+        "/api.php?get=exists_by_lang_and_category": {
+            "get": {
+                "summary": "Retrieve exists statics by language and category",
+                "description": "Corresponds to calling `api.php?get=exists_by_lang_and_category` with query parameters.",
+                "tags": [
+                    "pages_infos"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "in": "query",
+                        "name": "category",
+                        "description": "Category",
+                        "required": false,
+                        "schema": {
+                            "default": "RTT",
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
         "/api.php?get=exists_by_qids": {
             "get": {
                 "summary": "Retrieve exists pages",

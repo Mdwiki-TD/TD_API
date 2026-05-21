@@ -167,21 +167,82 @@ function missing_by_lang_and_category($endpoint_params)
     // ---
     $qua = <<<SQL
         SELECT
-            c.article_id
+            c.article_id AS title,
+            c.category AS category,
+            ti.importance,
+            ti.r_lead_refs,
+            ti.r_all_refs,
+            ti.en_views,
+            ti.w_lead_words,
+            ti.w_all_words,
+            ti.qid
         FROM
             category_members c
+        LEFT JOIN
+            titles_infos ti ON ti.title = c.article_id
         WHERE
             c.category = ?
-            AND NOT EXISTS (
-                SELECT
-                    1
-                FROM
-                    all_exists t
-                WHERE
-                    t.article_id = c.article_id
-                AND
-                t.code = ?
-            )
+        AND NOT EXISTS (
+            SELECT
+                1
+            FROM
+                all_exists t
+            WHERE
+                t.article_id = c.article_id
+                AND t.code = ?
+        )
+        /* to work with valid langs */
+        AND EXISTS ( SELECT 1 FROM langs la WHERE la.code = ? )
+    SQL;
+    // ---
+    $params = [$category, $lang_code, $lang_code];
+    // ---
+    return [$qua, $params, $error];
+    // ---
+}
+
+
+function exists_by_lang_and_category($endpoint_params)
+{
+    // ---
+    $lang_code  = sanitize_input($_GET['lang'] ?? '', '/^[a-zA-Z ]+$/');
+    $category   = sanitize_input($_GET['category'] ?? '', '/^[a-zA-Z ]+$/');
+    // ---
+    $error = "";
+    // ---
+    if ($lang_code === null) {
+        $error = "lang is missing";
+        return ["", [], $error];
+    };
+    // ---
+    if ($category === null) {
+        $category = "RTT";
+    }
+    // ---
+    $qua = <<<SQL
+        SELECT
+            c.article_id AS title,
+            c.category AS category,
+            ti.importance,
+            ti.r_lead_refs,
+            ti.r_all_refs,
+            ti.en_views,
+            ti.w_lead_words,
+            ti.w_all_words,
+            ti.qid,
+            aq.target
+        FROM
+            category_members c
+        JOIN
+            all_exists t ON t.article_id = c.article_id
+        LEFT JOIN
+            titles_infos ti ON ti.title = c.article_id
+        LEFT JOIN
+            all_qids_exists aq ON aq.qid = ti.qid
+        WHERE
+            c.category = ?
+        AND t.code = ?
+        AND t.code = aq.code
     SQL;
     // ---
     $params = [$category, $lang_code];

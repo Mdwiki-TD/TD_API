@@ -4,6 +4,7 @@
         "missing_by_qids",
         "missing_exists_statics",
         "missing_by_lang_and_category",
+        "exists_by_lang_and_category",
         "exists_by_qids",
         "titles",
         "assessments",

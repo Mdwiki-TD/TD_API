@@ -24,6 +24,7 @@ use function API\Missing\missing_query;
 use function API\Missing\exists_by_qids_query;
 use function API\Missing\missing_exists_statics;
 use function API\Missing\missing_by_lang_and_category;
+use function API\Missing\exists_by_lang_and_category;
 use function API\Missing\missing_by_qids_query;
 use function API\SelectHelps\get_select;
 use function API\Top\top_langs;
@@ -89,6 +90,11 @@ switch ($get) {
 
     case 'missing_exists_statics':
         list($query, $params) = missing_exists_statics($endpoint_params);
+        break;
+
+    case 'exists_by_lang_and_category':
+        list($query, $params, $error) = exists_by_lang_and_category($endpoint_params);
+        if ($error) $error_results = ["error" => $error];
         break;
 
     case 'missing_by_lang_and_category':
