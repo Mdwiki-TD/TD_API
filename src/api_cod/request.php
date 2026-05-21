@@ -22,6 +22,10 @@ use function API\TitlesInfos\titles_query;
 use function API\TitlesInfos\mdwiki_revids;
 use function API\Missing\missing_query;
 use function API\Missing\exists_by_qids_query;
+use function API\Missing\missing_exists_statics;
+use function API\Missing\exists_statics_by_category;
+use function API\Missing\missing_by_lang_and_category;
+use function API\Missing\exists_by_lang_and_category;
 use function API\Missing\missing_by_qids_query;
 use function API\SelectHelps\get_select;
 use function API\Top\top_langs;
@@ -51,7 +55,8 @@ $get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_FULL_SPECIAL_CHARS); //$_G
 $qua = "";
 $query = "";
 $params = [];
-$results = [];
+
+$error_results = [];
 $execution_time = 0;
 
 // load endpoint_params.json
@@ -73,19 +78,38 @@ $get_group_value = filter_input(INPUT_GET, 'group', FILTER_SANITIZE_FULL_SPECIAL
 switch ($get) {
 
     case 'missing':
-        list($query, $params) = missing_query($endpoint_params);
+        list($query, $params, $error) = missing_query($endpoint_params);
         break;
 
     case 'missing_by_qids':
-        list($query, $params) = missing_by_qids_query($endpoint_params);
+        list($query, $params, $error) = missing_by_qids_query($endpoint_params);
+
         break;
 
     case 'exists_by_qids':
         list($query, $params) = exists_by_qids_query($endpoint_params);
         break;
 
+    case 'missing_exists_statics':
+        list($query, $params) = missing_exists_statics($endpoint_params);
+        break;
+
+    case 'exists_statics_by_category':
+        list($query, $params) = exists_statics_by_category($endpoint_params);
+        break;
+
+    case 'exists_by_lang_and_category':
+        list($query, $params, $error) = exists_by_lang_and_category($endpoint_params);
+
+        break;
+
+    case 'missing_by_lang_and_category':
+        list($query, $params, $error) = missing_by_lang_and_category($endpoint_params);
+
+        break;
+
     case 'users':
-        $query = "SELECT username FROM users_list";
+        $query = "SELECT username FROM users";
         if (isset($_GET['userlike']) && $_GET['userlike'] != 'false' && $_GET['userlike'] != '0') {
             $added = filter_input(INPUT_GET, 'userlike', FILTER_SANITIZE_SPECIAL_CHARS);
             if ($added !== null) {
@@ -126,7 +150,7 @@ switch ($get) {
         $query = "SELECT p.title,
             p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, p.user, u.user_group, LEFT(p.pupdate, 7) as m, v.views
             FROM pages p
-            LEFT JOIN users_list u
+            LEFT JOIN users u
                 ON p.user = u.username
             LEFT JOIN views_new_all v
                 ON p.target = v.target
@@ -468,12 +492,15 @@ switch ($get) {
             list($query, $params) = add_li_params($query, [], $endpoint_params);
             break;
         }
-        $results = ["error" => "invalid get request"];
+        $error_results = ["error" => "invalid get request"];
         break;
 }
+
 $source = "db";
 
-if ($results === [] && ($qua !== "" || $query !== "")) {
+$results = [];
+
+if ($qua !== "" || $query !== "") {
     // ---
     $start_time = microtime(true);
     // ---
@@ -527,6 +554,11 @@ $out = [
     "supported_values" => [],
 ];
 
+if ($error) $error_results = ["error" => $error];
+
+if ($error_results) {
+    $out["error"] = $error_results;
+}
 // if server is localhost then add query to out
 if ($_SERVER['SERVER_NAME'] !== 'localhost') {
     // remove query from $out
