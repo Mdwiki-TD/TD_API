@@ -328,18 +328,6 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-    `titles_infos` (
-        `title` varchar(120),
-        `importance` varchar(120),
-        `r_lead_refs` int,
-        `r_all_refs` int,
-        `en_views` int,
-        `w_lead_words` int,
-        `w_all_words` int,
-        `qid` varchar(120)
-    );
-
-CREATE TABLE
     `translate_type` (
         `tt_id` int unsigned NOT NULL AUTO_INCREMENT,
         `tt_title` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -434,33 +422,6 @@ from
             left join `qids` `q` on ((`qq`.`qid` = `q`.`qid`))
         )
         left join `all_articles` `aa` on ((`aa`.`article_id` = `q`.`title`))
-    );
-
-DROP TABLE IF EXISTS `titles_infos`;
-
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `titles_infos` AS
-select
-    `ase`.`title` AS `title`,
-    `ase`.`importance` AS `importance`,
-    `rc`.`r_lead_refs` AS `r_lead_refs`,
-    `rc`.`r_all_refs` AS `r_all_refs`,
-    `ep`.`en_views` AS `en_views`,
-    `w`.`w_lead_words` AS `w_lead_words`,
-    `w`.`w_all_words` AS `w_all_words`,
-    `q`.`qid` AS `qid`
-from
-    (
-        (
-            (
-                (
-                    `assessments` `ase`
-                    left join `enwiki_pageviews` `ep` on ((`ase`.`title` = `ep`.`title`))
-                )
-                left join `qids` `q` on ((`q`.`title` = `ase`.`title`))
-            )
-            left join `refs_counts` `rc` on ((`rc`.`r_title` = `ase`.`title`))
-        )
-        left join `words` `w` on ((`w`.`w_title` = `ase`.`title`))
     );
 
 DROP TABLE IF EXISTS `users_list`;

@@ -31,15 +31,24 @@ function titles_query($endpoint_params)
 {
     // ---
     $qua = <<<SQL
-        SELECT title, importance, r_lead_refs, r_all_refs, en_views, w_lead_words, w_all_words, qid
-        FROM titles_infos
+        select
+            ase.title AS title,
+            ase.importance AS importance,
+            rc.r_lead_refs AS r_lead_refs,
+            rc.r_all_refs AS r_all_refs,
+            ep.en_views AS en_views,
+            w.w_lead_words AS w_lead_words,
+            w.w_all_words AS w_all_words,
+            q.qid AS qid
+        from
+            assessments ase
+            left join enwiki_pageviews ep on ase.title = ep.title
+            left join qids q on q.title = ase.title
+            left join refs_counts rc on rc.r_title = ase.title
+            left join words w on w.w_title = ase.title
     SQL;
     // ---
-    // list($qua, $params) = add_li_params($qua, [], $endpoint_params, ['titles']);
-    // ---
     list($qua, $params) = add_li_params($qua, [], $endpoint_params);
-    // ---
-    // list($qua, $params) = add_array_params($qua, $params, 'titles', 'title');
     // ---
     return [$qua, $params];
 }
