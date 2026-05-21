@@ -18,7 +18,7 @@ function missing_query($endpoint_params)
     $query = <<<SQL
         SELECT q.qid, aa.article_id as title, aa.category
             FROM all_articles aa
-            left join qids q on aa.article_id = q.title
+            LEFT JOIN qids q on aa.article_id = q.title
             WHERE NOT EXISTS (
                 SELECT 1
                 FROM all_exists t
@@ -176,10 +176,10 @@ function exists_statics_by_category($endpoint_params)
             FROM category_members
             WHERE category = ?
         ) total
-            LEFT JOIN qids q ON q.title = c.article_id
-            INNER JOIN all_exists t ON t.article_id = c.article_id
-            INNER JOIN all_qids_exists aqe ON aqe.qid = q.qid AND aqe.code = t.code
-            JOIN langs la ON la.code = t.code
+            LEFT JOIN qids q                ON q.title = c.article_id
+            INNER JOIN all_exists t         ON t.article_id = c.article_id
+            INNER JOIN all_qids_exists aqe  ON aqe.qid = q.qid AND aqe.code = t.code
+            JOIN langs la                   ON la.code = t.code
         WHERE
             c.category = ?
         AND la.autonym IS NOT NULL
@@ -225,11 +225,11 @@ function missing_by_lang_and_category($endpoint_params)
         FROM
             category_members c
 
-        left join assessments ase on ase.title = c.article_id
-        left join enwiki_pageviews ep on ep.title = c.article_id
-        left join qids q on q.title = c.article_id
-        left join refs_counts rc on rc.r_title = c.article_id
-        left join words w on w.w_title = c.article_id
+        LEFT JOIN assessments ase       ON ase.title = c.article_id
+        LEFT JOIN enwiki_pageviews ep   ON ep.title = c.article_id
+        LEFT JOIN qids q                ON q.title = c.article_id
+        LEFT JOIN refs_counts rc        ON rc.r_title = c.article_id
+        LEFT JOIN words w               ON w.w_title = c.article_id
 
         WHERE
             c.category = ?
@@ -255,7 +255,7 @@ function missing_by_lang_and_category($endpoint_params)
         AND EXISTS ( SELECT 1 FROM langs la WHERE la.code = ? )
     SQL;
     // ---
-    $params = [$category, $lang_code, $lang_code,  $lang_code];
+    $params = [$category, $lang_code, $lang_code, $lang_code];
     // ---
     return [$qua, $params, $error];
     // ---
@@ -296,14 +296,12 @@ function exists_by_lang_and_category($endpoint_params)
         JOIN
             all_exists t ON t.article_id = c.article_id
 
-        left join assessments ase on ase.title = c.article_id
-        left join enwiki_pageviews ep on ep.title = c.article_id
-        left join qids q on q.title = c.article_id
-        left join refs_counts rc on rc.r_title = c.article_id
-        left join words w on w.w_title = c.article_id
-
-        LEFT JOIN
-            all_qids_exists aq ON aq.qid = q.qid
+        LEFT JOIN assessments ase       ON ase.title = c.article_id
+        LEFT JOIN enwiki_pageviews ep   ON ep.title = c.article_id
+        LEFT JOIN qids q                ON q.title = c.article_id
+        LEFT JOIN refs_counts rc        ON rc.r_title = c.article_id
+        LEFT JOIN words w               ON w.w_title = c.article_id
+        LEFT JOIN all_qids_exists aq    ON aq.qid = q.qid
         WHERE
             c.category = ?
         AND t.code = ?
