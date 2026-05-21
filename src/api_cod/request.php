@@ -404,8 +404,8 @@ switch ($get) {
             $query .= " and p.title not in (select p2.title from pages p2 WHERE p2.lang = p.lang and p2.target != '') ";
         }
         // ---
-        $campaign   = sanitize_input($_GET['campaign'] ?? '', '/^[a-zA-Z ]+$/');
-        $category   = sanitize_input($_GET['cat'] ?? '', '/^[a-zA-Z ]+$/');
+        $campaign   = sanitize_input($_GET['campaign'] ?? '', '/^[A-Za-z0-9-]+$/');
+        $category   = sanitize_input($_GET['cat'] ?? '', '/^[A-Za-z0-9-]+$/');
         // ---
         if ($category !== null) {
             $query .= " AND p.cat = ?";
@@ -444,7 +444,7 @@ switch ($get) {
         // ---
         list($query, $params) = add_li_params($qua, [], $endpoint_params);
         // ---
-        // $params = [sanitize_input($_GET['user'] ?? '', '/^[a-zA-Z ]+$/')];
+        // $params = [sanitize_input($_GET['user'] ?? '', '/^[A-Za-z0-9-]+$/')];
         // ---
         break;
 

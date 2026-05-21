@@ -32,15 +32,15 @@ function make_status_query($endpoint_params)
         $qu_ery .= " AND YEAR(p.pupdate) = ?";
         $pa_rams[] = $added;
     }
-    $user_group = sanitize_input($_GET['user_group'] ?? '', '/^[a-zA-Z ]+$/');
+    $user_group = sanitize_input($_GET['user_group'] ?? '', '/^[A-Za-z0-9-]+$/');
     if ($user_group !== null) {
         // $qu_ery .= " AND p.user IN (SELECT username FROM users WHERE user_group = ?)";
         $qu_ery .= " AND u.user_group = ?";
         $pa_rams[] = $user_group;
     }
 
-    $campaign   = sanitize_input($_GET['campaign'] ?? '', '/^[a-zA-Z ]+$/');
-    $category   = sanitize_input($_GET['cat'] ?? '', '/^[a-zA-Z ]+$/');
+    $campaign   = sanitize_input($_GET['campaign'] ?? '', '/^[A-Za-z0-9-]+$/');
+    $category   = sanitize_input($_GET['cat'] ?? '', '/^[A-Za-z0-9-]+$/');
 
     if ($category !== null) {
         $qu_ery .= " AND p.cat = ?";
