@@ -4,46 +4,11 @@ namespace API\Missing;
 /*
 
 Usage:
-use function API\Missing\missing_query;
 use function API\Missing\exists_by_qids_query;
 
 */
 
 use function API\Helps\sanitize_input;
-
-function missing_query($endpoint_params)
-{
-    // ---
-    $lang_code  = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $category   = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    // ---
-    if ($lang_code === null) {
-        $error = "lang is missing";
-        return ["", [], $error];
-    };
-    // ---
-    if ($category === null) {
-        $category = "RTT";
-    }
-    // ---
-    $params = [$lang_code, $category];
-    // ---
-    $query = <<<SQL
-        SELECT q.qid, aa.article_id as title, aa.category
-            FROM all_articles aa
-            LEFT JOIN qids q on aa.article_id = q.title
-            WHERE NOT EXISTS (
-                SELECT 1
-                FROM all_exists t
-                WHERE t.article_id = aa.article_id
-                AND t.code = ?
-            )
-            AND aa.category = ?
-
-    SQL;
-    // ---
-    return [$query, $params, ""];
-}
 
 function exists_by_qids_query($endpoint_params)
 {
@@ -214,19 +179,17 @@ function missing_by_lang_and_category($endpoint_params)
         FROM
             category_members c
 
+        JOIN qids q                     ON q.title      = c.article_id
         LEFT JOIN assessments ase       ON ase.title    = c.article_id
         LEFT JOIN enwiki_pageviews ep   ON ep.title     = c.article_id
-        LEFT JOIN qids q                ON q.title      = c.article_id
         LEFT JOIN refs_counts rc        ON rc.r_title   = c.article_id
         LEFT JOIN words w               ON w.w_title    = c.article_id
 
         WHERE
             c.category = ?
         AND NOT EXISTS (
-            SELECT
-                1
-            FROM
-                all_qids_exists aqe
+            SELECT 1
+            FROM all_qids_exists aqe
             WHERE
                 aqe.code = ?
                 AND aqe.qid = q.qid

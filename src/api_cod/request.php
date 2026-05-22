@@ -78,14 +78,11 @@ $error = "";
 // ---
 switch ($get) {
 
-    case 'missing':
-        list($query, $params, $error) = missing_query($endpoint_params);
-        break;
-
     case 'missing_exists_statics':
         list($query, $params) = missing_exists_statics($endpoint_params);
         break;
 
+    case 'missing':
     case 'missing_by_lang_and_category':
         list($query, $params, $error) = missing_by_lang_and_category($endpoint_params);
         break;
