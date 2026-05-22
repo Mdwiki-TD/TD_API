@@ -96,7 +96,7 @@ function exists_statics_by_category($endpoint_params)
         WHERE
             c.category = ?
         GROUP BY 1, 2, 3
-        ORDER BY 3 ASC;
+        ORDER BY 4 ASC;
     SQL;
     // ---
     $params = [$category];
