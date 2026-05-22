@@ -15,9 +15,9 @@ FROM
     LEFT JOIN all_qids_exists aq ON aq.qid = q.qid
     AND la.code = aq.code
 WHERE
-    c.category = ?
+    c.category = "RTT"
 GROUP BY 1, 2, 3
-ORDER BY 4 ASC;
+ORDER BY 6 ASC;
 ```
 
 # database table:
