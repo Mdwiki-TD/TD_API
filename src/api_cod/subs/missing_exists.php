@@ -39,12 +39,21 @@ function exists_by_qids_query($endpoint_params)
         AND (t.target != '' AND t.target IS NOT NULL)
     SQL;
     // ---
-    $lang_code   = sanitize_input($_GET['lang'] ?? '', '/^[A-Za-z0-9-]+$/');
+    $lang_raw     = $_GET['lang'] ?? null;
+    $campaign_raw = $_GET['campaign'] ?? null;
+    $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
+    // ---
+    $lang_code   = sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9-]+$/');
+    // ---
+    if ($lang_code === null) {
+        $error = "lang is missing";
+        return ["", [], $error];
+    };
     // ---
     $params = [$lang_code];
     // ---
-    $campaign   = sanitize_input($_GET['campaign'] ?? '', '/^[A-Za-z0-9-]+$/');
-    $category   = sanitize_input($_GET['category'] ?? '', '/^[A-Za-z0-9-]+$/');
+    $campaign   = sanitize_input($campaign_raw ?? '', '/^[A-Za-z0-9-]+$/');
+    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9-]+$/');
     // ---
     if ($category === null && $campaign !== null) {
         $qua .= " AND aa.category IN (SELECT category FROM categories WHERE campaign = ?)";
@@ -54,16 +63,16 @@ function exists_by_qids_query($endpoint_params)
         $params[] = $category;
     }
     // ---
-    return [$qua, $params];
+    return [$qua, $params, ""];
     // ---
 }
 
 function exists_statics_by_category($endpoint_params)
 {
     // ---
-    // NOTE: not ready yet
+    $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
     // ---
-    $category   = sanitize_input($_GET['category'] ?? '', '/^[A-Za-z0-9-]+$/');
+    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9-]+$/');
     // ---
     if ($category === null) {
         $category = "RTT";
@@ -92,15 +101,18 @@ function exists_statics_by_category($endpoint_params)
     // ---
     $params = [$category];
     // ---
-    return [$qua, $params];
+    return [$qua, $params, ""];
     // ---
 }
 
 function missing_by_lang_and_category($endpoint_params)
 {
     // ---
-    $lang_code  = sanitize_input($_GET['lang'] ?? '', '/^[A-Za-z0-9-]+$/');
-    $category   = sanitize_input($_GET['category'] ?? '', '/^[A-Za-z0-9-]+$/');
+    $lang_raw     = $_GET['lang'] ?? null;
+    $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
+    // ---
+    $lang_code  = sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9-]+$/');
+    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9-]+$/');
     // ---
     $error = "";
     // ---
@@ -152,8 +164,11 @@ function missing_by_lang_and_category($endpoint_params)
 function exists_by_lang_and_category($endpoint_params)
 {
     // ---
-    $lang_code  = sanitize_input($_GET['lang'] ?? '', '/^[A-Za-z0-9-]+$/');
-    $category   = sanitize_input($_GET['category'] ?? '', '/^[A-Za-z0-9-]+$/');
+    $lang_raw     = $_GET['lang'] ?? null;
+    $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
+    // ---
+    $lang_code  = sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9-]+$/');
+    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9-]+$/');
     // ---
     if ($lang_code === null) {
         $error = "lang is missing";

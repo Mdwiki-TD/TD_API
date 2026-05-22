@@ -61,11 +61,11 @@ function top_users($endpoint_params)
     // ---
     $query = top_query('user');
     // ---
-    list($query, $params) = add_li_params($query, [], $endpoint_params, []);
+    [$query, $params] = add_li_params($query, [], $endpoint_params, []);
     // ---
     $query .= " GROUP BY p.user ORDER BY 2 DESC";
     // ---
-    return [$query, $params];
+    return [$query, $params, ""];
 }
 
 function top_langs($endpoint_params)
@@ -73,11 +73,11 @@ function top_langs($endpoint_params)
     // ---
     $query = top_query('lang');
     // ---
-    list($query, $params) = add_li_params($query, [], $endpoint_params, [""]);
+    [$query, $params] = add_li_params($query, [], $endpoint_params, [""]);
     // ---
     $query .= " GROUP BY p.lang ORDER BY 2 DESC";
     // ---
-    return [$query, $params];
+    return [$query, $params, ""];
 }
 
 function top_lang_of_users($endpoint_params)
@@ -105,5 +105,5 @@ function top_lang_of_users($endpoint_params)
         ORDER BY cnt DESC;
     SQL;
     // ---
-    return [$query, $params];
+    return [$query, $params, ""];
 }
