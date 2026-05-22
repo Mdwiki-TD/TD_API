@@ -113,40 +113,7 @@
             }
         ]
     },
-    "missing_by_qids": {
-        "columns": [],
-        "params": [
-            {
-                "name": "lang",
-                "column": "t.code",
-                "type": "text",
-                "placeholder": "Language code",
-                "no_mt_options": true
-            },
-            {
-                "name": "category",
-                "column": "a.category",
-                "type": "text",
-                "placeholder": "Category",
-                "no_mt_options": true
-            },
-            {
-                "name": "campaign",
-                "column": "campaign",
-                "type": "text",
-                "placeholder": "Campaign"
-            },
-            {
-                "name": "order",
-                "column": "order",
-                "type": "text",
-                "placeholder": "Order by",
-                "default": "a.title",
-                "no_select": true
-            }
-        ]
-    },
-    "missing_exists_statics": {
+    "exists_statics_by_category": {
         "columns": [],
         "params": [
             {
@@ -214,7 +181,7 @@
             },
             {
                 "name": "category",
-                "column": "a.category",
+                "column": "aa.category",
                 "type": "text",
                 "placeholder": "Category",
                 "no_mt_options": true
@@ -224,12 +191,6 @@
                 "column": "campaign",
                 "type": "text",
                 "placeholder": "Campaign"
-            },
-            {
-                "name": "target",
-                "column": "t.target",
-                "type": "text",
-                "placeholder": "Target"
             },
             {
                 "name": "order",
@@ -245,19 +206,19 @@
         "params": [
             {
                 "name": "title",
-                "column": "title",
+                "column": "ase.title",
                 "type": "text",
                 "placeholder": "Page Title"
             },
             {
                 "name": "importance",
-                "column": "importance",
+                "column": "ase.importance",
                 "type": "text",
                 "placeholder": "Importance"
             },
             {
                 "name": "titles",
-                "column": "title",
+                "column": "ase.title",
                 "type": "array"
             }
         ]

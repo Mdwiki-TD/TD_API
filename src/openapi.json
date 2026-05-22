@@ -771,41 +771,10 @@
                 }
             }
         },
-        "/api.php?get=missing_by_qids": {
-            "get": {
-                "summary": "Retrieve missing pages",
-                "description": "Corresponds to calling `api.php?get=missing_by_qids` with query parameters.",
-                "tags": [
-                    "pages_infos"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/LangParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CategoryParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CampaignParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/OrderParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=missing_exists_statics": {
+        "/api.php?get=exists_statics_by_category": {
             "get": {
                 "summary": "Retrieve missing statics",
-                "description": "Corresponds to calling `api.php?get=missing_exists_statics` with query parameters.",
+                "description": "Corresponds to calling `api.php?get=exists_statics_by_category` with query parameters.",
                 "tags": [
                     "pages_infos"
                 ],

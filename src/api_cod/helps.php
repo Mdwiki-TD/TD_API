@@ -244,8 +244,6 @@ function change_types($types, $endpoint_params, $ignore_params)
 function add_array_params($qua, $params, $param = "titles", $column = "title", $where_or_and = "")
 {
     // ---
-    // list($query, $params) = add_array_params($query, $params, 'titles', 'title', "AND");
-    // ---
     if (empty($where_or_and)) {
         $where_or_and = (strpos(strtoupper($qua), 'WHERE') !== false) ? ' AND ' : ' WHERE ';
     }

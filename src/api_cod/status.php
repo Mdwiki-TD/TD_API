@@ -32,15 +32,18 @@ function make_status_query($endpoint_params)
         $qu_ery .= " AND YEAR(p.pupdate) = ?";
         $pa_rams[] = $added;
     }
-    $user_group = sanitize_input($_GET['user_group'] ?? '', '/^[a-zA-Z ]+$/');
+    $user_group = sanitize_input($_GET['user_group'] ?? '', '/^[A-Za-z0-9-]+$/');
     if ($user_group !== null) {
         // $qu_ery .= " AND p.user IN (SELECT username FROM users WHERE user_group = ?)";
         $qu_ery .= " AND u.user_group = ?";
         $pa_rams[] = $user_group;
     }
-
-    $campaign   = sanitize_input($_GET['campaign'] ?? '', '/^[a-zA-Z ]+$/');
-    $category   = sanitize_input($_GET['cat'] ?? '', '/^[a-zA-Z ]+$/');
+    // ---
+    $campaign_raw = $_GET['campaign'] ?? null;
+    $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
+    // ---
+    $campaign   = sanitize_input($campaign_raw ?? '', '/^[A-Za-z0-9-]+$/');
+    $category   = sanitize_input($category_raw ?? $_GET['cat'] ?? '', '/^[A-Za-z0-9-]+$/');
 
     if ($category !== null) {
         $qu_ery .= " AND p.cat = ?";
@@ -55,5 +58,5 @@ function make_status_query($endpoint_params)
         ORDER BY 1 ASC;
     SQL;
 
-    return [$qu_ery, $pa_rams];
+    return [$qu_ery, $pa_rams, ""];
 }
