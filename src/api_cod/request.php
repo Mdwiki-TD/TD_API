@@ -20,9 +20,7 @@ use function API\Leaderboard\langs_format;
 use function API\Status\make_status_query;
 use function API\TitlesInfos\titles_query;
 use function API\TitlesInfos\mdwiki_revids;
-use function API\Missing\missing_query;
 use function API\Missing\exists_by_qids_query;
-use function API\Missing\missing_exists_statics;
 use function API\Missing\exists_statics_by_category;
 use function API\Missing\missing_by_lang_and_category;
 use function API\Missing\exists_by_lang_and_category;
@@ -77,10 +75,6 @@ $get_group_value = filter_input(INPUT_GET, 'group', FILTER_SANITIZE_FULL_SPECIAL
 $error = "";
 // ---
 switch ($get) {
-
-    case 'missing_exists_statics':
-        list($query, $params) = missing_exists_statics($endpoint_params);
-        break;
 
     case 'missing':
     case 'missing_by_lang_and_category':

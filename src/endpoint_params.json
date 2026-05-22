@@ -113,7 +113,7 @@
             }
         ]
     },
-    "missing_exists_statics": {
+    "exists_statics_by_category": {
         "columns": [],
         "params": [
             {

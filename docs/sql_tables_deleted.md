@@ -109,14 +109,29 @@
 
     ```
 
--   [ ] table_name
+-   [x] all_exists
 
     ```sql
-
+        CREATE TABLE
+        all_exists (
+            id int NOT NULL AUTO_INCREMENT,
+            article_id varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+            code varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
+            PRIMARY KEY (id),
+            UNIQUE KEY article_id_code (article_id, code),
+            CONSTRAINT all_exists_ibfk_1 FOREIGN KEY (article_id) REFERENCES all_articles (article_id)
+        ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
     ```
 
--   [ ] table_name
+-   [ ] all_articles
 
     ```sql
-
+        CREATE TABLE
+            all_articles (
+                id int NOT NULL AUTO_INCREMENT,
+                article_id varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                category varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                PRIMARY KEY (id),
+                UNIQUE KEY article_id (article_id)
+            ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
     ```

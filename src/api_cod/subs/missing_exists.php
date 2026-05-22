@@ -58,52 +58,6 @@ function exists_by_qids_query($endpoint_params)
     // ---
 }
 
-
-function missing_exists_statics($endpoint_params)
-{
-    // ---
-    $category   = sanitize_input($_GET['category'] ?? '', '/^[A-Za-z0-9-]+$/');
-    // ---
-    if ($category === null) {
-        $category = "RTT";
-    }
-    // ---
-    $qua = <<<SQL
-        SELECT
-            a.code AS language_code,
-            la.autonym AS autonym,
-            la.name AS language_name,
-            COUNT(a.article_id) AS available_title_count,
-            (total.total_rtt - COUNT(a.article_id)) AS missing_title_count,
-            total.total_rtt as total
-        FROM
-            all_exists a
-        CROSS JOIN (
-            SELECT COUNT(DISTINCT article_id) AS total_rtt
-            FROM category_members
-            WHERE category = ?
-        ) total
-        JOIN langs la ON la.code = a.code
-        WHERE
-            a.article_id IN (
-                SELECT c.article_id
-                FROM category_members c
-                WHERE c.category = ?
-            )
-        AND la.autonym IS NOT NULL
-        GROUP BY
-            a.code, la.autonym, la.name, total.total_rtt
-        ORDER BY 4 DESC;
-    SQL;
-    // ---
-    $params = [$category, $category];
-    // ---
-    return [$qua, $params];
-    // ---
-}
-
-
-
 function exists_statics_by_category($endpoint_params)
 {
     // ---
@@ -117,32 +71,26 @@ function exists_statics_by_category($endpoint_params)
     // ---
     $qua = <<<SQL
         SELECT
-            t.code AS language_code,
+            la.code AS language_code,
             la.autonym AS autonym,
             la.name AS language_name,
-            COUNT(DISTINCT c.article_id) AS available_title_count,
-            (total.total_rtt - COUNT(c.article_id)) AS missing_title_count,
-            total.total_rtt as total
+            count(*) AS total,
+            SUM(CASE WHEN aq.target IS NULL THEN 1 ELSE 0 END) AS missing_title_count,
+            SUM(CASE WHEN aq.target IS NOT NULL THEN 1 ELSE 0 END) AS available_title_count
         FROM
             category_members c
-        CROSS JOIN (
-            SELECT COUNT(DISTINCT article_id) AS total_rtt
-            FROM category_members
-            WHERE category = ?
-        ) total
-            LEFT JOIN qids q                ON q.title = c.article_id
-            INNER JOIN all_exists t         ON t.article_id = c.article_id
-            INNER JOIN all_qids_exists aqe  ON aqe.qid = q.qid AND aqe.code = t.code
-            JOIN langs la                   ON la.code = t.code
+
+        JOIN langs la
+        LEFT JOIN qids q                ON q.title = c.article_id
+        LEFT JOIN all_qids_exists aq    ON aq.qid = q.qid AND la.code = aq.code
+
         WHERE
             c.category = ?
-        AND la.autonym IS NOT NULL
-        GROUP BY
-            t.code, la.autonym, la.name, total.total_rtt
-        ORDER BY 4 DESC;
+        GROUP BY 1, 2, 3
+        ORDER BY 3 ASC;
     SQL;
     // ---
-    $params = [$category, $category];
+    $params = [$category];
     // ---
     return [$qua, $params];
     // ---
@@ -180,25 +128,21 @@ function missing_by_lang_and_category($endpoint_params)
             category_members c
 
         JOIN qids q                     ON q.title      = c.article_id
+        LEFT JOIN all_qids_exists aq    ON aq.qid       = q.qid AND aq.code = ?
+
         LEFT JOIN assessments ase       ON ase.title    = c.article_id
         LEFT JOIN enwiki_pageviews ep   ON ep.title     = c.article_id
         LEFT JOIN refs_counts rc        ON rc.r_title   = c.article_id
         LEFT JOIN words w               ON w.w_title    = c.article_id
-
         WHERE
             c.category = ?
-        AND NOT EXISTS (
-            SELECT 1
-            FROM all_qids_exists aqe
-            WHERE
-                aqe.code = ?
-                AND aqe.qid = q.qid
-        )
+        AND aq.target IS NULL
+
         /* to work with valid langs */
         AND EXISTS ( SELECT 1 FROM langs la WHERE la.code = ? )
     SQL;
     // ---
-    $params = [$category, $lang_code, $lang_code];
+    $params = [$lang_code, $category, $lang_code];
     // ---
     return [$qua, $params, $error];
     // ---
@@ -236,7 +180,7 @@ function exists_by_lang_and_category($endpoint_params)
             category_members c
 
         JOIN qids q                ON q.title = c.article_id
-        JOIN all_qids_exists aq    ON aq.qid = q.qid
+        LEFT JOIN all_qids_exists aq    ON aq.qid = q.qid AND aq.code = ?
 
         LEFT JOIN assessments ase       ON ase.title    = c.article_id
         LEFT JOIN enwiki_pageviews ep   ON ep.title     = c.article_id
@@ -244,10 +188,13 @@ function exists_by_lang_and_category($endpoint_params)
         LEFT JOIN words w               ON w.w_title    = c.article_id
         WHERE
             c.category = ?
-        AND aq.code = ?
+        AND aq.target IS NOT NULL
+
+        /* to work with valid langs */
+        AND EXISTS ( SELECT 1 FROM langs la WHERE la.code = ? )
     SQL;
     // ---
-    $params = [$category, $lang_code];
+    $params = [$lang_code, $category, $lang_code];
     // ---
     return [$qua, $params, ""];
     // ---

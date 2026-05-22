@@ -1,7 +1,7 @@
 {
     "pages_infos": [
         "missing",
-        "missing_exists_statics",
+        "exists_statics_by_category",
         "missing_by_lang_and_category",
         "exists_by_lang_and_category",
         "exists_by_qids",
