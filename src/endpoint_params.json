@@ -206,7 +206,7 @@
             },
             {
                 "name": "category",
-                "column": "a.category",
+                "column": "aa.category",
                 "type": "text",
                 "placeholder": "Category",
                 "no_mt_options": true
