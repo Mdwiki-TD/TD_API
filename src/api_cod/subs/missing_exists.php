@@ -228,3 +228,36 @@ function exists_by_lang_and_category($endpoint_params)
     return [$qua, $params, ""];
     // ---
 }
+
+function statics_by_category($endpoint_params)
+{
+    // ---
+    $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
+    // ---
+    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9-]+$/');
+    // ---
+    if ($category === null) {
+        $category = "RTT";
+    }
+    // ---
+    $qua = <<<SQL
+        SELECT
+            aq.code AS language_code,
+            COUNT(*) AS available_title_count
+        FROM
+            category_members c
+            JOIN qids q ON q.title = c.article_id
+            JOIN all_qids_exists aq ON aq.qid = q.qid
+        WHERE
+            c.category = ?
+        GROUP BY
+            aq.code
+        ORDER BY
+            available_title_count ASC;
+    SQL;
+    // ---
+    $params = [$category];
+    // ---
+    return [$qua, $params, ""];
+    // ---
+}
