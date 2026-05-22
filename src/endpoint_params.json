@@ -218,12 +218,6 @@
                 "placeholder": "Campaign"
             },
             {
-                "name": "target",
-                "column": "t.target",
-                "type": "text",
-                "placeholder": "Target"
-            },
-            {
                 "name": "order",
                 "column": "order",
                 "type": "text",
@@ -235,23 +229,9 @@
     "titles": {
         "columns": [],
         "params": [
-            {
-                "name": "title",
-                "column": "title",
-                "type": "text",
-                "placeholder": "Page Title"
-            },
-            {
-                "name": "importance",
-                "column": "importance",
-                "type": "text",
-                "placeholder": "Importance"
-            },
-            {
-                "name": "titles",
-                "column": "title",
-                "type": "array"
-            }
+            { "name": "title", "column": "ase.title", "type": "text", "placeholder": "Page Title" },
+            { "name": "importance", "column": "ase.importance", "type": "text", "placeholder": "Importance" },
+            { "name": "titles", "column": "ase.title", "type": "array" }
         ]
     },
     "revids": {

@@ -75,6 +75,8 @@ $SELECT = get_select($endpoint_params, $endpoint_columns);
 // ---
 $get_group_value = filter_input(INPUT_GET, 'group', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 // ---
+$error = "";
+// ---
 switch ($get) {
 
     case 'missing':

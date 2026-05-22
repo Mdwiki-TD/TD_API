@@ -66,6 +66,32 @@
 
     ```
 
+-   [ ] keys_new
+
+    ```sql
+        CREATE TABLE
+            keys_new (
+                id int NOT NULL AUTO_INCREMENT,
+                u_n text COLLATE utf8mb4_unicode_ci NOT NULL,
+                a_k text COLLATE utf8mb4_unicode_ci NOT NULL,
+                a_s text COLLATE utf8mb4_unicode_ci NOT NULL,
+                created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (id)
+            ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+    ```
+
+-   [ ] table_name
+
+    ```sql
+
+    ```
+
+-   [ ] table_name
+
+    ```sql
+
+    ```
+
 -   [ ] table_name
 
     ```sql

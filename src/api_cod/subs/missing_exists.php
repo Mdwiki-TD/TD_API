@@ -9,7 +9,6 @@ use function API\Missing\exists_by_qids_query;
 
 */
 
-use function API\Helps\add_li_params;
 use function API\Helps\sanitize_input;
 
 function missing_query($endpoint_params)
@@ -106,7 +105,6 @@ function exists_by_qids_query($endpoint_params)
             { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
             { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
             { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
-            { "name": "target", "column": "t.target", "type": "text", "placeholder": "Target" },
             { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "no_select": true }
         ]
       */
@@ -120,10 +118,14 @@ function exists_by_qids_query($endpoint_params)
             t.target AS target
         FROM all_qids_titles a
             JOIN all_qids_exists t ON t.qid = a.qid
+        WHERE t.code = ?
 
+        AND (t.target != '' AND t.target IS NOT NULL)
     SQL;
     // ---
-    list($qua, $params) = add_li_params($qua, [], $endpoint_params);
+    $lang_code   = sanitize_input($_GET['lang'] ?? '', '/^[A-Za-z0-9-]+$/');
+    // ---
+    $params = [$lang_code];
     // ---
     $campaign   = sanitize_input($_GET['campaign'] ?? '', '/^[A-Za-z0-9-]+$/');
     $category   = sanitize_input($_GET['category'] ?? '', '/^[A-Za-z0-9-]+$/');
@@ -335,7 +337,7 @@ function exists_by_lang_and_category($endpoint_params)
         LEFT JOIN qids q                ON q.title = c.article_id
         LEFT JOIN refs_counts rc        ON rc.r_title = c.article_id
         LEFT JOIN words w               ON w.w_title = c.article_id
-        LEFT JOIN all_qids_exists aq    ON aq.qid = q.qid
+        JOIN all_qids_exists aq    ON aq.qid = q.qid
         WHERE
             c.category = ?
         AND t.code = ?

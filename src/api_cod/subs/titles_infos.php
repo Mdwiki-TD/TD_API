@@ -30,6 +30,21 @@ SQL;
 function titles_query($endpoint_params)
 {
     // ---
+    /*
+    "titles": {
+        "columns": [],
+        "params": [
+            { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
+            { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" },
+            { "name": "titles", "column": "title", "type": "array" }
+        ]
+    }
+    */
+    // ---
+    // $params = [];
+    // $query_line = "";
+    // list($query_line, $params) = add_array_params($query_line, $params, 'titles', 'ase.title', "WHERE");
+    // ---
     $qua = <<<SQL
         select
             ase.title AS title,
@@ -42,10 +57,10 @@ function titles_query($endpoint_params)
             q.qid AS qid
         from
             assessments ase
-            left join enwiki_pageviews ep on ase.title = ep.title
-            left join qids q on q.title = ase.title
-            left join refs_counts rc on rc.r_title = ase.title
-            left join words w on w.w_title = ase.title
+            left join enwiki_pageviews ep   on ep.title   = ase.title
+            left join qids q                on q.title    = ase.title
+            left join refs_counts rc        on rc.r_title = ase.title
+            left join words w               on w.w_title  = ase.title
     SQL;
     // ---
     list($qua, $params) = add_li_params($qua, [], $endpoint_params);
