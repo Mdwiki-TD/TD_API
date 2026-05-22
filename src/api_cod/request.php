@@ -8,7 +8,6 @@ if (isset($_REQUEST['test'])) {
 header('Content-Type: application/json');
 
 use function API\SQL\fetch_query_new;
-use function API\Helps\sanitize_input;
 use function API\Helps\add_group;
 use function API\Helps\add_li_params;
 use function API\Helps\add_order;
@@ -24,6 +23,7 @@ use function API\Missing\exists_by_qids_query;
 use function API\Missing\exists_statics_by_category;
 use function API\Missing\missing_by_lang_and_category;
 use function API\Missing\exists_by_lang_and_category;
+use function API\Missing\statics_by_category;
 use function API\SelectHelps\get_select;
 use function API\Top\top_langs;
 use function API\Top\top_lang_of_users;
@@ -92,6 +92,10 @@ switch ($get) {
 
     case 'exists_by_lang_and_category':
         [$query, $params, $error] = exists_by_lang_and_category($endpoint_params);
+
+        break;
+    case 'statics_by_category':
+        [$query, $params, $error] = statics_by_category($endpoint_params);
 
         break;
 
