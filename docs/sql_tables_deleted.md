@@ -49,7 +49,7 @@
 
     ```
 
--   [ ] all_qids_titles
+-   [x] all_qids_titles
 
     ```sql
 
@@ -66,7 +66,7 @@
 
     ```
 
--   [ ] keys_new
+-   [x] keys_new
 
     ```sql
         CREATE TABLE
