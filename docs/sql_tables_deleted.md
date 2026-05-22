@@ -80,15 +80,32 @@
             ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
     ```
 
--   [ ] table_name
+-   [x] wddone
 
     ```sql
-
+        CREATE TABLE
+            wddone (
+                id int unsigned NOT NULL AUTO_INCREMENT,
+                mdtitle varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
+                target varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
+                lang varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+                user varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
+                PRIMARY KEY (id),
+                KEY idx_target (target)
+            ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
     ```
 
--   [ ] table_name
+-   [x] all_qids
 
     ```sql
+        CREATE TABLE
+            `all_qids` (
+                `qid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+                `category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                `id` int NOT NULL AUTO_INCREMENT,
+                PRIMARY KEY (`id`),
+                UNIQUE KEY `qid` (`qid`)
+            ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
     ```
 

@@ -40,25 +40,6 @@ CREATE TABLE
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE
-    `all_exists` (
-        `id` int NOT NULL AUTO_INCREMENT,
-        `article_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-        `code` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
-        PRIMARY KEY (`id`),
-        UNIQUE KEY `article_id_code` (`article_id`, `code`),
-        CONSTRAINT `all_exists_ibfk_1` FOREIGN KEY (`article_id`) REFERENCES `all_articles` (`article_id`)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-CREATE TABLE
-    `all_qids` (
-        `qid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-        `category` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-        `id` int NOT NULL AUTO_INCREMENT,
-        PRIMARY KEY (`id`),
-        UNIQUE KEY `qid` (`qid`)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-CREATE TABLE
     `all_qids_exists` (
         `id` int NOT NULL AUTO_INCREMENT,
         `qid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -66,15 +47,7 @@ CREATE TABLE
         `target` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
         PRIMARY KEY (`id`),
         UNIQUE KEY `qid_code` (`qid`, `code`),
-        CONSTRAINT `all_qids_exists_ibfk_1` FOREIGN KEY (`qid`) REFERENCES `all_qids` (`qid`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-CREATE TABLE
-    `all_qids_titles` (
-        `qid` varchar(255),
-        `title` varchar(120),
-        `category` varchar(255)
-    );
 
 CREATE TABLE
     `assessments` (
@@ -368,17 +341,6 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    `wddone` (
-        `id` int unsigned NOT NULL AUTO_INCREMENT,
-        `mdtitle` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
-        `target` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
-        `lang` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
-        `user` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
-        PRIMARY KEY (`id`),
-        KEY `idx_target` (`target`)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-CREATE TABLE
     `words` (
         `w_id` int unsigned NOT NULL AUTO_INCREMENT,
         `w_title` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -388,16 +350,6 @@ CREATE TABLE
         UNIQUE KEY `w_title` (`w_title`),
         KEY `idx_words_w_title` (`w_title`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
-CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW all_qids_titles AS
-select
-    qq.qid AS qid,
-    q.title AS title,
-    aa.category AS category
-from
-    all_qids qq
-    left join qids q on qq.qid = q.qid
-    left join all_articles aa on aa.article_id = q.title;
 
 DROP TABLE IF EXISTS views_new_all;
 

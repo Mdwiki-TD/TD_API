@@ -45,55 +45,6 @@ function missing_query($endpoint_params)
     return [$query, $params, ""];
 }
 
-function missing_by_qids_query($endpoint_params)
-{
-    // ---
-    /*
-    [
-        { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
-        { "name": "category", "column": "a.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
-        { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
-        { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "default": "a.title", "no_select": true }
-    ]
-      */
-    // ---
-    $lang_code  = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $category   = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    // ---
-    if ($lang_code === null) {
-        $error = "lang is missing";
-        return ["", [], $error];
-    };
-    // ---
-    if ($category === null) {
-        $category = "RTT";
-    }
-    // ---
-    $params = [$lang_code, $category];
-    // ---
-    $query = <<<SQL
-        SELECT
-            qq.qid AS qid,
-            q.title AS title,
-            aa.category AS category
-
-        FROM all_qids qq
-        LEFT JOIN qids q ON qq.qid = q.qid
-        LEFT JOIN all_articles aa ON aa.article_id = q.title
-
-            WHERE NOT EXISTS (
-                SELECT 1
-                FROM all_qids_exists t
-            WHERE t.qid = qq.qid
-                AND t.code = ?
-            )
-        AND aa.category = ?
-
-    SQL;
-    // ---
-    return [$query, $params, ""];
-}
-
 function exists_by_qids_query($endpoint_params)
 {
     // ---
@@ -110,15 +61,14 @@ function exists_by_qids_query($endpoint_params)
     // ---
     $qua = <<<SQL
         SELECT
-            qq.qid AS qid,
+            t.qid AS qid,
             q.title AS title,
             aa.category AS category,
             t.code AS code,
             t.target AS target
-        FROM all_qids qq
-            LEFT JOIN qids q            ON qq.qid = q.qid
+        FROM qids q
+            JOIN all_qids_exists t      ON t.qid = q.qid
             LEFT JOIN all_articles aa   ON aa.article_id = q.title
-            JOIN all_qids_exists t      ON t.qid = qq.qid
         WHERE t.code = ?
 
         AND (t.target != '' AND t.target IS NOT NULL)
