@@ -214,23 +214,14 @@ function missing_by_lang_and_category($endpoint_params)
         FROM
             category_members c
 
-        LEFT JOIN assessments ase       ON ase.title = c.article_id
-        LEFT JOIN enwiki_pageviews ep   ON ep.title = c.article_id
-        LEFT JOIN qids q                ON q.title = c.article_id
-        LEFT JOIN refs_counts rc        ON rc.r_title = c.article_id
-        LEFT JOIN words w               ON w.w_title = c.article_id
+        LEFT JOIN assessments ase       ON ase.title    = c.article_id
+        LEFT JOIN enwiki_pageviews ep   ON ep.title     = c.article_id
+        LEFT JOIN qids q                ON q.title      = c.article_id
+        LEFT JOIN refs_counts rc        ON rc.r_title   = c.article_id
+        LEFT JOIN words w               ON w.w_title    = c.article_id
 
         WHERE
             c.category = ?
-        AND NOT EXISTS (
-            SELECT
-                1
-            FROM
-                all_exists t
-            WHERE
-                t.article_id = c.article_id
-                AND t.code = ?
-        )
         AND NOT EXISTS (
             SELECT
                 1
@@ -244,7 +235,7 @@ function missing_by_lang_and_category($endpoint_params)
         AND EXISTS ( SELECT 1 FROM langs la WHERE la.code = ? )
     SQL;
     // ---
-    $params = [$category, $lang_code, $lang_code, $lang_code];
+    $params = [$category, $lang_code, $lang_code];
     // ---
     return [$qua, $params, $error];
     // ---
@@ -280,19 +271,17 @@ function exists_by_lang_and_category($endpoint_params)
             aq.target
         FROM
             category_members c
-        JOIN
-            all_exists t ON t.article_id = c.article_id
 
-        LEFT JOIN assessments ase       ON ase.title = c.article_id
-        LEFT JOIN enwiki_pageviews ep   ON ep.title = c.article_id
-        LEFT JOIN qids q                ON q.title = c.article_id
-        LEFT JOIN refs_counts rc        ON rc.r_title = c.article_id
-        LEFT JOIN words w               ON w.w_title = c.article_id
+        JOIN qids q                ON q.title = c.article_id
         JOIN all_qids_exists aq    ON aq.qid = q.qid
+
+        LEFT JOIN assessments ase       ON ase.title    = c.article_id
+        LEFT JOIN enwiki_pageviews ep   ON ep.title     = c.article_id
+        LEFT JOIN refs_counts rc        ON rc.r_title   = c.article_id
+        LEFT JOIN words w               ON w.w_title    = c.article_id
         WHERE
             c.category = ?
-        AND t.code = ?
-        AND t.code = aq.code
+        AND aq.code = ?
     SQL;
     // ---
     $params = [$category, $lang_code];
