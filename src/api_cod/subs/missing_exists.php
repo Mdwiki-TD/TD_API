@@ -28,16 +28,23 @@ function exists_by_qids_query($endpoint_params)
         SELECT
             t.qid AS qid,
             q.title AS title,
-            aa.category AS category,
+            MIN(aa.category) AS category,
             t.code AS code,
             t.target AS target
-        FROM qids q
-            JOIN all_qids_exists t      ON t.qid = q.qid
-            LEFT JOIN all_articles aa   ON aa.article_id = q.title
-        WHERE t.code = ?
-
-        AND (t.target != '' AND t.target IS NOT NULL)
-    SQL;
+        FROM
+                qids q
+                JOIN all_qids_exists t ON t.qid = q.qid
+                LEFT JOIN category_members aa ON aa.article_id = q.title
+        WHERE
+                t.code = ?
+                AND t.target != ''
+                AND t.target IS NOT NULL
+        GROUP BY
+                t.qid,
+                q.title,
+                t.code,
+                t.target
+        SQL;
     // ---
     $lang_raw     = $_GET['lang'] ?? null;
     $campaign_raw = $_GET['campaign'] ?? null;
