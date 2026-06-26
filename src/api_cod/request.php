@@ -110,6 +110,19 @@ switch ($get) {
         }
         break;
 
+    case 'category_members':
+        $cat = "RTT";
+        $query = "SELECT article_id FROM category_members";
+        if (isset($_GET['cat'])) {
+            $input_cat = filter_input(INPUT_GET, 'cat', FILTER_SANITIZE_SPECIAL_CHARS);
+            if ($input_cat !== null) {
+                $cat = $input_cat;
+            }
+        }
+        $query .= " WHERE category = ?";
+        $params[] = $cat;
+        break;
+
     case 'revids':
         [$query, $params, $error] = mdwiki_revids($endpoint_params);
         break;

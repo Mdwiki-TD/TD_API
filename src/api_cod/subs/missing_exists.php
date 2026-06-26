@@ -18,7 +18,7 @@ function exists_by_qids_query($endpoint_params)
     /*
         [
             { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
-            { "name": "category", "column": "cm.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
+            { "name": "category", "column": "aa.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
             { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
             { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "no_select": true }
         ]
@@ -28,16 +28,18 @@ function exists_by_qids_query($endpoint_params)
         SELECT
             t.qid AS qid,
             q.title AS title,
-            cm.category AS category,
+            MIN(aa.category) AS category,
             t.code AS code,
             t.target AS target
-        FROM qids q
-            JOIN all_qids_exists t        ON t.qid = q.qid
-            LEFT JOIN category_members cm ON cm.article_id = q.title
-        WHERE t.code = ?
-
-        AND (t.target != '' AND t.target IS NOT NULL)
-    SQL;
+        FROM
+                qids q
+                JOIN all_qids_exists t ON t.qid = q.qid
+                LEFT JOIN category_members aa ON aa.article_id = q.title
+        WHERE
+                t.code = ?
+                AND t.target != ''
+                AND t.target IS NOT NULL
+        SQL;
     // ---
     $lang_raw     = $_GET['lang'] ?? null;
     $campaign_raw = $_GET['campaign'] ?? null;
@@ -56,12 +58,20 @@ function exists_by_qids_query($endpoint_params)
     $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9-]+$/');
     // ---
     if ($category === null && $campaign !== null) {
-        $qua .= " AND cm.category IN (SELECT category FROM categories WHERE campaign = ?)";
+        $qua .= " AND aa.category IN (SELECT category FROM categories WHERE campaign = ?)";
         $params[] = $campaign;
     } elseif ($category !== null) {
-        $qua .= " AND cm.category = ?";
+        $qua .= " AND aa.category = ?";
         $params[] = $category;
     }
+    // ---
+    $qua .= <<<SQL
+        GROUP BY
+            t.qid,
+            q.title,
+            t.code,
+            t.target
+    SQL;
     // ---
     return [$qua, $params, ""];
     // ---
