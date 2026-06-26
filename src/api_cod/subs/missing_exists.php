@@ -39,11 +39,6 @@ function exists_by_qids_query($endpoint_params)
                 t.code = ?
                 AND t.target != ''
                 AND t.target IS NOT NULL
-        GROUP BY
-                t.qid,
-                q.title,
-                t.code,
-                t.target
         SQL;
     // ---
     $lang_raw     = $_GET['lang'] ?? null;
@@ -69,6 +64,14 @@ function exists_by_qids_query($endpoint_params)
         $qua .= " AND aa.category = ?";
         $params[] = $category;
     }
+    // ---
+    $qua .= <<<SQL
+        GROUP BY
+            t.qid,
+            q.title,
+            t.code,
+            t.target
+    SQL;
     // ---
     return [$qua, $params, ""];
     // ---
