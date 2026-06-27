@@ -16,3 +16,9 @@ The **OpenAPI** interface (formerly known as Swagger) provides an interactive an
 
 You can access the OpenAPI interactive UI here:
 👉 [https://mdwiki.toolforge.org/api/openapi.html](https://mdwiki.toolforge.org/api/openapi.html)
+
+# End points
+
+| Endpoint | Method | Description |
+| -------- | ------ | ----------- |
+| `/`      | GET    | Main entry  |
