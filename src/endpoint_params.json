@@ -94,15 +94,13 @@
                 "name": "lang",
                 "column": "t.code",
                 "type": "text",
-                "placeholder": "Language code",
-                "no_mt_options": true
+                "placeholder": "Language code"
             },
             {
                 "name": "category",
                 "column": "a.category",
                 "type": "text",
-                "placeholder": "Category",
-                "no_mt_options": true
+                "placeholder": "Category"
             },
             {
                 "name": "order",
@@ -122,7 +120,6 @@
                 "type": "text",
                 "placeholder": "Category",
                 "default": "RTT",
-                "no_mt_options": true,
                 "required": true
             }
         ]
@@ -135,7 +132,6 @@
                 "column": "t.code",
                 "type": "text",
                 "placeholder": "Language code",
-                "no_mt_options": true,
                 "required": true
             },
             {
@@ -143,8 +139,7 @@
                 "column": "a.category",
                 "type": "text",
                 "placeholder": "Category",
-                "default": "RTT",
-                "no_mt_options": true
+                "default": "RTT"
             }
         ]
     },
@@ -156,7 +151,6 @@
                 "column": "t.code",
                 "type": "text",
                 "placeholder": "Language code",
-                "no_mt_options": true,
                 "required": true
             },
             {
@@ -164,40 +158,7 @@
                 "column": "a.category",
                 "type": "text",
                 "placeholder": "Category",
-                "default": "RTT",
-                "no_mt_options": true
-            }
-        ]
-    },
-    "exists_by_qids": {
-        "columns": [],
-        "params": [
-            {
-                "name": "lang",
-                "column": "t.code",
-                "type": "text",
-                "placeholder": "Language code",
-                "no_mt_options": true
-            },
-            {
-                "name": "category",
-                "column": "aa.category",
-                "type": "text",
-                "placeholder": "Category",
-                "no_mt_options": true
-            },
-            {
-                "name": "campaign",
-                "column": "campaign",
-                "type": "text",
-                "placeholder": "Campaign"
-            },
-            {
-                "name": "order",
-                "column": "order",
-                "type": "text",
-                "placeholder": "Order by",
-                "no_select": true
+                "default": "RTT"
             }
         ]
     },

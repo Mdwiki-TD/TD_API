@@ -4,85 +4,21 @@ namespace API\Missing;
 /*
 
 Usage:
-use function API\Missing\exists_by_qids_query;
+use function API\Missing\exists_statics_by_category;
+use function API\Missing\missing_by_lang_and_category;
+use function API\Missing\exists_by_lang_and_category;
+use function API\Missing\statics_by_category;
 
 */
 
 use function API\Helps\sanitize_input;
-
-function exists_by_qids_query($endpoint_params)
-{
-    // ---
-    // exists_by_qids
-    // ---
-    /*
-        [
-            { "name": "lang", "column": "t.code", "type": "text", "placeholder": "Language code", "no_mt_options": true },
-            { "name": "category", "column": "aa.category", "type": "text", "placeholder": "Category", "no_mt_options": true },
-            { "name": "campaign", "column": "campaign", "type": "text", "placeholder": "Campaign" },
-            { "name": "order", "column": "order", "type": "text", "placeholder": "Order by", "no_select": true }
-        ]
-      */
-    // ---
-    $qua = <<<SQL
-        SELECT
-            t.qid AS qid,
-            q.title AS title,
-            MIN(aa.category) AS category,
-            t.code AS code,
-            t.target AS target
-        FROM
-                qids q
-                JOIN all_qids_exists t ON t.qid = q.qid
-                LEFT JOIN category_members aa ON aa.article_id = q.title
-        WHERE
-                t.code = ?
-                AND t.target != ''
-                AND t.target IS NOT NULL
-        SQL;
-    // ---
-    $lang_raw     = $_GET['lang'] ?? null;
-    $campaign_raw = $_GET['campaign'] ?? null;
-    $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
-    // ---
-    $lang_code   = sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9-]+$/');
-    // ---
-    if ($lang_code === null) {
-        $error = "lang is missing";
-        return ["", [], $error];
-    };
-    // ---
-    $params = [$lang_code];
-    // ---
-    $campaign   = sanitize_input($campaign_raw ?? '', '/^[A-Za-z0-9-]+$/');
-    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9-]+$/');
-    // ---
-    if ($category === null && $campaign !== null) {
-        $qua .= " AND aa.category IN (SELECT category FROM categories WHERE campaign = ?)";
-        $params[] = $campaign;
-    } elseif ($category !== null) {
-        $qua .= " AND aa.category = ?";
-        $params[] = $category;
-    }
-    // ---
-    $qua .= <<<SQL
-        GROUP BY
-            t.qid,
-            q.title,
-            t.code,
-            t.target
-    SQL;
-    // ---
-    return [$qua, $params, ""];
-    // ---
-}
 
 function exists_statics_by_category($endpoint_params)
 {
     // ---
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
     // ---
-    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9-]+$/');
+    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
     // ---
     if ($category === null) {
         $category = "RTT";
@@ -135,8 +71,8 @@ function missing_by_lang_and_category($endpoint_params)
     $lang_raw     = $_GET['lang'] ?? null;
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
     // ---
-    $lang_code  = sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9-]+$/');
-    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9-]+$/');
+    $lang_code  = sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
     // ---
     $error = "";
     // ---
@@ -191,8 +127,8 @@ function exists_by_lang_and_category($endpoint_params)
     $lang_raw     = $_GET['lang'] ?? null;
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
     // ---
-    $lang_code  = sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9-]+$/');
-    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9-]+$/');
+    $lang_code  = sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
     // ---
     if ($lang_code === null) {
         $error = "lang is missing";
@@ -244,7 +180,7 @@ function statics_by_category($endpoint_params)
     // ---
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
     // ---
-    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9-]+$/');
+    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
     // ---
     if ($category === null) {
         $category = "RTT";

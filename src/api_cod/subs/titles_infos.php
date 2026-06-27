@@ -98,8 +98,8 @@ function pages_query($endpoint_params, $SELECT, $DISTINCT, $get)
     $campaign_raw = $_GET['campaign'] ?? null;
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
     // ---
-    $campaign   = sanitize_input($campaign_raw ?? '', '/^[A-Za-z0-9-]+$/');
-    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9-]+$/');
+    $campaign   = sanitize_input($campaign_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
     // ---
     if ($category !== null) {
         $query .= " AND p.cat = ?";

@@ -19,7 +19,6 @@ use function API\Leaderboard\langs_format;
 use function API\Status\make_status_query;
 use function API\TitlesInfos\titles_query;
 use function API\TitlesInfos\mdwiki_revids;
-use function API\Missing\exists_by_qids_query;
 use function API\Missing\exists_statics_by_category;
 use function API\Missing\missing_by_lang_and_category;
 use function API\Missing\exists_by_lang_and_category;
@@ -80,10 +79,6 @@ switch ($get) {
     case 'missing':
     case 'missing_by_lang_and_category':
         [$query, $params, $error] = missing_by_lang_and_category($endpoint_params);
-        break;
-
-    case 'exists_by_qids':
-        [$query, $params, $error] = exists_by_qids_query($endpoint_params);
         break;
 
     case 'exists_statics_by_category':
