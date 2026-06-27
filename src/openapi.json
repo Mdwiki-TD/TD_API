@@ -855,40 +855,6 @@
                 }
             }
         },
-        "/api.php?get=exists_by_qids": {
-            "get": {
-                "summary": "Retrieve exists pages",
-                "description": "Corresponds to calling `api.php?get=exists_by_qids` with query parameters.",
-                "tags": [
-                    "pages_infos"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/LangParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CategoryParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CampaignParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TargetParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/OrderParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
         "/api.php?get=pages": {
             "get": {
                 "summary": "Retrieve pages list",
