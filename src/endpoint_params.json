@@ -169,38 +169,6 @@
             }
         ]
     },
-    "exists_by_qids": {
-        "columns": [],
-        "params": [
-            {
-                "name": "lang",
-                "column": "t.code",
-                "type": "text",
-                "placeholder": "Language code",
-                "no_mt_options": true
-            },
-            {
-                "name": "category",
-                "column": "aa.category",
-                "type": "text",
-                "placeholder": "Category",
-                "no_mt_options": true
-            },
-            {
-                "name": "campaign",
-                "column": "campaign",
-                "type": "text",
-                "placeholder": "Campaign"
-            },
-            {
-                "name": "order",
-                "column": "order",
-                "type": "text",
-                "placeholder": "Order by",
-                "no_select": true
-            }
-        ]
-    },
     "titles": {
         "columns": [],
         "params": [
