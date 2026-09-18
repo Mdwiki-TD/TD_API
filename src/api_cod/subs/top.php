@@ -63,7 +63,7 @@ function top_users($endpoint_params)
     // ---
     [$query, $params] = add_li_params($query, [], $endpoint_params, []);
     // ---
-    $query .= " GROUP BY p.user ORDER BY 2 DESC";
+    $query .= " GROUP BY p.user ORDER BY targets DESC";
     // ---
     return [$query, $params, ""];
 }
@@ -75,7 +75,7 @@ function top_langs($endpoint_params)
     // ---
     [$query, $params] = add_li_params($query, [], $endpoint_params, [""]);
     // ---
-    $query .= " GROUP BY p.lang ORDER BY 3 DESC";
+    $query .= " GROUP BY p.lang ORDER BY targets DESC";
     // ---
     return [$query, $params, ""];
 }
