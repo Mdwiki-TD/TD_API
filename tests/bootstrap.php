@@ -11,9 +11,9 @@ putenv('TOOL_TOOLSDB_USER=root');
 putenv('TOOL_TOOLSDB_PASSWORD=root11');
 $_SERVER['SERVER_NAME'] = 'localhost';
 
-require_once __DIR__ . '/../src/include_all.php';
+require_once dirname(__DIR__) . '/src/include_all.php';
 
-$vendorAutoload = __DIR__ . '/../vendor/autoload.php';
+$vendorAutoload = dirname(__DIR__) . '/vendor/autoload.php';
 
 if (file_exists($vendorAutoload)) {
     require_once $vendorAutoload;
