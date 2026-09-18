@@ -75,7 +75,7 @@ function top_langs($endpoint_params)
     // ---
     [$query, $params] = add_li_params($query, [], $endpoint_params, [""]);
     // ---
-    $query .= " GROUP BY p.lang ORDER BY 2 DESC";
+    $query .= " GROUP BY p.lang ORDER BY 3 DESC";
     // ---
     return [$query, $params, ""];
 }
