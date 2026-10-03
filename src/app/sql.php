@@ -23,6 +23,7 @@ if (!extension_loaded('apcu') || !function_exists('apcu_exists')) {
         return false;
     }
 }
+
 class Database
 {
 
@@ -31,11 +32,13 @@ class Database
     private $user;
     private $password;
     private $dbname;
+    private $appEnv;
     private $groupByModeDisabled = false;
 
-    public function __construct(string $dbname_var = 'DB_NAME')
+    public function __construct(string $dbnameVar = 'DB_NAME')
     {
-        $this->set_db($dbname_var);
+        $this->appEnv = $this->envVar('APP_ENV');
+        $this->setDb($dbnameVar);
     }
 
     private function envVar(string $key)
@@ -51,11 +54,27 @@ class Database
 
         return "";
     }
-    private function set_db(string $dbname_var)
+    private function buildDsn(string $dbnameVar): string
+    {
+        // Load host and database name from environment variables, falling back to a default host
+        $this->host   = $this->envVar('DB_HOST_TOOLS') ?: 'tools.db.svc.wikimedia.cloud';
+        $this->dbname = $this->envVar($dbnameVar);
+
+        // Build the PDO Data Source Name (DSN) string for MySQL connection
+        return "mysql:host={$this->host};dbname={$this->dbname}";
+    }
+
+    private function hasValidCredentials(): bool
+    {
+        // Check whether all required connection credentials are present
+        return !empty($this->host) && !empty($this->dbname) && !empty($this->user) && !empty($this->password);
+    }
+
+    private function setDb(string $dbnameVar)
     {
         $this->host = $this->envVar('DB_HOST_TOOLS') ?: 'tools.db.svc.wikimedia.cloud';
-        $this->dbname = $this->envVar($dbname_var);
-        $this->user = $this->envVar('TOOL_TOOLSDB_USER');
+        $this->dbname = $this->envVar($dbnameVar);
+        $this->user     = $this->envVar('TOOL_TOOLSDB_USER');
         $this->password = $this->envVar('TOOL_TOOLSDB_PASSWORD');
 
         try {
@@ -86,10 +105,10 @@ class Database
         }
     }
 
-    public function disableFullGroupByMode($sql_query)
+    public function disableFullGroupByMode($sqlQuery)
     {
         // if the query contains "GROUP BY", disable ONLY_FULL_GROUP_BY, strtoupper() is for case insensitive
-        if (strpos(strtoupper($sql_query), 'GROUP BY') !== false && !$this->groupByModeDisabled) {
+        if (strpos(strtoupper($sqlQuery), 'GROUP BY') !== false && !$this->groupByModeDisabled) {
             try {
                 // More precise SQL mode modification
                 $this->db->exec("SET SESSION sql_mode=(SELECT REPLACE(@@SESSION.sql_mode,'ONLY_FULL_GROUP_BY',''))");
@@ -100,42 +119,15 @@ class Database
             }
         }
     }
-    public function execute_query($sql_query, $params = null)
+
+    public function fetchQuery($sqlQuery, $params = null)
     {
         try {
-            $this->disableFullGroupByMode($sql_query);
+            // $this->test_print($sqlQuery);
 
-            $q = $this->db->prepare($sql_query);
-            if ($params) {
-                $q->execute($params);
-            } else {
-                $q->execute();
-            }
+            $this->disableFullGroupByMode($sqlQuery);
 
-            // Check if the query starts with "SELECT"
-            $query_type = strtoupper(substr(trim((string) $sql_query), 0, 6));
-            if ($query_type === 'SELECT') {
-                // Fetch the results if it's a SELECT query
-                $result = $q->fetchAll(PDO::FETCH_ASSOC);
-                return $result;
-            } else {
-                // Otherwise, return null
-                return [];
-            }
-        } catch (PDOException $e) {
-            echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;
-            return false;
-        }
-    }
-
-    public function fetchquery($sql_query, $params = null)
-    {
-        try {
-            // $this->test_print($sql_query);
-
-            $this->disableFullGroupByMode($sql_query);
-
-            $q = $this->db->prepare($sql_query);
+            $q = $this->db->prepare($sqlQuery);
             if ($params) {
                 $q->execute($params);
             } else {
@@ -146,9 +138,37 @@ class Database
             $result = $q->fetchAll(PDO::FETCH_ASSOC);
             return $result;
         } catch (PDOException $e) {
-            // echo "SQL Error:" . $e->getMessage() . "<br>" . $sql_query;
-            error_log("SQL Error: " . $e->getMessage() . " | Query: " . $sql_query);
+            // echo "SQL Error:" . $e->getMessage() . "<br>" . $sqlQuery;
+            error_log("SQL Error: " . $e->getMessage() . " | Query: " . $sqlQuery);
             return [];
+        }
+    }
+
+    public function execute_query($sqlQuery, $params = null)
+    {
+        try {
+            $this->disableFullGroupByMode($sqlQuery);
+
+            $q = $this->db->prepare($sqlQuery);
+            if ($params) {
+                $q->execute($params);
+            } else {
+                $q->execute();
+            }
+
+            // Check if the query starts with "SELECT"
+            $query_type = strtoupper(substr(trim((string) $sqlQuery), 0, 6));
+            if ($query_type === 'SELECT') {
+                // Fetch the results if it's a SELECT query
+                $result = $q->fetchAll(PDO::FETCH_ASSOC);
+                return $result;
+            } else {
+                // Otherwise, return null
+                return [];
+            }
+        } catch (PDOException $e) {
+            echo "sql error:" . $e->getMessage() . "<br>" . $sqlQuery;
+            return false;
         }
     }
 
@@ -158,20 +178,20 @@ class Database
     }
 }
 
-function create_apcu_key($sql_query, $params)
+function create_apcu_key($sqlQuery, $params)
 {
-    if (empty($sql_query)) {
+    if (empty($sqlQuery)) {
         return "!empty_sql_query";
     }
     // Serialize the parameters to create a unique cache key
     $params_string = is_array($params) ? json_encode($params) : '';
 
-    return 'apcu_' . md5($sql_query . $params_string);
+    return 'apcu_' . md5($sqlQuery . $params_string);
 }
 
-function get_from_apcu($sql_query, $params)
+function get_from_apcu($sqlQuery, $params)
 {
-    $cache_key = create_apcu_key($sql_query, $params);
+    $cache_key = create_apcu_key($sqlQuery, $params);
 
     $items = [];
 
@@ -187,19 +207,19 @@ function get_from_apcu($sql_query, $params)
     return $items;
 }
 
-function add_to_apcu($sql_query, $params, $results)
+function add_to_apcu($sqlQuery, $params, $results)
 {
-    $cache_key = create_apcu_key($sql_query, $params);
+    $cache_key = create_apcu_key($sqlQuery, $params);
 
     $cache_ttl = 3600 * 12;
 
     apcu_store($cache_key, $results, $cache_ttl);
 }
 
-function fetch_query_new($sql_query, $params, $get)
+function fetch_query_new($sqlQuery, $params, $get)
 {
     if ($get != 'settings' && isset($_REQUEST['apcu'])) {
-        $in_apcu = get_from_apcu($sql_query, $params);
+        $in_apcu = get_from_apcu($sqlQuery, $params);
 
         if ($in_apcu && is_array($in_apcu)) {
             return [$in_apcu, "apcu"];
@@ -207,17 +227,17 @@ function fetch_query_new($sql_query, $params, $get)
     }
 
     // Create a new database object
-    $db = new Database('DB_NAME');
+    $db = new Database();
 
     // Execute a SQL query
-    $results = $db->fetchquery($sql_query, $params);
+    $results = $db->fetchQuery($sqlQuery, $params);
 
     // Destroy the database object
     $db = null;
 
     if ($get != 'settings' && isset($_REQUEST['apcu'])) {
         if ($results) {
-            add_to_apcu($sql_query, $params, $results);
+            add_to_apcu($sqlQuery, $params, $results);
         }
     }
 

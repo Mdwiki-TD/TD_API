@@ -1,4 +1,7 @@
 <?php
+// src/index.php
+
+use App\APIController;
 
 if (isset($_REQUEST['test'])) {
     ini_set('display_errors', 1);
@@ -13,3 +16,6 @@ if (!isset($_GET['get'])) {
 
 include_once __DIR__ . '/bootstrap.php';
 include_once __DIR__ . '/app/request.php';
+
+$controller = new APIController();
+$controller->handleRequest();

@@ -1,7 +1,12 @@
 <?php
 
 include_once __DIR__ . '/helps.php';
+include_once __DIR__ . '/Logger.php';
+
+include_once __DIR__ . '/MdwikiSql/Database.php';
+
 include_once __DIR__ . '/sql.php';
+
 include_once __DIR__ . '/select_helps.php';
 include_once __DIR__ . '/qids.php';
 include_once __DIR__ . '/leaderboard.php';
