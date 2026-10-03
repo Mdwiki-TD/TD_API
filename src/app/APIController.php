@@ -40,7 +40,7 @@ class APIController
     ) {
         $this->db       = $db ?? new Database();
         $this->registry ??= new EndpointRegistry();
-        $this->executor ??= new QueryExecutor();
+        $this->executor ??= new QueryExecutor($this->db);
         $this->builder  ??= new ResponseBuilder();
         $this->request  ??= new Request();
     }
@@ -85,7 +85,6 @@ class APIController
                 $spec->params,
                 error: $spec->error
             ));
-
         } catch (Throwable $e) {
             error_log('[API] ' . $e->getMessage());
             http_response_code(500);

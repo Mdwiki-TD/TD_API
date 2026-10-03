@@ -4,12 +4,22 @@ declare(strict_types=1);
 
 namespace App\Database;
 
+use App\Database\Cache\{ApcuCache, CacheInterface, NullCache};
 use App\Endpoints\{EndpointContext, QuerySpec};
-use function API\SQL\fetch_query_new;
 use function API\Helps\{add_order, add_limit, add_offset};
 
 final class QueryExecutor
 {
+    /** endpoints لا تُخزَّن أبداً في الكاش */
+    private const NO_CACHE = ['settings'];
+
+    private CacheInterface $cache;
+
+    public function __construct(private Database $db, ?CacheInterface $cache = null)
+    {
+        $this->cache = $cache ?? (ApcuCache::isAvailable() ? new ApcuCache() : new NullCache());
+    }
+
     /** @return array{results: array, source: string, sql: string, time: string} */
     public function run(QuerySpec $spec, EndpointContext $ctx): array
     {
@@ -23,9 +33,20 @@ final class QueryExecutor
             }
             $sql = $ordered;
         }
-
         $sql = add_offset(add_limit($sql));
-        [$results, $source] = fetch_query_new($sql, $spec->params, $ctx->get);
+
+        $useCache = $ctx->request->enabled('apcu') && !in_array($ctx->get, self::NO_CACHE, true);
+
+        $results = $useCache ? $this->cache->get($sql, $spec->params) : null;
+        $source  = 'apcu';
+
+        if ($results === null) {
+            $results = $this->db->fetchQuery($sql, $spec->params);
+            $source  = 'db';
+            if ($useCache && $results) {
+                $this->cache->set($sql, $spec->params, $results);
+            }
+        }
 
         return [
             'results' => $results,
