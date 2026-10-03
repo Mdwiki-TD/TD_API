@@ -36,7 +36,7 @@ TD_API is a REST-like HTTP API serving as the primary data access layer for the 
 
 | Pattern                      | Where Used                                           | Assessment                                                |
 | ---------------------------- | ---------------------------------------------------- | --------------------------------------------------------- |
-| Parameterized SQL (PDO)      | `app/sql.php`, `helps.php`, all `subs/`          | Correctly implemented for most endpoints                  |
+| Parameterized SQL (PDO)      | `app/sql.php`, `helps.php`, all `subs/`              | Correctly implemented for most endpoints                  |
 | APCu cache-aside             | `sql.php` (`fetch_query_new()`)                      | Good: 12h TTL, graceful fallback, explicit opt-in         |
 | JSON config-driven endpoints | `endpoint_params.json`                               | Good: centralized, enables dynamic UI generation          |
 | Whitelist validation         | `sanitize_input()`, `filter_order()`, `get_select()` | Good: regex + column/param whitelists                     |
@@ -48,7 +48,6 @@ TD_API is a REST-like HTTP API serving as the primary data access layer for the 
 
 2. **Dead code accumulation** -- Every module contains dead code:
 
-    - `te.php` (empty file)
     - `missing_exists_backup_.php_x` (328-line backup)
     - `script.js.backup` (20KB backup)
     - `$qua_old` in `titles_infos.php` (unused variable)
@@ -66,7 +65,7 @@ TD_API is a REST-like HTTP API serving as the primary data access layer for the 
 | ------------------------- | ----------------------------------------------------------------------------- | ------------------------------- |
 | No Composer/autoloading   | Adding modules requires editing `bootstrap.php`                               | `bootstrap.php`                 |
 | No `.env` loader          | `load_env.php` uses `putenv()` with hardcoded values                          | `load_env.php`, `bootstrap.php` |
-| Inconsistent return types | Some functions return `[$query, $params]`, others `[$query, $params, $error]` | `app/subs/*.php`            |
+| Inconsistent return types | Some functions return `[$query, $params]`, others `[$query, $params, $error]` | `app/subs/*.php`                |
 | Mixed variable naming     | `$qua`/`$query`/`$qu_ery`/`$query_line` for query strings                     | `request.php`, `helps.php`      |
 | No security headers       | No CSP, X-Frame-Options, X-Content-Type-Options                               | All entry points                |
 
@@ -98,7 +97,7 @@ TD_API is a REST-like HTTP API serving as the primary data access layer for the 
 | --- | ----------------------------------------------------- | ------------ | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | 1   | **Hardcoded database credentials in version control** | **Critical** | `load_env.php`             | Root user `root:root11` committed to git history. Even if deleted now, it persists in history.                                 |
 | 2   | **`?test` enables `display_errors` in production**    | **High**     | `api.php:5`, `index.php:5` | Any user can append `?test` to trigger verbose PHP error output, potentially leaking file paths, DB details, and stack traces. |
-| 3   | **SQL error leakage in `execute_query()`**            | **High**     | `app/sql.php:138`      | Method echoes full SQL query + error message to output: `echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;`          |
+| 3   | **SQL error leakage in `execute_query()`**            | **High**     | `app/sql.php:138`          | Method echoes full SQL query + error message to output: `echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;`          |
 
 ### P1 -- Fix Within 1 Week
 
@@ -106,7 +105,7 @@ TD_API is a REST-like HTTP API serving as the primary data access layer for the 
 | --- | ------------------------------------------------ | ---------- | --------------------- | -------------------------------------------------------------------------------------- |
 | 4   | **`FILTER_SANITIZE_STRING` removed in PHP 8.2+** | **High**   | `api/proxy.php:17`    | Proxy will fatally error on PHP 8.2+.                                                  |
 | 5   | **Broken HTML entity escaping (XSS)**            | **High**   | `test2/script.js:157` | `highlightJson()` replacement is a no-op -- `'&'` replaces `'&'` instead of `'&amp;'`. |
-| 6   | **`$_COOKIE['test']` controls debug output**     | **Medium** | `app/sql.php:87`  | `test_print()` method echoes debug data based on user-controlled cookie.               |
+| 6   | **`$_COOKIE['test']` controls debug output**     | **Medium** | `app/sql.php:87`      | `test_print()` method echoes debug data based on user-controlled cookie.               |
 
 ### P2 -- Fix Within 1 Month
 
@@ -197,7 +196,7 @@ TD_API is a REST-like HTTP API serving as the primary data access layer for the 
 | 21  | Consolidate `test/` and `test2/` into single test UI                      | 4h     | Eliminates duplicate maintenance       |
 | 22  | Replace jQuery with vanilla JS in `test/script.js`                        | 1h     | Removes unnecessary 87KB dependency    |
 | 23  | Add `X-Content-Type-Options`, `X-Frame-Options` headers                   | 15 min | Basic security hardening               |
-| 24  | Add PHPDoc blocks to all public functions in `app/`                   | 4h     | Improves code documentation            |
+| 24  | Add PHPDoc blocks to all public functions in `app/`                       | 4h     | Improves code documentation            |
 | 25  | HTML-encode API responses before `innerHTML` insertion in test UIs        | 1h     | Eliminates XSS vectors                 |
 
 ### Long-Term (3-6 Months)

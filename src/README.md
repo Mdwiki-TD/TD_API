@@ -42,8 +42,6 @@ src/
   openapi.html              # Swagger UI documentation page (53 lines)
   redoc.html                # ReDoc documentation page (19 lines)
   t.php                     # APCu cache inspection/diagnostic tool (16 lines)
-  api/
-    proxy.php               # CORS reverse proxy (49 lines)
   app/
     request.php             # Main router and switch/case dispatcher (512 lines)
     sql.php                 # Database class + APCu caching (238 lines)
@@ -52,7 +50,6 @@ src/
     status.php              # Status endpoint query builder (63 lines)
     leaderboard.php         # Leaderboard data formatting (66 lines)
     qids.php                # Wikidata QID queries (42 lines)
-    te.php                  # Empty file (dead code)
     subs/
       missing_exists.php    # Missing/exists endpoint queries (264 lines)
       titles_infos.php      # Titles, revids, pages queries (115 lines)
