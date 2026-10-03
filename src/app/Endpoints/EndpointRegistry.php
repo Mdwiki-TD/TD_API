@@ -71,18 +71,17 @@ final class EndpointRegistry
 
     /** endpoints didn't get moved yet, stay in the old request.php */
     private const LEGACY = [
+        // 'publish_reports',
         'pages',
         'pages_by_user_or_lang',
         'pages_langs',
         'pages_users',
         'pages_users_langs',
         'pages_with_views',
-        'publish_reports',
         'user_lang_status',
         'user_status',
         'users_by_last_pupdate',
     ];
-
     /** @var array<string, EndpointHandler> */
     private array $handlers;
 
@@ -118,7 +117,7 @@ final class EndpointRegistry
                 applyOrder: false,
             ),
 
-            'langs' => new StaticSqlHandler( 'SELECT code, autonym, name, redirects FROM langs' ),
+            'langs' => new StaticSqlHandler('SELECT code, autonym, name, redirects FROM langs'),
 
             'graph_data' => new StaticSqlHandler(
                 "SELECT LEFT(pupdate, 7) AS m, COUNT(*) AS c
@@ -130,7 +129,7 @@ final class EndpointRegistry
                 applyOrder: false,
             ),
 
-            'user_access' => new FilteredSqlHandler( 'SELECT id, user_name, created_at FROM access_keys' ),
+            'user_access' => new FilteredSqlHandler('SELECT id, user_name, created_at FROM access_keys'),
 
             'views'       => $views,
             'views_new'   => $views,

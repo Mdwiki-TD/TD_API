@@ -304,16 +304,6 @@ switch ($get) {
         SQL;
         break;
 
-    case 'publish_reports':
-        $query = <<<SQL
-            SELECT $DISTINCT $SELECT
-            FROM publish_reports
-            SQL;
-
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
-
-        break;
-
     case 'pages_by_user_or_lang':
 
         $qua = <<<SQL
@@ -331,19 +321,34 @@ switch ($get) {
             $added = filter_input(INPUT_GET, 'year', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $added = (int) $added;
             if ($added && $added > 0) {
-
                 // $query .= " AND (YEAR(p.date) = ? OR YEAR(p.pupdate) = ? OR YEAR(p.add_date) = ?)";
-                //
                 // $params[] = $added;
                 // $params[] = $added;
                 // $params[] = $added;
-
                 $query .= " AND ? IN (YEAR(p.date), YEAR(p.pupdate), YEAR(p.add_date))";
                 $params[] = $added;
             }
         }
         $query = add_group($query, $endpoint_data, $get_group_value);
+        break;
 
+    case 'pages_with_views':
+        $_qua = <<<SQL
+            from pages p
+            WHERE p.target != ''
+        SQL;
+
+        [$query, $params] = add_li_params($_qua, [], $endpoint_params);
+        $query_start = <<<SQL
+            select distinct
+                p.id, p.title, p.word, p.translate_type, p.cat,
+                p.lang, p.user, p.target, p.date, p.pupdate,
+                p.add_date, p.deleted, p.mdwiki_revid,
+                (select v.views from views_new_all v WHERE p.target = v.target AND p.lang = v.lang) as views
+        SQL;
+
+        $query = $query_start . $query;
+        $query = add_group($query, $endpoint_data, $get_group_value);
         break;
 
     case 'pages':
@@ -377,26 +382,12 @@ switch ($get) {
 
         break;
 
-    case 'pages_with_views':
-
-        $_qua = <<<SQL
-            from pages p
-            WHERE p.target != ''
-        SQL;
-
-        [$query, $params] = add_li_params($_qua, [], $endpoint_params);
-
-        $query_start = <<<SQL
-            select distinct
-                p.id, p.title, p.word, p.translate_type, p.cat,
-                p.lang, p.user, p.target, p.date, p.pupdate,
-                p.add_date, p.deleted, p.mdwiki_revid,
-                (select v.views from views_new_all v WHERE p.target = v.target AND p.lang = v.lang) as views
-        SQL;
-
-        $query = $query_start . $query;
-
-        $query = add_group($query, $endpoint_data, $get_group_value);
+    case 'publish_reports':
+        $query = <<<SQL
+            SELECT $DISTINCT $SELECT
+            FROM publish_reports
+            SQL;
+        [$query, $params] = add_li_params($query, [], $endpoint_params);
 
         break;
 
