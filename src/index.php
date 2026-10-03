@@ -15,7 +15,7 @@ if (!isset($_GET['get'])) {
 }
 
 include_once __DIR__ . '/bootstrap.php';
-include_once __DIR__ . '/app/request.php';
+// include_once __DIR__ . '/app/request.php';
 
 $controller = new APIController();
 $controller->handleRequest();

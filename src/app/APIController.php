@@ -1,9 +1,16 @@
 <?php
 // src/app/APIController.php
+declare(strict_types=1);
 
 namespace App;
 
+use App\Config\EndpointConfig;
+use App\Database\QueryExecutor;
+use App\Endpoints\{EndpointContext, EndpointRegistry};
+use App\Formatting\ResponseBuilder;
+use App\Http\Request;
 use App\Database\Database;
+use Throwable;
 
 /*
 index.php
@@ -24,18 +31,79 @@ class APIController
 {
     private Database $db;
 
-    public function __construct(?Database $db = null)
-    {
-        $this->db = $db ?? new Database();
+    public function __construct(
+        ?Database $db = null,
+        private ?EndpointRegistry $registry = null,
+        private ?QueryExecutor $executor = null,
+        private ?ResponseBuilder $builder = null,
+        private ?Request $request = null,
+    ) {
+        $this->db       = $db ?? new Database();
+        $this->registry ??= new EndpointRegistry();
+        $this->executor ??= new QueryExecutor();
+        $this->builder  ??= new ResponseBuilder();
+        $this->request  ??= new Request();
     }
     /**
-     * Main entry point: load data, build rows, render the template.
+     * Main entry point
      */
     public function handleRequest(): void
     {
         if ($this->db->isDbNull()) {
-            error_log("Database is null");
+            error_log('Database is null');
         }
-        // TODO: implement
+
+        $get = $this->request->get('get') ?? '';
+
+        // 1) endpoints غير المنقولة: نسلّمها للملف القديم كما هي
+        if ($this->registry->isLegacy($get)) {
+            $this->runLegacy();
+            return;
+        }
+
+        header('Content-Type: application/json');
+
+        try {
+            $config = new EndpointConfig(__DIR__ . '/endpoint_params.json');
+            $ctx    = new EndpointContext($get, $config->find($get), $this->request);
+
+            $handler = $this->registry->resolve($ctx);
+            if ($handler === null) {
+                $this->emit($this->builder->build($ctx, error: 'invalid get request'));
+                return;
+            }
+
+            $spec = $handler->handle($ctx);
+            if ($spec->sql === '') {
+                $this->emit($this->builder->build($ctx, error: $spec->error));
+                return;
+            }
+
+            $run     = $this->executor->run($spec, $ctx);
+            $results = $this->builder->format($get, $run['results']);
+
+            $this->emit($this->builder->build(
+                $ctx,
+                $results,
+                $run['source'],
+                $run['time'],
+                $run['sql'],
+                error: $spec->error
+            ));
+        } catch (Throwable $e) {
+            error_log('[API] ' . $e->getMessage());
+            http_response_code(500);
+            $this->emit($this->builder->errorOnly('internal error'));
+        }
+    }
+
+    private function runLegacy(): void
+    {
+        require __DIR__ . '/request.php';
+    }
+
+    private function emit(array $data): void
+    {
+        echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 }
