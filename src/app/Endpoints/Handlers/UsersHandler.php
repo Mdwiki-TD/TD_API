@@ -15,7 +15,7 @@ final class UsersHandler implements EndpointHandler
         $params = [];
 
         if ($ctx->request->enabled('userlike')) {
-            $like = $ctx->request->get('userlike', FILTER_SANITIZE_SPECIAL_CHARS);
+            $like = $ctx->request->get('userlike');
             if ($like !== null) {
                 $sql .= ' WHERE username LIKE ?';
                 $params[] = $like . '%';

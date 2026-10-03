@@ -2,20 +2,19 @@
 // src/app/Http/Request.php
 
 declare(strict_types=1);
+
 namespace App\Http;
 
 final class Request
 {
-    /** القيمة المفلترة، أو null إذا كانت غير موجودة */
-    public function get(string $key, int $filter = FILTER_SANITIZE_FULL_SPECIAL_CHARS): ?string
+    public function get(string $key): ?string
     {
-        if (!isset($_GET[$key]) || is_array($_GET[$key])) {
+        $v = $_GET[$key] ?? null;
+        if (!is_string($v)) {
             return null;
         }
-        $v = filter_var($_GET[$key], $filter);
-        return is_string($v) ? $v : null;
+        return trim(preg_replace('/[\x00-\x1F\x7F]/u', '', $v) ?? '');
     }
-
     /** نفس منطق الكود القديم: غير موجود / false / 0 تعني "غير مفعّل" */
     public function enabled(string $key): bool
     {

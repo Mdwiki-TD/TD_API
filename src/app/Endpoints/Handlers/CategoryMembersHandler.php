@@ -13,7 +13,7 @@ final class CategoryMembersHandler implements EndpointHandler
 
     public function handle(EndpointContext $ctx): QuerySpec
     {
-        $cat = $ctx->request->get('cat', FILTER_SANITIZE_SPECIAL_CHARS) ?? self::DEFAULT_CATEGORY;
+        $cat = $ctx->request->get('cat') ?: self::DEFAULT_CATEGORY;
 
         return new QuerySpec(
             'SELECT article_id FROM category_members WHERE category = ?',
