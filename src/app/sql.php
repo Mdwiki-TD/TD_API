@@ -2,7 +2,7 @@
 
 namespace API\SQL;
 
-use App\MdwikiSql\Database;
+use App\Database\Database;
 
 if (!extension_loaded('apcu') || !function_exists('apcu_exists')) {
     function apcu_exists($key)

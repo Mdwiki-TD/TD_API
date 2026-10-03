@@ -1,7 +1,7 @@
 <?php
 // src/index.php
 
-use App\Controllers\APIController;
+use App\APIController;
 
 if (isset($_REQUEST['test'])) {
     ini_set('display_errors', 1);
