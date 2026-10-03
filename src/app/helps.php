@@ -30,7 +30,7 @@ function filter_order($key, $endpoint_data, $get_value)
     }
 
     if (in_array($added, $endpoint_columns) || in_array($added, $endpoint_params)) {
-        error_log("Added '$added' is valid for '$key'");
+        // error_log("Added '$added' is valid for '$key'");
         return $added;
     }
 
