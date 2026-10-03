@@ -85,7 +85,20 @@
     },
     "publish_reports_stats": {
         "columns": [],
-        "params": []
+        "params": [
+            {
+                "name": "lang",
+                "column": "lang",
+                "type": "text",
+                "placeholder": "Language code"
+            },
+            {
+                "name": "user",
+                "column": "user",
+                "type": "text",
+                "placeholder": "Username"
+            }
+        ]
     },
     "missing": {
         "columns": [],
@@ -751,7 +764,9 @@
         ]
     },
     "leaderboard_table": {
-        "columns": ["u.user_group"],
+        "columns": [
+            "u.user_group"
+        ],
         "params": [
             {
                 "name": "year",
@@ -782,7 +797,9 @@
         ]
     },
     "leaderboard_table_formated": {
-        "columns": ["u.user_group"],
+        "columns": [
+            "u.user_group"
+        ],
         "params": [
             {
                 "name": "year",

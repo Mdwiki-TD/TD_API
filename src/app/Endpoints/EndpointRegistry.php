@@ -14,6 +14,7 @@ use App\Endpoints\Handlers\{
     ViewsHandler,
     LeaderboardHandler,
     QidsHandler,
+    PagesUsersToMainHandler,
 };
 
 use function API\Missing\{
@@ -62,26 +63,26 @@ final class EndpointRegistry
 
         'qids',
         'qids_others',
+        'pages_users_to_main',
+        'publish_reports_stats',
+        'count_pages',
+        'language_settings',
+        'words',
     ];
 
     /** endpoints didn't get moved yet, stay in the old request.php */
     private const LEGACY = [
-        'count_pages',
         'in_process',
-        'language_settings',
         'pages',
         'pages_by_user_or_lang',
         'pages_langs',
         'pages_users',
         'pages_users_langs',
-        'pages_users_to_main',
         'pages_with_views',
         'publish_reports',
-        'publish_reports_stats',
         'user_lang_status',
         'user_status',
         'users_by_last_pupdate',
-        'words',
     ];
 
     /** @var array<string, EndpointHandler> */
@@ -145,7 +146,25 @@ final class EndpointRegistry
 
             'qids'        => $qids,
             'qids_others' => $qids,
+            'pages_users_to_main' => new PagesUsersToMainHandler(),
 
+            'language_settings' => new FilteredSqlHandler('SELECT DISTINCT * FROM language_settings'),
+
+            'words' => new FilteredSqlHandler(
+                'SELECT w_id, w_title, w_lead_words, w_all_words FROM words'
+            ),
+
+            'count_pages' => new FilteredSqlHandler(
+                'SELECT DISTINCT user, COUNT(target) AS count FROM pages',
+                suffix: ' GROUP BY user',
+                defaultOrder: 'count DESC',
+            ),
+
+            'publish_reports_stats' => new FilteredSqlHandler(
+                'SELECT DISTINCT YEAR(date) AS year, MONTH(date) AS month, lang, user, result
+                FROM publish_reports',
+                // suffix: ' GROUP BY year, month, lang, user, result',
+            ),
         ];
     }
 

@@ -227,12 +227,11 @@ switch ($get) {
         $qua = qids_qua($get);
         break;
 
-    /**
-     * Above Already in EndpointRegistry.php
-     */
-
-    case 'pages_users_to_main':
-        $query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
+    case 'pages_users_to_main':     // now at PagesUsersToMainHandler.php
+        $query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid
+            FROM pages_users_to_main pum, pages_users pu
+            where pum.id = pu.id
+        ";
         $params = [];
         if (enabled('lang')) {
             $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -243,11 +242,35 @@ switch ($get) {
         }
         break;
 
+    case 'language_settings':
+        $query = "SELECT DISTINCT * FROM language_settings";
+        [$query, $params] = add_li_params($query, [], $endpoint_params);
+        break;
+
+    case 'words':
+        $params = [];
+        $query = "SELECT w_id, w_title, w_lead_words, w_all_words FROM words ";
+        [$query, $params] = add_li_params($query, [], $endpoint_params);
+        break;
+
     case 'count_pages':
         $query = "SELECT DISTINCT user, count(target) as count from pages";
         [$query, $params] = add_li_params($query, [], $endpoint_params);
         $query .= " group by user order by count desc";
         break;
+
+    case 'publish_reports_stats':
+        $query = <<<SQL
+            SELECT DISTINCT YEAR(date) as year, MONTH(date) as month, lang, user, result
+            FROM publish_reports
+            GROUP BY year, month, lang, user, result
+        SQL;
+        [$query, $params] = add_li_params($query, [], $endpoint_params);
+        break;
+
+    /**
+     * Above Already in EndpointRegistry.php
+     */
 
     case 'users_by_last_pupdate':
         $qua = <<<SQL
@@ -269,40 +292,11 @@ switch ($get) {
         SQL;
         break;
 
-    case 'language_settings':
-        $query = <<<SQL
-            SELECT DISTINCT *
-            FROM language_settings
-        SQL;
-
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
-
-        break;
-
-    case 'publish_reports_stats':
-        $query = <<<SQL
-            SELECT DISTINCT YEAR(date) as year, MONTH(date) as month, lang, user, result
-            FROM publish_reports
-            GROUP BY year, month, lang, user, result
-        SQL;
-
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
-
-        break;
-
     case 'publish_reports':
         $query = <<<SQL
             SELECT $DISTINCT $SELECT
             FROM publish_reports
             SQL;
-
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
-
-        break;
-
-    case 'words':
-        $params = [];
-        $query = "SELECT w_id, w_title, w_lead_words, w_all_words FROM words ";
 
         [$query, $params] = add_li_params($query, [], $endpoint_params);
 
@@ -402,11 +396,8 @@ switch ($get) {
             LEFT JOIN categories ca ON cat = ca.category
             LEFT JOIN langs la ON lang = la.code
         SQL;
-
         [$query, $params] = add_li_params($qua, [], $endpoint_params);
-
         $query = add_group($query, $endpoint_data, $get_group_value);
-
         break;
 
     default:
