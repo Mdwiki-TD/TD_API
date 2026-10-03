@@ -1,20 +1,16 @@
 <?php
 
 namespace API\Qids;
-/*
-Usage:
-use function API\Qids\qids_qua;
-*/
 
 function qids_qua($get)
 {
-    // ---
+
     $valid_tables = ["qids", "qids_others"];
-    // ---
+
     if (!in_array($get, $valid_tables)) {
         $get = "qids";
     }
-    // ---
+
     $quaries = [
         'empty' => "select id, title, qid from xx WHERE (qid = '' OR qid IS NULL)",
         'all' => "select id, title, qid from xx",
@@ -30,12 +26,12 @@ function qids_qua($get)
             A.qid != '' AND A.title != B.title AND A.id != B.id
         SQL
     ];
-    //---
+
     $dis = filter_input(INPUT_GET, 'dis', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    //---
+
     $qua = $quaries[$dis] ?? $quaries['all'];
-    //---
+
     $qua = str_replace("xx", $get, $qua);
-    //---
+
     return $qua;
 }

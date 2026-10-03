@@ -1,10 +1,5 @@
 <?php
 
-if (isset($_REQUEST['test'])) {
-    ini_set('display_errors', 1);
-    ini_set('display_startup_errors', 1);
-    error_reporting(E_ALL);
-}
 header('Content-Type: application/json');
 
 use function API\SQL\fetch_query_new;
@@ -57,23 +52,23 @@ $error_results = [];
 $execution_time = 0;
 
 // load endpoint_params.json
-$endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
-// ---
+$endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/endpoint_params.json'), true);
+
 $endpoint_data = $endpoint_params_tab[$get] ?? [];
-// ---
+
 if (isset($endpoint_data['redirect'])) {
     $endpoint_data = $endpoint_params_tab[$endpoint_data['redirect']] ?? [];
 };
-// ---
+
 $endpoint_params = $endpoint_data['params'] ?? [];
 $endpoint_columns = $endpoint_data['columns'] ?? [];
-// ---
+
 $SELECT = get_select($endpoint_params, $endpoint_columns);
-// ---
+
 $get_group_value = filter_input(INPUT_GET, 'group', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-// ---
+
 $error = "";
-// ---
+
 switch ($get) {
 
     case 'missing':
@@ -145,7 +140,7 @@ switch ($get) {
 
     case 'leaderboard_table':
     case 'leaderboard_table_formated':
-        // ---
+
         $query = "SELECT p.title,
             p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, p.user, u.user_group, LEFT(p.pupdate, 7) as m, v.views
             FROM pages p
@@ -156,12 +151,12 @@ switch ($get) {
                 AND p.lang = v.lang
             WHERE p.target != ''
         ";
-        // ---
+
         [$query, $params] = add_li_params($query, [], $endpoint_params);
-        // ---
+
         // $query .= " \n group by v.target, v.lang";
         $query .= " ORDER BY 1 DESC";
-        //---
+
         break;
 
     case 'status':
@@ -202,21 +197,21 @@ switch ($get) {
         break;
 
     case 'top_lang_of_users':
-        // ---
+
         [$query, $params, $error] = top_lang_of_users($endpoint_params);
-        // ---
+
         break;
 
     case 'top_langs':
-        // ---
+
         [$query, $params, $error] = top_langs($endpoint_params);
-        // ---
+
         break;
 
     case 'top_users':
-        // ---
+
         [$query, $params, $error] = top_users($endpoint_params);
-        // ---
+
         break;
 
     case 'users_by_last_pupdate':
@@ -256,11 +251,11 @@ switch ($get) {
                     ON p.target = v.target
                     AND p.lang = v.lang
             SQL;
-            // ---
+
             [$query, $params] = add_li_params($query, [], $endpoint_params);
-            // ---
+
             // $query .= " GROUP BY v.target, v.lang";
-            // ---
+
         };
         break;
 
@@ -269,9 +264,9 @@ switch ($get) {
             SELECT DISTINCT *
             FROM language_settings
         SQL;
-        // ---
+
         [$query, $params] = add_li_params($query, [], $endpoint_params);
-        // ---
+
         break;
 
     case 'publish_reports_stats':
@@ -280,9 +275,9 @@ switch ($get) {
             FROM publish_reports
             GROUP BY year, month, lang, user, result
         SQL;
-        // ---
+
         [$query, $params] = add_li_params($query, [], $endpoint_params);
-        // ---
+
         break;
 
     case 'publish_reports':
@@ -290,9 +285,9 @@ switch ($get) {
             SELECT $DISTINCT $SELECT
             FROM publish_reports
             SQL;
-        // ---
+
         [$query, $params] = add_li_params($query, [], $endpoint_params);
-        // ---
+
         break;
 
     case 'lang_views':
@@ -305,11 +300,11 @@ switch ($get) {
                     ON p.target = v.target
                     AND p.lang = v.lang
             SQL;
-            // ---
+
             [$query, $params] = add_li_params($query, [], $endpoint_params);
-            // ---
+
             // $query .= " GROUP BY v.target, v.lang";
-            // ---
+
         };
         break;
 
@@ -326,13 +321,13 @@ switch ($get) {
     case 'words':
         $params = [];
         $query = "SELECT w_id, w_title, w_lead_words, w_all_words FROM words ";
-        // ---
+
         [$query, $params] = add_li_params($query, [], $endpoint_params);
-        // ---
+
         break;
 
     case 'pages_by_user_or_lang':
-        // ---
+
         $qua = <<<SQL
             SELECT DISTINCT p.title, p.word, p.translate_type, p.cat, p.lang, p.user, p.target, p.date,
             p.pupdate, p.add_date, p.deleted, v.views
@@ -341,26 +336,26 @@ switch ($get) {
                 ON p.target = v.target
                 AND p.lang = v.lang
         SQL;
-        // ---
+
         [$query, $params] = add_li_params($qua, [], $endpoint_params, ['year']);
-        // ---
+
         if (isset($_GET['year'])) {
             $added = filter_input(INPUT_GET, 'year', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             $added = (int) $added;
             if ($added && $added > 0) {
-                // ---
+
                 // $query .= " AND (YEAR(p.date) = ? OR YEAR(p.pupdate) = ? OR YEAR(p.add_date) = ?)";
-                // // ---
+                //
                 // $params[] = $added;
                 // $params[] = $added;
                 // $params[] = $added;
-                // ---
+
                 $query .= " AND ? IN (YEAR(p.date), YEAR(p.pupdate), YEAR(p.add_date))";
                 $params[] = $added;
             }
         }
         $query = add_group($query, $endpoint_data, $get_group_value);
-        // ---
+
         break;
 
     case 'pages':
@@ -381,28 +376,28 @@ switch ($get) {
 
     case 'user_lang_status':
     case 'user_status':
-        // ---
+
         $SELECT = ($SELECT == "*" || $SELECT == "year") ? "YEAR(p.pupdate) as year" : $SELECT;
-        // ---
+
         $qua = "SELECT DISTINCT $SELECT
             FROM pages p
             LEFT JOIN categories ca
             ON p.cat = ca.category
             ";
-        // ---
+
         [$query, $params] = add_li_params($qua, [], $endpoint_params);
-        // ---
+
         break;
 
     case 'pages_with_views':
-        // ---
+
         $_qua = <<<SQL
             from pages p
             WHERE p.target != ''
         SQL;
-        // ---
+
         [$query, $params] = add_li_params($_qua, [], $endpoint_params);
-        // ---
+
         $query_start = <<<SQL
             select distinct
                 p.id, p.title, p.word, p.translate_type, p.cat,
@@ -410,26 +405,26 @@ switch ($get) {
                 p.add_date, p.deleted, p.mdwiki_revid,
                 (select v.views from views_new_all v WHERE p.target = v.target AND p.lang = v.lang) as views
         SQL;
-        // ---
+
         $query = $query_start . $query;
-        // ---
+
         $query = add_group($query, $endpoint_data, $get_group_value);
-        // ---
+
         break;
 
     case 'in_process':
-        // ---
+
         $qua = <<<SQL
             SELECT title, user, lang, cat, translate_type, word, add_date, ca.campaign, la.autonym
             from in_process
             LEFT JOIN categories ca ON cat = ca.category
             LEFT JOIN langs la ON lang = la.code
         SQL;
-        // ---
+
         [$query, $params] = add_li_params($qua, [], $endpoint_params);
-        // ---
+
         $query = add_group($query, $endpoint_data, $get_group_value);
-        // ---
+
         break;
 
     default:
@@ -447,30 +442,30 @@ $source = "db";
 $results = [];
 
 if ($qua !== "" || $query !== "") {
-    // ---
+
     $start_time = microtime(true);
-    // ---
+
     if ($query !== "") {
-        // ---
+
         $order_value = filter_input(INPUT_GET, 'order', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $query = add_order($query, $endpoint_data, $order_value);
-        // ---
+
         $query = add_limit($query);
         $query = add_offset($query);
-        // ---
+
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
-        // ---
+
         list($results, $source) = fetch_query_new($query, $params, $get);
     } else {
         $qua = add_limit($qua);
         $qua = add_offset($qua);
-        // ---
+
         list($results, $source) = fetch_query_new($qua, [], $get);
     }
-    // ---
+
     $end_time = microtime(true);
-    // ---
+
     $execution_time = $end_time - $start_time;
     $execution_time = number_format($execution_time, 2);
 }
@@ -478,7 +473,7 @@ if ($qua !== "" || $query !== "") {
 $qua = str_replace(["\n", "\r"], " ", $qua);
 $qua = preg_replace("/ +/", " ", $qua);
 
-// ---
+
 switch ($get) {
     case 'leaderboard_table_formated':
         $results = leaderboard_table_format($results);
@@ -515,5 +510,5 @@ $out["supported_params"] = array_column($endpoint_params, "name");
 
 $out["supported_values"] = array_column($endpoint_params, "options", 'name');
 $out["columns"] = $endpoint_columns;
-// ---
+
 echo json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);

@@ -1,17 +1,6 @@
 <?php
 
 namespace API\Helps;
-/*
-Usage:
-use function API\Helps\sanitize_input;
-use function API\Helps\add_order;
-use function API\Helps\add_group;
-use function API\Helps\add_limit;
-use function API\Helps\add_offset;
-use function API\Helps\add_li_params;
-use function API\Helps\add_array_params;
-use function API\Helps\filter_order;
-*/
 
 function sanitize_input($input, $pattern)
 {
@@ -23,30 +12,30 @@ function sanitize_input($input, $pattern)
 
 function filter_order($key, $endpoint_data, $get_value)
 {
-    // ---
+
     $endpoint_params = $endpoint_data['params'] ?? [];
     $endpoint_columns = $endpoint_data['columns'] ?? [];
-    // ---
+
     if (!isset($_GET[$key])) {
         // error_log("No '$key' parameter defined in endpoint data");
         return null;
     }
-    // ---
+
     $added = $get_value;
-    // ---
+
     if (!$added) {
         // error_log("No '$key' parameter provided in the request");
         return null;
     }
-    // ---
+
     if (in_array($added, $endpoint_columns) || in_array($added, $endpoint_params)) {
         error_log("Added '$added' is valid for '$key'");
         return $added;
     }
-    // ---
+
     // split $added or ,
     $added_array = explode(",", $added);
-    // ---
+
     foreach ($added_array as $k => $value) {
         $value = trim($value);
         // if its number okay
@@ -59,72 +48,72 @@ function filter_order($key, $endpoint_data, $get_value)
             unset($added_array[$k]);
         }
     }
-    // ---
+
     if (count($added_array) > 0) {
         return implode(", ", $added_array);
     }
-    // ---
+
     return null;
 }
 
 function add_group($qua, $endpoint_data, $get_value)
 {
-    // ---
+
     $added = filter_order('group', $endpoint_data, $get_value);
-    // ---
+
     if ($added) {
         $qua .= " GROUP BY $added";
     }
-    // ---
+
     return $qua;
 }
 
 function get_order_direction($param_order_direction)
 {
-    // ---
+
     $order_direction = isset($_GET['order_direction']) ?
         filter_input(INPUT_GET, 'order_direction', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : ($param_order_direction["default"] ?? "");
-    // ---
+
     if (!$order_direction) {
         return "DESC";
     }
-    // ---
+
     $valid_orders = ["ASC", "DESC"];
-    // ---
+
     // $order_direction upper
     $order_direction = strtoupper($order_direction);
-    // ---
+
     if (!in_array($order_direction, $valid_orders)) {
         $order_direction = "DESC";
     }
-    // ---
+
     return $order_direction;
 }
 
 function add_order($qua, $endpoint_data, $get_value)
 {
-    // ---
+
     $endpoint_params = $endpoint_data['params'] ?? [];
     $order_values    = $endpoint_data['order_values'] ?? [];
-    // ---
+
     $params_key_to_data = array_column($endpoint_params, null, 'name');
-    // ---
+
     $param_order = $params_key_to_data["order"] ?? [];
-    // ---
+
     if (!$param_order) {
         // error_log("No 'order' parameter defined in endpoint data");
         return $qua;
     }
-    // ---
+
     $default_order = $param_order["default"] ?? "";
-    // ---
+
     if (empty($get_value) && empty($default_order)) {
         // error_log("No order required");
         return $qua;
     }
-    // ---
+
     $added = $default_order;
-    // ---
+
     if (!empty($get_value)) {
         $added_value = $order_values[$get_value] ?? "";
         // error_log("get_value: $get_value, added_value: $added_value");
@@ -134,16 +123,16 @@ function add_order($qua, $endpoint_data, $get_value)
             $added = filter_order('order', $endpoint_data, $get_value) ?? $default_order;
         }
     }
-    // ---
+
     if (!$added) {
         return $qua;
     }
-    // ---
+
     $param_order_direction = $params_key_to_data["order_direction"] ?? [];
     $order_direction = get_order_direction($param_order_direction);
-    // ---
+
     $qua .= " ORDER BY $added $order_direction";
-    // ---
+
     return $qua;
 }
 
@@ -182,50 +171,50 @@ function add_distinct($qua)
 
 function add_one_param($qua, $column, $added, $tabe)
 {
-    // ---
+
     $add_str = "";
     $params = [];
-    // ---
+
     $where_or_and = (strpos(strtoupper($qua), 'WHERE') !== false) ? ' AND ' : ' WHERE ';
-    // ---
+
     if ($added == "not_mt" || $added == "not_empty") {
         $add_str = " $where_or_and ($column != '' AND $column IS NOT NULL) ";
-        // ---
+
     } elseif ($added == "mt" || $added == "empty") {
         $add_str = " $where_or_and ($column = '' OR $column IS NULL) ";
-        // ---
+
     } elseif ($added == ">0" || $added == "&#62;0") {
         $add_str = " $where_or_and $column > 0 ";
-        // ---
+
     } elseif (($tabe['type'] ?? '') == 'array') {
         list($add_str, $params) = add_array_params($add_str, $params, $tabe['name'], $column, $where_or_and);
     } else {
         $params[] = $added;
         $add_str = " $where_or_and $column = ? ";
-        // ---
+
         $value_can_be_null = isset($tabe['value_can_be_null']) ? $tabe['value_can_be_null'] : false;
-        // ---
+
         if ($value_can_be_null) {
             $add_str = " $where_or_and ($column = ? OR $column IS NULL OR $column = '') ";
         }
     }
-    // ---
+
     return [$add_str, $params];
 }
 
 function change_types($types, $endpoint_params, $ignore_params)
 {
-    // ---
+
     // $types = array_flip($types);
-    // ---
+
     $types2 = [];
-    // ---
+
     foreach ($types as $type) {
         $types2[$type] = ["column" => $type];
     }
     // ---value_can_be_null
     $types = $types2;
-    // ---
+
     if (count($types) == 0 && count($endpoint_params) > 0) {
         foreach ($endpoint_params as $param) {
             // { "name": "title", "column": "w_title", "type": "text", "placeholder": "Page Title" },
@@ -234,74 +223,74 @@ function change_types($types, $endpoint_params, $ignore_params)
             $types[$param['name']] = $param;
         }
     }
-    // ---
+
     foreach ($ignore_params as $param) {
         if (isset($types[$param])) unset($types[$param]);
     }
-    // ---
+
     return $types;
 }
 function add_array_params($qua, $params, $param = "titles", $column = "title", $where_or_and = "")
 {
-    // ---
+
     if (empty($where_or_and)) {
         $where_or_and = (strpos(strtoupper($qua), 'WHERE') !== false) ? ' AND ' : ' WHERE ';
     }
-    // ---
+
     $titles = $_GET[$param] ?? [];
-    // ---
+
     if (!empty($titles) && is_array($titles)) {
-        // ---
+
         $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
-        // ---
+
         $qua .= " $where_or_and $column IN ($placeholders)";
-        // ---
+
         $params = array_merge($params, $titles);
     }
-    // ---
+
     return [$qua, $params];
 }
 
 function add_li_params(string $qua, array $types, array $endpoint_params = [], array $ignore_params = []): array
 {
     $types = change_types($types, $endpoint_params, $ignore_params);
-    // ---
+
     $params = [];
-    // ---
+
     foreach ($types as $type => $tabe) {
-        // ---
+
         $column = $tabe['column'];
-        // ---
+
         if (empty($column)) continue;
-        // ---
+
         if (isset($_GET[$type]) || isset($_GET[$column])) {
-            // ---
+
             // filter input
             $added = filter_input(INPUT_GET, $type, FILTER_SANITIZE_SPECIAL_CHARS) ?? '';
             $added = (!empty($added)) ? $added : filter_input(INPUT_GET, $column, FILTER_SANITIZE_SPECIAL_CHARS);
-            // ---
+
             // if "limit" in endpoint_params remove it
             if ($column == "limit" || $column == "select" || ($added && strtolower($added) == "all")) {
                 continue;
             }
-            // ---
+
             if (isset($tabe['no_empty_value']) && empty($added)) {
                 continue;
             }
-            // ---
+
             if ($column == "distinct" && $added == "1") {
                 if (strpos(strtolower($qua), 'distinct') === false) {
                     $qua = add_distinct($qua);
                 }
             } else {
                 list($add_str, $new_params) = add_one_param($qua, $column, $added, $tabe);
-                // ---
+
                 $params = array_merge($params, $new_params);
-                // ---
+
                 $qua .= $add_str;
             }
         }
     }
-    // ---
+
     return [$qua, $params];
 }

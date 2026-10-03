@@ -7,7 +7,7 @@ namespace Tests;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests for SQL functions in api_cod/sql.php
+ * Tests for SQL functions in app/sql.php
  */
 class SqlTest extends TestCase
 {

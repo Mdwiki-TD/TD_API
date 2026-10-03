@@ -12,10 +12,10 @@ This document proposes a modern, scalable directory structure for the TD_API PHP
 
 ```text
 TD_API/
-├── api_cod/           # Core application code (mixed concerns)
+├── app/           # Core application code (mixed concerns)
 │   ├── langs/         # Language-related functionality
 │   ├── subs/          # Sub-modules
-│   ├── include.php    # Global includes
+│   ├── bootstrap.php    # Global includes
 │   ├── request.php    # Main request handler (536 lines)
 │   ├── sql.php        # Database layer (278 lines)
 │   └── ...
@@ -188,7 +188,7 @@ td_api/
 
 **Migration Example**:
 ```php
-// Current approach (api_cod/request.php)
+// Current approach (app/request.php)
 switch ($get) {
     case 'pages':
         $qua = "SELECT $DISTINCT $SELECT FROM $get p";
@@ -239,7 +239,7 @@ class GetPagesAction {
 **Purpose**: Common utilities used across all layers.
 
 **Migration Path**:
-- Move `api_cod/helps.php` functions to `src/Shared/Sanitizers.php`
+- Move `app/helps.php` functions to `src/Shared/Sanitizers.php`
 - Refactor into static utility classes with clear responsibilities
 - Maintain backward compatibility with gradual migration
 
@@ -249,7 +249,7 @@ class GetPagesAction {
 
 ### 1. Security Enhancement: Public Directory Isolation
 
-**Current Risk**: All files in the web root are accessible via HTTP, including `api_cod/sql.php` which contains database credentials.
+**Current Risk**: All files in the web root are accessible via HTTP, including `app/sql.php` which contains database credentials.
 
 **Solution**:
 ```
@@ -298,7 +298,7 @@ return [
 
 ### 3. Autoloading and Namespaces
 
-**Current**: Manual includes in `api_cod/include.php`
+**Current**: Manual includes in `app/bootstrap.php`
 ```php
 include_once __DIR__ . '/helps.php';
 include_once __DIR__ . '/sql.php';
@@ -398,7 +398,7 @@ resources/schemas/     # OpenAPI JSON specs
 
 ### Phase 6: Cleanup (Week 11-12)
 
-1. **Remove old files** (`api_cod/`, duplicate entry points)
+1. **Remove old files** (`app/`, duplicate entry points)
 2. **Update deployment scripts**
 3. **Performance testing**
 4. **Production rollout**
@@ -409,14 +409,14 @@ resources/schemas/     # OpenAPI JSON specs
 
 | Current Location | Proposed Location | Rationale |
 |-----------------|-------------------|-----------|
-| `api_cod/request.php` | `src/Infrastructure/Http/Controllers/ApiController.php` | HTTP handling belongs in infrastructure |
-| `api_cod/sql.php` | `src/Infrastructure/Database/` | Database access is infrastructure concern |
-| `api_cod/helps.php` | `src/Shared/Sanitizers.php`, `src/Application/Validators/` | Split into shared utilities and validators |
-| `api_cod/QueryBuilder.php` | `src/Infrastructure/Database/QueryBuilders/` | Specific builders for each entity |
-| `api_cod/langs/*` | `src/Domain/ValueObjects/Language.php`, `resources/lang/` | Language as value object + translations |
-| `api_cod/subs/*` | `src/Infrastructure/Database/QueryBuilders/` | Query building logic |
-| `api_cod/leaderboard.php` | `src/Application/Actions/GetLeaderboardAction.php` | Use case in application layer |
-| `api_cod/status.php` | `src/Application/Queries/GetTranslationStatusQuery.php` | CQRS query |
+| `app/request.php` | `src/Infrastructure/Http/Controllers/ApiController.php` | HTTP handling belongs in infrastructure |
+| `app/sql.php` | `src/Infrastructure/Database/` | Database access is infrastructure concern |
+| `app/helps.php` | `src/Shared/Sanitizers.php`, `src/Application/Validators/` | Split into shared utilities and validators |
+| `app/QueryBuilder.php` | `src/Infrastructure/Database/QueryBuilders/` | Specific builders for each entity |
+| `app/langs/*` | `src/Domain/ValueObjects/Language.php`, `resources/lang/` | Language as value object + translations |
+| `app/subs/*` | `src/Infrastructure/Database/QueryBuilders/` | Query building logic |
+| `app/leaderboard.php` | `src/Application/Actions/GetLeaderboardAction.php` | Use case in application layer |
+| `app/status.php` | `src/Application/Queries/GetTranslationStatusQuery.php` | CQRS query |
 | `endpoint_params.json` | `config/endpoints/params.php` | PHP config for better caching |
 | `index.php`, `api.php` | `public/index.php` | Single entry point with routing |
 | `openapi.html` | `public/swagger-ui/index.html` | Organized documentation |

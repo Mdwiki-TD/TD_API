@@ -7,12 +7,9 @@ if (isset($_REQUEST['test'])) {
 }
 
 if (!isset($_GET['get'])) {
-    // if ($_SERVER['SERVER_NAME'] === 'localhost') {
-    // header("Location: test/index.php");
-    header("Location: openapi.html");
+    header("Location: /api/openapi.html");
     exit();
-    // };
 }
 
-include_once __DIR__ . '/include_all.php';
-include_once __DIR__ . '/api_cod/request.php';
+include_once __DIR__ . '/bootstrap.php';
+include_once __DIR__ . '/app/request.php';

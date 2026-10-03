@@ -1,29 +1,20 @@
 <?php
 
 namespace API\Missing;
-/*
-
-Usage:
-use function API\Missing\exists_statics_by_category;
-use function API\Missing\missing_by_lang_and_category;
-use function API\Missing\exists_by_lang_and_category;
-use function API\Missing\statics_by_category;
-
-*/
 
 use function API\Helps\sanitize_input;
 
 function exists_statics_by_category($endpoint_params)
 {
-    // ---
+
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
-    // ---
+
     $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
-    // ---
+
     if ($category === null) {
         $category = "RTT";
     }
-    // ---
+
     $qua = <<<SQL
         SELECT
             la.code AS language_code,
@@ -58,33 +49,33 @@ function exists_statics_by_category($endpoint_params)
 
         ORDER BY available_title_count ASC;
     SQL;
-    // ---
+
     $params = [$category];
-    // ---
+
     return [$qua, $params, ""];
-    // ---
+
 }
 
 function missing_by_lang_and_category($endpoint_params)
 {
-    // ---
+
     $lang_raw     = $_GET['lang'] ?? null;
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
-    // ---
+
     $lang_code  = sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9- ]+$/');
     $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
-    // ---
+
     $error = "";
-    // ---
+
     if ($lang_code === null) {
         $error = "lang is missing";
         return ["", [], $error];
     };
-    // ---
+
     if ($category === null) {
         $category = "RTT";
     }
-    // ---
+
     $qua = <<<SQL
         SELECT
             c.article_id AS title,
@@ -113,32 +104,32 @@ function missing_by_lang_and_category($endpoint_params)
         /* to work with valid langs */
         AND EXISTS ( SELECT 1 FROM langs la WHERE la.code = ? )
     SQL;
-    // ---
+
     $params = [$lang_code, $category, $lang_code];
-    // ---
+
     return [$qua, $params, $error];
-    // ---
+
 }
 
 
 function exists_by_lang_and_category($endpoint_params)
 {
-    // ---
+
     $lang_raw     = $_GET['lang'] ?? null;
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
-    // ---
+
     $lang_code  = sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9- ]+$/');
     $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
-    // ---
+
     if ($lang_code === null) {
         $error = "lang is missing";
         return ["", [], $error];
     };
-    // ---
+
     if ($category === null) {
         $category = "RTT";
     }
-    // ---
+
     $qua = <<<SQL
         SELECT
             c.article_id AS title,
@@ -168,24 +159,24 @@ function exists_by_lang_and_category($endpoint_params)
         /* to work with valid langs */
         AND EXISTS ( SELECT 1 FROM langs la WHERE la.code = ? )
     SQL;
-    // ---
+
     $params = [$lang_code, $category, $lang_code];
-    // ---
+
     return [$qua, $params, ""];
-    // ---
+
 }
 
 function statics_by_category($endpoint_params)
 {
-    // ---
+
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
-    // ---
+
     $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
-    // ---
+
     if ($category === null) {
         $category = "RTT";
     }
-    // ---
+
     $qua = <<<SQL
         SELECT
             aq.code AS language_code,
@@ -201,9 +192,9 @@ function statics_by_category($endpoint_params)
         ORDER BY
             available_title_count ASC;
     SQL;
-    // ---
+
     $params = [$category];
-    // ---
+
     return [$qua, $params, ""];
-    // ---
+
 }

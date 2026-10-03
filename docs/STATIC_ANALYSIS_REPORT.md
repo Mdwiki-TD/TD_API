@@ -22,13 +22,13 @@
 
 ## Executive Summary
 
-| Category | Critical | High | Medium | Low |
-|----------|----------|------|--------|-----|
-| Security Vulnerabilities | 3 | 4 | 5 | 3 |
-| Performance Issues | 1 | 3 | 4 | 2 |
-| Architectural Anti-Patterns | 2 | 4 | 3 | 2 |
-| Logical Errors | 1 | 2 | 3 | 1 |
-| Code Quality Issues | 0 | 2 | 8 | 5 |
+| Category                    | Critical | High | Medium | Low |
+| --------------------------- | -------- | ---- | ------ | --- |
+| Security Vulnerabilities    | 3        | 4    | 5      | 3   |
+| Performance Issues          | 1        | 3    | 4      | 2   |
+| Architectural Anti-Patterns | 2        | 4    | 3      | 2   |
+| Logical Errors              | 1        | 2    | 3      | 1   |
+| Code Quality Issues         | 0        | 2    | 8      | 5   |
 
 **Overall Risk Level:** HIGH
 
@@ -41,60 +41,71 @@ The codebase requires immediate attention to address critical security vulnerabi
 ### CRITICAL: SQL Injection Vulnerabilities
 
 #### 1. Direct Parameter Interpolation in SQL (request.php:484)
+
 ```php
 $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
 ```
+
 **Risk:** While parameterized queries are used for execution, this line constructs a raw SQL string by directly embedding parameters. If any parameter contains malicious content, it could lead to SQL injection when this string is logged or displayed.
 
-**Location:** `api_cod/request.php:484`
+**Location:** `app/request.php:484`
 
 ---
 
 #### 2. Hardcoded Database Credentials (sql.php:72-73)
+
 ```php
 $this->user = 'root';
 $this->password = 'root11';
 ```
+
 **Risk:** Hardcoded credentials in source code are a severe security risk. If this repository is public or compromised, attackers gain direct database access.
 
-**Location:** `api_cod/sql.php:72-73`
+**Location:** `app/sql.php:72-73`
 
 ---
 
 #### 3. Potential SQL Injection via Table Name (request.php:463)
+
 ```php
 $query = "SELECT $DISTINCT $SELECT FROM $get";
 ```
+
 **Risk:** The `$get` variable is derived from user input and directly interpolated into SQL without proper validation against a whitelist.
 
-**Location:** `api_cod/request.php:463`
+**Location:** `app/request.php:463`
 
 ---
 
 ### HIGH: Input Validation Issues
 
 #### 4. Insufficient Input Sanitization (helps.php:263-264)
+
 ```php
 $added = filter_input(INPUT_GET, $type, FILTER_SANITIZE_SPECIAL_CHARS) ?? '';
 $added = (!empty($added)) ? $added : filter_input(INPUT_GET, $column, FILTER_SANITIZE_SPECIAL_CHARS);
 ```
+
 **Risk:** `FILTER_SANITIZE_SPECIAL_CHARS` is deprecated in PHP 8.1+. Should use `FILTER_SANITIZE_FULL_SPECIAL_CHARS` or better, validate against expected patterns.
 
-**Location:** `api_cod/helps.php:263-264`
+**Location:** `app/helps.php:263-264`
 
 ---
 
 #### 5. Unvalidated SELECT Clause (select_helps.php:21)
+
 ```php
 $SELECT = (isset($_GET['select']) && !in_array($_GET['select'], $false_selects)) ? $_GET['select'] : '*';
 ```
+
 **Risk:** User input directly used in SELECT clause. While there's some validation later, the initial assignment is unsafe.
 
-**Location:** `api_cod/select_helps.php:21`
+**Location:** `app/select_helps.php:21`
 
 ---
 
 #### 6. Missing Rate Limiting
+
 **Risk:** No rate limiting is implemented on API endpoints, making them vulnerable to DoS attacks and abuse.
 
 **Location:** All endpoints
@@ -104,30 +115,35 @@ $SELECT = (isset($_GET['select']) && !in_array($_GET['select'], $false_selects))
 ### MEDIUM: Information Disclosure
 
 #### 7. Verbose Error Messages (sql.php:148)
+
 ```php
 echo "sql error:" . $e->getMessage() . "<br>" . $sql_query;
 ```
+
 **Risk:** Exposing SQL queries and error details to users can reveal database structure.
 
-**Location:** `api_cod/sql.php:148`
+**Location:** `app/sql.php:148`
 
 ---
 
 #### 8. Query Exposure on Non-Production (request.php:525-528)
+
 ```php
 if ($_SERVER['SERVER_NAME'] !== 'localhost') {
     unset($out["query"]);
 };
 ```
+
 **Risk:** The check for localhost may not be reliable in all environments (e.g., reverse proxies, load balancers).
 
-**Location:** `api_cod/request.php:525-528`
+**Location:** `app/request.php:525-528`
 
 ---
 
 ### LOW: Security Headers
 
 #### 9. Missing Security Headers
+
 **Risk:** No security headers (CSP, X-Frame-Options, X-Content-Type-Options) are set.
 
 **Recommendation:** Add security headers in the response.
@@ -139,51 +155,60 @@ if ($_SERVER['SERVER_NAME'] !== 'localhost') {
 ### CRITICAL: Database Connection Per Request
 
 #### 1. New Connection on Every Query (sql.php:262)
+
 ```php
 $db = new Database('DB_NAME');
 $results = $db->fetchquery($sql_query, $params);
 $db = null;
 ```
+
 **Impact:** Creating a new database connection for every query is extremely inefficient. Connection pooling or persistent connections should be used.
 
-**Location:** `api_cod/sql.php:262-268`
+**Location:** `app/sql.php:262-268`
 
 ---
 
 ### HIGH: N+1 Query Pattern
 
 #### 2. Subquery in Loop Context (request.php:439)
+
 ```php
 (select v.views from views_new_all v WHERE p.target = v.target AND p.lang = v.lang) as views
 ```
+
 **Impact:** This correlated subquery executes for every row in the result set.
 
-**Location:** `api_cod/request.php:439`
+**Location:** `app/request.php:439`
 
 ---
 
 #### 3. Missing Index Recommendations
+
 **Tables requiring indexes:**
-- `pages(target, lang)` - composite index
-- `views_new_all(target, lang)` - composite index
-- `pages(user)` - for user queries
-- `pages(pupdate)` - for date-based filtering
+
+-   `pages(target, lang)` - composite index
+-   `views_new_all(target, lang)` - composite index
+-   `pages(user)` - for user queries
+-   `pages(pupdate)` - for date-based filtering
 
 ---
 
 ### MEDIUM: Inefficient Queries
 
 #### 4. Unbounded Result Sets
+
 ```php
 if (isset($_GET['limit'])) {
 ```
+
 **Issue:** No default LIMIT is enforced, potentially returning millions of rows.
 
-**Location:** `api_cod/helps.php:148`
+**Location:** `app/helps.php:148`
 
 ---
 
 #### 5. Suboptimal JOIN Strategy (request.php:130-138)
+
 The `leaderboard_table` query joins three tables without proper index hints.
 
 ---
@@ -191,12 +216,14 @@ The `leaderboard_table` query joins three tables without proper index hints.
 ### LOW: Repeated File Reads
 
 #### 6. JSON File Loading on Every Request (request.php:64)
+
 ```php
 $endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
 ```
+
 **Recommendation:** Cache this configuration in APCu or as a PHP array.
 
-**Location:** `api_cod/request.php:64`
+**Location:** `app/request.php:64`
 
 ---
 
@@ -205,13 +232,15 @@ $endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_par
 ### CRITICAL: God Object/Switch Anti-Pattern
 
 #### 1. Monolithic Router (request.php:77-469)
+
 The main router contains a 400-line switch statement handling 40+ endpoints.
 
 **Issues:**
-- Violates Single Responsibility Principle
-- Difficult to test individual endpoints
-- Hard to maintain and extend
-- Tight coupling between routing and business logic
+
+-   Violates Single Responsibility Principle
+-   Difficult to test individual endpoints
+-   Hard to maintain and extend
+-   Tight coupling between routing and business logic
 
 **Recommendation:** Implement a proper router with endpoint handlers as separate classes.
 
@@ -220,22 +249,26 @@ The main router contains a 400-line switch statement handling 40+ endpoints.
 ### HIGH: Procedural Code with Namespaces
 
 #### 2. Inconsistent Architecture
+
 The codebase uses namespaces but remains entirely procedural. Functions are used instead of classes for business logic.
 
 **Issues:**
-- No dependency injection
-- Difficult to unit test
-- No interface abstractions
-- Global state via `$_GET` and `$_REQUEST`
+
+-   No dependency injection
+-   Difficult to unit test
+-   No interface abstractions
+-   Global state via `$_GET` and `$_REQUEST`
 
 ---
 
 #### 3. Direct Superglobal Access
+
 ```php
 $_GET['get']
 $_GET['limit']
 $_GET['user']
 ```
+
 **Issue:** Direct access to superglobals throughout the codebase makes testing difficult and creates hidden dependencies.
 
 ---
@@ -243,6 +276,7 @@ $_GET['user']
 ### MEDIUM: Code Duplication
 
 #### 4. Repeated Parameter Handling Pattern
+
 The same pattern for parameter sanitization and query building is repeated across multiple endpoints:
 
 ```php
@@ -260,10 +294,11 @@ if ($added !== null) {
 ### LOW: Inconsistent Error Handling
 
 #### 5. Mixed Error Handling Strategies
-- Some functions return empty arrays on error
-- Some echo error messages
-- Some use error_log
-- No consistent exception handling
+
+-   Some functions return empty arrays on error
+-   Some echo error messages
+-   Some use error_log
+-   No consistent exception handling
 
 ---
 
@@ -272,9 +307,11 @@ if ($added !== null) {
 ### HIGH: Incorrect Cache Key Generation
 
 #### 1. Potential Cache Collision (sql.php:191)
+
 ```php
 return 'apcu_' . md5($sql_query . $params_string);
 ```
+
 **Issue:** MD5 collisions are possible. While unlikely, for a high-traffic API this could cause incorrect cached data to be returned.
 
 ---
@@ -282,6 +319,7 @@ return 'apcu_' . md5($sql_query . $params_string);
 ### MEDIUM: Filter Logic Error
 
 #### 2. Double Sanitization (helps.php:16-21)
+
 ```php
 function sanitize_input($input, $pattern) {
     if (!empty($input) && preg_match($pattern, $input) && $input !== "all") {
@@ -290,16 +328,19 @@ function sanitize_input($input, $pattern) {
     return null;
 }
 ```
+
 **Issue:** The function returns `null` for invalid input, but calling code often doesn't distinguish between "not provided" and "invalid".
 
 ---
 
 #### 3. Undefined Variable Usage (titles_infos.php:13-28)
+
 ```php
 $qua_old = <<<SQL
     SELECT ...
 SQL;
 ```
+
 **Issue:** `$qua_old` is defined but never used in the functions below it.
 
 ---
@@ -307,9 +348,11 @@ SQL;
 ### LOW: Type Juggling Issues
 
 #### 4. String Comparison with Numbers (helps.php:46-49)
+
 ```php
 !is_numeric($value)
 ```
+
 Using `is_numeric` can have unexpected behavior with string numbers.
 
 ---
@@ -322,20 +365,20 @@ All functions lack PHPDoc blocks and parameter/return type declarations.
 
 ### Inconsistent Naming Conventions
 
-- Mix of snake_case and camelCase
-- `$qua` vs `$query` for query variables
-- `$tabe` (typo for "table"?)
+-   Mix of snake_case and camelCase
+-   `$qua` vs `$query` for query variables
+-   `$tabe` (typo for "table"?)
 
 ### Dead Code
 
-- Commented-out code blocks throughout
-- Unused variables (`$qua_old` in `titles_infos.php`)
+-   Commented-out code blocks throughout
+-   Unused variables (`$qua_old` in `titles_infos.php`)
 
 ### Magic Strings/Numbers
 
-- `3600 * 12` for cache TTL
-- Hardcoded table names
-- Status codes without constants
+-   `3600 * 12` for cache TTL
+-   Hardcoded table names
+-   Status codes without constants
 
 ---
 
@@ -346,10 +389,12 @@ All functions lack PHPDoc blocks and parameter/return type declarations.
 **Purpose:** Main entry point that delegates to request.php
 
 **Issues:**
-- No input validation before include
-- Test mode check allows error display
+
+-   No input validation before include
+-   Test mode check allows error display
 
 **Recommended PHPDoc:**
+
 ```php
 <?php
 /**
@@ -381,21 +426,23 @@ if (!isset($_GET['get'])) {
     exit();
 }
 
-require_once __DIR__ . '/api_cod/request.php';
+require_once __DIR__ . '/app/request.php';
 ```
 
 ---
 
-### api_cod/request.php (Main Router)
+### app/request.php (Main Router)
 
 **Purpose:** Central routing and query building
 
 **Issues:**
-- God switch statement (400+ lines)
-- Direct superglobal access
-- Mixed responsibilities
+
+-   God switch statement (400+ lines)
+-   Direct superglobal access
+-   Mixed responsibilities
 
 **Recommended Refactoring:**
+
 ```php
 <?php
 /**
@@ -522,16 +569,18 @@ class Router
 
 ---
 
-### api_cod/sql.php (Database Layer)
+### app/sql.php (Database Layer)
 
 **Purpose:** Database connection and query execution
 
 **Issues:**
-- Hardcoded credentials
-- New connection per query
-- Mixed responsibilities
+
+-   Hardcoded credentials
+-   New connection per query
+-   Mixed responsibilities
 
 **Recommended PHPDoc:**
+
 ```php
 <?php
 /**
@@ -830,16 +879,18 @@ function get_dbname(string $endpointName): string
 
 ---
 
-### api_cod/helps.php (Query Builder Utilities)
+### app/helps.php (Query Builder Utilities)
 
 **Purpose:** Helper functions for building SQL queries
 
 **Issues:**
-- Deprecated filter constants
-- Inconsistent return types
-- Global state dependencies
+
+-   Deprecated filter constants
+-   Inconsistent return types
+-   Global state dependencies
 
 **Recommended PHPDoc:**
+
 ```php
 <?php
 /**
@@ -1307,44 +1358,51 @@ namespace API\Types;
 ### Immediate Actions (Critical - Do Today)
 
 1. **Remove hardcoded credentials** from `sql.php`
-   - Use environment variables or secure config files
-   - Never commit credentials to version control
+
+    - Use environment variables or secure config files
+    - Never commit credentials to version control
 
 2. **Fix SQL injection in table name interpolation**
-   - Validate `$get` against whitelist of allowed tables
-   - Use parameterized queries where possible
+
+    - Validate `$get` against whitelist of allowed tables
+    - Use parameterized queries where possible
 
 3. **Remove query interpolation for logging**
-   - Line 484 in `request.php` creates unnecessary risk
-   - Log sanitized queries only
+    - Line 484 in `request.php` creates unnecessary risk
+    - Log sanitized queries only
 
 ### Short-Term Actions (This Week)
 
 4. **Implement connection pooling**
-   - Use persistent connections or a connection pool
-   - Reduce database overhead significantly
+
+    - Use persistent connections or a connection pool
+    - Reduce database overhead significantly
 
 5. **Add default LIMIT**
-   - Prevent accidental full table scans
-   - Implement maximum limit enforcement
+
+    - Prevent accidental full table scans
+    - Implement maximum limit enforcement
 
 6. **Standardize error handling**
-   - Create custom exception classes
-   - Never expose SQL queries to users
+
+    - Create custom exception classes
+    - Never expose SQL queries to users
 
 7. **Add input validation layer**
-   - Centralize all input validation
-   - Remove direct `$_GET` access
+    - Centralize all input validation
+    - Remove direct `$_GET` access
 
 ### Medium-Term Actions (This Month)
 
 8. **Refactor router**
-   - Split the 400-line switch into separate handlers
-   - Implement proper MVC or similar pattern
+
+    - Split the 400-line switch into separate handlers
+    - Implement proper MVC or similar pattern
 
 9. **Add comprehensive logging**
-   - Log all queries with timing
-   - Implement structured logging
+
+    - Log all queries with timing
+    - Implement structured logging
 
 10. **Add rate limiting**
     - Implement per-IP and per-user limits
@@ -1353,17 +1411,19 @@ namespace API\Types;
 ### Long-Term Actions (This Quarter)
 
 11. **Add full test coverage**
-    - Unit tests for all helper functions
-    - Integration tests for all endpoints
-    - Security testing
+
+    -   Unit tests for all helper functions
+    -   Integration tests for all endpoints
+    -   Security testing
 
 12. **Implement proper dependency injection**
-    - Remove all global state dependencies
-    - Make code testable
+
+    -   Remove all global state dependencies
+    -   Make code testable
 
 13. **Add API versioning**
-    - Support multiple API versions
-    - Implement deprecation strategy
+    -   Support multiple API versions
+    -   Implement deprecation strategy
 
 ---
 

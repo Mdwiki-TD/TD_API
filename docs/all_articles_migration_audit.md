@@ -65,7 +65,7 @@ After applying the rewrites below `all_articles` can be **fully dropped**.
 
 | # | File | Line(s) | Operation | Columns Used | category nullable? | Notes |
 |---|------|---------|-----------|-------------|-------------------|-------|
-| T1 | `src/api_cod/subs/missing_exists.php` | 36 (within `exists_by_qids_query`, plus the `aa.category` filter at 60–66) | SELECT (`LEFT JOIN`) | `article_id`, `category` | Yes — `LEFT JOIN` may produce NULL `aa.category` for rows that don't match | Used to attach (and optionally filter on) a single category per article |
+| T1 | `src/app/subs/missing_exists.php` | 36 (within `exists_by_qids_query`, plus the `aa.category` filter at 60–66) | SELECT (`LEFT JOIN`) | `article_id`, `category` | Yes — `LEFT JOIN` may produce NULL `aa.category` for rows that don't match | Used to attach (and optionally filter on) a single category per article |
 | T1-doc | `sql.sql` | 33–40 | DDL | — | — | Schema definition; remove on cutover |
 | T1-doc | `docs/sql_tables_deleted.md` | 41–65, 122, 126–138 | Documentation | — | — | Documents already-deleted views and the still-live `all_articles` table |
 | T1-doc | `refactor.md` | 845 | Planned ORM call | — | — | References deleted **view** `all_articles_titles`, not the table; out of scope but flagged for cleanup |
@@ -97,7 +97,7 @@ The neighbouring functions in `new_sql_tables.php` (`missing_by_lang_and_categor
 
 ### T1 / D1 — `LEFT JOIN all_articles aa ON aa.article_id = q.title`
 
-**Original query** (TD_API `src/api_cod/subs/missing_exists.php:13–67`, mirrored in Translation-Dashboard `src/backend/api_or_sql/new_sql_tables.php:18–66`):
+**Original query** (TD_API `src/app/subs/missing_exists.php:13–67`, mirrored in Translation-Dashboard `src/backend/api_or_sql/new_sql_tables.php:18–66`):
 
 ```sql
 SELECT
@@ -279,7 +279,7 @@ que = """select DISTINCT article_id from category_members;"""
 
 **Phase 2 — MEDIUM risk, semantic decision:**
 
-3. **TD_API / `src/api_cod/subs/missing_exists.php` (`exists_by_qids_query`)** — replace the `LEFT JOIN all_articles aa ON aa.article_id = q.title` with one of the two patterns in §3 / T1. Recommended: Option A (filter via `cm.category`/campaign), matching the convention already used by the neighbouring functions in the same file. (T1)
+3. **TD_API / `src/app/subs/missing_exists.php` (`exists_by_qids_query`)** — replace the `LEFT JOIN all_articles aa ON aa.article_id = q.title` with one of the two patterns in §3 / T1. Recommended: Option A (filter via `cm.category`/campaign), matching the convention already used by the neighbouring functions in the same file. (T1)
 4. **Translation-Dashboard / `src/backend/api_or_sql/new_sql_tables.php` (`exists_by_qids_query`)** — apply the identical rewrite as in step 3. (D1)
 
 **Phase 3 — HIGH risk, requires a decision:**

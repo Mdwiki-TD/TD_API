@@ -1,23 +1,15 @@
 <?php
 
 namespace API\Top;
-/*
-Usage:
-use function API\Top\top_langs;
-use function API\Top\top_users;
-
-
-
-*/
 
 use function API\Helps\add_array_params;
 use function API\Helps\add_li_params;
 
 function top_query($select)
 {
-    // ---
+
     $select_field = ($select === 'user') ? 'p.user' : 'p.lang, la.name as lang_name';
-    // ---
+
     $query = <<<SQL
         SELECT
             $select_field,
@@ -52,42 +44,42 @@ function top_query($select)
         AND p.user != '' AND p.user IS NOT NULL
         AND p.lang != '' AND p.lang IS NOT NULL
         SQL;
-    // ---
+
     return $query;
 }
 
 function top_users($endpoint_params)
 {
-    // ---
+
     $query = top_query('user');
-    // ---
+
     [$query, $params] = add_li_params($query, [], $endpoint_params, []);
-    // ---
+
     $query .= " GROUP BY p.user ORDER BY targets DESC";
-    // ---
+
     return [$query, $params, ""];
 }
 
 function top_langs($endpoint_params)
 {
-    // ---
+
     $query = top_query('lang');
-    // ---
+
     [$query, $params] = add_li_params($query, [], $endpoint_params, [""]);
-    // ---
+
     $query .= " GROUP BY p.lang ORDER BY targets DESC";
-    // ---
+
     return [$query, $params, ""];
 }
 
 function top_lang_of_users($endpoint_params)
 {
-    // ---
+
     $params = [];
     $query_line = "";
-    // ---
+
     list($query_line, $params) = add_array_params($query_line, $params, 'users', 'p.user', "AND");
-    // ---
+
     $query = <<<SQL
         SELECT user, lang, cnt
         FROM (
@@ -104,6 +96,6 @@ function top_lang_of_users($endpoint_params)
         WHERE rn = 1
         ORDER BY cnt DESC;
     SQL;
-    // ---
+
     return [$query, $params, ""];
 }

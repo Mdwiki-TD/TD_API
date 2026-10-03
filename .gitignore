@@ -1,27 +1,26 @@
 
-test/script copy.js
+*.env.*
+*.js.backup
+.claude/settings.json
+.claude/settings.local.json
+.env
+.phpunit.result.cache
+/.commandcode
+/.phpunit.cache
+/build/coverage-html
+/old
 /test1
-src/api_cod/request_countall.php
-t.php
+/vendor
+/x
 openapi/deepwiki.md
 openapi/script_docs.md
 openapi/x.json
 openapi_o.json
-/x
-/old
-.env
-*.env.*
-TD_API.zip
-
-/vendor
 src/api/proxy.php
-*.js.backup
-.claude/settings.local.json
-.phpunit.result.cache
-.claude/settings.json
-tests_output.txt
+src/app/request_countall.php
+src/app/subs/missing_exists_backup_.php_x
 src/load_env.php
-/.phpunit.cache
-/build/coverage-html
-src/api_cod/subs/missing_exists_backup_.php_x
-/.commandcode
+t.php
+TD_API.zip
+test/script copy.js
+tests_output.txt

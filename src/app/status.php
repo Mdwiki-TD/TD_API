@@ -1,10 +1,7 @@
 <?php
 
 namespace API\Status;
-/*
-Usage:
-use function API\Status\make_status_query;
-*/
+
 
 use function API\Helps\sanitize_input;
 
@@ -38,10 +35,10 @@ function make_status_query($endpoint_params)
         $qu_ery .= " AND u.user_group = ?";
         $pa_rams[] = $user_group;
     }
-    // ---
+
     $campaign_raw = $_GET['campaign'] ?? null;
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
-    // ---
+
     $campaign   = sanitize_input($campaign_raw ?? '', '/^[A-Za-z0-9- ]+$/');
     $category   = sanitize_input($category_raw ?? $_GET['cat'] ?? '', '/^[A-Za-z0-9- ]+$/');
 

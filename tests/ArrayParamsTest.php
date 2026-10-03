@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use function API\Helps\add_array_params;
 
 /**
- * Tests for add_array_params function in api_cod/helps.php
+ * Tests for add_array_params function in app/helps.php
  */
 class ArrayParamsTest extends TestCase
 {

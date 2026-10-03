@@ -9,9 +9,10 @@ putenv('DB_NAME=s54732__mdwikiz');
 
 putenv('TOOL_TOOLSDB_USER=root');
 putenv('TOOL_TOOLSDB_PASSWORD=root11');
+
 $_SERVER['SERVER_NAME'] = 'localhost';
 
-require_once dirname(__DIR__) . '/src/include_all.php';
+require_once dirname(__DIR__) . '/src/bootstrap.php';
 
 $vendorAutoload = dirname(__DIR__) . '/vendor/autoload.php';
 

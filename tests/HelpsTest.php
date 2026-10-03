@@ -17,7 +17,7 @@ use function API\Helps\add_li_params;
 use function API\Helps\get_order_direction;
 
 /**
- * Tests for helper functions in api_cod/helps.php
+ * Tests for helper functions in app/helps.php
  * Note: Tests using $_GET run in separate processes because filter_input()
  * doesn't work with direct $_GET assignments in PHPUnit.
  */
