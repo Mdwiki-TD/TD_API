@@ -299,31 +299,9 @@ switch ($get) {
         $query = $query_start . $query;
         $query = add_group($query, $endpoint_data, $get_group_value);
         break;
-    /**
-     * Above Already in EndpointRegistry.php
-     */
 
-    case 'users_by_last_pupdate':
-        $qua = <<<SQL
-            WITH RankedPages AS (
-                SELECT
-                    p1.target,
-                    p1.user,
-                    p1.pupdate,
-                    p1.lang,
-                    p1.title,
-                    ROW_NUMBER() OVER (PARTITION BY p1.user ORDER BY p1.pupdate DESC) AS rn
-                FROM pages p1
-                WHERE p1.target != ''
-            )
-            SELECT target, user, pupdate, lang, title
-            FROM RankedPages
-            WHERE rn = 1
-            ORDER BY pupdate DESC;
-        SQL;
-        break;
 
-    case 'pages_by_user_or_lang':
+    case 'pages_by_user_or_lang': // now at PagesByUserOrLangHandler.php
 
         $qua = <<<SQL
             SELECT DISTINCT p.title, p.word, p.translate_type, p.cat, p.lang, p.user, p.target, p.date,
@@ -351,18 +329,7 @@ switch ($get) {
         $query = add_group($query, $endpoint_data, $get_group_value);
         break;
 
-    case 'pages_langs':
-    case 'pages_users_langs':
-        $table_name = ($get == 'pages_langs') ? 'pages' : 'pages_users';
-        $query = <<<SQL
-            SELECT lang, autonym
-            FROM $table_name p
-            LEFT JOIN langs la ON lang = la.code
-            GROUP BY lang
-        SQL;
-        break;
-
-    case 'user_lang_status':
+    case 'user_lang_status':        // now at UserStatusHandler.php
     case 'user_status':
 
         $SELECT = ($SELECT == "*" || $SELECT == "year") ? "YEAR(p.pupdate) as year" : $SELECT;
@@ -376,6 +343,41 @@ switch ($get) {
         [$query, $params] = add_li_params($qua, [], $endpoint_params);
 
         break;
+
+    case 'users_by_last_pupdate':
+        $qua = <<<SQL
+            WITH RankedPages AS (
+                SELECT
+                    p1.target,
+                    p1.user,
+                    p1.pupdate,
+                    p1.lang,
+                    p1.title,
+                    ROW_NUMBER() OVER (PARTITION BY p1.user ORDER BY p1.pupdate DESC) AS rn
+                FROM pages p1
+                WHERE p1.target != ''
+            )
+            SELECT target, user, pupdate, lang, title
+            FROM RankedPages
+            WHERE rn = 1
+            ORDER BY pupdate DESC
+        SQL;
+        break;
+
+    case 'pages_langs':
+    case 'pages_users_langs':
+        $table_name = ($get == 'pages_langs') ? 'pages' : 'pages_users';
+        $query = <<<SQL
+            SELECT lang, autonym
+            FROM $table_name p
+            LEFT JOIN langs la ON lang = la.code
+            GROUP BY lang
+        SQL;
+        break;
+
+    /**
+     * Above Already in EndpointRegistry.php
+     */
 
     case 'pages':
     case 'pages_users':

@@ -16,6 +16,8 @@ use App\Endpoints\Handlers\{
     QidsHandler,
     PagesUsersToMainHandler,
     PagesWithViewsHandler,
+    PagesByUserOrLangHandler,
+    UserStatusHandler,
 };
 
 use function API\Missing\{
@@ -69,19 +71,20 @@ final class EndpointRegistry
         'words',
         'in_process',
         'pages_with_views',
+
+        'user_lang_status',
+        'user_status',
+        'pages_by_user_or_lang',
+        'users_by_last_pupdate',
+        'pages_users_langs',
+        'pages_langs',
     ];
 
     /** endpoints didn't get moved yet, stay in the old request.php */
     private const LEGACY = [
         // 'publish_reports',
         'pages',
-        'pages_by_user_or_lang',
-        'pages_langs',
         'pages_users',
-        'pages_users_langs',
-        'user_lang_status',
-        'user_status',
-        'users_by_last_pupdate',
     ];
     /** @var array<string, EndpointHandler> */
     private array $handlers;
@@ -172,6 +175,32 @@ final class EndpointRegistry
                 groupable: true,
             ),
             'pages_with_views' => new PagesWithViewsHandler(),
+
+            'users_by_last_pupdate' => new StaticSqlHandler(
+                "WITH RankedPages AS (
+                    SELECT p1.target, p1.user, p1.pupdate, p1.lang, p1.title,
+                            ROW_NUMBER() OVER (PARTITION BY p1.user ORDER BY p1.pupdate DESC) AS rn
+                    FROM pages p1
+                    WHERE p1.target != ''
+                )
+                SELECT target, user, pupdate, lang, title
+                FROM RankedPages
+                WHERE rn = 1
+                ORDER BY pupdate DESC",
+                applyOrder: false,
+            ),
+
+            'pages_by_user_or_lang' => new PagesByUserOrLangHandler(),
+
+            'pages_langs' => new StaticSqlHandler(
+                'SELECT lang, autonym FROM pages p LEFT JOIN langs la ON lang = la.code GROUP BY lang'
+            ),
+            'pages_users_langs' => new StaticSqlHandler(
+                'SELECT lang, autonym FROM pages_users p LEFT JOIN langs la ON lang = la.code GROUP BY lang'
+            ),
+
+            'user_status'      => new UserStatusHandler(),
+            'user_lang_status' => new UserStatusHandler(),
         ];
     }
 
