@@ -375,14 +375,14 @@ switch ($get) {
         SQL;
         break;
 
-    /**
-     * Above Already in EndpointRegistry.php
-     */
-
     case 'pages':
     case 'pages_users':
         [$query, $params, $error] = pages_query($endpoint_params, $SELECT, $DISTINCT, $get);
         break;
+
+    /**
+     * Above Already in EndpointRegistry.php
+     */
 
     case 'publish_reports':
         $query = <<<SQL

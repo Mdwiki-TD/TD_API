@@ -18,6 +18,7 @@ use App\Endpoints\Handlers\{
     PagesWithViewsHandler,
     PagesByUserOrLangHandler,
     UserStatusHandler,
+    PagesHandler,
 };
 
 use function API\Missing\{
@@ -78,14 +79,10 @@ final class EndpointRegistry
         'users_by_last_pupdate',
         'pages_users_langs',
         'pages_langs',
-    ];
-
-    /** endpoints didn't get moved yet, stay in the old request.php */
-    private const LEGACY = [
-        // 'publish_reports',
         'pages',
         'pages_users',
     ];
+
     /** @var array<string, EndpointHandler> */
     private array $handlers;
 
@@ -201,15 +198,11 @@ final class EndpointRegistry
 
             'user_status'      => new UserStatusHandler(),
             'user_lang_status' => new UserStatusHandler(),
+            'pages'       => new PagesHandler('pages'),
+            'pages_users' => new PagesHandler('pages_users'),
         ];
     }
 
-    public function isLegacy(string $get): bool
-    {
-        return in_array($get, self::LEGACY, true);
-    }
-
-    /** null = Unknown (error). call isLegacy() before. */
     public function resolve(EndpointContext $ctx): ?EndpointHandler
     {
         if (isset($this->handlers[$ctx->get])) {

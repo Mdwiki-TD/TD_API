@@ -55,12 +55,6 @@ class APIController
 
         $get = $this->request->get('get') ?? '';
 
-        // 1) endpoints غير المنقولة: نسلّمها للملف القديم كما هي
-        if ($this->registry->isLegacy($get)) {
-            $this->runLegacy();
-            return;
-        }
-
         header('Content-Type: application/json');
 
         try {
@@ -97,11 +91,6 @@ class APIController
             http_response_code(500);
             $this->emit($this->builder->errorOnly('internal error'));
         }
-    }
-
-    private function runLegacy(): void
-    {
-        require __DIR__ . '/request.php';
     }
 
     private function emit(array $data): void
