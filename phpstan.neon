@@ -5,4 +5,4 @@ parameters:
 
     # Scan files for class definitions
     scanFiles:
-        - src/include_all.php
+        - src/bootstrap.php

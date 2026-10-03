@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,10 +25,8 @@ class InputSanityTest extends TestCase
         $this->assertTrue(function_exists('API\SelectHelps\get_select'));
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testGetSuperglobalWorksInSeparateProcess(): void
     {
         $_GET['test'] = 'value';

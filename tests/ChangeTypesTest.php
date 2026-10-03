@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use function API\Helps\change_types;
 
 /**
- * Tests for change_types function in api_cod/helps.php
+ * Tests for change_types function in app/helps.php
  * This function converts type definitions for query parameter handling
  */
 class ChangeTypesTest extends TestCase

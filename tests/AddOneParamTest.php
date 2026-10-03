@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use function API\Helps\add_one_param;
 
 /**
- * Tests for add_one_param function in api_cod/helps.php
+ * Tests for add_one_param function in app/helps.php
  * This function handles special parameter values like not_empty, empty, >0
  */
 class AddOneParamTest extends TestCase
