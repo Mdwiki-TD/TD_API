@@ -258,6 +258,7 @@ function add_array_params($qua, $params, $param = "titles", $column = "title", $
  */
 function read_scalar_param(string $key): ?string
 {
+    // $v = filter_input(INPUT_GET, $key) ?? null;
     $v = $_GET[$key] ?? null;
     if (!is_string($v)) {
         return null;
