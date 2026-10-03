@@ -1,46 +1,29 @@
 <?php
+// src/app/Logger.php
+declare(strict_types=1);
 
 namespace App;
 
-class Logger
+final class Logger
 {
-    private static ?bool $isDebugEnabled = null;
+    private static ?bool $debug = null;
 
-    /**
-     * Check and cache the debug status.
-     *
-     * @return bool
-     */
-    private static function isDebugEnabled(): bool
+    private static function isDebug(): bool
     {
-        if (self::$isDebugEnabled === null) {
-            if (isset($_COOKIE['test']) && $_COOKIE['test'] === 'x') {
-                self::$isDebugEnabled = false;
-            } else {
-                self::$isDebugEnabled = isset($_REQUEST['test']) || isset($_COOKIE['test']);
-            }
-        }
-
-        return self::$isDebugEnabled;
+        return self::$debug ??= ((getenv('APP_ENV') ?: ($_ENV['APP_ENV'] ?? '')) === 'development');
     }
 
-    /**
-     * Print debug information if the test condition is met.
-     *
-     * @param mixed $s Data to be logged or printed.
-     * @return void
-     */
+    /** يُكتب في سجل الخادم فقط، وفي وضع development فقط */
     public static function debug(mixed $s): void
     {
-        if (!self::isDebugEnabled()) {
-            return;
+        if (self::isDebug()) {
+            error_log('[debug] ' . (is_string($s) ? $s : print_r($s, true)));
         }
+    }
 
-        if (is_string($s)) {
-            echo "\n<br>\n$s";
-        } else {
-            echo "\n<br>\n";
-            print_r($s);
-        }
+    /** يُكتب دائماً في سجل الخادم، ولا يصل للمستخدم أبداً */
+    public static function error(string $message): void
+    {
+        error_log($message);
     }
 }
