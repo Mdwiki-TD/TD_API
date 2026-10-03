@@ -4,7 +4,7 @@ declare(strict_types=1);
 /*
 # This will make the query time > x10
             # AND A.id < B.id
-/*
+*/
 namespace App\Endpoints\Handlers;
 
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
