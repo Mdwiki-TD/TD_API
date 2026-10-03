@@ -1,4 +1,5 @@
 <?php
+// src/app/qids.php
 
 namespace API\Qids;
 
@@ -24,6 +25,8 @@ function qids_qua($get)
             xx B ON A.qid = B.qid
         WHERE
             A.qid != '' AND A.title != B.title AND A.id != B.id
+            # This will make the query time > x10
+            # AND A.id < B.id
         SQL
     ];
 

@@ -25,7 +25,7 @@ final class ResponseBuilder
         string $source = 'db',
         string $time = '0',
         string $sql = '',
-        string $params = '',
+        array $params = [],
         string $error = '',
     ): array {
         $out = [
@@ -40,6 +40,8 @@ final class ResponseBuilder
             unset($out['query']);
         } else {
             $out['query'] = trim(preg_replace('/\s+/', ' ', $sql));
+            // apply $params to $qua
+            $out['query'] = " " . sprintf(str_replace('?', "'%s'", $out['query']), ...$params) . " ";
         }
 
         if ($error !== '') {

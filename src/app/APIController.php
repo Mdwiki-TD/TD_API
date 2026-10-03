@@ -88,8 +88,10 @@ class APIController
                 $run['source'],
                 $run['time'],
                 $run['sql'],
+                $spec->params,
                 error: $spec->error
             ));
+
         } catch (Throwable $e) {
             error_log('[API] ' . $e->getMessage());
             http_response_code(500);

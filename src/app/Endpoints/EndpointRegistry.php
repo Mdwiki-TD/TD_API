@@ -12,14 +12,15 @@ use App\Endpoints\Handlers\{
     UsersHandler,
     CategoryMembersHandler,
     ViewsHandler,
-    LeaderboardHandler
+    LeaderboardHandler,
+    QidsHandler,
 };
 
 use function API\Missing\{
     missing_by_lang_and_category,
     exists_statics_by_category,
     exists_by_lang_and_category,
-    statics_by_category
+    statics_by_category,
 };
 use function API\TitlesInfos\{mdwiki_revids, titles_query};
 use function API\Status\make_status_query;
@@ -58,6 +59,9 @@ final class EndpointRegistry
 
         'leaderboard_table',
         'leaderboard_table_formated',
+
+        'qids',
+        'qids_others',
     ];
 
     /** endpoints didn't get moved yet, stay in the old request.php */
@@ -74,8 +78,6 @@ final class EndpointRegistry
         'pages_with_views',
         'publish_reports',
         'publish_reports_stats',
-        'qids',
-        'qids_others',
         'user_lang_status',
         'user_status',
         'users_by_last_pupdate',
@@ -94,6 +96,7 @@ final class EndpointRegistry
         $langViews = new ViewsHandler(requiredParam: 'lang');
 
         $leader    = new LeaderboardHandler();
+        $qids = new QidsHandler();
 
         $this->handlers = [
             'missing'                      => $missing,
@@ -139,6 +142,9 @@ final class EndpointRegistry
 
             'leaderboard_table'          => $leader,
             'leaderboard_table_formated' => $leader,
+
+            'qids'        => $qids,
+            'qids_others' => $qids,
 
         ];
     }

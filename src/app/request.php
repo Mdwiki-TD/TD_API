@@ -222,6 +222,11 @@ switch ($get) {
         $query .= " ORDER BY 1 DESC";
         break;
 
+    case 'qids':
+    case 'qids_others':
+        $qua = qids_qua($get);
+        break;
+
     /**
      * Above Already in EndpointRegistry.php
      */
@@ -236,14 +241,6 @@ switch ($get) {
                 $params[] = $added;
             }
         }
-        break;
-
-    case 'qids':
-        $qua = qids_qua($get);
-        break;
-
-    case 'qids_others':
-        $qua = qids_qua($get);
         break;
 
     case 'count_pages':
