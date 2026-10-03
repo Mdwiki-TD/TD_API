@@ -167,6 +167,47 @@ switch ($get) {
      * Above Already in EndpointRegistry.php
      */
 
+    case 'views':
+    case 'views_new':
+        $query = <<<SQL
+            SELECT p.title, v.target, v.lang, v.views
+            FROM views_new_all v
+            LEFT JOIN pages p
+                ON p.target = v.target
+                AND p.lang = v.lang
+        SQL;
+        [$query, $params] = add_li_params($query, [], $endpoint_params);
+        $query .= " ORDER BY 1 DESC";
+        break;
+
+    case 'lang_views':
+    case 'lang_views2':
+        if (enabled('lang')) {
+            $query = <<<SQL
+                SELECT p.title, v.target, v.lang, v.views
+                FROM views_new_all v
+                LEFT JOIN pages p
+                    ON p.target = v.target
+                    AND p.lang = v.lang
+            SQL;
+            [$query, $params] = add_li_params($query, [], $endpoint_params);
+        };
+        break;
+
+    case 'user_views':
+    case 'user_views2':
+        if (enabled('user')) {
+            $query = <<<SQL
+                SELECT p.title, v.target, v.lang, v.views
+                FROM views_new_all v
+                JOIN pages p
+                    ON p.target = v.target
+                    AND p.lang = v.lang
+            SQL;
+            [$query, $params] = add_li_params($query, [], $endpoint_params);
+        };
+        break;
+
     case 'pages_users_to_main':
         $query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
         $params = [];
@@ -198,20 +239,6 @@ switch ($get) {
         // $query .= " \n group by v.target, v.lang";
         $query .= " ORDER BY 1 DESC";
 
-        break;
-
-    case 'views':
-    case 'views_new':
-        $query = <<<SQL
-            SELECT p.title, v.target, v.lang, v.views
-            FROM views_new_all v
-            LEFT JOIN pages p
-                ON p.target = v.target
-                AND p.lang = v.lang
-        SQL;
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
-        // $query .= " group by v.target, v.lang"; // used with views_new and sum(v.views)
-        $query .= " ORDER BY 1 DESC";
         break;
 
     case 'qids':
@@ -248,24 +275,6 @@ switch ($get) {
         SQL;
         break;
 
-    case 'user_views':
-    case 'user_views2':
-        if (enabled('user')) {
-            $query = <<<SQL
-                SELECT p.title, v.target, v.lang, v.views
-                FROM views_new_all v
-                JOIN pages p
-                    ON p.target = v.target
-                    AND p.lang = v.lang
-            SQL;
-
-            [$query, $params] = add_li_params($query, [], $endpoint_params);
-
-            // $query .= " GROUP BY v.target, v.lang";
-
-        };
-        break;
-
     case 'language_settings':
         $query = <<<SQL
             SELECT DISTINCT *
@@ -295,24 +304,6 @@ switch ($get) {
 
         [$query, $params] = add_li_params($query, [], $endpoint_params);
 
-        break;
-
-    case 'lang_views':
-    case 'lang_views2':
-        if (enabled('lang')) {
-            $query = <<<SQL
-                SELECT v.target, v.lang, v.views
-                FROM views_new_all v
-                LEFT JOIN pages p
-                    ON p.target = v.target
-                    AND p.lang = v.lang
-            SQL;
-
-            [$query, $params] = add_li_params($query, [], $endpoint_params);
-
-            // $query .= " GROUP BY v.target, v.lang";
-
-        };
         break;
 
     case 'words':
