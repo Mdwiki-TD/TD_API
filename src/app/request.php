@@ -36,14 +36,15 @@ $other_tables = [
     'projects',
     'settings',
     'translate_type',
-    // 'pages',
-    // 'pages_users',
 ];
 
-$DISTINCT = (isset($_GET['distinct']) && $_GET['distinct'] != 'false' && $_GET['distinct'] != '0') ? 'DISTINCT ' : '';
-$get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_FULL_SPECIAL_CHARS); //$_GET['get']
+function enabled(string $key): bool
+{
+    return isset($_GET[$key]) && $_GET[$key] !== 'false' && $_GET[$key] !== '0';
+}
 
-// if (!isset($_GET['limit'])) $_GET['limit'] = '50';
+$DISTINCT = enabled('distinct') ? 'DISTINCT ' : '';
+$get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_FULL_SPECIAL_CHARS); //$_GET['get']
 
 $qua = "";
 $query = "";
@@ -70,8 +71,10 @@ $get_group_value = filter_input(INPUT_GET, 'group', FILTER_SANITIZE_FULL_SPECIAL
 
 $error = "";
 
+/**
+ * Already in EndpointRegistry.php
+ */
 switch ($get) {
-
     case 'missing':
     case 'missing_by_lang_and_category':
         [$query, $params, $error] = missing_by_lang_and_category($endpoint_params);
@@ -79,20 +82,46 @@ switch ($get) {
 
     case 'exists_statics_by_category':
         [$query, $params, $error] = exists_statics_by_category($endpoint_params);
-        break;
 
     case 'exists_by_lang_and_category':
         [$query, $params, $error] = exists_by_lang_and_category($endpoint_params);
-
         break;
+
     case 'statics_by_category':
         [$query, $params, $error] = statics_by_category($endpoint_params);
-
         break;
 
-    case 'users':
+    case 'revids':
+        [$query, $params, $error] = mdwiki_revids($endpoint_params);
+        break;
+
+    case 'titles':
+        [$query, $params, $error] = titles_query($endpoint_params);
+        break;
+
+    case 'status':
+        [$query, $params, $error] = make_status_query($endpoint_params);
+        break;
+
+    case 'top_lang_of_users':
+        [$query, $params, $error] = top_lang_of_users($endpoint_params);
+        break;
+
+    case 'top_langs':
+        [$query, $params, $error] = top_langs($endpoint_params);
+        break;
+
+    case 'top_users':
+        [$query, $params, $error] = top_users($endpoint_params);
+        break;
+
+    /**
+     * Above Already in EndpointRegistry.php
+     */
+
+    case 'users': // now at UsersHandler.php
         $query = "SELECT username FROM users";
-        if (isset($_GET['userlike']) && $_GET['userlike'] != 'false' && $_GET['userlike'] != '0') {
+        if (enabled('userlike')) {
             $added = filter_input(INPUT_GET, 'userlike', FILTER_SANITIZE_SPECIAL_CHARS);
             if ($added !== null) {
                 $query .= " WHERE username like ?";
@@ -114,18 +143,10 @@ switch ($get) {
         $params[] = $cat;
         break;
 
-    case 'revids':
-        [$query, $params, $error] = mdwiki_revids($endpoint_params);
-        break;
-
-    case 'titles':
-        [$query, $params, $error] = titles_query($endpoint_params);
-        break;
-
     case 'pages_users_to_main':
         $query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
         $params = [];
-        if (isset($_GET['lang']) && $_GET['lang'] != 'false' && $_GET['lang'] != '0') {
+        if (enabled('lang')) {
             $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             if ($added !== null) {
                 $query .= " AND pu.lang = ?";
@@ -158,10 +179,6 @@ switch ($get) {
         // $query .= " \n group by v.target, v.lang";
         $query .= " ORDER BY 1 DESC";
 
-        break;
-
-    case 'status':
-        [$query, $params, $error] = make_status_query($endpoint_params);
         break;
 
     case 'views':
@@ -197,24 +214,6 @@ switch ($get) {
         $query .= " group by user order by count desc";
         break;
 
-    case 'top_lang_of_users':
-
-        [$query, $params, $error] = top_lang_of_users($endpoint_params);
-
-        break;
-
-    case 'top_langs':
-
-        [$query, $params, $error] = top_langs($endpoint_params);
-
-        break;
-
-    case 'top_users':
-
-        [$query, $params, $error] = top_users($endpoint_params);
-
-        break;
-
     case 'users_by_last_pupdate':
         $qua = <<<SQL
             WITH RankedPages AS (
@@ -244,7 +243,7 @@ switch ($get) {
 
     case 'user_views':
     case 'user_views2':
-        if (isset($_GET['user']) && $_GET['user'] != 'false' && $_GET['user'] != '0') {
+        if (enabled('user')) {
             $query = <<<SQL
                 SELECT p.title, v.target, v.lang, v.views
                 FROM views_new_all v
@@ -293,7 +292,7 @@ switch ($get) {
 
     case 'lang_views':
     case 'lang_views2':
-        if (isset($_GET['lang']) && $_GET['lang'] != 'false' && $_GET['lang'] != '0') {
+        if (enabled('lang')) {
             $query = <<<SQL
                 SELECT v.target, v.lang, v.views
                 FROM views_new_all v

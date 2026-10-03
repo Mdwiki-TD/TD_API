@@ -15,7 +15,7 @@ final class QueryExecutor
     {
         $start = microtime(true);
 
-        $sql = add_order($spec->sql, $ctx->data, $ctx->order);
+        $sql = $spec->applyOrder ? add_order($spec->sql, $ctx->data, $ctx->order) : $spec->sql;
         $sql = add_offset(add_limit($sql));
 
         [$results, $source] = fetch_query_new($sql, $spec->params, $ctx->get);

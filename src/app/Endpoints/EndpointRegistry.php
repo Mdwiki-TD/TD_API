@@ -4,7 +4,14 @@ declare(strict_types=1);
 
 namespace App\Endpoints;
 
-use App\Endpoints\Handlers\{CallableHandler, DefaultTableHandler};
+use App\Endpoints\Handlers\{
+    CallableHandler,
+    DefaultTableHandler,
+    StaticSqlHandler,
+    FilteredSqlHandler,
+    UsersHandler,
+    CategoryMembersHandler
+};
 use function API\Missing\{
     missing_by_lang_and_category,
     exists_statics_by_category,
@@ -31,40 +38,43 @@ final class EndpointRegistry
         'translate_type',
     ];
 
+    public const LEGACY_DEPRECATED = [
+        'category_members',
+        'coordinators',
+        'graph_data',
+        'langs',
+        'user_access',
+        'users',
+    ];
+
     /** endpoints لم تُنقل بعد، تبقى في request.php القديم */
     private const LEGACY = [
-        'users',
-        'category_members',
-        'pages_users_to_main',
-        'coordinators',
-        'leaderboard_table',
-        'leaderboard_table_formated',
-        'views',
-        'views_new',
-        'user_access',
-        'qids',
-        'qids_others',
         'count_pages',
-        'users_by_last_pupdate',
-        'langs',
-        'user_views',
-        'user_views2',
-        'language_settings',
-        'publish_reports_stats',
-        'publish_reports',
+        'in_process',
         'lang_views',
         'lang_views2',
-        'graph_data',
-        'words',
-        'pages_by_user_or_lang',
+        'language_settings',
+        'leaderboard_table',
+        'leaderboard_table_formated',
         'pages',
-        'pages_users',
+        'pages_by_user_or_lang',
         'pages_langs',
+        'pages_users',
         'pages_users_langs',
+        'pages_users_to_main',
+        'pages_with_views',
+        'publish_reports',
+        'publish_reports_stats',
+        'qids',
+        'qids_others',
         'user_lang_status',
         'user_status',
-        'pages_with_views',
-        'in_process',
+        'user_views',
+        'user_views2',
+        'users_by_last_pupdate',
+        'views',
+        'views_new',
+        'words',
     ];
 
     /** @var array<string, EndpointHandler> */
@@ -86,6 +96,31 @@ final class EndpointRegistry
             'top_langs'                    => new CallableHandler(fn($c): array => top_langs($c->params)),
             'top_users'                    => new CallableHandler(fn($c): array => top_users($c->params)),
             'top_lang_of_users'            => new CallableHandler(fn($c): array => top_lang_of_users($c->params)),
+
+            'users'            => new UsersHandler(),
+            'category_members' => new CategoryMembersHandler(),
+
+            'coordinators' => new StaticSqlHandler(
+                'SELECT id, username, is_active FROM coordinators ORDER BY id',
+                applyOrder: false,
+            ),
+
+            'langs' => new StaticSqlHandler(
+                'SELECT code, autonym, name, redirects FROM langs'
+            ),
+
+            'graph_data' => new StaticSqlHandler(
+                "SELECT LEFT(pupdate, 7) AS m, COUNT(*) AS c
+                FROM pages
+                WHERE target != ''
+                GROUP BY LEFT(pupdate, 7)
+                ORDER BY LEFT(pupdate, 7) ASC",
+                applyOrder: false,
+            ),
+
+            'user_access' => new FilteredSqlHandler(
+                'SELECT id, user_name, created_at FROM access_keys'
+            ),
         ];
     }
 

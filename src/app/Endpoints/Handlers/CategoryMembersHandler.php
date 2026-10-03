@@ -1,0 +1,22 @@
+<?php
+// src/app/Endpoints/Handlers/CategoryMembersHandler.php
+declare(strict_types=1);
+
+namespace App\Endpoints\Handlers;
+
+use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+
+final class CategoryMembersHandler implements EndpointHandler
+{
+    private const DEFAULT_CATEGORY = 'RTT';
+
+    public function handle(EndpointContext $ctx): QuerySpec
+    {
+        $cat = $ctx->request->get('cat', FILTER_SANITIZE_SPECIAL_CHARS) ?? self::DEFAULT_CATEGORY;
+
+        return new QuerySpec(
+            'SELECT article_id FROM category_members WHERE category = ?',
+            [$cat],
+        );
+    }
+}

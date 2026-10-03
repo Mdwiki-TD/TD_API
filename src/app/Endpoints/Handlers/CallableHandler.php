@@ -7,7 +7,9 @@ namespace App\Endpoints\Handlers;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 use Closure;
 
-/** غلاف للدوال القديمة التي ترجع [query, params, error?] */
+/**
+ * Warraper for legacy functions that return [query, params, error?]
+ */
 final class CallableHandler implements EndpointHandler
 {
     public function __construct(private Closure $fn) {}
