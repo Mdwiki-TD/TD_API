@@ -5,40 +5,8 @@ namespace API\TitlesInfos;
 use function API\Helps\add_li_params;
 use function API\Helps\sanitize_input;
 
-$qua_old = <<<SQL
-    SELECT
-        ase.title,
-        ase.importance,
-        rc.r_lead_refs,
-        rc.r_all_refs,
-        ep.en_views,
-        w.w_lead_words,
-        w.w_all_words,
-        q.qid
-    FROM assessments ase
-    LEFT JOIN enwiki_pageviews ep ON ase.title = ep.title
-    LEFT JOIN qids q ON q.title = ase.title
-    LEFT JOIN refs_counts rc ON rc.r_title = ase.title
-    LEFT JOIN words w ON w.w_title = ase.title
-SQL;
-
 function titles_query($endpoint_params)
 {
-
-    /*
-    "titles": {
-        "columns": [],
-        "params": [
-            { "name": "title", "column": "title", "type": "text", "placeholder": "Page Title" },
-            { "name": "importance", "column": "importance", "type": "text", "placeholder": "Importance" },
-            { "name": "titles", "column": "title", "type": "array" }
-        ]
-    }
-    */
-
-    // $params = [];
-    // $query_line = "";
-    // list($query_line, $params) = add_array_params($query_line, $params, 'titles', 'ase.title', "WHERE");
 
     $qua = <<<SQL
         select
