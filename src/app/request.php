@@ -280,6 +280,25 @@ switch ($get) {
         $query = add_group($query, $endpoint_data, $get_group_value);
         break;
 
+
+    case 'pages_with_views':        // now at PagesWithViewsHandler.php
+        $_qua = <<<SQL
+            from pages p
+            WHERE p.target != ''
+        SQL;
+
+        [$query, $params] = add_li_params($_qua, [], $endpoint_params);
+        $query_start = <<<SQL
+            select distinct
+                p.id, p.title, p.word, p.translate_type, p.cat,
+                p.lang, p.user, p.target, p.date, p.pupdate,
+                p.add_date, p.deleted, p.mdwiki_revid,
+                (select v.views from views_new_all v WHERE p.target = v.target AND p.lang = v.lang) as views
+        SQL;
+
+        $query = $query_start . $query;
+        $query = add_group($query, $endpoint_data, $get_group_value);
+        break;
     /**
      * Above Already in EndpointRegistry.php
      */
@@ -332,30 +351,6 @@ switch ($get) {
         $query = add_group($query, $endpoint_data, $get_group_value);
         break;
 
-    case 'pages_with_views':
-        $_qua = <<<SQL
-            from pages p
-            WHERE p.target != ''
-        SQL;
-
-        [$query, $params] = add_li_params($_qua, [], $endpoint_params);
-        $query_start = <<<SQL
-            select distinct
-                p.id, p.title, p.word, p.translate_type, p.cat,
-                p.lang, p.user, p.target, p.date, p.pupdate,
-                p.add_date, p.deleted, p.mdwiki_revid,
-                (select v.views from views_new_all v WHERE p.target = v.target AND p.lang = v.lang) as views
-        SQL;
-
-        $query = $query_start . $query;
-        $query = add_group($query, $endpoint_data, $get_group_value);
-        break;
-
-    case 'pages':
-    case 'pages_users':
-        [$query, $params, $error] = pages_query($endpoint_params, $SELECT, $DISTINCT, $get);
-        break;
-
     case 'pages_langs':
     case 'pages_users_langs':
         $table_name = ($get == 'pages_langs') ? 'pages' : 'pages_users';
@@ -380,6 +375,11 @@ switch ($get) {
 
         [$query, $params] = add_li_params($qua, [], $endpoint_params);
 
+        break;
+
+    case 'pages':
+    case 'pages_users':
+        [$query, $params, $error] = pages_query($endpoint_params, $SELECT, $DISTINCT, $get);
         break;
 
     case 'publish_reports':

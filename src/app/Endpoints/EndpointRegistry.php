@@ -15,6 +15,7 @@ use App\Endpoints\Handlers\{
     LeaderboardHandler,
     QidsHandler,
     PagesUsersToMainHandler,
+    PagesWithViewsHandler,
 };
 
 use function API\Missing\{
@@ -67,6 +68,7 @@ final class EndpointRegistry
         'language_settings',
         'words',
         'in_process',
+        'pages_with_views',
     ];
 
     /** endpoints didn't get moved yet, stay in the old request.php */
@@ -77,7 +79,6 @@ final class EndpointRegistry
         'pages_langs',
         'pages_users',
         'pages_users_langs',
-        'pages_with_views',
         'user_lang_status',
         'user_status',
         'users_by_last_pupdate',
@@ -170,6 +171,7 @@ final class EndpointRegistry
                 LEFT JOIN langs la ON lang = la.code',
                 groupable: true,
             ),
+            'pages_with_views' => new PagesWithViewsHandler(),
         ];
     }
 
