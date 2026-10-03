@@ -1,10 +1,9 @@
 <?php
+require_once __DIR__ . '/autoload.php';
 
 include_once __DIR__ . '/APIController.php';
 include_once __DIR__ . '/helps.php';
 include_once __DIR__ . '/Logger.php';
-
-include_once __DIR__ . '/Database/Database.php';
 
 include_once __DIR__ . '/sql.php';
 
