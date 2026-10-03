@@ -8,6 +8,7 @@
 /old
 /vendor
 /x
+composer.lock
 src/load_env.php
 t.php
 *.zip

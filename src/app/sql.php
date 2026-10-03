@@ -13,12 +13,16 @@ if (!extension_loaded('apcu') || !function_exists('apcu_exists')) {
     {
         return false;
     }
+    /** @return bool */
     function apcu_store($key, $value, $ttl = 0)
     {
+        $_SERVER['_apcu_dummy'] = true;
         return false;
     }
+    /** @return bool */
     function apcu_delete($key)
     {
+        $_SERVER['_apcu_dummy'] = true;
         return false;
     }
 }

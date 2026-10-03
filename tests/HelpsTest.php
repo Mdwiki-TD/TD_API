@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 
 use function API\Helps\sanitize_input;
@@ -142,10 +144,8 @@ class HelpsTest extends TestCase
         $this->assertNull($result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testFilterOrderWithInvalidValueReturnsNull(): void
     {
         $endpoint_data = [
@@ -156,10 +156,8 @@ class HelpsTest extends TestCase
         $this->assertNull($result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testFilterOrderWithCommaSeparatedValues(): void
     {
         // filter_input() does not read from $_GET assignments in PHPUnit;
@@ -248,10 +246,8 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddLimitWithGetParameter(): void
     {
         // Note: filter_input() doesn't read from $_GET directly in PHPUnit
@@ -264,10 +260,8 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddLimitWithZeroDoesNotAdd(): void
     {
         $_GET['limit'] = '0';
@@ -276,10 +270,8 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddLimitWithNegativeDoesNotAdd(): void
     {
         $_GET['limit'] = '-5';
@@ -288,10 +280,8 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddLimitSkipsIfAlreadyPresent(): void
     {
         $_GET['limit'] = '10';
@@ -303,10 +293,8 @@ class HelpsTest extends TestCase
 
     // ========== add_offset tests ==========
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddOffsetWithGetParameter(): void
     {
         // Note: filter_input() doesn't read from $_GET directly in PHPUnit
@@ -319,10 +307,8 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddOffsetWithZeroDoesNotAdd(): void
     {
         $_GET['offset'] = '0';
@@ -331,10 +317,8 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddOffsetSkipsIfAlreadyPresent(): void
     {
         $_GET['offset'] = '20';
@@ -396,21 +380,17 @@ class HelpsTest extends TestCase
 
     public function testAddLiParamsWithSimpleWhere(): void
     {
-        // filter_input() does not read $_GET assignments in PHPUnit.
-        // $added becomes null, which gets passed to add_one_param and results in null in params.
         $_GET['title'] = 'TestPage';
         $query = 'SELECT * FROM pages';
         // Types should be an array of strings, not an associative array
         $types = ['title'];
         $result = add_li_params($query, $types, [], []);
         $this->assertStringContainsString('title = ?', $result[0]);
-        $this->assertSame([null], $result[1]);
+        $this->assertSame(['TestPage'], $result[1]);
     }
 
     public function testAddLiParamsWithMultipleConditions(): void
     {
-        // filter_input() does not read $_GET assignments in PHPUnit.
-        // $added becomes null for each type, resulting in null values in params.
         $_GET['title'] = 'TestPage';
         $_GET['lang'] = 'en';
         $query = 'SELECT * FROM pages';
@@ -419,7 +399,7 @@ class HelpsTest extends TestCase
         $result = add_li_params($query, $types, [], []);
         $this->assertStringContainsString('title = ?', $result[0]);
         $this->assertStringContainsString('lang = ?', $result[0]);
-        $this->assertSame([null, null], $result[1]);
+        $this->assertSame(['TestPage', 'en'], $result[1]);
     }
 
     public function testAddLiParamsIgnoresLimitColumn(): void
@@ -445,63 +425,50 @@ class HelpsTest extends TestCase
 
     public function testAddLiParamsWithNotEmptyValue(): void
     {
-        // filter_input() does not read $_GET assignments in PHPUnit.
-        // $added becomes null, which is neither 'not_empty' nor any special value,
-        // so the generic 'column = ?' clause is added with null in params.
         $_GET['filter'] = 'not_empty';
         $query = 'SELECT * FROM pages';
         // Types should be an array of strings
         $types = ['filter'];
         $result = add_li_params($query, $types, [], []);
-        $this->assertStringContainsString('filter = ?', $result[0]);
-        $this->assertSame([null], $result[1]);
+        $this->assertStringContainsString("filter != '' AND filter IS NOT NULL", $result[0]);
+        $this->assertSame([], $result[1]);
     }
 
     public function testAddLiParamsWithEmptyValue(): void
     {
-        // filter_input() does not read $_GET assignments in PHPUnit.
-        // $added becomes null, which is not 'empty', so generic 'column = ?' is used.
         $_GET['filter'] = 'empty';
         $query = 'SELECT * FROM pages';
         // Types should be an array of strings
         $types = ['filter'];
         $result = add_li_params($query, $types, [], []);
-        $this->assertStringContainsString('filter = ?', $result[0]);
-        $this->assertSame([null], $result[1]);
+        $this->assertStringContainsString("filter = '' OR filter IS NULL", $result[0]);
+        $this->assertSame([], $result[1]);
     }
 
     public function testAddLiParamsWithGreaterThanZero(): void
     {
-        // filter_input() does not read $_GET assignments in PHPUnit.
-        // $added becomes null, not '>0', so generic 'column = ?' is added.
         $_GET['count'] = '>0';
         $query = 'SELECT * FROM pages';
         // Types should be an array of strings
         $types = ['count'];
         $result = add_li_params($query, $types, [], []);
-        $this->assertStringContainsString('count = ?', $result[0]);
-        $this->assertSame([null], $result[1]);
+        $this->assertStringContainsString('count > 0', $result[0]);
+        $this->assertSame([], $result[1]);
     }
 
     public function testAddLiParamsWithDistinctFlag(): void
     {
-        // filter_input() does not read $_GET assignments in PHPUnit.
-        // $added becomes null, not '1', so the distinct branch is not triggered.
-        // Null is treated as the generic column = ? branch but 'distinct' column is special:
-        // the fallback null value goes to add_one_param with $added = null.
         $_GET['distinct'] = '1';
         $query = 'SELECT * FROM pages';
         // Types should be an array of strings
         $types = ['distinct'];
         $result = add_li_params($query, $types, [], []);
-        $this->assertStringContainsString('distinct = ?', $result[0]);
-        $this->assertSame([null], $result[1]);
+        $this->assertSame('SELECT DISTINCT * FROM pages', $result[0]);
+        $this->assertSame([], $result[1]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddLiParamsWithNoEmptyValueSkipsEmpty(): void
     {
         $_GET['filter'] = '';
@@ -513,10 +480,8 @@ class HelpsTest extends TestCase
         $this->assertSame('SELECT * FROM pages', $result[0]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddLiParamsWithValueCanBeNull(): void
     {
         $_GET['status'] = 'active';

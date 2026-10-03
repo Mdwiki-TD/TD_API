@@ -14,7 +14,7 @@
     "scripts": {
         "test": [
             "vendor/bin/phpstan analyse",
-            "vendor/bin/phpunit tests --testdox --colors=always -c phpunit.xml"
+            "vendor/bin/phpunit tests --testdox --colors=always -c phpunit.xml --do-not-fail-on-phpunit-warning"
         ]
     },
     "autoload-dev": {

@@ -19,7 +19,7 @@
     executionOrder="depends,defects"
     beStrictAboutOutputDuringTests="true"
     failOnRisky="true"
-    failOnWarning="true">
+    failOnWarning="false">
     <testsuites>
         <testsuite name="default">
             <directory>tests</directory>

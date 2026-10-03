@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 
 use function API\Helps\add_array_params;
@@ -37,10 +39,8 @@ class ArrayParamsTest extends TestCase
         $this->assertSame([], $result[1]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddArrayParamsWithSingleValue(): void
     {
         $_GET['titles'] = ['Page1'];
@@ -53,10 +53,8 @@ class ArrayParamsTest extends TestCase
         $this->assertSame(['Page1'], $result[1]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddArrayParamsWithMultipleValues(): void
     {
         $_GET['titles'] = ['Page1', 'Page2', 'Page3'];
@@ -69,10 +67,8 @@ class ArrayParamsTest extends TestCase
         $this->assertSame(['Page1', 'Page2', 'Page3'], $result[1]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddArrayParamsWithWhereClause(): void
     {
         $_GET['titles'] = ['Page1', 'Page2'];
@@ -87,10 +83,8 @@ class ArrayParamsTest extends TestCase
         $this->assertSame(['en', 'Page1', 'Page2'], $result[1]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddArrayParamsWithDifferentParameterName(): void
     {
         $_GET['langs'] = ['en', 'ar', 'fr'];
@@ -104,10 +98,8 @@ class ArrayParamsTest extends TestCase
         $this->assertSame(['en', 'ar', 'fr'], $result[1]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddArrayParamsAppendsToExistingParams(): void
     {
         $_GET['titles'] = ['Page1'];
@@ -119,10 +111,8 @@ class ArrayParamsTest extends TestCase
         $this->assertSame([100, 'Page1'], $result[1]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddArrayParamsWithoutWhereOrAndUsesWhere(): void
     {
         $_GET['titles'] = ['Page1'];
@@ -137,10 +127,8 @@ class ArrayParamsTest extends TestCase
         $this->assertStringContainsString('WHERE', $result[0]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddArrayParamsWithExistingWhere(): void
     {
         $_GET['titles'] = ['Page1'];
@@ -155,10 +143,8 @@ class ArrayParamsTest extends TestCase
         $this->assertStringContainsString('AND', $result[0]);
     }
 
-    /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     */
+    #[RunInSeparateProcess]
+    #[PreserveGlobalState(false)]
     public function testAddArrayParamsWhenNotSetInGet(): void
     {
         // Don't set $_GET['titles']
