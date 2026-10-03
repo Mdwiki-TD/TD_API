@@ -23,6 +23,6 @@ final class LeaderboardHandler implements EndpointHandler
                 WHERE p.target != ''";
 
         [$sql, $params] = add_li_params($sql, [], $ctx->params);
-        return new QuerySpec($sql . ' ORDER BY 1 DESC', $params);
+        return new QuerySpec($sql, $params, defaultOrder: '1 DESC');
     }
 }

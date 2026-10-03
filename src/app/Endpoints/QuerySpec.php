@@ -11,6 +11,7 @@ final class QuerySpec
         public readonly array $params = [],
         public readonly string $error = '',
         public readonly bool $applyOrder = true, // false للاستعلامات التي تحوي ORDER BY ثابتاً
+        public readonly string $defaultOrder = '', // يُستخدم فقط إذا لم تضف add_order ترتيباً
     ) {}
 
     public static function fromLegacy(array $r): self

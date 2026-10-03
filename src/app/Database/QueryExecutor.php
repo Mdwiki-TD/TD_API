@@ -15,9 +15,16 @@ final class QueryExecutor
     {
         $start = microtime(true);
 
-        $sql = $spec->applyOrder ? add_order($spec->sql, $ctx->data, $ctx->order) : $spec->sql;
-        $sql = add_offset(add_limit($sql));
+        $sql = $spec->sql;
+        if ($spec->applyOrder) {
+            $ordered = add_order($sql, $ctx->data, $ctx->order);
+            if ($ordered === $sql && $spec->defaultOrder !== '') {
+                $ordered .= ' ORDER BY ' . $spec->defaultOrder;
+            }
+            $sql = $ordered;
+        }
 
+        $sql = add_offset(add_limit($sql));
         [$results, $source] = fetch_query_new($sql, $spec->params, $ctx->get);
 
         return [

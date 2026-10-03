@@ -91,7 +91,7 @@ final class EndpointRegistry
     {
         $missing = new CallableHandler(fn($c): array => missing_by_lang_and_category($c->params));
 
-        $views     = new ViewsHandler(orderByFirst: true);
+        $views     = new ViewsHandler(defaultOrder: '1 DESC');
         $userViews = new ViewsHandler(requiredParam: 'user');
         $langViews = new ViewsHandler(requiredParam: 'lang');
 

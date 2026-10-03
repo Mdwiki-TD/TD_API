@@ -751,7 +751,7 @@
         ]
     },
     "leaderboard_table": {
-        "columns": [],
+        "columns": ["u.user_group"],
         "params": [
             {
                 "name": "year",
@@ -771,11 +771,18 @@
                 "column": "u.user_group",
                 "type": "text",
                 "placeholder": "User Group Name"
+            },
+            {
+                "name": "order",
+                "column": "order",
+                "type": "text",
+                "placeholder": "Order by",
+                "no_select": true
             }
         ]
     },
     "leaderboard_table_formated": {
-        "columns": [],
+        "columns": ["u.user_group"],
         "params": [
             {
                 "name": "year",
@@ -795,6 +802,13 @@
                 "column": "u.user_group",
                 "type": "text",
                 "placeholder": "User Group Name"
+            },
+            {
+                "name": "order",
+                "column": "order",
+                "type": "text",
+                "placeholder": "Order by",
+                "no_select": true
             }
         ]
     },

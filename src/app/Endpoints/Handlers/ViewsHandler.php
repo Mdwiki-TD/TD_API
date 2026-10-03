@@ -12,7 +12,7 @@ final class ViewsHandler implements EndpointHandler
 {
     public function __construct(
         private ?string $requiredParam = null,
-        private bool $orderByFirst = false,
+        private string $defaultOrder = '',
     ) {}
 
     public function handle(EndpointContext $ctx): QuerySpec
@@ -29,9 +29,6 @@ final class ViewsHandler implements EndpointHandler
 
         [$sql, $params] = add_li_params($sql, [], $ctx->params);
 
-        if ($this->orderByFirst) {
-            $sql .= ' ORDER BY 1 DESC';
-        }
-        return new QuerySpec($sql, $params);
+        return new QuerySpec($sql, $params, defaultOrder: $this->defaultOrder);
     }
 }
