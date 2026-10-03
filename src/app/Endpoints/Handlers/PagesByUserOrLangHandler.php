@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
 
+use App\Query\FilterBuilder;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
-use function API\Helps\{add_li_params, add_group};
 
 final class PagesByUserOrLangHandler implements EndpointHandler
 {
@@ -21,17 +21,17 @@ final class PagesByUserOrLangHandler implements EndpointHandler
     public function handle(EndpointContext $ctx): QuerySpec
     {
         // year يُعالج يدوياً أدناه، فيُستثنى من الفلاتر العامة
-        [$sql, $params] = add_li_params(self::BASE, [], $ctx->params, ['year']);
+        [$sql, $params] = $ctx->applyFilters(self::BASE, ['year']);
 
         $year = (int) ($ctx->request->get('year') ?? 0);
         if ($year > 0) {
             // لا يوجد WHERE في BASE ما لم تضفه الفلاتر، فنحدد الرابط المناسب
-            $glue = stripos($sql, 'WHERE') !== false ? ' AND' : ' WHERE';
+            $glue = FilterBuilder::glue($sql);
             $sql .= "$glue ? IN (YEAR(p.date), YEAR(p.pupdate), YEAR(p.add_date))";
             $params[] = $year;
         }
 
-        $sql = add_group($sql, $ctx->data, $ctx->group);
+        $sql = $ctx->applyGroup($sql);
         return new QuerySpec($sql, $params);
     }
 }

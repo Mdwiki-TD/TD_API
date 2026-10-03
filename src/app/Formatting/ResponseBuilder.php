@@ -6,19 +6,17 @@ namespace App\Formatting;
 
 use App\Endpoints\EndpointContext;
 use App\Http\Environment;
-use function API\Leaderboard\{leaderboard_table_format, langs_format};
 
 final class ResponseBuilder
 {
     public function format(string $get, array $results): array
     {
         return match ($get) {
-            'leaderboard_table_formated' => leaderboard_table_format($results),
-            'langs'                      => langs_format($results),
+            'leaderboard_table_formated' => LeaderboardFormatter::format($results),
+            'langs'                      => LangsFormatter::format($results),
             default                      => $results,
         };
     }
-
     public function build(
         EndpointContext $ctx,
         array $results = [],

@@ -3,6 +3,33 @@
 
 namespace API\Helps;
 
+function add_offset($qua)
+{
+    // if $qua has OFFSET then return
+    if (strpos($qua, 'OFFSET') !== false || strpos($qua, 'offset') !== false) return $qua;
+    if (isset($_GET['offset'])) {
+        $added = filter_input(INPUT_GET, 'offset', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $added = (int) $added;
+        if ($added > 0) {
+            $qua .= " OFFSET $added";
+        }
+    }
+    return $qua;
+}
+function add_limit($qua)
+{
+    // if $qua has LIMIT then return
+    if (strpos($qua, 'LIMIT') !== false || strpos($qua, 'limit') !== false) return $qua;
+    if (isset($_GET['limit'])) {
+        $added = filter_input(INPUT_GET, 'limit', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        $added = (int) $added;
+        if ($added > 0) {
+            $qua .= " LIMIT $added";
+        }
+    }
+    return $qua;
+}
+
 function sanitize_input($input, $pattern)
 {
     if (!empty($input) && preg_match($pattern, $input) && $input !== "all") {
@@ -137,32 +164,6 @@ function add_order($qua, $endpoint_data, $get_value)
     return $qua;
 }
 
-function add_offset($qua)
-{
-    // if $qua has OFFSET then return
-    if (strpos($qua, 'OFFSET') !== false || strpos($qua, 'offset') !== false) return $qua;
-    if (isset($_GET['offset'])) {
-        $added = filter_input(INPUT_GET, 'offset', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $added = (int) $added;
-        if ($added > 0) {
-            $qua .= " OFFSET $added";
-        }
-    }
-    return $qua;
-}
-function add_limit($qua)
-{
-    // if $qua has LIMIT then return
-    if (strpos($qua, 'LIMIT') !== false || strpos($qua, 'limit') !== false) return $qua;
-    if (isset($_GET['limit'])) {
-        $added = filter_input(INPUT_GET, 'limit', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $added = (int) $added;
-        if ($added > 0) {
-            $qua .= " LIMIT $added";
-        }
-    }
-    return $qua;
-}
 
 function add_distinct($qua)
 {

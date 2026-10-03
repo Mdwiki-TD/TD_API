@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Endpoints\Handlers;
 
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
-use function API\Helps\add_li_params;
 
 final class DefaultTableHandler implements EndpointHandler
 {
@@ -16,7 +15,7 @@ final class DefaultTableHandler implements EndpointHandler
             return new QuerySpec(error: 'invalid table name');
         }
         $sql = "SELECT {$ctx->distinct}{$ctx->select} FROM `{$ctx->get}`";
-        [$sql, $params] = add_li_params($sql, [], $ctx->params);
+        [$sql, $params] = $ctx->applyFilters($sql);
         return new QuerySpec($sql, $params);
     }
 }

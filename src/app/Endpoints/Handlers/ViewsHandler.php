@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Endpoints\Handlers;
 
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
-use function API\Helps\add_li_params;
 
 /** استعلامات views_new_all مع pages: تختلف بالأعمدة ونوع الـ JOIN وبارامتر مطلوب اختياري */
 final class ViewsHandler implements EndpointHandler
@@ -27,7 +26,7 @@ final class ViewsHandler implements EndpointHandler
                     ON p.target = v.target
                     AND p.lang = v.lang";
 
-        [$sql, $params] = add_li_params($sql, [], $ctx->params);
+        [$sql, $params] = $ctx->applyFilters($sql);
 
         return new QuerySpec($sql, $params, defaultOrder: $this->defaultOrder);
     }

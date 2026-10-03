@@ -19,6 +19,7 @@ use App\Endpoints\Handlers\{
     PagesByUserOrLangHandler,
     UserStatusHandler,
     PagesHandler,
+    StatusHandler,
 };
 
 use function API\Missing\{
@@ -27,8 +28,6 @@ use function API\Missing\{
     exists_by_lang_and_category,
     statics_by_category,
 };
-use function API\TitlesInfos\{mdwiki_revids, titles_query};
-use function API\Status\make_status_query;
 use function API\Top\{top_langs, top_users, top_lang_of_users};
 
 final class EndpointRegistry
@@ -103,9 +102,25 @@ final class EndpointRegistry
             'exists_statics_by_category'   => new CallableHandler(fn($c): array => exists_statics_by_category($c->params)),
             'exists_by_lang_and_category'  => new CallableHandler(fn($c): array => exists_by_lang_and_category($c->params)),
             'statics_by_category'          => new CallableHandler(fn($c): array => statics_by_category($c->params)),
-            'revids'                       => new CallableHandler(fn($c): array => mdwiki_revids($c->params)),
-            'titles'                       => new CallableHandler(fn($c): array => titles_query($c->params)),
-            'status'                       => new CallableHandler(fn($c): array => make_status_query($c->params)),
+            'revids' => new FilteredSqlHandler('SELECT title, revid FROM mdwiki_revids'),
+            'titles' => new FilteredSqlHandler(
+                "SELECT
+                    ase.title AS title,
+                    ase.importance AS importance,
+                    rc.r_lead_refs AS r_lead_refs,
+                    rc.r_all_refs AS r_all_refs,
+                    ep.en_views AS en_views,
+                    w.w_lead_words AS w_lead_words,
+                    w.w_all_words AS w_all_words,
+                    q.qid AS qid
+                from
+                    assessments ase
+                    left join enwiki_pageviews ep   on ep.title   = ase.title
+                    left join qids q                on q.title    = ase.title
+                    left join refs_counts rc        on rc.r_title = ase.title
+                    left join words w               on w.w_title  = ase.title"
+            ),
+            'status'                       => new StatusHandler(),
             'top_langs'                    => new CallableHandler(fn($c): array => top_langs($c->params)),
             'top_users'                    => new CallableHandler(fn($c): array => top_users($c->params)),
             'top_lang_of_users'            => new CallableHandler(fn($c): array => top_lang_of_users($c->params)),

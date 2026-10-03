@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Endpoints\Handlers;
 
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
-use function API\Helps\add_li_params;
 
 /** التنسيق (formated) يتم لاحقاً في ResponseBuilder::format حسب قيمة get */
 final class LeaderboardHandler implements EndpointHandler
@@ -22,7 +21,7 @@ final class LeaderboardHandler implements EndpointHandler
                     AND p.lang = v.lang
                 WHERE p.target != ''";
 
-        [$sql, $params] = add_li_params($sql, [], $ctx->params);
+        [$sql, $params] = $ctx->applyFilters($sql);
         return new QuerySpec($sql, $params, defaultOrder: '1 DESC');
     }
 }

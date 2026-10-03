@@ -3,9 +3,10 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
+use App\Query\FilterBuilder;
+use App\Query\InputSanitizer;
 
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
-use function API\Helps\{add_li_params, sanitize_input};
 
 final class PagesHandler implements EndpointHandler
 {
@@ -26,15 +27,15 @@ final class PagesHandler implements EndpointHandler
                 LEFT JOIN categories ca ON p.cat = ca.category";
 
         // campaign / cat / category تُعالج يدوياً أدناه
-        [$sql, $params] = add_li_params($sql, [], $ctx->params, ['campaign', 'cat', 'category']);
+        [$sql, $params] = $ctx->applyFilters($sql, ['campaign', 'cat', 'category']);
 
-        $campaign = sanitize_input($ctx->request->get('campaign') ?? '', self::PATTERN);
-        $category = sanitize_input(
+        $campaign = InputSanitizer::match($ctx->request->get('campaign') ?? '', self::PATTERN);
+        $category = InputSanitizer::match(
             $ctx->request->get('category') ?? $ctx->request->get('cat') ?? '',
             self::PATTERN
         );
 
-        $glue = stripos($sql, 'WHERE') !== false ? ' AND' : ' WHERE';
+        $glue = FilterBuilder::glue($sql);
 
         if ($category !== null) {
             $sql .= "$glue p.cat = ?";

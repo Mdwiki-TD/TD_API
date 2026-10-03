@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Endpoints\Handlers;
 
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
-use function API\Helps\{add_li_params, add_group};
 
 final class PagesWithViewsHandler implements EndpointHandler
 {
@@ -26,10 +25,10 @@ final class PagesWithViewsHandler implements EndpointHandler
     public function handle(EndpointContext $ctx): QuerySpec
     {
         // الفلاتر تُضاف أولاً على FROM/WHERE (add_one_param تعتمد على وجود WHERE)
-        [$tail, $params] = add_li_params(self::FROM_WHERE, [], $ctx->params);
+        [$tail, $params] = $ctx->applyFilters(self::FROM_WHERE);
 
         $sql = self::SELECT . "\n" . $tail;
-        $sql = add_group($sql, $ctx->data, $ctx->group);
+        $sql = $ctx->applyGroup($sql);
 
         return new QuerySpec($sql, $params);
     }

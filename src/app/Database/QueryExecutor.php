@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Database;
 
+use App\Query\Pagination;
+use App\Query\Ordering;
 use App\Database\Cache\{ApcuCache, CacheInterface, NullCache};
 use App\Endpoints\{EndpointContext, QuerySpec};
-use function API\Helps\{add_order, add_limit, add_offset};
 
 final class QueryExecutor
 {
@@ -27,13 +28,13 @@ final class QueryExecutor
 
         $sql = $spec->sql;
         if ($spec->applyOrder) {
-            $ordered = add_order($sql, $ctx->data, $ctx->order);
+            $ordered = Ordering::order($sql, $ctx->data, $ctx->order, $ctx->request);
             if ($ordered === $sql && $spec->defaultOrder !== '') {
                 $ordered .= ' ORDER BY ' . $spec->defaultOrder;
             }
             $sql = $ordered;
         }
-        $sql = add_offset(add_limit($sql));
+        $sql = Pagination::apply($sql, $ctx->request);
 
         $useCache = $ctx->request->enabled('apcu') && !in_array($ctx->get, self::NO_CACHE, true);
 

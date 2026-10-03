@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Endpoints\Handlers;
 
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
-use function API\Helps\{add_li_params, add_group};
 
 
 /** استعلام أساسي + فلاتر من endpoint_params.json (user_access, language_settings ...) */
@@ -21,11 +20,11 @@ final class FilteredSqlHandler implements EndpointHandler
 
     public function handle(EndpointContext $ctx): QuerySpec
     {
-        [$sql, $params] = add_li_params($this->sql, [], $ctx->params);
+        [$sql, $params] = $ctx->applyFilters($this->sql);
         $sql .= $this->suffix;
 
         if ($this->groupable) {
-            $sql = add_group($sql, $ctx->data, $ctx->group);
+            $sql = $ctx->applyGroup($sql);
         }
 
         return new QuerySpec($sql, $params, defaultOrder: $this->defaultOrder);
