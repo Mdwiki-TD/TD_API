@@ -2,7 +2,6 @@
 
 namespace API\SelectHelps;
 
-
 function get_select($endpoint_params, $endpoint_columns)
 {
 

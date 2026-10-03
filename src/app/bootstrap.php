@@ -1,5 +1,6 @@
 <?php
 
+include_once __DIR__ . '/APIController.php';
 include_once __DIR__ . '/helps.php';
 include_once __DIR__ . '/Logger.php';
 

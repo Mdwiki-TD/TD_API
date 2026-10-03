@@ -103,6 +103,10 @@ class Database
             throw new \RuntimeException('Database connection failed');
         }
     }
+    public function isDbNull(): bool {
+        return $this->db === null;
+    }
+
     public function disableFullGroupByMode(string $sqlQuery): void
     {
         if ($this->db === null) {
