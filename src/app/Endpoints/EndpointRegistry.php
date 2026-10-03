@@ -31,8 +31,6 @@ final class EndpointRegistry
 {
     /** Simple tables allowed in the default path */
     private const OTHER_TABLES = [
-        // in_process has special case, see LEGACY
-        'in_process_x_placeholder',
         'assessments',
         'refs_counts',
         'enwiki_pageviews',
@@ -68,11 +66,11 @@ final class EndpointRegistry
         'count_pages',
         'language_settings',
         'words',
+        'in_process',
     ];
 
     /** endpoints didn't get moved yet, stay in the old request.php */
     private const LEGACY = [
-        'in_process',
         'pages',
         'pages_by_user_or_lang',
         'pages_langs',
@@ -164,6 +162,14 @@ final class EndpointRegistry
                 'SELECT DISTINCT YEAR(date) AS year, MONTH(date) AS month, lang, user, result
                 FROM publish_reports',
                 // suffix: ' GROUP BY year, month, lang, user, result',
+            ),
+            'in_process' => new FilteredSqlHandler(
+                'SELECT title, user, lang, cat, translate_type, word, add_date,
+                        ca.campaign, la.autonym
+                FROM in_process
+                LEFT JOIN categories ca ON cat = ca.category
+                LEFT JOIN langs la ON lang = la.code',
+                groupable: true,
             ),
         ];
     }
