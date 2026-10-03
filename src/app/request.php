@@ -115,10 +115,6 @@ switch ($get) {
         [$query, $params, $error] = top_users($endpoint_params);
         break;
 
-    /**
-     * Above Already in EndpointRegistry.php
-     */
-
     case 'users': // now at UsersHandler.php
         $query = "SELECT username FROM users";
         if (enabled('userlike')) {
@@ -130,7 +126,7 @@ switch ($get) {
         }
         break;
 
-    case 'category_members':
+    case 'category_members': // now at CategoryMembersHandler.php
         $cat = "RTT";
         $query = "SELECT article_id FROM category_members";
         if (isset($_GET['cat'])) {
@@ -143,6 +139,34 @@ switch ($get) {
         $params[] = $cat;
         break;
 
+    case 'coordinators':
+        $qua = "SELECT id, username, is_active FROM coordinators order by id";
+        $qua = add_limit($qua);
+        break;
+
+    case 'langs':
+        $qua = 'SELECT code, autonym, name, redirects FROM langs';
+        break;
+
+    case 'graph_data':
+        $qua = <<<SQL
+            SELECT LEFT(pupdate, 7) as m, COUNT(*) as c
+            FROM pages
+            WHERE target != ''
+            GROUP BY LEFT(pupdate, 7)
+            ORDER BY LEFT(pupdate, 7) ASC
+        SQL;
+        break;
+
+    case 'user_access':
+        $query = "SELECT id, user_name, created_at FROM access_keys";
+        [$query, $params] = add_li_params($query, [], $endpoint_params);
+        break;
+
+    /**
+     * Above Already in EndpointRegistry.php
+     */
+
     case 'pages_users_to_main':
         $query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
         $params = [];
@@ -153,11 +177,6 @@ switch ($get) {
                 $params[] = $added;
             }
         }
-        break;
-
-    case 'coordinators':
-        $qua = "SELECT id, username, is_active FROM coordinators order by id";
-        $qua = add_limit($qua);
         break;
 
     case 'leaderboard_table':
@@ -195,11 +214,6 @@ switch ($get) {
         $query .= " ORDER BY 1 DESC";
         break;
 
-    case 'user_access':
-        $query = "SELECT id, user_name, created_at FROM access_keys";
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
-        break;
-
     case 'qids':
         $qua = qids_qua($get);
         break;
@@ -231,13 +245,6 @@ switch ($get) {
             FROM RankedPages
             WHERE rn = 1
             ORDER BY pupdate DESC;
-        SQL;
-        break;
-
-    case 'langs':
-        $qua = <<<SQL
-            SELECT code, autonym, name, redirects
-            FROM langs
         SQL;
         break;
 
@@ -306,16 +313,6 @@ switch ($get) {
             // $query .= " GROUP BY v.target, v.lang";
 
         };
-        break;
-
-    case 'graph_data':
-        $qua = <<<SQL
-            SELECT LEFT(pupdate, 7) as m, COUNT(*) as c
-            FROM pages
-            WHERE target != ''
-            GROUP BY LEFT(pupdate, 7)
-            ORDER BY LEFT(pupdate, 7) ASC
-        SQL;
         break;
 
     case 'words':

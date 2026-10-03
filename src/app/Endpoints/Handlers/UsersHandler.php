@@ -8,6 +8,7 @@ use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 final class UsersHandler implements EndpointHandler
 {
+    public const ENDPOINT_NAME = 'users';
     public function handle(EndpointContext $ctx): QuerySpec
     {
         $sql = 'SELECT username FROM users';

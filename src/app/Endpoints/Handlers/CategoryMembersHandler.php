@@ -8,6 +8,7 @@ use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 final class CategoryMembersHandler implements EndpointHandler
 {
+    public const ENDPOINT_NAME = 'category_members';
     private const DEFAULT_CATEGORY = 'RTT';
 
     public function handle(EndpointContext $ctx): QuerySpec

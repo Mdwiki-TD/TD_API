@@ -24,9 +24,10 @@ use function API\Top\{top_langs, top_users, top_lang_of_users};
 
 final class EndpointRegistry
 {
-    /** جداول بسيطة مسموحة في المسار الافتراضي */
+    /** Simple tables allowed in the default path */
     private const OTHER_TABLES = [
-        'in_process_x_placeholder', // in_process له case خاص، انظر LEGACY
+        // in_process has special case, see LEGACY
+        'in_process_x_placeholder',
         'assessments',
         'refs_counts',
         'enwiki_pageviews',
@@ -47,7 +48,7 @@ final class EndpointRegistry
         'users',
     ];
 
-    /** endpoints لم تُنقل بعد، تبقى في request.php القديم */
+    /** endpoints didn't get moved yet, stay in the old request.php */
     private const LEGACY = [
         'count_pages',
         'in_process',
@@ -114,7 +115,8 @@ final class EndpointRegistry
                 FROM pages
                 WHERE target != ''
                 GROUP BY LEFT(pupdate, 7)
-                ORDER BY LEFT(pupdate, 7) ASC",
+                ORDER BY LEFT(pupdate, 7) ASC
+                ",
                 applyOrder: false,
             ),
 
@@ -129,7 +131,7 @@ final class EndpointRegistry
         return in_array($get, self::LEGACY, true);
     }
 
-    /** null = غير معروف (خطأ). استدعِ isLegacy() قبلها. */
+    /** null = Unknown (error). call isLegacy() before. */
     public function resolve(EndpointContext $ctx): ?EndpointHandler
     {
         if (isset($this->handlers[$ctx->get])) {
