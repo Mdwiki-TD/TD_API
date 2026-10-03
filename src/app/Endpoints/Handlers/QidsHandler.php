@@ -1,7 +1,10 @@
 <?php
 // src/app/Endpoints/Handlers/QidsHandler.php
 declare(strict_types=1);
-
+/*
+# This will make the query time > x10
+            # AND A.id < B.id
+/*
 namespace App\Endpoints\Handlers;
 
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
@@ -20,8 +23,6 @@ final class QidsHandler implements EndpointHandler
             FROM {table} A
             JOIN {table} B ON A.qid = B.qid
             WHERE A.qid != '' AND A.title != B.title AND A.id != B.id
-            # This will make the query time > x10
-            # AND A.id < B.id
             SQL,
     ];
 
