@@ -10,8 +10,11 @@ use App\Endpoints\Handlers\{
     StaticSqlHandler,
     FilteredSqlHandler,
     UsersHandler,
-    CategoryMembersHandler
+    CategoryMembersHandler,
+    ViewsHandler,
+    LeaderboardHandler
 };
+
 use function API\Missing\{
     missing_by_lang_and_category,
     exists_statics_by_category,
@@ -46,17 +49,22 @@ final class EndpointRegistry
         'langs',
         'user_access',
         'users',
+        'views',
+        'views_new',
+        'user_views',
+        'user_views2',
+        'lang_views',
+        'lang_views2',
+
+        'leaderboard_table',
+        'leaderboard_table_formated',
     ];
 
     /** endpoints didn't get moved yet, stay in the old request.php */
     private const LEGACY = [
         'count_pages',
         'in_process',
-        'lang_views',
-        'lang_views2',
         'language_settings',
-        'leaderboard_table',
-        'leaderboard_table_formated',
         'pages',
         'pages_by_user_or_lang',
         'pages_langs',
@@ -70,11 +78,7 @@ final class EndpointRegistry
         'qids_others',
         'user_lang_status',
         'user_status',
-        'user_views',
-        'user_views2',
         'users_by_last_pupdate',
-        'views',
-        'views_new',
         'words',
     ];
 
@@ -84,6 +88,12 @@ final class EndpointRegistry
     public function __construct()
     {
         $missing = new CallableHandler(fn($c): array => missing_by_lang_and_category($c->params));
+
+        $views     = new ViewsHandler(orderByFirst: true);
+        $userViews = new ViewsHandler(requiredParam: 'user');
+        $langViews = new ViewsHandler(requiredParam: 'lang');
+
+        $leader    = new LeaderboardHandler();
 
         $this->handlers = [
             'missing'                      => $missing,
@@ -106,9 +116,7 @@ final class EndpointRegistry
                 applyOrder: false,
             ),
 
-            'langs' => new StaticSqlHandler(
-                'SELECT code, autonym, name, redirects FROM langs'
-            ),
+            'langs' => new StaticSqlHandler( 'SELECT code, autonym, name, redirects FROM langs' ),
 
             'graph_data' => new StaticSqlHandler(
                 "SELECT LEFT(pupdate, 7) AS m, COUNT(*) AS c
@@ -120,9 +128,18 @@ final class EndpointRegistry
                 applyOrder: false,
             ),
 
-            'user_access' => new FilteredSqlHandler(
-                'SELECT id, user_name, created_at FROM access_keys'
-            ),
+            'user_access' => new FilteredSqlHandler( 'SELECT id, user_name, created_at FROM access_keys' ),
+
+            'views'       => $views,
+            'views_new'   => $views,
+            'user_views'  => $userViews,
+            'user_views2' => $userViews,
+            'lang_views'  => $langViews,
+            'lang_views2' => $langViews,
+
+            'leaderboard_table'          => $leader,
+            'leaderboard_table_formated' => $leader,
+
         ];
     }
 

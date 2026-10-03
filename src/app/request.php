@@ -163,24 +163,20 @@ switch ($get) {
         [$query, $params] = add_li_params($query, [], $endpoint_params);
         break;
 
-    /**
-     * Above Already in EndpointRegistry.php
-     */
-
-    case 'views':
+    case 'views':  // now at ViewsHandler.php
     case 'views_new':
         $query = <<<SQL
-            SELECT p.title, v.target, v.lang, v.views
-            FROM views_new_all v
-            LEFT JOIN pages p
-                ON p.target = v.target
-                AND p.lang = v.lang
+                SELECT p.title, v.target, v.lang, v.views
+                FROM views_new_all v
+                LEFT JOIN pages p
+                    ON p.target = v.target
+                    AND p.lang = v.lang
         SQL;
         [$query, $params] = add_li_params($query, [], $endpoint_params);
         $query .= " ORDER BY 1 DESC";
         break;
 
-    case 'lang_views':
+    case 'lang_views':  // now at ViewsHandler.php
     case 'lang_views2':
         if (enabled('lang')) {
             $query = <<<SQL
@@ -194,13 +190,13 @@ switch ($get) {
         };
         break;
 
-    case 'user_views':
+    case 'user_views':  // now at ViewsHandler.php
     case 'user_views2':
         if (enabled('user')) {
             $query = <<<SQL
                 SELECT p.title, v.target, v.lang, v.views
                 FROM views_new_all v
-                JOIN pages p
+                LEFT JOIN pages p
                     ON p.target = v.target
                     AND p.lang = v.lang
             SQL;
@@ -208,20 +204,8 @@ switch ($get) {
         };
         break;
 
-    case 'pages_users_to_main':
-        $query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
-        $params = [];
-        if (enabled('lang')) {
-            $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            if ($added !== null) {
-                $query .= " AND pu.lang = ?";
-                $params[] = $added;
-            }
-        }
-        break;
-
-    case 'leaderboard_table':
-    case 'leaderboard_table_formated':
+    case 'leaderboard_table':           // now at LeaderboardHandler.php
+    case 'leaderboard_table_formated':  // now at LeaderboardHandler.php
 
         $query = "SELECT p.title,
             p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, p.user, u.user_group, LEFT(p.pupdate, 7) as m, v.views
@@ -235,10 +219,23 @@ switch ($get) {
         ";
 
         [$query, $params] = add_li_params($query, [], $endpoint_params);
-
-        // $query .= " \n group by v.target, v.lang";
         $query .= " ORDER BY 1 DESC";
+        break;
 
+    /**
+     * Above Already in EndpointRegistry.php
+     */
+
+    case 'pages_users_to_main':
+        $query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid FROM pages_users_to_main pum, pages_users pu where pum.id = pu.id";
+        $params = [];
+        if (enabled('lang')) {
+            $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            if ($added !== null) {
+                $query .= " AND pu.lang = ?";
+                $params[] = $added;
+            }
+        }
         break;
 
     case 'qids':
