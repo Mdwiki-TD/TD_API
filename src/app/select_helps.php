@@ -11,7 +11,6 @@ function get_select($endpoint_params, $endpoint_columns)
         'select',
     ];
 
-    // $SELECT = (isset($_GET['select'])) ? filter_input(INPUT_GET, 'select', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : '*';
     $SELECT = (isset($_GET['select']) && !in_array($_GET['select'], $false_selects)) ? $_GET['select'] : '*';
 
     if ($SELECT == '*') {

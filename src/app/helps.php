@@ -252,6 +252,20 @@ function add_array_params($qua, $params, $param = "titles", $column = "title", $
     return [$qua, $params];
 }
 
+/**
+ * قراءة قيمة GET نصية بلا ترميز HTML (الأمان عبر prepared statements).
+ * ترجع null للمصفوفات والقيم غير الموجودة.
+ */
+function read_scalar_param(string $key): ?string
+{
+    $v = $_GET[$key] ?? null;
+    if (!is_string($v)) {
+        return null;
+    }
+    // إزالة محارف التحكم فقط
+    return trim(preg_replace('/[\x00-\x1F\x7F]/u', '', $v) ?? '');
+}
+
 function add_li_params(string $qua, array $types, array $endpoint_params = [], array $ignore_params = []): array
 {
     $types = change_types($types, $endpoint_params, $ignore_params);
@@ -267,8 +281,8 @@ function add_li_params(string $qua, array $types, array $endpoint_params = [], a
         if (isset($_GET[$type]) || isset($_GET[$column])) {
 
             // filter input
-            $added = filter_input(INPUT_GET, $type, FILTER_SANITIZE_SPECIAL_CHARS) ?? '';
-            $added = (!empty($added)) ? $added : filter_input(INPUT_GET, $column, FILTER_SANITIZE_SPECIAL_CHARS);
+            $added = read_scalar_param($type) ?? '';
+            $added = ($added !== '') ? $added : (read_scalar_param($column) ?? '');
 
             // if "limit" in endpoint_params remove it
             if ($column == "limit" || $column == "select" || ($added && strtolower($added) == "all")) {
