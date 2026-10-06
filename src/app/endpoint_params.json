@@ -1100,6 +1100,13 @@
         "columns": [],
         "params": [
             {
+                "name": "year",
+                "column": "YEAR(p.pupdate)",
+                "type": "number",
+                "placeholder": "year of date",
+                "no_empty_value": true
+            },
+            {
                 "name": "user",
                 "column": "p.user",
                 "type": "text",
