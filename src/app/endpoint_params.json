@@ -1100,6 +1100,13 @@
         "columns": [],
         "params": [
             {
+                "name": "month",
+                "column": "MONTH(p.pupdate)",
+                "type": "number",
+                "placeholder": "month of date",
+                "no_empty_value": true
+            },
+            {
                 "name": "year",
                 "column": "YEAR(p.pupdate)",
                 "type": "number",
@@ -1119,6 +1126,18 @@
                 "type": "text",
                 "placeholder": "Language code",
                 "no_empty_value": false
+            },
+            {
+                "name": "category",
+                "column": "p.cat",
+                "type": "text",
+                "placeholder": "Category"
+            },
+            {
+                "name": "campaign",
+                "column": "p.campaign",
+                "type": "text",
+                "placeholder": "Campaign"
             }
         ]
     },

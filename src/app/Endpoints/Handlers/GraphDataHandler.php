@@ -12,26 +12,17 @@ final class GraphDataHandler implements EndpointHandler
     {
         $sql = "SELECT DISTINCT LEFT(p.pupdate, 7) AS date, COUNT(*) AS count
             FROM pages p
+            LEFT JOIN categories ca ON p.cat = ca.category
             WHERE p.target != ''
         ";
 
-        [$sql, $params] = $ctx->applyFilters($sql);
+        [$sql, $params] = $ctx->applyFilters($sql, ['campaign', 'cat', 'category']);
+
+        // Apply campaign/category filters
+        [$sql, $params] = $ctx->applyCampaignCategory($sql, $params);
 
         $sql .= " GROUP BY LEFT(p.pupdate, 7)";
 
         return new QuerySpec($sql, $params, defaultOrder: 'date ASC');
-    }
-
-    public function handle1(EndpointContext $ctx): QuerySpec
-    {
-        $sql = "SELECT DISTINCT YEAR(p.pupdate) AS year, count(*) as count
-                FROM pages p
-                LEFT JOIN categories ca ON p.cat = ca.category
-        ";
-        [$sql, $params] = $ctx->applyFilters($sql);
-
-        $sql .= " GROUP BY 1";
-
-        return new QuerySpec($sql, $params, defaultOrder: '1 ASC');
     }
 }
