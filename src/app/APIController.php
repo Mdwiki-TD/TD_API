@@ -88,7 +88,9 @@ class APIController
         } catch (Throwable $e) {
             error_log('[API] ' . $e->getMessage());
             http_response_code(500);
-            $this->emit($this->builder->errorOnly('internal error'));
+            $result = $this->builder->errorOnly('internal error');
+            $result["e"] = $e->getMessage();
+            $this->emit($result);
         }
     }
 

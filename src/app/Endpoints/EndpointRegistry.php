@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Endpoints;
 
 use App\Endpoints\Handlers\{
+    GraphDataHandler,
     CallableHandler,
     DefaultTableHandler,
     StaticSqlHandler,
@@ -135,15 +136,7 @@ final class EndpointRegistry
 
             'langs' => new StaticSqlHandler('SELECT code, autonym, name, redirects FROM langs'),
 
-            'graph_data' => new StaticSqlHandler(
-                "SELECT LEFT(pupdate, 7) AS m, COUNT(*) AS c
-                FROM pages
-                WHERE target != ''
-                GROUP BY LEFT(pupdate, 7)
-                ORDER BY LEFT(pupdate, 7) ASC
-                ",
-                applyOrder: false,
-            ),
+            'graph_data' => new GraphDataHandler(),
 
             'user_access' => new FilteredSqlHandler('SELECT id, user_name, created_at FROM access_keys'),
 

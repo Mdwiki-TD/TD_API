@@ -23,8 +23,10 @@ final class EndpointContext
         public readonly Request $request,
     ) {
         $this->params   = $data['params'] ?? [];
+
         $this->columns  = $data['columns'] ?? [];
         $this->select   = SelectBuilder::build($this->params, $this->columns, $request);
+
         $this->distinct = $request->enabled('distinct') ? 'DISTINCT ' : '';
         $this->group    = $request->get('group');
         $this->order    = $request->get('order');

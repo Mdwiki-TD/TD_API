@@ -1098,7 +1098,22 @@
     },
     "graph_data": {
         "columns": [],
-        "params": []
+        "params": [
+            {
+                "name": "user",
+                "column": "p.user",
+                "type": "text",
+                "placeholder": "Username",
+                "no_empty_value": false
+            },
+            {
+                "name": "lang",
+                "column": "p.lang",
+                "type": "text",
+                "placeholder": "Language code",
+                "no_empty_value": false
+            }
+        ]
     },
     "users_by_last_pupdate": {
         "columns": [],
