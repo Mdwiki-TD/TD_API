@@ -1,6 +1,9 @@
 <?php
 // src/app/request.php
 
+/**
+ * DEPRECATED
+ */
 header('Content-Type: application/json');
 
 use function API\SQL\fetch_query_new;
