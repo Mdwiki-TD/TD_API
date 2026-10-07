@@ -98,11 +98,19 @@ final class EndpointRegistry
         $qids = new QidsHandler();
 
         $this->handlers = [
-            'missing'                      => $missing,
-            'missing_by_lang_and_category' => $missing,
+            // TODO: missing_exists.php need to be replaced by Handlers
             'exists_statics_by_category'   => new CallableHandler(fn($c): array => exists_statics_by_category($c->params)),
             'exists_by_lang_and_category'  => new CallableHandler(fn($c): array => exists_by_lang_and_category($c->params)),
             'statics_by_category'          => new CallableHandler(fn($c): array => statics_by_category($c->params)),
+
+            // TODO: top.php need to be replaced by Handlers
+            'top_langs'                    => new CallableHandler(fn($c): array => top_langs($c->params)),
+            'top_users'                    => new CallableHandler(fn($c): array => top_users($c->params)),
+            'top_lang_of_users'            => new CallableHandler(fn($c): array => top_lang_of_users($c->params)),
+
+            'missing'                      => $missing,
+            'missing_by_lang_and_category' => $missing,
+
             'revids' => new FilteredSqlHandler('SELECT title, revid FROM mdwiki_revids'),
             'titles' => new FilteredSqlHandler(
                 "SELECT
@@ -124,10 +132,6 @@ final class EndpointRegistry
 
             'user_status'                  => new UserStatusHandler(),
             'user_data_status'             => new UserDataStatusHandler(),
-
-            'top_langs'                    => new CallableHandler(fn($c): array => top_langs($c->params)),
-            'top_users'                    => new CallableHandler(fn($c): array => top_users($c->params)),
-            'top_lang_of_users'            => new CallableHandler(fn($c): array => top_lang_of_users($c->params)),
 
             'users'            => new UsersHandler(),
             'category_members' => new CategoryMembersHandler(),
