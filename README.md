@@ -66,7 +66,7 @@ All endpoints accept **HTTP GET** requests. The API uses a single entry point (`
 | `/api.php?get=top_users`                    | GET    | Top users by targets, words, views                                                           |
 | `/api.php?get=translate_type`               | GET    | Translation types (lead/full)                                                                |
 | `/api.php?get=user_access`                  | GET    | Access keys with usernames                                                                   |
-| `/api.php?get=user_lang_status`             | GET    | User status by language (redirects to user_status)                                           |
+| `/api.php?get=get_lang_years`               | GET    | User status by language (redirects to user_status)                                           |
 | `/api.php?get=user_status`                  | GET    | User status by language with year/select options                                             |
 | `/api.php?get=user_views2`                  | GET    | Page views filtered by a specific user (alias)                                               |
 | `/api.php?get=user_views`                   | GET    | Page views filtered by a specific user                                                       |

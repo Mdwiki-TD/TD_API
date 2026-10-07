@@ -1100,6 +1100,12 @@
         "columns": [],
         "params": [
             {
+                "name": "user_group",
+                "column": "u.user_group",
+                "type": "text",
+                "placeholder": "User Group Name"
+            },
+            {
                 "name": "month",
                 "column": "MONTH(p.pupdate)",
                 "type": "number",
@@ -1252,7 +1258,16 @@
             }
         ]
     },
-    "user_lang_status": {
-        "redirect": "user_status"
+    "get_lang_years": {
+        "columns": [],
+        "params": [
+            {
+                "name": "lang",
+                "column": "p.lang",
+                "type": "text",
+                "placeholder": "Language code",
+                "no_empty_value": false
+            }
+        ]
     }
 }

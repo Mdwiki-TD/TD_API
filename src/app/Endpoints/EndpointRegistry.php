@@ -73,7 +73,7 @@ final class EndpointRegistry
         'in_process',
         'pages_with_views',
 
-        'user_lang_status',
+        'get_lang_years',
         'user_status',
         'pages_by_user_or_lang',
         'users_by_last_pupdate',
@@ -205,7 +205,13 @@ final class EndpointRegistry
             ),
 
             'user_status'      => new UserStatusHandler(),
-            'user_lang_status' => new UserStatusHandler(),
+
+            'get_lang_years' => new FilteredSqlHandler(
+                'SELECT DISTINCT YEAR(p.pupdate) as year
+                    FROM pages p
+                    LEFT JOIN categories ca ON p.cat = ca.category',
+            ),
+
             'pages'       => new PagesHandler('pages'),
             'pages_users' => new PagesHandler('pages_users'),
         ];

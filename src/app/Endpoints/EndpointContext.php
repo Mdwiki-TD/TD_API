@@ -62,10 +62,10 @@ final class EndpointContext
 
         $glue = FilterBuilder::glue($sql);
 
-        if ($category !== null) {
+        if (FilterBuilder::isValid($category)) {
             $sql .= "$glue p.cat = ?";
             $params[] = $category;
-        } elseif ($campaign !== null) {
+        } elseif (FilterBuilder::isValid($campaign)) {
             $sql .= "$glue ca.campaign = ?";
             $params[] = $campaign;
         }

@@ -10,9 +10,11 @@ final class GraphDataHandler implements EndpointHandler
 {
     public function handle(EndpointContext $ctx): QuerySpec
     {
+        // api.php?get=graph_data&year=All&month=&category=&campaign=All&user_group=all
         $sql = "SELECT DISTINCT LEFT(p.pupdate, 7) AS date, COUNT(*) AS count
             FROM pages p
             LEFT JOIN categories ca ON p.cat = ca.category
+            LEFT JOIN users u ON p.user = u.username
             WHERE p.target != ''
         ";
 

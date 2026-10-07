@@ -1,14 +1,26 @@
 <?php
 // src/app/Query/FilterBuilder.php
 declare(strict_types=1);
+
 namespace App\Query;
 
 use App\Http\Request;
 
-/** يحوّل بارامترات endpoint_params.json إلى شروط WHERE مع placeholders */
+/**
+ * Change endpoint_params.json parameters to WHERE conditions with placeholders
+ */
 final class FilterBuilder
 {
-    /** AND إن كان في الاستعلام WHERE، وإلا WHERE */
+    public static function isValid(mixed $str): bool
+    {
+        return !empty($str) && strtolower((string)$str) != "all";
+    }
+
+    /**
+     * Check if `AND` in sql query else `WHERE`
+     * @param string $sql
+     * @return string
+     */
     public static function glue(string $sql): string
     {
         return preg_match('/\bWHERE\b/i', $sql) === 1 ? ' AND' : ' WHERE';
@@ -16,11 +28,15 @@ final class FilterBuilder
 
     /**
      * @param  array<int, array<string, mixed>> $endpointParams
-     * @param  list<string> $ignore أسماء بارامترات تُعالج يدوياً
+     * @param  list<string> $ignore parameters to handled manually
      * @return array{0: string, 1: array} [sql, params]
      */
-    public static function apply(string $sql, array $endpointParams, Request $request, array $ignore = []): array
-    {
+    public static function apply(
+        string $sql,
+        array $endpointParams,
+        Request $request,
+        array $ignore = []
+    ): array {
         $params = [];
 
         foreach (self::filters($endpointParams, $ignore) as $name => $def) {
@@ -34,7 +50,7 @@ final class FilterBuilder
                 $value = $request->get($column) ?? '';
             }
 
-            if ($column === 'limit' || $column === 'select' || strtolower($value) === 'all') {
+            if ($column === 'limit' || $column === 'select' || !self::isValid($value)) {
                 continue;
             }
             if (isset($def['no_empty_value']) && empty($value)) {
@@ -71,7 +87,12 @@ final class FilterBuilder
 
     /** @return array{0: string, 1: array} */
     private static function condition(
-        string $sql, string $name, string $column, string $value, array $def, Request $request
+        string $sql,
+        string $name,
+        string $column,
+        string $value,
+        array $def,
+        Request $request
     ): array {
         $glue = self::glue($sql);
 

@@ -20,7 +20,8 @@ final class PagesHandler implements EndpointHandler
 
         $sql = "SELECT {$ctx->distinct}{$select}
                 FROM `{$this->table}` p
-                LEFT JOIN categories ca ON p.cat = ca.category";
+                LEFT JOIN categories ca ON p.cat = ca.category
+        ";
 
         // campaign / cat / category are handled manually below
         [$sql, $params] = $ctx->applyFilters($sql, ['campaign', 'cat', 'category']);
