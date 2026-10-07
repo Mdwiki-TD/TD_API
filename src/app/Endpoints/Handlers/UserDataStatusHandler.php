@@ -11,19 +11,17 @@ final class UserDataStatusHandler implements EndpointHandler
 
     public function handle(EndpointContext $ctx): QuerySpec
     {
-        $sql = "SELECT YEAR(p.pupdate) AS year, p.lang, ca.campaign
-                FROM pages p
-                LEFT JOIN categories ca ON p.cat = ca.category
-        ";
-        $params = [];
-
         $user = $ctx->request->get('user');
-
-        if ($ctx->isValid($user)) {
-            $sql .= "WHERE p.user = ?";
-            $params[] = $user;
+        if (!$ctx->isValid($user)) {
+            return new QuerySpec(error: 'user param required');
         }
 
-        return new QuerySpec($sql, $params);
+        return new QuerySpec(
+            'SELECT DISTINCT YEAR(p.pupdate) AS year, p.lang, ca.campaign
+                FROM pages p
+                LEFT JOIN categories ca ON p.cat = ca.category
+                WHERE p.user = ?',
+            [$user],
+        );
     }
 }

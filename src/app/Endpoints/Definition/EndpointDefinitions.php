@@ -548,8 +548,11 @@ final class EndpointDefinitions
                 tag: 'pages_infos',
             ),
             'user_data_status' => new EndpointDefinition(
-                summary: 'TODO',
+                summary: "Retrieve years, languages and campaigns of a user's pages",
                 tag: 'users',
+                params: [
+                    new Param(name: 'user', column: 'p.user', placeholder: 'Username', required: true),
+                ],
             ),
         ];
     }

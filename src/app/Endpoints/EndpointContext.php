@@ -71,7 +71,7 @@ final class EndpointContext
         }
         return [$sql, $params];
     }
-    public function isValid(string $value): bool
+    public function isValid(?string $value): bool
     {
         return FilterBuilder::isValid($value);
     }
