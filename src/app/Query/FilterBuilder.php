@@ -11,9 +11,9 @@ use App\Http\Request;
  */
 final class FilterBuilder
 {
-    public static function isValid(mixed $str): bool
+    public static function isValid(?string $v): bool
     {
-        return !empty($str) && strtolower((string)$str) != "all";
+        return $v !== null && $v !== '' && strtolower($v) !== 'all';
     }
 
     /**
