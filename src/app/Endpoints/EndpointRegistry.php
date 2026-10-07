@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Endpoints;
 
 use App\Endpoints\Handlers\{
+    GraphDataHandler,
     CallableHandler,
     DefaultTableHandler,
     StaticSqlHandler,
@@ -19,7 +20,7 @@ use App\Endpoints\Handlers\{
     PagesByUserOrLangHandler,
     UserStatusHandler,
     PagesHandler,
-    StatusHandler,
+    UserDataStatusHandler,
 };
 
 use function API\Missing\{
@@ -72,7 +73,7 @@ final class EndpointRegistry
         'in_process',
         'pages_with_views',
 
-        'user_lang_status',
+        'get_lang_years',
         'user_status',
         'pages_by_user_or_lang',
         'users_by_last_pupdate',
@@ -120,7 +121,10 @@ final class EndpointRegistry
                     left join refs_counts rc        on rc.r_title = ase.title
                     left join words w               on w.w_title  = ase.title"
             ),
-            'status'                       => new StatusHandler(),
+
+            'user_status'                  => new UserStatusHandler(),
+            'user_data_status'             => new UserDataStatusHandler(),
+
             'top_langs'                    => new CallableHandler(fn($c): array => top_langs($c->params)),
             'top_users'                    => new CallableHandler(fn($c): array => top_users($c->params)),
             'top_lang_of_users'            => new CallableHandler(fn($c): array => top_lang_of_users($c->params)),
@@ -135,15 +139,7 @@ final class EndpointRegistry
 
             'langs' => new StaticSqlHandler('SELECT code, autonym, name, redirects FROM langs'),
 
-            'graph_data' => new StaticSqlHandler(
-                "SELECT LEFT(pupdate, 7) AS m, COUNT(*) AS c
-                FROM pages
-                WHERE target != ''
-                GROUP BY LEFT(pupdate, 7)
-                ORDER BY LEFT(pupdate, 7) ASC
-                ",
-                applyOrder: false,
-            ),
+            'graph_data' => new GraphDataHandler(),
 
             'user_access' => new FilteredSqlHandler('SELECT id, user_name, created_at FROM access_keys'),
 
@@ -211,8 +207,12 @@ final class EndpointRegistry
                 'SELECT lang, autonym FROM pages_users p LEFT JOIN langs la ON lang = la.code GROUP BY lang'
             ),
 
-            'user_status'      => new UserStatusHandler(),
-            'user_lang_status' => new UserStatusHandler(),
+            'get_lang_years' => new FilteredSqlHandler(
+                'SELECT DISTINCT YEAR(p.pupdate) as year
+                    FROM pages p
+                    LEFT JOIN categories ca ON p.cat = ca.category',
+            ),
+
             'pages'       => new PagesHandler('pages'),
             'pages_users' => new PagesHandler('pages_users'),
         ];

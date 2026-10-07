@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\Formatting;
 
 use App\Endpoints\EndpointContext;
+use App\Formatting\GraphDataFormatter;
+use App\Formatting\LeaderboardFormatter;
+use App\Formatting\UserDataStatusFormatter;
+use App\Formatting\LangsFormatter;
 use App\Http\Environment;
 
 final class ResponseBuilder
@@ -12,6 +16,8 @@ final class ResponseBuilder
     public function format(string $get, array $results): array
     {
         return match ($get) {
+            // 'graph_data'              => GraphDataFormatter::format($results),
+            'user_data_status'           => UserDataStatusFormatter::format($results),
             'leaderboard_table_formated' => LeaderboardFormatter::format($results),
             'langs'                      => LangsFormatter::format($results),
             default                      => $results,

@@ -1,6 +1,9 @@
 <?php
 // src/app/request.php
 
+/**
+ * DEPRECATED
+ */
 header('Content-Type: application/json');
 
 use function API\SQL\fetch_query_new;
@@ -12,7 +15,6 @@ use function API\Helps\add_offset;
 use function API\Qids\qids_qua;
 use function API\Leaderboard\leaderboard_table_format;
 use function API\Leaderboard\langs_format;
-use function API\Status\make_status_query;
 use function API\TitlesInfos\titles_query;
 use function API\TitlesInfos\mdwiki_revids;
 use function API\Missing\exists_statics_by_category;
@@ -97,10 +99,6 @@ switch ($get) {
 
     case 'titles':
         [$query, $params, $error] = titles_query($endpoint_params);
-        break;
-
-    case 'status':
-        [$query, $params, $error] = make_status_query($endpoint_params);
         break;
 
     case 'top_lang_of_users':
@@ -329,19 +327,23 @@ switch ($get) {
         $query = add_group($query, $endpoint_data, $get_group_value);
         break;
 
-    case 'user_lang_status':        // now at UserStatusHandler.php
-    case 'user_status':
+    case 'get_lang_years':
+        $qua = "SELECT DISTINCT YEAR(p.pupdate) as year
+            FROM pages p
+            LEFT JOIN categories ca ON p.cat = ca.category
+        ";
+        [$query, $params] = add_li_params($qua, [], $endpoint_params);
+        break;
+
+    case 'user_status':        // now at UserStatusHandler.php
 
         $SELECT = ($SELECT == "*" || $SELECT == "year") ? "YEAR(p.pupdate) as year" : $SELECT;
-
         $qua = "SELECT DISTINCT $SELECT
             FROM pages p
-            LEFT JOIN categories ca
-            ON p.cat = ca.category
-            ";
+            LEFT JOIN categories ca ON p.cat = ca.category
+        ";
 
         [$query, $params] = add_li_params($qua, [], $endpoint_params);
-
         break;
 
     case 'users_by_last_pupdate':

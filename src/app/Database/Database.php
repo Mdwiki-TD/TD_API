@@ -119,6 +119,7 @@ class Database
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             Logger::error('SQL Error in fetchQuery: ' . $e->getMessage() . ' | Query: ' . $sqlQuery);
+            Logger::debug('SQL Error in fetchQuery: Query: ' . $sqlQuery);
             throw new DatabaseException('Query failed', 0, $e);
         }
     }

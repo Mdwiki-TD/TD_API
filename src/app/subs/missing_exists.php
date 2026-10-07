@@ -53,7 +53,6 @@ function exists_statics_by_category($endpoint_params)
     $params = [$category];
 
     return [$qua, $params, ""];
-
 }
 
 function missing_by_lang_and_category($endpoint_params)
@@ -101,14 +100,13 @@ function missing_by_lang_and_category($endpoint_params)
             c.category = ?
         AND aq.target IS NULL
 
-        /* to work with valid langs */
         AND EXISTS ( SELECT 1 FROM langs la WHERE la.code = ? )
     SQL;
+    /* to work with valid langs */
 
     $params = [$lang_code, $category, $lang_code];
 
     return [$qua, $params, $error];
-
 }
 
 
@@ -156,14 +154,13 @@ function exists_by_lang_and_category($endpoint_params)
             c.category = ?
         AND aq.target IS NOT NULL
 
-        /* to work with valid langs */
         AND EXISTS ( SELECT 1 FROM langs la WHERE la.code = ? )
     SQL;
+    /* to work with valid langs */
 
     $params = [$lang_code, $category, $lang_code];
 
     return [$qua, $params, ""];
-
 }
 
 function statics_by_category($endpoint_params)
@@ -196,5 +193,4 @@ function statics_by_category($endpoint_params)
     $params = [$category];
 
     return [$qua, $params, ""];
-
 }
