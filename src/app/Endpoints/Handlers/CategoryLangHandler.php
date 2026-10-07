@@ -2,7 +2,7 @@
 // src/app/Endpoints/Handlers/CategoryLangHandler.php
 declare(strict_types=1);
 namespace App\Endpoints\Handlers;
-
+use App\Endpoints\Definition\EndpointDefinition;
 use App\Endpoints\{DefinedEndpoint, EndpointContext, EndpointHandler};
 use App\Endpoints\Definition\Param;
 use App\Query\InputSanitizer;

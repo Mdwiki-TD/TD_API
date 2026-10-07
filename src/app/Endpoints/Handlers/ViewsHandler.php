@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
-
+use App\Endpoints\Definition\EndpointDefinition;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 /** استعلامات views_new_all مع pages: تختلف بالأعمدة ونوع الـ JOIN وبارامتر مطلوب اختياري */

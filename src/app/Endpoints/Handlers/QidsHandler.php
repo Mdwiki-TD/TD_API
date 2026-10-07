@@ -6,7 +6,7 @@ declare(strict_types=1);
             # AND A.id < B.id
 */
 namespace App\Endpoints\Handlers;
-
+use App\Endpoints\Definition\EndpointDefinition;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 final class QidsHandler implements EndpointHandler
