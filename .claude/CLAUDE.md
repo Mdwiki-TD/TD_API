@@ -25,21 +25,20 @@ Core Files:
   app/request.php      - Main switch/case router (40+ endpoints)
   app/sql.php          - Database class + APCu caching functions
   app/helps.php        - Query builder utilities (add_limit, add_order, add_li_params)
-  app/select_helps.php - SELECT clause builder from endpoint_params
+  app/select_helps.php - SELECT clause builder from endpoint params
   app/bootstrap.php      - Module loader
 
 Endpoint-specific modules:
   app/subs/            - Endpoint query functions (missing_exists.php, titles_infos.php, top.php)
 
 Configuration:
-  endpoint_params.json     - Per-endpoint parameter/column definitions
   openapi.json            - OpenAPI 3.0 specification
 ```
 
 ### Request Flow
 
 1. HTTP GET request to `api.php?get=<endpoint>`
-2. `request.php` loads endpoint config from `endpoint_params.json`
+2. `request.php` loads endpoint definition from `EndpointDefinitions`
 3. Switch/case dispatches to endpoint handler (inline SQL or function call)
 4. Query built via `add_li_params()`, `add_order()`, `add_limit()`, `add_offset()`
 5. `fetch_query_new()` checks APCu cache, then queries database
@@ -92,22 +91,17 @@ Cache TTL: 12 hours (3600 \* 12 seconds)
 
 ### Adding a New Endpoint
 
-1. Add endpoint configuration to `endpoint_params.json`:
+1. Add endpoint definition in `EndpointDefinitions.php` (or implement `DefinedEndpoint` in its handler class):
 
-```json
-{
-    "new_endpoint": {
-        "columns": ["col1", "col2"],
-        "params": [
-            {
-                "name": "param1",
-                "column": "db_column",
-                "type": "text",
-                "placeholder": "Description"
-            }
-        ]
-    }
-}
+```php
+new EndpointDefinition(
+    summary: 'Description of endpoint',
+    tag: 'pages',
+    params: [
+        new Param(name: 'param1', column: 'db_column', type: 'text', placeholder: 'Description')
+    ],
+    columns: ['col1', 'col2']
+)
 ```
 
 2. Add case in `app/request.php` switch statement (or add to `$other_tables` array for simple SELECT queries)

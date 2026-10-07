@@ -27,7 +27,7 @@ final class Param
         public readonly string|array|null $doc = null,
     ) {}
 
-    /** نفس شكل endpoint_params.json بالضبط (المفاتيح الغائبة تبقى غائبة) */
+    /** تحويل البارامتر لمصفوفة للـ QueryBuilder و ResponseBuilder */
     public function toArray(): array
     {
         $a = ['name' => $this->name, 'column' => $this->column, 'type' => $this->type];

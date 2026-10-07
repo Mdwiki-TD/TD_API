@@ -7,7 +7,7 @@ namespace App\Query;
 use App\Http\Request;
 
 /**
- * Change endpoint_params.json parameters to WHERE conditions with placeholders
+ * Change endpoint definition parameters to WHERE conditions with placeholders
  */
 final class FilterBuilder
 {

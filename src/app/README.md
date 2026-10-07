@@ -11,7 +11,6 @@ src/app/
 │   └── Environment.php            ← Handles APP_ENV, isLocalhost(), and isDebug()
 │
 ├── Config/
-│   └── EndpointConfig.php         ← Loads endpoint_params.json with error handling & redirects
 │
 ├── Endpoints/                     ← Core Application Logic
 │   ├── EndpointContext.php

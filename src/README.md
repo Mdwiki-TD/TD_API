@@ -37,7 +37,6 @@ src/
   api.php                   # Primary API entry point (17 lines)
   index.php                 # Duplicate entry point (16 lines)
   bootstrap.php           # Central dependency loader (20 lines)
-  endpoint_params.json      # Per-endpoint parameter/column definitions (33KB)
   openapi.json              # OpenAPI 3.0 specification (61KB)
   openapi.html              # Swagger UI documentation page (53 lines)
   redoc.html                # ReDoc documentation page (19 lines)
@@ -109,8 +108,8 @@ HTTP GET api.php?get=<endpoint>
   → bootstrap.php: loads load_env.php (if dev), then all modules
   → request.php:
       1. Sanitizes endpoint name
-      2. Loads endpoint_params.json
-      3. Resolves redirects (e.g., pages_with_views → pages)
+      2. Loads endpoint definition from EndpointDefinitions
+      3. Resolves redirects
       4. Builds SELECT clause
       5. Switch/case dispatches to handler
       6. Builds SQL (parameterized or raw)

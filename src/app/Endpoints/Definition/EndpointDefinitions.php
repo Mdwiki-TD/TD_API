@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace App\Endpoints\Definition;
 
 /**
- * مولَّد من endpoint_params.json + openapi.json (مرحلي).
- * بعد التحقق ينتقل كل تعريف إلى الـ handler الخاص به ويُحذف هذا الملف.
+ * تعريفات جميع الـ endpoints ككائنات EndpointDefinition.
  */
 final class EndpointDefinitions
 {

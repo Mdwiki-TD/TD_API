@@ -16,14 +16,13 @@ index.php
   → bootstrap (env, autoload)
   → APIController::handleRequest()
         1. Request            ← Reads $_GET once
-        2. EndpointConfig     ← Parses JSON + resolves redirects
+        2. EndpointRegistry   ← Resolves Handler and EndpointDefinition
         3. EndpointContext    ← Resolves get, params, columns, select, distinct, group
-        4. EndpointRegistry   ← Resolves the appropriate Handler
-        5. Handler->handle()  ← Returns a QuerySpec (query, params, error, skipOrder?)
-        6. QueryExecutor      ← Applies order/limit/offset + Cache + Database
-        7. Formatter          ← Applies custom formatting (leaderboard, langs)
-        8. ResponseBuilder    ← Builds metadata (time, source, length, supported_params)
-        9. JsonResponse       ← Outputs JSON response
+        4. Handler->handle()  ← Returns a QuerySpec (query, params, error, skipOrder?)
+        5. QueryExecutor      ← Applies order/limit/offset + Cache + Database
+        6. Formatter          ← Applies custom formatting (leaderboard, langs)
+        7. ResponseBuilder    ← Builds metadata (time, source, length, supported_params)
+        8. JsonResponse       ← Outputs JSON response
 */
 
 class APIController

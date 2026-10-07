@@ -20,7 +20,7 @@ final class EndpointDefinition
         public readonly string $description = '',   // فارغ = الوصف القياسي
     ) {}
 
-    /** الشكل الذي تقرؤه Query/* و ResponseBuilder (بديل endpoint_params.json) */
+    /** الشكل الذي تقرؤه Query/* و ResponseBuilder */
     public function toArray(): array
     {
         $a = [

@@ -55,14 +55,9 @@ $params = [];
 $error_results = [];
 $execution_time = 0;
 
-// load endpoint_params.json
-$endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/endpoint_params.json'), true);
-
-$endpoint_data = $endpoint_params_tab[$get] ?? [];
-
-if (isset($endpoint_data['redirect'])) {
-    $endpoint_data = $endpoint_params_tab[$endpoint_data['redirect']] ?? [];
-};
+// load endpoint definitions
+$endpoint_def = \App\Endpoints\Definition\EndpointDefinitions::for($get ?? '');
+$endpoint_data = $endpoint_def ? $endpoint_def->toArray() : [];
 
 $endpoint_params = $endpoint_data['params'] ?? [];
 $endpoint_columns = $endpoint_data['columns'] ?? [];

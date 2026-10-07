@@ -7,7 +7,7 @@ use App\Endpoints\Definition\EndpointDefinition;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 
-/** استعلام أساسي + فلاتر من endpoint_params.json (user_access, language_settings ...) */
+/** استعلام أساسي + فلاتر من التعريفات (user_access, language_settings ...) */
 
 final class FilteredSqlHandler implements EndpointHandler
 {
