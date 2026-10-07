@@ -232,4 +232,9 @@ final class EndpointRegistry
         }
         return null;
     }
+    /** @return array<string, EndpointHandler> الاسم => handler (aliases تشير لنفس الكائن) */
+    public function all(): array
+    {
+        return $this->handlers;
+    }
 }

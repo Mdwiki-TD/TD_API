@@ -35,6 +35,10 @@
             const ui = SwaggerUIBundle({
                 url: "openapi.json", // Path to your OpenAPI JSON file
                 dom_id: '#swagger-ui',
+                supportedSubmitMethods: ['get'],
+                docExpansion: 'none',
+                filter: true,        // مربع بحث عن endpoint من بين 45
+                tryItOutEnabled: true,
                 deepLinking: true,
                 presets: [
                     SwaggerUIBundle.presets.apis,
