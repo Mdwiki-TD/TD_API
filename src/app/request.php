@@ -12,7 +12,6 @@ use function API\Helps\add_offset;
 use function API\Qids\qids_qua;
 use function API\Leaderboard\leaderboard_table_format;
 use function API\Leaderboard\langs_format;
-use function API\Status\make_status_query;
 use function API\TitlesInfos\titles_query;
 use function API\TitlesInfos\mdwiki_revids;
 use function API\Missing\exists_statics_by_category;
@@ -97,10 +96,6 @@ switch ($get) {
 
     case 'titles':
         [$query, $params, $error] = titles_query($endpoint_params);
-        break;
-
-    case 'status':
-        [$query, $params, $error] = make_status_query($endpoint_params);
         break;
 
     case 'top_lang_of_users':

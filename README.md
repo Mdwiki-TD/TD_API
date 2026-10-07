@@ -59,7 +59,6 @@ All endpoints accept **HTTP GET** requests. The API uses a single entry point (`
 | `/api.php?get=revids`                       | GET    | MDWiki revision IDs for titles                                                               |
 | `/api.php?get=settings`                     | GET    | System configuration settings                                                                |
 | `/api.php?get=statics_by_category`          | GET    | Count of existing articles grouped by language for a category                                |
-| `/api.php?get=status`                       | GET    | Page publication counts by month (optional filters)                                          |
 | `/api.php?get=titles`                       | GET    | Page titles with assessments, refs, views, QIDs, words                                       |
 | `/api.php?get=top_lang_of_users`            | GET    | Top language per user (by page count)                                                        |
 | `/api.php?get=top_langs`                    | GET    | Top languages by targets, words, views                                                       |

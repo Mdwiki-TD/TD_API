@@ -52,7 +52,6 @@ src/app/
 | `sql.php`                 | `API\SQL`         | `Database` class (PDO), `fetch_query_new()` with APCu integration                   |
 | `helps.php`               | `API\Helps`       | `add_li_params()`, `add_order()`, `add_limit()`, `add_offset()`, `sanitize_input()` |
 | `select_helps.php`        | `API\SelectHelps` | `get_select()` builds SELECT clause from `$_GET['select']`                          |
-| `status.php`              | `API\Status`      | `make_status_query()` for the `/status` endpoint                                    |
 | `leaderboard.php`         | `API\Leaderboard` | `leaderboard_table_format()`, `langs_format()`                                      |
 | `qids.php`                | `API\Qids`        | `qids_qua()` for Wikidata QID endpoints                                             |
 | `subs/missing_exists.php` | `API\Missing`     | Complex queries for missing/exists article analysis                                 |

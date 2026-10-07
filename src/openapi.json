@@ -1204,37 +1204,6 @@
                 }
             }
         },
-        "/api.php?get=status": {
-            "get": {
-                "summary": "Retrieve status statistics",
-                "description": "Corresponds to calling `api.php?get=status` with query parameters.",
-                "tags": [
-                    "statistics"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/YearParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/UserGroupParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CampaignParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CategoryParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
         "/api.php?get=titles": {
             "get": {
                 "summary": "Retrieve pages by title or importance",

@@ -176,17 +176,20 @@ td_api/
 **Purpose**: Contains the core business logic, independent of any external frameworks or infrastructure.
 
 **Key Components**:
-- **Entities**: Objects with identity (Page, User, Translation)
-- **Value Objects**: Immutable objects without identity (Language, Qid)
-- **Repository Interfaces**: Contracts defining data access requirements
-- **Domain Services**: Complex business operations that don't fit in entities
+
+-   **Entities**: Objects with identity (Page, User, Translation)
+-   **Value Objects**: Immutable objects without identity (Language, Qid)
+-   **Repository Interfaces**: Contracts defining data access requirements
+-   **Domain Services**: Complex business operations that don't fit in entities
 
 **Benefits**:
-- Business logic is isolated and testable without database
-- Changes to infrastructure don't affect business rules
-- Clear boundaries make the codebase easier to understand
+
+-   Business logic is isolated and testable without database
+-   Changes to infrastructure don't affect business rules
+-   Clear boundaries make the codebase easier to understand
 
 **Migration Example**:
+
 ```php
 // Current approach (app/request.php)
 switch ($get) {
@@ -209,39 +212,44 @@ class GetPagesAction {
 **Purpose**: Orchestrates use cases by coordinating domain objects. No business rules here, only coordination.
 
 **Key Components**:
-- **Actions/Commands**: Handle write operations
-- **Queries**: Handle read operations (CQRS pattern)
-- **DTOs**: Data structures for crossing layer boundaries
-- **Validators**: Input validation and sanitization
+
+-   **Actions/Commands**: Handle write operations
+-   **Queries**: Handle read operations (CQRS pattern)
+-   **DTOs**: Data structures for crossing layer boundaries
+-   **Validators**: Input validation and sanitization
 
 **Benefits**:
-- Clear entry points for each use case
-- Request validation separated from business logic
-- Easier to add new features without modifying existing code
+
+-   Clear entry points for each use case
+-   Request validation separated from business logic
+-   Easier to add new features without modifying existing code
 
 ### 3. Infrastructure Layer (`src/Infrastructure/`)
 
 **Purpose**: Contains all technical details and external concerns.
 
 **Key Components**:
-- **Database**: Concrete repository implementations, connection management
-- **Cache**: APCu and other caching implementations
-- **Http**: Controllers, middleware, request/response handling
-- **External**: Third-party API integrations
+
+-   **Database**: Concrete repository implementations, connection management
+-   **Cache**: APCu and other caching implementations
+-   **Http**: Controllers, middleware, request/response handling
+-   **External**: Third-party API integrations
 
 **Benefits**:
-- Technical details are isolated
-- Easy to swap implementations (e.g., APCu → Redis)
-- Database schema changes only affect repository implementations
+
+-   Technical details are isolated
+-   Easy to swap implementations (e.g., APCu → Redis)
+-   Database schema changes only affect repository implementations
 
 ### 4. Shared Kernel (`src/Shared/`)
 
 **Purpose**: Common utilities used across all layers.
 
 **Migration Path**:
-- Move `app/helps.php` functions to `src/Shared/Sanitizers.php`
-- Refactor into static utility classes with clear responsibilities
-- Maintain backward compatibility with gradual migration
+
+-   Move `app/helps.php` functions to `src/Shared/Sanitizers.php`
+-   Refactor into static utility classes with clear responsibilities
+-   Maintain backward compatibility with gradual migration
 
 ---
 
@@ -252,6 +260,7 @@ class GetPagesAction {
 **Current Risk**: All files in the web root are accessible via HTTP, including `app/sql.php` which contains database credentials.
 
 **Solution**:
+
 ```
 # Apache/Nginx configuration
 DocumentRoot /var/www/td_api/public
@@ -260,19 +269,22 @@ DocumentRoot /var/www/td_api/public
 ```
 
 **Benefits**:
-- Source code files are not directly accessible
-- Configuration files protected from HTTP access
-- Prevents accidental exposure of sensitive data
+
+-   Source code files are not directly accessible
+-   Configuration files protected from HTTP access
+-   Prevents accidental exposure of sensitive data
 
 ### 2. Configuration Management
 
 **Current Approach**:
+
 ```php
 // Hardcoded in sql.php
 $ts_mycnf = parse_ini_file($this->home_dir . "/confs/db.ini");
 ```
 
 **Proposed Approach**:
+
 ```php
 // config/database.php
 return [
@@ -292,13 +304,15 @@ return [
 ```
 
 **Benefits**:
-- Environment-specific configuration via `.env` files
-- No hardcoded credentials in source code
-- Easy to manage different environments (dev, staging, production)
+
+-   Environment-specific configuration via `.env` files
+-   No hardcoded credentials in source code
+-   Easy to manage different environments (dev, staging, production)
 
 ### 3. Autoloading and Namespaces
 
 **Current**: Manual includes in `app/bootstrap.php`
+
 ```php
 include_once __DIR__ . '/helps.php';
 include_once __DIR__ . '/sql.php';
@@ -306,6 +320,7 @@ include_once __DIR__ . '/sql.php';
 ```
 
 **Proposed**: PSR-4 autoloading via Composer
+
 ```json
 {
     "autoload": {
@@ -317,15 +332,17 @@ include_once __DIR__ . '/sql.php';
 ```
 
 **Benefits**:
-- No manual include/require statements
-- Class loading on-demand
-- Namespace-based organization
+
+-   No manual include/require statements
+-   Class loading on-demand
+-   Namespace-based organization
 
 ### 4. Testing Infrastructure
 
 **Current**: Frontend test files (`test/`, `test2/`) mixed with source
 
 **Proposed**: Comprehensive test suite
+
 ```
 tests/
 ├── Unit/              # Fast, isolated tests for domain logic
@@ -334,16 +351,18 @@ tests/
 ```
 
 **Benefits**:
-- Regression prevention
-- Confidence when refactoring
-- Documentation via tests
-- PHPUnit integration for CI/CD
+
+-   Regression prevention
+-   Confidence when refactoring
+-   Documentation via tests
+-   PHPUnit integration for CI/CD
 
 ### 5. API Documentation
 
 **Current**: `openapi.html` at root, `openapi.json` separate
 
 **Proposed**: Organized documentation
+
 ```
 docs/
 ├── api/               # API usage guides
@@ -407,21 +426,20 @@ resources/schemas/     # OpenAPI JSON specs
 
 ## File Mapping: Current → Proposed
 
-| Current Location | Proposed Location | Rationale |
-|-----------------|-------------------|-----------|
-| `app/request.php` | `src/Infrastructure/Http/Controllers/ApiController.php` | HTTP handling belongs in infrastructure |
-| `app/sql.php` | `src/Infrastructure/Database/` | Database access is infrastructure concern |
-| `app/helps.php` | `src/Shared/Sanitizers.php`, `src/Application/Validators/` | Split into shared utilities and validators |
-| `app/QueryBuilder.php` | `src/Infrastructure/Database/QueryBuilders/` | Specific builders for each entity |
-| `app/langs/*` | `src/Domain/ValueObjects/Language.php`, `resources/lang/` | Language as value object + translations |
-| `app/subs/*` | `src/Infrastructure/Database/QueryBuilders/` | Query building logic |
-| `app/leaderboard.php` | `src/Application/Actions/GetLeaderboardAction.php` | Use case in application layer |
-| `app/status.php` | `src/Application/Queries/GetTranslationStatusQuery.php` | CQRS query |
-| `endpoint_params.json` | `config/endpoints/params.php` | PHP config for better caching |
-| `index.php`, `api.php` | `public/index.php` | Single entry point with routing |
-| `openapi.html` | `public/swagger-ui/index.html` | Organized documentation |
-| `test/`, `test2/` | `tests/Functional/`, `public/assets/` | Separate test suite from frontend assets |
-| `x/` | `bin/`, `var/temp/` | Scripts in bin/, temp files in var/ |
+| Current Location       | Proposed Location                                          | Rationale                                  |
+| ---------------------- | ---------------------------------------------------------- | ------------------------------------------ |
+| `app/request.php`      | `src/Infrastructure/Http/Controllers/ApiController.php`    | HTTP handling belongs in infrastructure    |
+| `app/sql.php`          | `src/Infrastructure/Database/`                             | Database access is infrastructure concern  |
+| `app/helps.php`        | `src/Shared/Sanitizers.php`, `src/Application/Validators/` | Split into shared utilities and validators |
+| `app/QueryBuilder.php` | `src/Infrastructure/Database/QueryBuilders/`               | Specific builders for each entity          |
+| `app/langs/*`          | `src/Domain/ValueObjects/Language.php`, `resources/lang/`  | Language as value object + translations    |
+| `app/subs/*`           | `src/Infrastructure/Database/QueryBuilders/`               | Query building logic                       |
+| `app/leaderboard.php`  | `src/Application/Actions/GetLeaderboardAction.php`         | Use case in application layer              |
+| `endpoint_params.json` | `config/endpoints/params.php`                              | PHP config for better caching              |
+| `index.php`, `api.php` | `public/index.php`                                         | Single entry point with routing            |
+| `openapi.html`         | `public/swagger-ui/index.html`                             | Organized documentation                    |
+| `test/`, `test2/`      | `tests/Functional/`, `public/assets/`                      | Separate test suite from frontend assets   |
+| `x/`                   | `bin/`, `var/temp/`                                        | Scripts in bin/, temp files in var/        |
 
 ---
 
@@ -491,29 +509,34 @@ server {
 ## Benefits Summary
 
 ### Maintainability
-- **Clear separation of concerns**: Each layer has a single responsibility
-- **Easy to navigate**: Developers know exactly where to find code
-- **Reduced cognitive load**: Smaller, focused classes instead of large files
+
+-   **Clear separation of concerns**: Each layer has a single responsibility
+-   **Easy to navigate**: Developers know exactly where to find code
+-   **Reduced cognitive load**: Smaller, focused classes instead of large files
 
 ### Testability
-- **Domain layer**: Unit testable without database
-- **Infrastructure layer**: Mockable interfaces for testing
-- **Integration tests**: Test database queries in isolation
+
+-   **Domain layer**: Unit testable without database
+-   **Infrastructure layer**: Mockable interfaces for testing
+-   **Integration tests**: Test database queries in isolation
 
 ### Scalability
-- **Horizontal scaling**: Stateless design allows multiple servers
-- **Caching strategy**: Centralized cache layer easy to optimize
-- **Database optimization**: Repository pattern allows query optimization without affecting business logic
+
+-   **Horizontal scaling**: Stateless design allows multiple servers
+-   **Caching strategy**: Centralized cache layer easy to optimize
+-   **Database optimization**: Repository pattern allows query optimization without affecting business logic
 
 ### Security
-- **Defense in depth**: Web root isolation prevents source code exposure
-- **Input validation**: Centralized validation layer
-- **Environment isolation**: Configuration separated from code
+
+-   **Defense in depth**: Web root isolation prevents source code exposure
+-   **Input validation**: Centralized validation layer
+-   **Environment isolation**: Configuration separated from code
 
 ### Developer Experience
-- **IDE support**: PSR-4 autoloading enables better autocomplete
-- **Type safety**: Gradual introduction of type hints
-- **Documentation**: Clear architecture boundaries serve as documentation
+
+-   **IDE support**: PSR-4 autoloading enables better autocomplete
+-   **Type safety**: Gradual introduction of type hints
+-   **Documentation**: Clear architecture boundaries serve as documentation
 
 ---
 

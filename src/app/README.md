@@ -24,7 +24,7 @@ src/app/
 │   │   ├── Pages/     (PagesHandler, PagesWithViewsHandler, PagesByUserOrLangHandler, PagesLangsHandler)
 │   │   ├── Views/     (ViewsHandler, UserViewsHandler, LangViewsHandler)
 │   │   ├── Users/     (UsersHandler, UsersByLastPupdateHandler, CoordinatorsHandler, CountPagesHandler)
-│   │   ├── Stats/     (LeaderboardHandler, GraphDataHandler, StatusHandler, Top*Handler)
+│   │   ├── Stats/     (LeaderboardHandler, GraphDataHandler, UserDataStatusHandler, Top*Handler)
 │   │   ├── Missing/   (MissingHandler, ExistsHandler, StaticsHandler)
 │   │   └── Misc/      (LangsHandler, QidsHandler, InProcessHandler, PublishReportsHandler ...)
 │   └── Queries/                   ← Heavy SQL queries (migrated from subs/)

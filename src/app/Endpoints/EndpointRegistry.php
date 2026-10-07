@@ -20,7 +20,7 @@ use App\Endpoints\Handlers\{
     PagesByUserOrLangHandler,
     UserStatusHandler,
     PagesHandler,
-    StatusHandler,
+    UserDataStatusHandler,
 };
 
 use function API\Missing\{
@@ -121,7 +121,10 @@ final class EndpointRegistry
                     left join refs_counts rc        on rc.r_title = ase.title
                     left join words w               on w.w_title  = ase.title"
             ),
-            'status'                       => new StatusHandler(),
+
+            'user_status'                  => new UserStatusHandler(),
+            'user_data_status'             => new UserDataStatusHandler(),
+
             'top_langs'                    => new CallableHandler(fn($c): array => top_langs($c->params)),
             'top_users'                    => new CallableHandler(fn($c): array => top_users($c->params)),
             'top_lang_of_users'            => new CallableHandler(fn($c): array => top_lang_of_users($c->params)),
@@ -203,8 +206,6 @@ final class EndpointRegistry
             'pages_users_langs' => new StaticSqlHandler(
                 'SELECT lang, autonym FROM pages_users p LEFT JOIN langs la ON lang = la.code GROUP BY lang'
             ),
-
-            'user_status'      => new UserStatusHandler(),
 
             'get_lang_years' => new FilteredSqlHandler(
                 'SELECT DISTINCT YEAR(p.pupdate) as year
