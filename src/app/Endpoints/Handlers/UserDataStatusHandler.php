@@ -4,26 +4,20 @@ declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
 
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{AbstractEndpointHandler, EndpointContext, QuerySpec};
 
-final class UserDataStatusHandler implements EndpointHandler
+final class UserDataStatusHandler extends AbstractEndpointHandler
 {
-
     public function handle(EndpointContext $ctx): QuerySpec
     {
-        $sql = "SELECT YEAR(p.pupdate) AS year, p.lang, ca.campaign
-                FROM pages p
-                LEFT JOIN categories ca ON p.cat = ca.category
-        ";
-        $params = [];
+        $sql = "SELECT DISTINCT
+            p.lang, p.user, ca.campaign, p.cat, YEAR(p.pupdate) AS year, COUNT(p.target) AS count
+            FROM pages p
+            LEFT JOIN categories ca ON p.cat = ca.category";
 
-        $user = $ctx->request->get('user');
+        [$sql, $params] = $ctx->applyFilters($sql);
+        $sql .= " GROUP BY lang, user, campaign, cat, year";
 
-        if ($ctx->isValid($user)) {
-            $sql .= "WHERE p.user = ?";
-            $params[] = $user;
-        }
-
-        return new QuerySpec($sql, $params);
+        return new QuerySpec($sql, $params, defaultOrder: 'count DESC');
     }
 }

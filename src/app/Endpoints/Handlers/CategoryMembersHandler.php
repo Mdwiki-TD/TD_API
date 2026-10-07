@@ -4,20 +4,25 @@ declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
 
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{AbstractEndpointHandler, EndpointContext, QuerySpec};
 
-final class CategoryMembersHandler implements EndpointHandler
+final class CategoryMembersHandler extends AbstractEndpointHandler
 {
-    public const ENDPOINT_NAME = 'category_members';
-    private const DEFAULT_CATEGORY = 'RTT';
-
     public function handle(EndpointContext $ctx): QuerySpec
     {
-        $cat = $ctx->request->get('cat') ?: self::DEFAULT_CATEGORY;
+        $cat = 'RTT';
+        $sql = 'SELECT article_id FROM category_members';
+        $params = [];
 
-        return new QuerySpec(
-            'SELECT article_id FROM category_members WHERE category = ?',
-            [$cat],
-        );
+        if ($ctx->request->has('cat')) {
+            $inputCat = $ctx->request->get('cat');
+            if ($inputCat !== null && $inputCat !== '') {
+                $cat = $inputCat;
+            }
+        }
+        $sql .= ' WHERE category = ?';
+        $params[] = $cat;
+
+        return new QuerySpec($sql, $params);
     }
 }

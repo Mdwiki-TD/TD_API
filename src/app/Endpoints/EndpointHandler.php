@@ -7,4 +7,13 @@ namespace App\Endpoints;
 interface EndpointHandler
 {
     public function handle(EndpointContext $ctx): QuerySpec;
+
+    /** @return array<int, array<string, mixed>> */
+    public function getParams(): array;
+
+    /** @return string[] */
+    public function getColumns(): array;
+
+    /** @return array<string, string> */
+    public function getOrderValues(): array;
 }

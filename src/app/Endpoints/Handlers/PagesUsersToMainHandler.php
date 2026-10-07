@@ -4,29 +4,34 @@ declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
 
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{AbstractEndpointHandler, EndpointContext, QuerySpec};
 
-final class PagesUsersToMainHandler implements EndpointHandler
+final class PagesUsersToMainHandler extends AbstractEndpointHandler
 {
     public function handle(EndpointContext $ctx): QuerySpec
     {
-        $old_query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid
+        $sql = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid
             FROM pages_users_to_main pum, pages_users pu
-            where pum.id = pu.id
-        ";
-        $sql = 'SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid
-                FROM pages_users_to_main pum
-                JOIN pages_users pu ON pum.id = pu.id';
-
+            WHERE pum.id = pu.id";
         $params = [];
 
         if ($ctx->request->enabled('lang')) {
             $lang = $ctx->request->get('lang');
-            if ($lang !== null) {
-                $sql .= ' WHERE pu.lang = ?';
+            if ($lang !== null && $lang !== '') {
+                $sql .= ' AND pu.lang = ?';
                 $params[] = $lang;
             }
         }
+
         return new QuerySpec($sql, $params);
+    }
+
+    public function getColumns(): array
+    {
+        return [
+            "new_target",
+            "new_user",
+            "new_qid",
+        ];
     }
 }

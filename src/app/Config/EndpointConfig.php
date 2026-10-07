@@ -4,28 +4,33 @@ declare(strict_types=1);
 
 namespace App\Config;
 
-use RuntimeException;
+use App\Endpoints\EndpointRegistry;
 
 final class EndpointConfig
 {
-    private array $config;
+    private EndpointRegistry $registry;
 
-    public function __construct(string $path)
+    public function __construct(?EndpointRegistry $registry = null)
     {
-        $raw = is_file($path) ? file_get_contents($path) : false;
-        if ($raw === false) {
-            throw new RuntimeException("endpoint config not readable: $path");
-        }
-        $this->config = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
+        $this->registry = $registry ?? new EndpointRegistry();
     }
 
-    /** بيانات الـ endpoint مع تتبع redirect */
+    /** بيانات الـ endpoint مع تتبع redirect واستخراج المعلمات والأعمدة من كلاس Handler الخاص بها */
     public function find(string $get): array
     {
-        $data = $this->config[$get] ?? [];
-        if (isset($data['redirect'])) {
-            $data = $this->config[$data['redirect']] ?? [];
+        if ($get === 'pages_with_views') {
+            $get = 'pages';
         }
-        return $data;
+
+        $handler = $this->registry->getHandler($get);
+        if ($handler === null) {
+            return [];
+        }
+
+        return [
+            'params'       => $handler->getParams(),
+            'columns'      => $handler->getColumns(),
+            'order_values' => $handler->getOrderValues(),
+        ];
     }
 }

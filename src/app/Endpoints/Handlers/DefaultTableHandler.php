@@ -4,18 +4,30 @@ declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
 
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{AbstractEndpointHandler, EndpointContext, QuerySpec};
 
-final class DefaultTableHandler implements EndpointHandler
+final class DefaultTableHandler extends AbstractEndpointHandler
 {
+    public function __construct(
+        private array $params = [],
+        private array $columns = [],
+    ) {}
+
     public function handle(EndpointContext $ctx): QuerySpec
     {
-        // $ctx->get سبق التحقق منه في Registry (whitelist)، والـ regex هنا حماية إضافية
-        if (!preg_match('/^[A-Za-z0-9_]+$/', $ctx->get)) {
-            return new QuerySpec(error: 'invalid table name');
-        }
-        $sql = "SELECT {$ctx->distinct}{$ctx->select} FROM `{$ctx->get}`";
+        $get = $ctx->get;
+        $sql = "SELECT {$ctx->distinct}{$ctx->select} FROM {$get}";
         [$sql, $params] = $ctx->applyFilters($sql);
         return new QuerySpec($sql, $params);
+    }
+
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    public function getColumns(): array
+    {
+        return $this->columns;
     }
 }

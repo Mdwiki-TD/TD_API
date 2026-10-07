@@ -3,6 +3,7 @@
 
 header('Content-Type: application/json');
 
+use App\Config\EndpointConfig;
 use function API\SQL\fetch_query_new;
 use function API\Helps\add_group;
 use function API\Helps\add_li_params;
@@ -52,14 +53,9 @@ $params = [];
 $error_results = [];
 $execution_time = 0;
 
-// load endpoint_params.json
-$endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/endpoint_params.json'), true);
-
-$endpoint_data = $endpoint_params_tab[$get] ?? [];
-
-if (isset($endpoint_data['redirect'])) {
-    $endpoint_data = $endpoint_params_tab[$endpoint_data['redirect']] ?? [];
-};
+// load endpoint config
+$endpoint_config = new EndpointConfig();
+$endpoint_data = $endpoint_config->find($get ?? '');
 
 $endpoint_params = $endpoint_data['params'] ?? [];
 $endpoint_columns = $endpoint_data['columns'] ?? [];

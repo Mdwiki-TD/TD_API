@@ -17,7 +17,7 @@ index.php
   → bootstrap (env, autoload)
   → APIController::handleRequest()
         1. Request            ← Reads $_GET once
-        2. EndpointConfig     ← Parses JSON + resolves redirects
+        2. EndpointConfig     ← Loads config + resolves redirects
         3. EndpointContext    ← Resolves get, params, columns, select, distinct, group
         4. EndpointRegistry   ← Resolves the appropriate Handler
         5. Handler->handle()  ← Returns a QuerySpec (query, params, error, skipOrder?)
@@ -58,7 +58,7 @@ class APIController
         header('Content-Type: application/json');
 
         try {
-            $config = new EndpointConfig(__DIR__ . '/endpoint_params.json');
+            $config = new EndpointConfig();
             $ctx    = new EndpointContext($get, $config->find($get), $this->request);
 
             $handler = $this->registry->resolve($ctx);

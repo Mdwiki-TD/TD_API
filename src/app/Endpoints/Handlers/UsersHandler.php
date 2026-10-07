@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
 
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{AbstractEndpointHandler, EndpointContext, QuerySpec};
 
-final class UsersHandler implements EndpointHandler
+final class UsersHandler extends AbstractEndpointHandler
 {
-    public const ENDPOINT_NAME = 'users';
     public function handle(EndpointContext $ctx): QuerySpec
     {
         $sql = 'SELECT username FROM users';
@@ -22,5 +21,43 @@ final class UsersHandler implements EndpointHandler
             }
         }
         return new QuerySpec($sql, $params);
+    }
+
+    public function getColumns(): array
+    {
+        return [
+            "user_id",
+            "username",
+            "email",
+            "wiki",
+            "user_group",
+            "reg_date",
+        ];
+    }
+
+    public function getParams(): array
+    {
+        return [
+            [
+                "name" => "userlike",
+                "column" => "userlike",
+                "type" => "text",
+                "placeholder" => "Username starts with",
+                "required" => true,
+            ],
+            [
+                "name" => "wiki",
+                "column" => "wiki",
+                "type" => "text",
+                "placeholder" => "Wiki Name",
+            ],
+            [
+                "name" => "user_group",
+                "column" => "user_group",
+                "type" => "text",
+                "placeholder" => "User Group Name",
+                "no_select" => true,
+            ],
+        ];
     }
 }

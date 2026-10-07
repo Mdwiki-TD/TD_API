@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
 
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{AbstractEndpointHandler, EndpointContext, QuerySpec};
 
-
-/** استعلام أساسي + فلاتر من endpoint_params.json (user_access, language_settings ...) */
-
-final class FilteredSqlHandler implements EndpointHandler
+/** استعلام أساسي + فلاتر مع تعريف معلماته وأعمدته داخل الكلاس */
+final class FilteredSqlHandler extends AbstractEndpointHandler
 {
     public function __construct(
         private string $sql,
         private string $suffix = '',        // يُلصق بعد الفلاتر (GROUP BY ثابت ...)
         private string $defaultOrder = '',
         private bool $groupable = false,    // يدعم ?group= من المستخدم
+        private array $params = [],
+        private array $columns = [],
+        private array $orderValues = [],
     ) {}
 
     public function handle(EndpointContext $ctx): QuerySpec
@@ -28,5 +29,20 @@ final class FilteredSqlHandler implements EndpointHandler
         }
 
         return new QuerySpec($sql, $params, defaultOrder: $this->defaultOrder);
+    }
+
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    public function getColumns(): array
+    {
+        return $this->columns;
+    }
+
+    public function getOrderValues(): array
+    {
+        return $this->orderValues;
     }
 }

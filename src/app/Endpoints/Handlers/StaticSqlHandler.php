@@ -4,18 +4,29 @@ declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
 
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{AbstractEndpointHandler, EndpointContext, QuerySpec};
 
-/** استعلام ثابت بلا فلاتر (coordinators, langs, graph_data ...) */
-final class StaticSqlHandler implements EndpointHandler
+final class StaticSqlHandler extends AbstractEndpointHandler
 {
     public function __construct(
         private string $sql,
         private bool $applyOrder = true,
+        private array $params = [],
+        private array $columns = [],
     ) {}
 
     public function handle(EndpointContext $ctx): QuerySpec
     {
-        return new QuerySpec($this->sql, [], '', $this->applyOrder);
+        return new QuerySpec($this->sql, [], applyOrder: $this->applyOrder);
+    }
+
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    public function getColumns(): array
+    {
+        return $this->columns;
     }
 }

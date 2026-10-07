@@ -88,22 +88,82 @@ final class EndpointRegistry
 
     public function __construct()
     {
-        $missing = new CallableHandler(fn($c): array => missing_by_lang_and_category($c->params));
+        $missing = new CallableHandler(
+            fn($c): array => missing_by_lang_and_category($c->params),
+            params: [
+                ["name" => "lang", "column" => "t.code", "type" => "text", "placeholder" => "Language code"],
+                ["name" => "category", "column" => "a.category", "type" => "text", "placeholder" => "Category"],
+                ["name" => "order", "column" => "order", "type" => "text", "placeholder" => "Order by", "no_select" => true],
+            ]
+        );
 
-        $views     = new ViewsHandler(defaultOrder: '1 DESC');
+        $views = new ViewsHandler(defaultOrder: '1 DESC');
         $userViews = new ViewsHandler(requiredParam: 'user');
         $langViews = new ViewsHandler(requiredParam: 'lang');
 
-        $leader    = new LeaderboardHandler();
+        $leader = new LeaderboardHandler();
         $qids = new QidsHandler();
 
         $this->handlers = [
+            'publish_reports' => new FilteredSqlHandler(
+                'SELECT DISTINCT date, title, user, lang, sourcetitle, result, data FROM publish_reports',
+                columns: ["date", "title", "user", "lang", "sourcetitle", "result", "data"],
+                params: [
+                    ["name" => "year", "column" => "YEAR(date)", "type" => "number", "placeholder" => "year of date"],
+                    ["name" => "month", "column" => "MONTH(date)", "type" => "number", "placeholder" => "month of date"],
+                    ["name" => "title", "column" => "title", "type" => "text", "placeholder" => "Page Title"],
+                    ["name" => "user", "column" => "user", "type" => "text", "placeholder" => "user"],
+                    ["name" => "lang", "column" => "lang", "type" => "text", "placeholder" => "Language code"],
+                    ["name" => "sourcetitle", "column" => "sourcetitle", "type" => "text", "placeholder" => "sourcetitle"],
+                    ["name" => "result", "column" => "result", "type" => "text", "placeholder" => "result"],
+                    ["name" => "select", "column" => "select", "type" => "text", "placeholder" => "Select fields", "no_select" => true],
+                    ["name" => "distinct", "column" => "distinct", "type" => "switch", "no_select" => true],
+                ]
+            ),
+            'language_settings' => new FilteredSqlHandler(
+                'SELECT DISTINCT * FROM language_settings',
+                columns: ["lang_code", "move_dots", "expend", "add_en_lang"],
+                params: [
+                    ["name" => "lang_code", "column" => "lang_code", "type" => "text", "placeholder" => "Language code"],
+                ]
+            ),
+            'publish_reports_stats' => new FilteredSqlHandler(
+                'SELECT DISTINCT YEAR(date) AS year, MONTH(date) AS month, lang, user, result FROM publish_reports',
+                params: [
+                    ["name" => "lang", "column" => "lang", "type" => "text", "placeholder" => "Language code"],
+                    ["name" => "user", "column" => "user", "type" => "text", "placeholder" => "Username"],
+                ]
+            ),
             'missing'                      => $missing,
             'missing_by_lang_and_category' => $missing,
-            'exists_statics_by_category'   => new CallableHandler(fn($c): array => exists_statics_by_category($c->params)),
-            'exists_by_lang_and_category'  => new CallableHandler(fn($c): array => exists_by_lang_and_category($c->params)),
-            'statics_by_category'          => new CallableHandler(fn($c): array => statics_by_category($c->params)),
-            'revids' => new FilteredSqlHandler('SELECT title, revid FROM mdwiki_revids'),
+            'exists_statics_by_category'   => new CallableHandler(
+                fn($c): array => exists_statics_by_category($c->params),
+                params: [
+                    ["name" => "category", "column" => "a.category", "type" => "text", "placeholder" => "Category", "default" => "RTT", "required" => true],
+                ]
+            ),
+            'exists_by_lang_and_category'  => new CallableHandler(
+                fn($c): array => exists_by_lang_and_category($c->params),
+                params: [
+                    ["name" => "lang", "column" => "t.code", "type" => "text", "placeholder" => "Language code", "required" => true],
+                    ["name" => "category", "column" => "a.category", "type" => "text", "placeholder" => "Category", "default" => "RTT"],
+                ]
+            ),
+            'statics_by_category'          => new CallableHandler(
+                fn($c): array => statics_by_category($c->params),
+                params: [
+                    ["name" => "lang", "column" => "t.code", "type" => "text", "placeholder" => "Language code", "required" => true],
+                    ["name" => "category", "column" => "a.category", "type" => "text", "placeholder" => "Category", "default" => "RTT"],
+                ]
+            ),
+            'revids' => new FilteredSqlHandler(
+                'SELECT title, revid FROM mdwiki_revids',
+                columns: ["title", "revid"],
+                params: [
+                    ["name" => "title", "column" => "title", "type" => "text", "placeholder" => "Page Title"],
+                    ["name" => "titles", "column" => "title", "type" => "array"],
+                ]
+            ),
             'titles' => new FilteredSqlHandler(
                 "SELECT
                     ase.title AS title,
@@ -119,15 +179,41 @@ final class EndpointRegistry
                     left join enwiki_pageviews ep   on ep.title   = ase.title
                     left join qids q                on q.title    = ase.title
                     left join refs_counts rc        on rc.r_title = ase.title
-                    left join words w               on w.w_title  = ase.title"
+                    left join words w               on w.w_title  = ase.title",
+                params: [
+                    ["name" => "title", "column" => "ase.title", "type" => "text", "placeholder" => "Page Title"],
+                    ["name" => "importance", "column" => "ase.importance", "type" => "text", "placeholder" => "Importance"],
+                    ["name" => "titles", "column" => "ase.title", "type" => "array"],
+                ]
             ),
 
             'user_status'                  => new UserStatusHandler(),
             'user_data_status'             => new UserDataStatusHandler(),
 
-            'top_langs'                    => new CallableHandler(fn($c): array => top_langs($c->params)),
-            'top_users'                    => new CallableHandler(fn($c): array => top_users($c->params)),
-            'top_lang_of_users'            => new CallableHandler(fn($c): array => top_lang_of_users($c->params)),
+            'top_langs'                    => new CallableHandler(
+                fn($c): array => top_langs($c->params),
+                params: [
+                    ["name" => "year", "column" => "YEAR(p.pupdate)", "type" => "number", "placeholder" => "year of date", "no_empty_value" => true],
+                    ["name" => "month", "column" => "MONTH(p.pupdate)", "type" => "number", "placeholder" => "month of date", "no_empty_value" => true],
+                    ["name" => "user_group", "column" => "u.user_group", "type" => "text", "placeholder" => "User Group Name", "no_empty_value" => true],
+                    ["name" => "cat", "column" => "p.cat", "type" => "text", "placeholder" => "Category", "no_empty_value" => true],
+                ]
+            ),
+            'top_users'                    => new CallableHandler(
+                fn($c): array => top_users($c->params),
+                params: [
+                    ["name" => "year", "column" => "YEAR(p.pupdate)", "type" => "number", "placeholder" => "year of date", "no_empty_value" => true],
+                    ["name" => "month", "column" => "MONTH(p.pupdate)", "type" => "number", "placeholder" => "month of date", "no_empty_value" => true],
+                    ["name" => "user_group", "column" => "u.user_group", "type" => "text", "placeholder" => "User Group Name", "no_empty_value" => true],
+                    ["name" => "cat", "column" => "p.cat", "type" => "text", "placeholder" => "Category", "no_empty_value" => true],
+                ]
+            ),
+            'top_lang_of_users'            => new CallableHandler(
+                fn($c): array => top_lang_of_users($c->params),
+                params: [
+                    ["name" => "users", "column" => "p.user", "type" => "array"],
+                ]
+            ),
 
             'users'            => new UsersHandler(),
             'category_members' => new CategoryMembersHandler(),
@@ -135,16 +221,31 @@ final class EndpointRegistry
             'coordinators' => new StaticSqlHandler(
                 'SELECT id, username, is_active FROM coordinators ORDER BY id',
                 applyOrder: false,
+                columns: ["username", "is_active"],
+                params: [
+                    ["name" => "Username", "column" => "username", "type" => "text", "placeholder" => "Coordinator Username"],
+                ]
             ),
 
-            'langs' => new StaticSqlHandler('SELECT code, autonym, name, redirects FROM langs'),
+            'langs' => new StaticSqlHandler(
+                'SELECT code, autonym, name, redirects FROM langs',
+                columns: ["code", "autonym", "name", "redirects"]
+            ),
 
             'graph_data' => new GraphDataHandler(),
 
-            'user_access' => new FilteredSqlHandler('SELECT id, user_name, created_at FROM access_keys'),
+            'user_access' => new FilteredSqlHandler(
+                'SELECT id, user_name, created_at FROM access_keys',
+                params: [
+                    ["name" => "user_name", "column" => "user_name", "type" => "text", "placeholder" => "Username"],
+                ]
+            ),
 
             'views'       => $views,
-            'views_new'   => $views,
+            'views_new'   => new ViewsHandler(
+                defaultOrder: '1 DESC',
+                columns: ["target", "lang", "year", "views"]
+            ),
             'user_views'  => $userViews,
             'user_views2' => $userViews,
             'lang_views'  => $langViews,
@@ -157,23 +258,25 @@ final class EndpointRegistry
             'qids_others' => $qids,
             'pages_users_to_main' => new PagesUsersToMainHandler(),
 
-            'language_settings' => new FilteredSqlHandler('SELECT DISTINCT * FROM language_settings'),
-
             'words' => new FilteredSqlHandler(
-                'SELECT w_id, w_title, w_lead_words, w_all_words FROM words'
+                'SELECT w_id, w_title, w_lead_words, w_all_words FROM words',
+                columns: ["w_id", "w_title", "w_lead_words", "w_all_words"],
+                params: [
+                    ["name" => "title", "column" => "w_title", "type" => "text", "placeholder" => "Page Title"],
+                    ["name" => "lead_words", "column" => "w_lead_words", "type" => "number", "placeholder" => "Lead words Count"],
+                    ["name" => "all_words", "column" => "w_all_words", "type" => "number", "placeholder" => "Total words Count"],
+                ]
             ),
 
             'count_pages' => new FilteredSqlHandler(
                 'SELECT DISTINCT user, COUNT(target) AS count FROM pages',
                 suffix: ' GROUP BY user',
                 defaultOrder: 'count DESC',
+                params: [
+                    ["name" => "target", "column" => "target", "type" => "text", "placeholder" => "Target"],
+                ]
             ),
 
-            'publish_reports_stats' => new FilteredSqlHandler(
-                'SELECT DISTINCT YEAR(date) AS year, MONTH(date) AS month, lang, user, result
-                FROM publish_reports',
-                // suffix: ' GROUP BY year, month, lang, user, result',
-            ),
             'in_process' => new FilteredSqlHandler(
                 'SELECT title, user, lang, cat, translate_type, word, add_date,
                         ca.campaign, la.autonym
@@ -181,6 +284,17 @@ final class EndpointRegistry
                 LEFT JOIN categories ca ON cat = ca.category
                 LEFT JOIN langs la ON lang = la.code',
                 groupable: true,
+                columns: ["title", "user", "lang", "cat", "translate_type", "word", "add_date"],
+                params: [
+                    ["name" => "lang", "column" => "lang", "type" => "text", "placeholder" => "Language code"],
+                    ["name" => "cat", "column" => "cat", "type" => "text", "placeholder" => "Category"],
+                    ["name" => "user", "column" => "user", "type" => "text", "placeholder" => "Username"],
+                    ["name" => "select", "column" => "select", "type" => "text", "placeholder" => "Select fields", "no_select" => true],
+                    ["name" => "distinct", "column" => "distinct", "type" => "switch", "no_select" => true],
+                    ["name" => "group", "column" => "group", "type" => "text", "placeholder" => "Group by field", "no_select" => true],
+                    ["name" => "order", "column" => "order", "type" => "text", "placeholder" => "Order by", "no_select" => true],
+                    ["name" => "year", "column" => "YEAR(add_date)", "type" => "number", "placeholder" => "year of date"],
+                ]
             ),
             'pages_with_views' => new PagesWithViewsHandler(),
 
@@ -211,6 +325,60 @@ final class EndpointRegistry
                 'SELECT DISTINCT YEAR(p.pupdate) as year
                     FROM pages p
                     LEFT JOIN categories ca ON p.cat = ca.category',
+                params: [
+                    ["name" => "lang", "column" => "p.lang", "type" => "text", "placeholder" => "Language code", "no_empty_value" => false],
+                ]
+            ),
+
+            'assessments' => new DefaultTableHandler(
+                columns: ["title", "importance"],
+                params: [
+                    ["name" => "title", "column" => "title", "type" => "text", "placeholder" => "Page Title"],
+                    ["name" => "importance", "column" => "importance", "type" => "text", "placeholder" => "Importance"],
+                    ["name" => "distinct", "column" => "distinct", "type" => "switch", "no_select" => true],
+                ]
+            ),
+            'refs_counts' => new DefaultTableHandler(
+                columns: ["r_id", "r_title", "r_lead_refs", "r_all_refs"],
+                params: [
+                    ["name" => "title", "column" => "r_title", "type" => "text", "placeholder" => "Page Title"],
+                    ["name" => "lead", "column" => "r_lead_refs", "type" => "number", "placeholder" => "Lead Refs Count"],
+                    ["name" => "all", "column" => "r_all_refs", "type" => "number", "placeholder" => "All Refs Count"],
+                ]
+            ),
+            'enwiki_pageviews' => new DefaultTableHandler(
+                columns: ["title", "en_views"],
+                params: [
+                    ["name" => "title", "column" => "title", "type" => "text", "placeholder" => "Page Title"],
+                    ["name" => "en_views", "column" => "en_views", "type" => "number", "placeholder" => "Views Count"],
+                ]
+            ),
+            'categories' => new DefaultTableHandler(
+                columns: ["category", "category2", "display", "campaign", "depth", "is_default"],
+                params: [
+                    ["name" => "Depth", "column" => "depth", "type" => "number", "placeholder" => "Depth Level"],
+                    ["name" => "campaign", "column" => "campaign", "type" => "text", "placeholder" => "Campaign"],
+                    ["name" => "select", "column" => "select", "type" => "text", "placeholder" => "Select fields", "no_select" => true],
+                ]
+            ),
+            'translate_type' => new DefaultTableHandler(
+                columns: ["tt_id", "tt_title", "tt_lead", "tt_full"],
+                params: [
+                    ["name" => "Lead", "column" => "tt_lead", "type" => "number", "placeholder" => "Lead Translation (0 or 1)"],
+                    ["name" => "Full", "column" => "tt_full", "type" => "number", "placeholder" => "Full Translation (0 or 1)"],
+                ]
+            ),
+            'projects' => new DefaultTableHandler(
+                columns: ["g_id", "g_title"]
+            ),
+            'users_no_inprocess' => new DefaultTableHandler(
+                columns: ["user", "is_active"]
+            ),
+            'full_translators' => new DefaultTableHandler(
+                columns: ["user", "is_active"]
+            ),
+            'settings' => new DefaultTableHandler(
+                columns: ["title", "displayed", "Type", "value", "ignored"]
             ),
 
             'pages'       => new PagesHandler('pages'),
@@ -220,10 +388,15 @@ final class EndpointRegistry
 
     public function resolve(EndpointContext $ctx): ?EndpointHandler
     {
-        if (isset($this->handlers[$ctx->get])) {
-            return $this->handlers[$ctx->get];
+        return $this->getHandler($ctx->get);
+    }
+
+    public function getHandler(string $get): ?EndpointHandler
+    {
+        if (isset($this->handlers[$get])) {
+            return $this->handlers[$get];
         }
-        if (in_array($ctx->get, self::OTHER_TABLES, true) || !empty($ctx->data)) {
+        if (in_array($get, self::OTHER_TABLES, true)) {
             return new DefaultTableHandler();
         }
         return null;
