@@ -6,6 +6,7 @@ namespace App\Endpoints;
 
 use App\Endpoints\Definition\{EndpointDefinition, EndpointDefinitions};
 
+use App\Endpoints\DefinedEndpoint;
 use App\Endpoints\Handlers\{
     GraphDataHandler,
     CallableHandler,
@@ -24,7 +25,13 @@ use App\Endpoints\Handlers\{
     PagesHandler,
     UserDataStatusHandler,
 };
-
+use App\Endpoints\Handlers\{
+    MissingByLangAndCategoryHandler,
+    MissingPagesHandler,
+    ExistsByLangAndCategoryHandler,
+    ExistsStaticsByCategoryHandler,
+    StaticsByCategoryHandler,
+};
 use function API\Missing\{
     missing_by_lang_and_category,
     exists_statics_by_category,
@@ -50,55 +57,6 @@ final class EndpointRegistry
         'publish_reports',
     ];
 
-    /** Simple tables allowed in the default path */
-    private const OTHER_TABLES = [
-        'assessments',
-        'refs_counts',
-        'enwiki_pageviews',
-        'categories',
-        'full_translators',
-        'users_no_inprocess',
-        'projects',
-        'settings',
-        'translate_type',
-    ];
-
-    public const LEGACY_DEPRECATED = [
-        'category_members',
-        'coordinators',
-        'graph_data',
-        'langs',
-        'user_access',
-        'users',
-        'views',
-        'views_new',
-        'user_views',
-        'user_views2',
-        'lang_views',
-        'lang_views2',
-
-        'leaderboard_table',
-        'leaderboard_table_formated',
-
-        'qids',
-        'qids_others',
-        'pages_users_to_main',
-        'publish_reports_stats',
-        'count_pages',
-        'language_settings',
-        'words',
-        'in_process',
-        'pages_with_views',
-
-        'get_lang_years',
-        'user_status',
-        'pages_by_user_or_lang',
-        'users_by_last_pupdate',
-        'pages_users_langs',
-        'pages_langs',
-        'pages',
-        'pages_users',
-    ];
 
     /** @var array<string, EndpointHandler> */
     private array $handlers;
@@ -115,18 +73,24 @@ final class EndpointRegistry
         $qids = new QidsHandler();
 
         $this->handlers = [
+            'missing'                      => new MissingPagesHandler(),
+            'missing_by_lang_and_category' => new MissingByLangAndCategoryHandler(),
+            'exists_by_lang_and_category'  => new ExistsByLangAndCategoryHandler(),
+            'exists_statics_by_category'   => new ExistsStaticsByCategoryHandler(),
+            'statics_by_category'          => new StaticsByCategoryHandler(),
+
             // TODO: missing_exists.php need to be replaced by Handlers
-            'exists_statics_by_category'   => new CallableHandler(fn($c): array => exists_statics_by_category($c->params)),
-            'exists_by_lang_and_category'  => new CallableHandler(fn($c): array => exists_by_lang_and_category($c->params)),
-            'statics_by_category'          => new CallableHandler(fn($c): array => statics_by_category($c->params)),
+            // 'exists_statics_by_category'   => new CallableHandler(fn($c): array => exists_statics_by_category($c->params)),
+            // 'exists_by_lang_and_category'  => new CallableHandler(fn($c): array => exists_by_lang_and_category($c->params)),
+            // 'statics_by_category'          => new CallableHandler(fn($c): array => statics_by_category($c->params)),
 
             // TODO: top.php need to be replaced by Handlers
             'top_langs'                    => new CallableHandler(fn($c): array => top_langs($c->params)),
             'top_users'                    => new CallableHandler(fn($c): array => top_users($c->params)),
             'top_lang_of_users'            => new CallableHandler(fn($c): array => top_lang_of_users($c->params)),
 
-            'missing'                      => $missing,
-            'missing_by_lang_and_category' => $missing,
+            // 'missing'                      => $missing,
+            // 'missing_by_lang_and_category' => $missing,
 
             'revids' => new FilteredSqlHandler('SELECT title, revid FROM mdwiki_revids'),
             'titles' => new FilteredSqlHandler(
@@ -242,28 +206,32 @@ final class EndpointRegistry
         }
     }
 
-    public function resolveold(EndpointContext $ctx): ?EndpointHandler
-    {
-        if (isset($this->handlers[$ctx->get])) {
-            return $this->handlers[$ctx->get];
-        }
-        if (in_array($ctx->get, self::OTHER_TABLES, true) || !empty($ctx->data)) {
-            return new DefaultTableHandler($ctx->get);
-        }
-        return null;
-    }
     /** @return array<string, EndpointHandler> الاسم => handler (aliases تشير لنفس الكائن) */
     public function all(): array
     {
         return $this->handlers;
     }
 
-    /** @return array{0: EndpointHandler, 1: EndpointDefinition}|null */
     public function resolve(string $get): ?array
     {
-        $handler    = $this->handlers[$get] ?? null;
-        $definition = EndpointDefinitions::for($get);
+        $handler = $this->handlers[$get] ?? null;
+        if ($handler === null) return null;
 
-        return ($handler !== null && $definition !== null) ? [$handler, $definition] : null;
+        $definition = $handler instanceof DefinedEndpoint
+            ? $handler->definition()
+            : EndpointDefinitions::for($get);
+
+        return $definition ? [$handler, $definition] : null;
+    }
+
+    /** @return array<string, EndpointDefinition> للمولّد ولاختبار round-trip */
+    public function definitions(): array
+    {
+        $out = [];
+        foreach ($this->handlers as $name => $h) {
+            $d = $h instanceof DefinedEndpoint ? $h->definition() : EndpointDefinitions::for($name);
+            if ($d !== null) $out[$name] = $d;
+        }
+        return $out;
     }
 }

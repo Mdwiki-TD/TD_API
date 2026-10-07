@@ -8,6 +8,6 @@ use App\Endpoints\Definition\EndpointDefinition;
 
 interface EndpointHandler
 {
-    // public function definition(): EndpointDefinition;
+    public function definition(): EndpointDefinition;
     public function handle(EndpointContext $ctx): QuerySpec;
 }
