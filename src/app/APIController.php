@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Config\EndpointConfig;
 use App\Database\QueryExecutor;
 use App\Endpoints\{EndpointContext, EndpointRegistry};
 use App\Formatting\ResponseBuilder;
@@ -58,14 +57,14 @@ class APIController
         header('Content-Type: application/json');
 
         try {
-            $config = new EndpointConfig(__DIR__ . '/endpoint_params.json');
-            $ctx    = new EndpointContext($get, $config->find($get), $this->request);
-
-            $handler = $this->registry->resolve($ctx);
-            if ($handler === null) {
-                $this->emit($this->builder->build($ctx, error: 'invalid get request'));
+            $resolved = $this->registry->resolve($get);
+            if ($resolved === null) {
+                $this->emit($this->builder->errorOnly('invalid get request'));
                 return;
             }
+            [$handler, $definition] = $resolved;
+
+            $ctx  = new EndpointContext($get, $definition->toArray(), $this->request);
 
             $spec = $handler->handle($ctx);
             if ($spec->sql === '') {

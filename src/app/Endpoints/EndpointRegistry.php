@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Endpoints;
 
+use App\Endpoints\Definition\{EndpointDefinition, EndpointDefinitions};
+
 use App\Endpoints\Handlers\{
     GraphDataHandler,
     CallableHandler,
@@ -33,6 +35,21 @@ use function API\Top\{top_langs, top_users, top_lang_of_users};
 
 final class EndpointRegistry
 {
+
+    /** جداول بسيطة: whitelist صريحة (تحل محل OTHER_TABLES و !empty($ctx->data)) */
+    private const TABLES = [
+        'assessments',
+        'refs_counts',
+        'enwiki_pageviews',
+        'categories',
+        'full_translators',
+        'users_no_inprocess',
+        'projects',
+        'settings',
+        'translate_type',
+        'publish_reports',
+    ];
+
     /** Simple tables allowed in the default path */
     private const OTHER_TABLES = [
         'assessments',
@@ -220,15 +237,18 @@ final class EndpointRegistry
             'pages'       => new PagesHandler('pages'),
             'pages_users' => new PagesHandler('pages_users'),
         ];
+        foreach (self::TABLES as $table) {
+            $this->handlers[$table] = new DefaultTableHandler($table);
+        }
     }
 
-    public function resolve(EndpointContext $ctx): ?EndpointHandler
+    public function resolveold(EndpointContext $ctx): ?EndpointHandler
     {
         if (isset($this->handlers[$ctx->get])) {
             return $this->handlers[$ctx->get];
         }
         if (in_array($ctx->get, self::OTHER_TABLES, true) || !empty($ctx->data)) {
-            return new DefaultTableHandler();
+            return new DefaultTableHandler($ctx->get);
         }
         return null;
     }
@@ -236,5 +256,14 @@ final class EndpointRegistry
     public function all(): array
     {
         return $this->handlers;
+    }
+
+    /** @return array{0: EndpointHandler, 1: EndpointDefinition}|null */
+    public function resolve(string $get): ?array
+    {
+        $handler    = $this->handlers[$get] ?? null;
+        $definition = EndpointDefinitions::for($get);
+
+        return ($handler !== null && $definition !== null) ? [$handler, $definition] : null;
     }
 }

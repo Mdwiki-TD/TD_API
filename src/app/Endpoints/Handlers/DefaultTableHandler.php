@@ -8,13 +8,11 @@ use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 final class DefaultTableHandler implements EndpointHandler
 {
+    public function __construct(private string $table) {}
+
     public function handle(EndpointContext $ctx): QuerySpec
     {
-        // $ctx->get سبق التحقق منه في Registry (whitelist)، والـ regex هنا حماية إضافية
-        if (!preg_match('/^[A-Za-z0-9_]+$/', $ctx->get)) {
-            return new QuerySpec(error: 'invalid table name');
-        }
-        $sql = "SELECT {$ctx->distinct}{$ctx->select} FROM `{$ctx->get}`";
+        $sql = "SELECT {$ctx->distinct}{$ctx->select} FROM `{$this->table}`";
         [$sql, $params] = $ctx->applyFilters($sql);
         return new QuerySpec($sql, $params);
     }
