@@ -3,13 +3,11 @@
 declare(strict_types=1);
 require __DIR__ . '/../src/app/bootstrap.php';
 
+use App\Endpoints\Definition\EndpointDefinitions;
 use App\Endpoints\EndpointRegistry;
 use App\OpenApi\{OpenApiBuilder, OpenApiCatalog};
 
-$builder = new OpenApiBuilder(
-    require __DIR__ . '/../src/app/OpenApi/endpoint_docs.php',
-    OpenApiCatalog::data()
-);
+$builder = new OpenApiBuilder(EndpointDefinitions::all(), OpenApiCatalog::data());
 
 $errors = $builder->validate(array_keys((new EndpointRegistry())->all()));
 if ($errors) {
@@ -28,4 +26,4 @@ if (in_array('--check', $argv, true)) {
     exit(0);
 }
 file_put_contents($file, $json);
-echo "openapi.json written (" . count(json_decode($json, true)['paths']) . " endpoints)\n";
+echo 'openapi.json written (' . count(json_decode($json, true)['paths']) . " endpoints)\n";

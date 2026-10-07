@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
+
 namespace App\OpenApi;
 
-/** الأجزاء المشتركة من openapi.json (مستخرجة حرفياً من النسخة اليدوية) */
+/** الأجزاء المشتركة من openapi.json */
 final class OpenApiCatalog
 {
     public static function data(): array
@@ -233,7 +235,6 @@ final class OpenApiCatalog
                     'required' => false,
                     'schema' => [
                         'type' => 'integer',
-                        'default' => 50,
                     ],
                 ],
                 'OffsetParam' => [
