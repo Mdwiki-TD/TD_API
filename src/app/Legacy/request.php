@@ -6,16 +6,16 @@
  */
 header('Content-Type: application/json');
 use App\Legacy\AddParams;
-use App\Legacy\SelectHelps;
 use App\Legacy\Helps;
 use App\Legacy\Leaderboard;
+use App\Legacy\Qids;
+use App\Legacy\SelectHelps;
+use App\Legacy\Sql;
 
 use function API\Missing\exists_by_lang_and_category;
 use function API\Missing\exists_statics_by_category;
 use function API\Missing\missing_by_lang_and_category;
 use function API\Missing\statics_by_category;
-use function API\Qids\qids_qua;
-use function API\SQL\fetch_query_new;
 use function API\TitlesInfos\mdwiki_revids;
 use function API\TitlesInfos\pages_query;
 use function API\TitlesInfos\titles_query;
@@ -218,7 +218,7 @@ switch ($get) {
 
     case 'qids':
     case 'qids_others':
-        $qua = qids_qua($get);
+        $qua = Qids::qids_qua($get);
         break;
 
     case 'pages_users_to_main': // now at PagesUsersToMainHandler.php
@@ -418,12 +418,12 @@ if ($qua !== "" || $query !== "") {
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
 
-        list($results, $source) = fetch_query_new($query, $params, $get);
+        list($results, $source) = Sql::fetch_query_new($query, $params, $get);
     } else {
         $qua = Helps::add_limit($qua);
         $qua = Helps::add_offset($qua);
 
-        list($results, $source) = fetch_query_new($qua, [], $get);
+        list($results, $source) = Sql::fetch_query_new($qua, [], $get);
     }
 
     $end_time = microtime(true);
