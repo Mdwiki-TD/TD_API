@@ -2,8 +2,7 @@
 
 namespace API\Top;
 
-use function API\Helps\add_array_params;
-use function API\Helps\add_li_params;
+use App\Legacy\AddParams;
 
 function top_query($select)
 {
@@ -53,7 +52,7 @@ function top_users($endpoint_params)
 
     $query = top_query('user');
 
-    [$query, $params] = add_li_params($query, [], $endpoint_params, []);
+    [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params, []);
 
     $query .= " GROUP BY p.user ORDER BY targets DESC";
 
@@ -65,7 +64,7 @@ function top_langs($endpoint_params)
 
     $query = top_query('lang');
 
-    [$query, $params] = add_li_params($query, [], $endpoint_params, [""]);
+    [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params, [""]);
 
     $query .= " GROUP BY p.lang ORDER BY targets DESC";
 
@@ -78,7 +77,7 @@ function top_lang_of_users($endpoint_params)
     $params = [];
     $query_line = "";
 
-    list($query_line, $params) = add_array_params($query_line, $params, 'users', 'p.user', "AND");
+    list($query_line, $params) = AddParams::add_array_params($query_line, $params, 'users', 'p.user', "AND");
 
     $query = <<<SQL
         SELECT user, lang, cnt

@@ -5,27 +5,23 @@
  * DEPRECATED
  */
 header('Content-Type: application/json');
-
-use function API\SQL\fetch_query_new;
-use function API\Helps\add_group;
-use function API\Helps\add_li_params;
-use function API\Helps\add_order;
-use function API\Helps\add_limit;
-use function API\Helps\add_offset;
-use function API\Qids\qids_qua;
-use function API\Leaderboard\leaderboard_table_format;
+use App\Legacy\AddParams;
+use App\Legacy\SelectHelps;
+use App\Legacy\Helps;
 use function API\Leaderboard\langs_format;
-use function API\TitlesInfos\titles_query;
-use function API\TitlesInfos\mdwiki_revids;
+use function API\Leaderboard\leaderboard_table_format;
+use function API\Missing\exists_by_lang_and_category;
 use function API\Missing\exists_statics_by_category;
 use function API\Missing\missing_by_lang_and_category;
-use function API\Missing\exists_by_lang_and_category;
 use function API\Missing\statics_by_category;
-use function API\SelectHelps\get_select;
+use function API\Qids\qids_qua;
+use function API\SQL\fetch_query_new;
+use function API\TitlesInfos\mdwiki_revids;
+use function API\TitlesInfos\pages_query;
+use function API\TitlesInfos\titles_query;
 use function API\Top\top_langs;
 use function API\Top\top_lang_of_users;
 use function API\Top\top_users;
-use function API\TitlesInfos\pages_query;
 
 $other_tables = [
     'in_process',
@@ -46,13 +42,13 @@ function enabled(string $key): bool
 }
 
 $DISTINCT = enabled('distinct') ? 'DISTINCT ' : '';
-$get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_FULL_SPECIAL_CHARS); //$_GET['get']
+$get      = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_FULL_SPECIAL_CHARS); //$_GET['get']
 
-$qua = "";
-$query = "";
+$qua    = "";
+$query  = "";
 $params = [];
 
-$error_results = [];
+$error_results  = [];
 $execution_time = 0;
 
 // load endpoint_params.json
@@ -62,12 +58,12 @@ $endpoint_data = $endpoint_params_tab[$get] ?? [];
 
 if (isset($endpoint_data['redirect'])) {
     $endpoint_data = $endpoint_params_tab[$endpoint_data['redirect']] ?? [];
-};
+}
 
-$endpoint_params = $endpoint_data['params'] ?? [];
+$endpoint_params  = $endpoint_data['params'] ?? [];
 $endpoint_columns = $endpoint_data['columns'] ?? [];
 
-$SELECT = get_select($endpoint_params, $endpoint_columns);
+$SELECT = SelectHelps::get_select($endpoint_params, $endpoint_columns);
 
 $get_group_value = filter_input(INPUT_GET, 'group', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -118,28 +114,28 @@ switch ($get) {
         if (enabled('userlike')) {
             $added = filter_input(INPUT_GET, 'userlike', FILTER_SANITIZE_SPECIAL_CHARS);
             if ($added !== null) {
-                $query .= " WHERE username like ?";
-                $params[] = "$added%";
+                $query    .= " WHERE username like ?";
+                $params[]  = "$added%";
             }
         }
         break;
 
     case 'category_members': // now at CategoryMembersHandler.php
-        $cat = "RTT";
-        $query = "SELECT article_id FROM category_members";
+        $cat    = "RTT";
+        $query  = "SELECT article_id FROM category_members";
         if (isset($_GET['cat'])) {
             $input_cat = filter_input(INPUT_GET, 'cat', FILTER_SANITIZE_SPECIAL_CHARS);
             if ($input_cat !== null) {
                 $cat = $input_cat;
             }
         }
-        $query .= " WHERE category = ?";
+        $query    .= " WHERE category = ?";
         $params[] = $cat;
         break;
 
     case 'coordinators':
         $qua = "SELECT id, username, is_active FROM coordinators order by id";
-        $qua = add_limit($qua);
+        $qua = Helps::add_limit($qua);
         break;
 
     case 'langs':
@@ -157,11 +153,11 @@ switch ($get) {
         break;
 
     case 'user_access':
-        $query = "SELECT id, user_name, created_at FROM access_keys";
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
+        $query            = "SELECT id, user_name, created_at FROM access_keys";
+        [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params);
         break;
 
-    case 'views':  // now at ViewsHandler.php
+    case 'views': // now at ViewsHandler.php
     case 'views_new':
         $query = <<<SQL
                 SELECT p.title, v.target, v.lang, v.views
@@ -170,11 +166,11 @@ switch ($get) {
                     ON p.target = v.target
                     AND p.lang = v.lang
         SQL;
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
-        $query .= " ORDER BY 1 DESC";
+        [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params);
+        $query            .= " ORDER BY 1 DESC";
         break;
 
-    case 'lang_views':  // now at ViewsHandler.php
+    case 'lang_views': // now at ViewsHandler.php
     case 'lang_views2':
         if (enabled('lang')) {
             $query = <<<SQL
@@ -184,11 +180,11 @@ switch ($get) {
                     ON p.target = v.target
                     AND p.lang = v.lang
             SQL;
-            [$query, $params] = add_li_params($query, [], $endpoint_params);
-        };
+            [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params);
+        }
         break;
 
-    case 'user_views':  // now at ViewsHandler.php
+    case 'user_views': // now at ViewsHandler.php
     case 'user_views2':
         if (enabled('user')) {
             $query = <<<SQL
@@ -198,12 +194,12 @@ switch ($get) {
                     ON p.target = v.target
                     AND p.lang = v.lang
             SQL;
-            [$query, $params] = add_li_params($query, [], $endpoint_params);
-        };
+            [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params);
+        }
         break;
 
-    case 'leaderboard_table':           // now at LeaderboardHandler.php
-    case 'leaderboard_table_formated':  // now at LeaderboardHandler.php
+    case 'leaderboard_table':          // now at LeaderboardHandler.php
+    case 'leaderboard_table_formated': // now at LeaderboardHandler.php
 
         $query = "SELECT p.title,
             p.target, p.cat, p.lang, p.word, YEAR(p.pupdate) AS pup_y, p.user, u.user_group, LEFT(p.pupdate, 7) as m, v.views
@@ -216,8 +212,8 @@ switch ($get) {
             WHERE p.target != ''
         ";
 
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
-        $query .= " ORDER BY 1 DESC";
+        [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params);
+        $query            .= " ORDER BY 1 DESC";
         break;
 
     case 'qids':
@@ -225,7 +221,7 @@ switch ($get) {
         $qua = qids_qua($get);
         break;
 
-    case 'pages_users_to_main':     // now at PagesUsersToMainHandler.php
+    case 'pages_users_to_main': // now at PagesUsersToMainHandler.php
         $query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid
             FROM pages_users_to_main pum, pages_users pu
             where pum.id = pu.id
@@ -234,27 +230,27 @@ switch ($get) {
         if (enabled('lang')) {
             $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
             if ($added !== null) {
-                $query .= " AND pu.lang = ?";
-                $params[] = $added;
+                $query    .= " AND pu.lang = ?";
+                $params[]  = $added;
             }
         }
         break;
 
     case 'language_settings':
-        $query = "SELECT DISTINCT * FROM language_settings";
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
+        $query             = "SELECT DISTINCT * FROM language_settings";
+        [$query, $params]  = AddParams::add_li_params($query, [], $endpoint_params);
         break;
 
     case 'words':
-        $params = [];
-        $query = "SELECT w_id, w_title, w_lead_words, w_all_words FROM words ";
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
+        $params           = [];
+        $query            = "SELECT w_id, w_title, w_lead_words, w_all_words FROM words ";
+        [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params);
         break;
 
     case 'count_pages':
-        $query = "SELECT DISTINCT user, count(target) as count from pages";
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
-        $query .= " group by user order by count desc";
+        $query            = "SELECT DISTINCT user, count(target) as count from pages";
+        [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params);
+        $query            .= " group by user order by count desc";
         break;
 
     case 'publish_reports_stats':
@@ -263,7 +259,7 @@ switch ($get) {
             FROM publish_reports
             GROUP BY year, month, lang, user, result
         SQL;
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
+        [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params);
         break;
 
     case 'in_process':
@@ -274,19 +270,18 @@ switch ($get) {
             LEFT JOIN categories ca ON cat = ca.category
             LEFT JOIN langs la ON lang = la.code
         SQL;
-        [$query, $params] = add_li_params($qua, [], $endpoint_params);
-        $query = add_group($query, $endpoint_data, $get_group_value);
+        [$query, $params] = AddParams::add_li_params($qua, [], $endpoint_params);
+        $query            = Helps::add_group($query, $endpoint_data, $get_group_value);
         break;
 
-
-    case 'pages_with_views':        // now at PagesWithViewsHandler.php
-        $_qua = <<<SQL
+    case 'pages_with_views': // now at PagesWithViewsHandler.php
+        $_qua  = <<<SQL
             from pages p
             WHERE p.target != ''
         SQL;
 
-        [$query, $params] = add_li_params($_qua, [], $endpoint_params);
-        $query_start = <<<SQL
+        [$query, $params] = AddParams::add_li_params($_qua, [], $endpoint_params);
+        $query_start      = <<<SQL
             select distinct
                 p.id, p.title, p.word, p.translate_type, p.cat,
                 p.lang, p.user, p.target, p.date, p.pupdate,
@@ -295,9 +290,8 @@ switch ($get) {
         SQL;
 
         $query = $query_start . $query;
-        $query = add_group($query, $endpoint_data, $get_group_value);
+        $query = Helps::add_group($query, $endpoint_data, $get_group_value);
         break;
-
 
     case 'pages_by_user_or_lang': // now at PagesByUserOrLangHandler.php
 
@@ -310,7 +304,7 @@ switch ($get) {
                 AND p.lang = v.lang
         SQL;
 
-        [$query, $params] = add_li_params($qua, [], $endpoint_params, ['year']);
+        [$query, $params]  = AddParams::add_li_params($qua, [], $endpoint_params, ['year']);
 
         if (isset($_GET['year'])) {
             $added = filter_input(INPUT_GET, 'year', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -320,11 +314,11 @@ switch ($get) {
                 // $params[] = $added;
                 // $params[] = $added;
                 // $params[] = $added;
-                $query .= " AND ? IN (YEAR(p.date), YEAR(p.pupdate), YEAR(p.add_date))";
-                $params[] = $added;
+                $query    .= " AND ? IN (YEAR(p.date), YEAR(p.pupdate), YEAR(p.add_date))";
+                $params[]  = $added;
             }
         }
-        $query = add_group($query, $endpoint_data, $get_group_value);
+        $query = Helps::add_group($query, $endpoint_data, $get_group_value);
         break;
 
     case 'get_lang_years':
@@ -332,18 +326,18 @@ switch ($get) {
             FROM pages p
             LEFT JOIN categories ca ON p.cat = ca.category
         ";
-        [$query, $params] = add_li_params($qua, [], $endpoint_params);
+        [$query, $params] = AddParams::add_li_params($qua, [], $endpoint_params);
         break;
 
-    case 'user_status':        // now at UserStatusHandler.php
+    case 'user_status': // now at UserStatusHandler.php
 
         $SELECT = ($SELECT == "*" || $SELECT == "year") ? "YEAR(p.pupdate) as year" : $SELECT;
-        $qua = "SELECT DISTINCT $SELECT
+        $qua    = "SELECT DISTINCT $SELECT
             FROM pages p
             LEFT JOIN categories ca ON p.cat = ca.category
         ";
 
-        [$query, $params] = add_li_params($qua, [], $endpoint_params);
+        [$query, $params] = AddParams::add_li_params($qua, [], $endpoint_params);
         break;
 
     case 'users_by_last_pupdate':
@@ -369,7 +363,7 @@ switch ($get) {
     case 'pages_langs':
     case 'pages_users_langs':
         $table_name = ($get == 'pages_langs') ? 'pages' : 'pages_users';
-        $query = <<<SQL
+        $query      = <<<SQL
             SELECT lang, autonym
             FROM $table_name p
             LEFT JOIN langs la ON lang = la.code
@@ -383,22 +377,22 @@ switch ($get) {
         break;
 
     /**
-     * Above Already in EndpointRegistry.php
-     */
+         * Above Already in EndpointRegistry.php
+         */
 
     case 'publish_reports':
         $query = <<<SQL
             SELECT $DISTINCT $SELECT
             FROM publish_reports
             SQL;
-        [$query, $params] = add_li_params($query, [], $endpoint_params);
+        [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params);
 
         break;
 
     default:
-        if (in_array($get, $other_tables) || !empty($endpoint_data)) {
-            $query = "SELECT $DISTINCT $SELECT FROM $get";
-            [$query, $params] = add_li_params($query, [], $endpoint_params);
+        if (in_array($get, $other_tables) || ! empty($endpoint_data)) {
+            $query            = "SELECT $DISTINCT $SELECT FROM $get";
+            [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params);
             break;
         }
         $error_results = ["error" => "invalid get request"];
@@ -416,18 +410,18 @@ if ($qua !== "" || $query !== "") {
     if ($query !== "") {
 
         $order_value = filter_input(INPUT_GET, 'order', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $query = add_order($query, $endpoint_data, $order_value);
+        $query       = Helps::add_order($query, $endpoint_data, $order_value);
 
-        $query = add_limit($query);
-        $query = add_offset($query);
+        $query = Helps::add_limit($query);
+        $query = Helps::add_offset($query);
 
         // apply $params to $qua
         $qua = sprintf(str_replace('?', "'%s'", $query), ...$params);
 
         list($results, $source) = fetch_query_new($query, $params, $get);
     } else {
-        $qua = add_limit($qua);
-        $qua = add_offset($qua);
+        $qua = Helps::add_limit($qua);
+        $qua = Helps::add_offset($qua);
 
         list($results, $source) = fetch_query_new($qua, [], $get);
     }
@@ -441,7 +435,6 @@ if ($qua !== "" || $query !== "") {
 $qua = str_replace(["\n", "\r"], " ", $qua);
 $qua = preg_replace("/ +/", " ", $qua);
 
-
 switch ($get) {
     case 'leaderboard_table_formated':
         $results = leaderboard_table_format($results);
@@ -452,18 +445,20 @@ switch ($get) {
         break;
 }
 
-$out = [
-    "time" => $execution_time,
-    "query" => $qua,
-    "source" => $source,
-    "length" => count($results),
-    "results" => $results,
+$out  = [
+    "time"             => $execution_time,
+    "query"            => $qua,
+    "source"           => $source,
+    "length"           => count($results),
+    "results"          => $results,
     // "endpoint_params" => $endpoint_params,
     "supported_params" => [],
     "supported_values" => [],
 ];
 
-if ($error) $error_results = ["error" => $error];
+if ($error) {
+    $error_results = ["error" => $error];
+}
 
 if ($error_results) {
     $out["error"] = $error_results;
@@ -472,11 +467,11 @@ if ($error_results) {
 if ($_SERVER['SERVER_NAME'] !== 'localhost') {
     // remove query from $out
     unset($out["query"]);
-};
+}
 
 $out["supported_params"] = array_column($endpoint_params, "name");
 
 $out["supported_values"] = array_column($endpoint_params, "options", 'name');
-$out["columns"] = $endpoint_columns;
+$out["columns"]          = $endpoint_columns;
 
 echo json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);

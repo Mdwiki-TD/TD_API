@@ -2,8 +2,8 @@
 
 namespace API\TitlesInfos;
 
-use function API\Helps\add_li_params;
-use function API\Helps\sanitize_input;
+use App\Legacy\AddParams;
+use App\Legacy\Helps;
 
 function titles_query($endpoint_params)
 {
@@ -26,7 +26,7 @@ function titles_query($endpoint_params)
             left join words w               on w.w_title  = ase.title
     SQL;
 
-    list($qua, $params) = add_li_params($qua, [], $endpoint_params);
+    list($qua, $params) = AddParams::add_li_params($qua, [], $endpoint_params);
 
     return [$qua, $params, ""];
 }
@@ -39,7 +39,7 @@ function mdwiki_revids($endpoint_params)
         FROM mdwiki_revids
     SQL;
 
-    list($qua, $params) = add_li_params($qua, [], $endpoint_params);
+    list($qua, $params) = AddParams::add_li_params($qua, [], $endpoint_params);
 
     return [$qua, $params, ""];
 }
@@ -55,13 +55,13 @@ function pages_query($endpoint_params, $SELECT, $DISTINCT, $get)
         LEFT JOIN categories ca ON p.cat = ca.category
     SQL;
 
-    [$query, $params] = add_li_params($qua, [], $endpoint_params, ['campaign', 'cat', 'category']);
+    [$query, $params] = AddParams::add_li_params($qua, [], $endpoint_params, ['campaign', 'cat', 'category']);
 
     $campaign_raw = $_GET['campaign'] ?? null;
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
 
-    $campaign   = sanitize_input($campaign_raw ?? '', '/^[A-Za-z0-9- ]+$/');
-    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $campaign   = Helps::sanitize_input($campaign_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $category   = Helps::sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
 
     if ($category !== null) {
         $query .= " AND p.cat = ?";

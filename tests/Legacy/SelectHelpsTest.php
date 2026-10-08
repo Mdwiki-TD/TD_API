@@ -4,9 +4,11 @@ declare (strict_types = 1);
 
 namespace Tests;
 
-use function API\SelectHelps\get_select;
+use App\Legacy\SelectHelps;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(SelectHelps::class)]
 class SelectHelpsTest extends TestCase
 {
     protected function setUp(): void
@@ -25,7 +27,7 @@ class SelectHelpsTest extends TestCase
     {
         $endpoint_params  = [];
         $endpoint_columns = ['title', 'lang', 'date'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('*', $result);
     }
 
@@ -34,7 +36,7 @@ class SelectHelpsTest extends TestCase
         $_GET['select']   = '*';
         $endpoint_params  = [];
         $endpoint_columns = ['title', 'lang'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('*', $result);
     }
 
@@ -46,7 +48,7 @@ class SelectHelpsTest extends TestCase
 
         foreach ($false_selects as $false_select) {
             $_GET['select'] = $false_select;
-            $result         = get_select($endpoint_params, $endpoint_columns);
+            $result         = SelectHelps::get_select($endpoint_params, $endpoint_columns);
             $this->assertSame('*', $result, "Failed for false select: $false_select");
         }
     }
@@ -56,7 +58,7 @@ class SelectHelpsTest extends TestCase
         $_GET['select']   = 'title';
         $endpoint_params  = [];
         $endpoint_columns = ['title', 'lang'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('title', $result);
     }
 
@@ -65,7 +67,7 @@ class SelectHelpsTest extends TestCase
         $_GET['select']   = 'invalid_column';
         $endpoint_params  = [];
         $endpoint_columns = ['title', 'lang'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('*', $result);
     }
 
@@ -82,7 +84,7 @@ class SelectHelpsTest extends TestCase
 
         foreach ($valid_counts as $count_expr) {
             $_GET['select'] = $count_expr;
-            $result         = get_select($endpoint_params, $endpoint_columns);
+            $result         = SelectHelps::get_select($endpoint_params, $endpoint_columns);
             $this->assertSame($count_expr, $result, "Failed for count expression: $count_expr");
         }
     }
@@ -100,7 +102,7 @@ class SelectHelpsTest extends TestCase
 
         foreach ($year_exprs as $year_expr) {
             $_GET['select'] = $year_expr;
-            $result         = get_select($endpoint_params, $endpoint_columns);
+            $result         = SelectHelps::get_select($endpoint_params, $endpoint_columns);
             $this->assertSame($year_expr, $result, "Failed for year expression: $year_expr");
         }
     }
@@ -113,12 +115,12 @@ class SelectHelpsTest extends TestCase
         // 'count(*)' is not in select_valids and alias expansion doesn't help
         // because the expanded form also fails validation
         $_GET['select'] = 'count(*)';
-        $result         = get_select($endpoint_params, $endpoint_columns);
+        $result         = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('*', $result);
 
         // 'year' is not in select_valids, falls back to '*'
         $_GET['select'] = 'year';
-        $result         = get_select($endpoint_params, $endpoint_columns);
+        $result         = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('*', $result);
     }
 
@@ -130,7 +132,7 @@ class SelectHelpsTest extends TestCase
             ['name' => 'lang'],
         ];
         $endpoint_columns = ['title'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('user', $result);
     }
 
@@ -144,7 +146,7 @@ class SelectHelpsTest extends TestCase
             ],
         ];
         $endpoint_columns = ['title'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('option1', $result);
     }
 
@@ -154,7 +156,7 @@ class SelectHelpsTest extends TestCase
         $_GET['count']    = '*';
         $endpoint_params  = [];
         $endpoint_columns = ['lang', 'title'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         // Note: filter_input() doesn't read from $_GET in PHPUnit test environment
         // So the count parameter is not processed
         $this->assertSame('lang', $result);
@@ -166,7 +168,7 @@ class SelectHelpsTest extends TestCase
         $_GET['count']    = 'title';
         $endpoint_params  = [];
         $endpoint_columns = ['user', 'title'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         // Note: filter_input() doesn't read from $_GET in PHPUnit test environment
         // So the count parameter is not processed
         $this->assertSame('user', $result);
@@ -177,7 +179,7 @@ class SelectHelpsTest extends TestCase
         $_GET['select']   = 'LANG';
         $endpoint_params  = [];
         $endpoint_columns = ['title'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         // 'lang' is in select_valids, but 'LANG' is not (case-sensitive check)
         // Actually the code does strtolower check, so this should work
         $this->assertSame('LANG', $result);
@@ -188,7 +190,7 @@ class SelectHelpsTest extends TestCase
         $_GET['select']   = 'lang';
         $endpoint_params  = [];
         $endpoint_columns = ['title'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('lang', $result);
     }
 
@@ -197,11 +199,11 @@ class SelectHelpsTest extends TestCase
         $_GET['select']   = 'p.lang';
         $endpoint_params  = [];
         $endpoint_columns = ['title'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('p.lang', $result);
 
         $_GET['select'] = 'p.user';
-        $result         = get_select($endpoint_params, $endpoint_columns);
+        $result         = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('p.user', $result);
     }
 
@@ -210,7 +212,7 @@ class SelectHelpsTest extends TestCase
         $_GET['select']   = 'g_title';
         $endpoint_params  = [];
         $endpoint_columns = ['title'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('g_title', $result);
     }
 
@@ -219,7 +221,7 @@ class SelectHelpsTest extends TestCase
         $_GET['select']   = 'user';
         $endpoint_params  = [];
         $endpoint_columns = ['title'];
-        $result           = get_select($endpoint_params, $endpoint_columns);
+        $result           = SelectHelps::get_select($endpoint_params, $endpoint_columns);
         $this->assertSame('user', $result);
     }
 }

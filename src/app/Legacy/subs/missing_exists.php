@@ -1,15 +1,14 @@
 <?php
-
 namespace API\Missing;
 
-use function API\Helps\sanitize_input;
+use App\Legacy\Helps;
 
 function exists_statics_by_category($endpoint_params)
 {
 
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
 
-    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $category = Helps::sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
 
     if ($category === null) {
         $category = "RTT";
@@ -61,15 +60,15 @@ function missing_by_lang_and_category($endpoint_params)
     $lang_raw     = $_GET['lang'] ?? null;
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
 
-    $lang_code  = sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9- ]+$/');
-    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $lang_code = Helps::sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $category  = Helps::sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
 
     $error = "";
 
     if ($lang_code === null) {
         $error = "lang is missing";
         return ["", [], $error];
-    };
+    }
 
     if ($category === null) {
         $category = "RTT";
@@ -109,20 +108,19 @@ function missing_by_lang_and_category($endpoint_params)
     return [$qua, $params, $error];
 }
 
-
 function exists_by_lang_and_category($endpoint_params)
 {
 
     $lang_raw     = $_GET['lang'] ?? null;
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
 
-    $lang_code  = sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9- ]+$/');
-    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $lang_code = Helps::sanitize_input($lang_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $category  = Helps::sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
 
     if ($lang_code === null) {
         $error = "lang is missing";
         return ["", [], $error];
-    };
+    }
 
     if ($category === null) {
         $category = "RTT";
@@ -168,7 +166,7 @@ function statics_by_category($endpoint_params)
 
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
 
-    $category   = sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $category = Helps::sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
 
     if ($category === null) {
         $category = "RTT";
