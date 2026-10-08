@@ -6,8 +6,6 @@ include_once __DIR__ . '/Logger.php';
 
 include_once __DIR__ . '/Legacy/sql.php';
 
-include_once __DIR__ . '/Legacy/helps.php';
-include_once __DIR__ . '/Legacy/select_helps.php';
 include_once __DIR__ . '/Legacy/qids.php';
 include_once __DIR__ . '/Legacy/leaderboard.php';
 

@@ -8,8 +8,8 @@ header('Content-Type: application/json');
 use App\Legacy\AddParams;
 use App\Legacy\SelectHelps;
 use App\Legacy\Helps;
-use function API\Leaderboard\langs_format;
-use function API\Leaderboard\leaderboard_table_format;
+use App\Legacy\Leaderboard;
+
 use function API\Missing\exists_by_lang_and_category;
 use function API\Missing\exists_statics_by_category;
 use function API\Missing\missing_by_lang_and_category;
@@ -437,11 +437,11 @@ $qua = preg_replace("/ +/", " ", $qua);
 
 switch ($get) {
     case 'leaderboard_table_formated':
-        $results = leaderboard_table_format($results);
+        $results = Leaderboard::leaderboard_table_format($results);
         break;
 
     case 'langs':
-        $results = langs_format($results);
+        $results = Leaderboard::langs_format($results);
         break;
 }
 

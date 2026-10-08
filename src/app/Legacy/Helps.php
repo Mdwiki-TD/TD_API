@@ -96,7 +96,7 @@ class Helps
     public static function add_group($qua, $endpoint_data, $get_value)
     {
 
-        $added = filter_order('group', $endpoint_data, $get_value);
+        $added = self::filter_order('group', $endpoint_data, $get_value);
 
         if ($added) {
             $qua .= " GROUP BY $added";
@@ -157,7 +157,7 @@ class Helps
             if (! empty($added_value)) {
                 $added = $added_value;
             } else {
-                $added = filter_order('order', $endpoint_data, $get_value) ?? $default_order;
+                $added = self::filter_order('order', $endpoint_data, $get_value) ?? $default_order;
             }
         }
 
@@ -166,7 +166,7 @@ class Helps
         }
 
         $param_order_direction = $params_key_to_data["order_direction"] ?? [];
-        $order_direction       = get_order_direction($param_order_direction);
+        $order_direction       = self::get_order_direction($param_order_direction);
 
         $qua .= " ORDER BY $added $order_direction";
 
