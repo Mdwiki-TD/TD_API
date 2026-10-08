@@ -1,18 +1,17 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Tests;
-
-use PHPUnit\Framework\Attributes\PreserveGlobalState;
-use PHPUnit\Framework\Attributes\RunInSeparateProcess;
-use PHPUnit\Framework\TestCase;
-
-use function API\Helps\add_array_params;
 
 /**
  * Tests for add_array_params function in app/helps.php
  */
+use function API\Helps\add_array_params;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\TestCase;
+
 class ArrayParamsTest extends TestCase
 {
     protected function setUp(): void
@@ -30,8 +29,8 @@ class ArrayParamsTest extends TestCase
     public function testAddArrayParamsWithEmptyArray(): void
     {
         $_GET['titles'] = [];
-        $query = 'SELECT * FROM pages';
-        $params = [];
+        $query          = 'SELECT * FROM pages';
+        $params         = [];
 
         $result = add_array_params($query, $params, 'titles', 'title', ' AND ');
 
@@ -44,8 +43,8 @@ class ArrayParamsTest extends TestCase
     public function testAddArrayParamsWithSingleValue(): void
     {
         $_GET['titles'] = ['Page1'];
-        $query = 'SELECT * FROM pages';
-        $params = [];
+        $query          = 'SELECT * FROM pages';
+        $params         = [];
 
         $result = add_array_params($query, $params, 'titles', 'title', ' AND ');
 
@@ -58,8 +57,8 @@ class ArrayParamsTest extends TestCase
     public function testAddArrayParamsWithMultipleValues(): void
     {
         $_GET['titles'] = ['Page1', 'Page2', 'Page3'];
-        $query = 'SELECT * FROM pages';
-        $params = [];
+        $query          = 'SELECT * FROM pages';
+        $params         = [];
 
         $result = add_array_params($query, $params, 'titles', 'title', ' AND ');
 
@@ -72,8 +71,8 @@ class ArrayParamsTest extends TestCase
     public function testAddArrayParamsWithWhereClause(): void
     {
         $_GET['titles'] = ['Page1', 'Page2'];
-        $query = 'SELECT * FROM pages WHERE lang = ?';
-        $params = ['en'];
+        $query          = 'SELECT * FROM pages WHERE lang = ?';
+        $params         = ['en'];
 
         $result = add_array_params($query, $params, 'titles', 'title', ' AND ');
 
@@ -88,8 +87,8 @@ class ArrayParamsTest extends TestCase
     public function testAddArrayParamsWithDifferentParameterName(): void
     {
         $_GET['langs'] = ['en', 'ar', 'fr'];
-        $query = 'SELECT * FROM pages';
-        $params = [];
+        $query         = 'SELECT * FROM pages';
+        $params        = [];
 
         $result = add_array_params($query, $params, 'langs', 'lang_code', ' WHERE ');
 
@@ -103,8 +102,8 @@ class ArrayParamsTest extends TestCase
     public function testAddArrayParamsAppendsToExistingParams(): void
     {
         $_GET['titles'] = ['Page1'];
-        $query = 'SELECT * FROM pages WHERE id > ?';
-        $params = [100];
+        $query          = 'SELECT * FROM pages WHERE id > ?';
+        $params         = [100];
 
         $result = add_array_params($query, $params, 'titles', 'title');
 
@@ -116,8 +115,8 @@ class ArrayParamsTest extends TestCase
     public function testAddArrayParamsWithoutWhereOrAndUsesWhere(): void
     {
         $_GET['titles'] = ['Page1'];
-        $query = 'SELECT * FROM pages';
-        $params = [];
+        $query          = 'SELECT * FROM pages';
+        $params         = [];
 
         // Empty where_or_and should auto-detect based on existing WHERE clause
         $result = add_array_params($query, $params, 'titles', 'title', '');
@@ -132,8 +131,8 @@ class ArrayParamsTest extends TestCase
     public function testAddArrayParamsWithExistingWhere(): void
     {
         $_GET['titles'] = ['Page1'];
-        $query = 'SELECT * FROM pages WHERE active = 1';
-        $params = [];
+        $query          = 'SELECT * FROM pages WHERE active = 1';
+        $params         = [];
 
         // Empty where_or_and should auto-detect based on existing WHERE clause
         $result = add_array_params($query, $params, 'titles', 'title', '');
@@ -148,7 +147,7 @@ class ArrayParamsTest extends TestCase
     public function testAddArrayParamsWhenNotSetInGet(): void
     {
         // Don't set $_GET['titles']
-        $query = 'SELECT * FROM pages';
+        $query  = 'SELECT * FROM pages';
         $params = [];
 
         $result = add_array_params($query, $params, 'titles', 'title', ' AND ');

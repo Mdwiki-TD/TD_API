@@ -1,25 +1,26 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Tests;
-
-use PHPUnit\Framework\TestCase;
-
-use function API\Helps\add_one_param;
 
 /**
  * Tests for add_one_param function in app/helps.php
  * This function handles special parameter values like not_empty, empty, >0
  */
+use function API\Helps\add_one_param;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(AddOneParam::class)]
 class AddOneParamTest extends TestCase
 {
     public function testAddOneParamWithRegularValue(): void
     {
-        $query = 'SELECT * FROM pages';
+        $query  = 'SELECT * FROM pages';
         $column = 'title';
-        $added = 'TestPage';
-        $tabe = [];
+        $added  = 'TestPage';
+        $tabe   = [];
 
         $result = add_one_param($query, $column, $added, $tabe);
 
@@ -31,10 +32,10 @@ class AddOneParamTest extends TestCase
 
     public function testAddOneParamWithNotEmptyValue(): void
     {
-        $query = 'SELECT * FROM pages';
+        $query  = 'SELECT * FROM pages';
         $column = 'content';
-        $added = 'not_empty';
-        $tabe = [];
+        $added  = 'not_empty';
+        $tabe   = [];
 
         $result = add_one_param($query, $column, $added, $tabe);
 
@@ -44,10 +45,10 @@ class AddOneParamTest extends TestCase
 
     public function testAddOneParamWithNotMtAlias(): void
     {
-        $query = 'SELECT * FROM pages';
+        $query  = 'SELECT * FROM pages';
         $column = 'content';
-        $added = 'not_mt';
-        $tabe = [];
+        $added  = 'not_mt';
+        $tabe   = [];
 
         $result = add_one_param($query, $column, $added, $tabe);
 
@@ -57,10 +58,10 @@ class AddOneParamTest extends TestCase
 
     public function testAddOneParamWithEmptyValue(): void
     {
-        $query = 'SELECT * FROM pages';
+        $query  = 'SELECT * FROM pages';
         $column = 'content';
-        $added = 'empty';
-        $tabe = [];
+        $added  = 'empty';
+        $tabe   = [];
 
         $result = add_one_param($query, $column, $added, $tabe);
 
@@ -70,10 +71,10 @@ class AddOneParamTest extends TestCase
 
     public function testAddOneParamWithMtAlias(): void
     {
-        $query = 'SELECT * FROM pages';
+        $query  = 'SELECT * FROM pages';
         $column = 'content';
-        $added = 'mt';
-        $tabe = [];
+        $added  = 'mt';
+        $tabe   = [];
 
         $result = add_one_param($query, $column, $added, $tabe);
 
@@ -83,10 +84,10 @@ class AddOneParamTest extends TestCase
 
     public function testAddOneParamWithGreaterThanZero(): void
     {
-        $query = 'SELECT * FROM pages';
+        $query  = 'SELECT * FROM pages';
         $column = 'view_count';
-        $added = '>0';
-        $tabe = [];
+        $added  = '>0';
+        $tabe   = [];
 
         $result = add_one_param($query, $column, $added, $tabe);
 
@@ -96,10 +97,10 @@ class AddOneParamTest extends TestCase
 
     public function testAddOneParamWithHtmlEncodedGreaterThanZero(): void
     {
-        $query = 'SELECT * FROM pages';
+        $query  = 'SELECT * FROM pages';
         $column = 'view_count';
-        $added = '&#62;0';  // HTML encoded >0
-        $tabe = [];
+        $added  = '&#62;0'; // HTML encoded >0
+        $tabe   = [];
 
         $result = add_one_param($query, $column, $added, $tabe);
 
@@ -109,10 +110,10 @@ class AddOneParamTest extends TestCase
 
     public function testAddOneParamWithExistingWhereClause(): void
     {
-        $query = 'SELECT * FROM pages WHERE lang = ?';
+        $query  = 'SELECT * FROM pages WHERE lang = ?';
         $column = 'title';
-        $added = 'TestPage';
-        $tabe = [];
+        $added  = 'TestPage';
+        $tabe   = [];
 
         $result = add_one_param($query, $column, $added, $tabe);
 
@@ -124,10 +125,10 @@ class AddOneParamTest extends TestCase
 
     public function testAddOneParamWithValueCanBeNull(): void
     {
-        $query = 'SELECT * FROM pages';
+        $query  = 'SELECT * FROM pages';
         $column = 'status';
-        $added = 'active';
-        $tabe = ['value_can_be_null' => true];
+        $added  = 'active';
+        $tabe   = ['value_can_be_null' => true];
 
         $result = add_one_param($query, $column, $added, $tabe);
 
@@ -140,10 +141,10 @@ class AddOneParamTest extends TestCase
         // Array type should call add_array_params
         $_GET['titles'] = ['Page1', 'Page2'];
 
-        $query = 'SELECT * FROM pages';
+        $query  = 'SELECT * FROM pages';
         $column = 'title';
-        $added = '';  // Value doesn't matter for array type
-        $tabe = ['type' => 'array', 'name' => 'titles'];
+        $added  = ''; // Value doesn't matter for array type
+        $tabe   = ['type' => 'array', 'name' => 'titles'];
 
         $result = add_one_param($query, $column, $added, $tabe);
 
@@ -156,10 +157,10 @@ class AddOneParamTest extends TestCase
 
     public function testAddOneParamWithNumericValue(): void
     {
-        $query = 'SELECT * FROM pages';
+        $query  = 'SELECT * FROM pages';
         $column = 'id';
-        $added = '123';
-        $tabe = [];
+        $added  = '123';
+        $tabe   = [];
 
         $result = add_one_param($query, $column, $added, $tabe);
 

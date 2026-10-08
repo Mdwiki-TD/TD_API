@@ -6,7 +6,10 @@ namespace API\Helps;
 function add_offset($qua)
 {
     // if $qua has OFFSET then return
-    if (strpos($qua, 'OFFSET') !== false || strpos($qua, 'offset') !== false) return $qua;
+    if (strpos($qua, 'OFFSET') !== false || strpos($qua, 'offset') !== false) {
+        return $qua;
+    }
+
     if (isset($_GET['offset'])) {
         $added = filter_input(INPUT_GET, 'offset', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $added = (int) $added;
@@ -19,7 +22,10 @@ function add_offset($qua)
 function add_limit($qua)
 {
     // if $qua has LIMIT then return
-    if (strpos($qua, 'LIMIT') !== false || strpos($qua, 'limit') !== false) return $qua;
+    if (strpos($qua, 'LIMIT') !== false || strpos($qua, 'limit') !== false) {
+        return $qua;
+    }
+
     if (isset($_GET['limit'])) {
         $added = filter_input(INPUT_GET, 'limit', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $added = (int) $added;
@@ -32,7 +38,7 @@ function add_limit($qua)
 
 function sanitize_input($input, $pattern)
 {
-    if (!empty($input) && preg_match($pattern, $input) && $input !== "all") {
+    if (! empty($input) && preg_match($pattern, $input) && $input !== "all") {
         return filter_var($input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     }
     return null;
@@ -41,17 +47,17 @@ function sanitize_input($input, $pattern)
 function filter_order($key, $endpoint_data, $get_value)
 {
 
-    $endpoint_params = $endpoint_data['params'] ?? [];
+    $endpoint_params  = $endpoint_data['params'] ?? [];
     $endpoint_columns = $endpoint_data['columns'] ?? [];
 
-    if (!isset($_GET[$key])) {
+    if (! isset($_GET[$key])) {
         // error_log("No '$key' parameter defined in endpoint data");
         return null;
     }
 
     $added = $get_value;
 
-    if (!$added) {
+    if (! $added) {
         // error_log("No '$key' parameter provided in the request");
         return null;
     }
@@ -68,9 +74,9 @@ function filter_order($key, $endpoint_data, $get_value)
         $value = trim($value);
         // if its number okay
         if (
-            !in_array($value, $endpoint_columns) &&
-            !in_array($value, $endpoint_params) &&
-            !is_numeric($value)
+            ! in_array($value, $endpoint_columns) &&
+            ! in_array($value, $endpoint_params) &&
+            ! is_numeric($value)
         ) {
             error_log("order value '$value' is not valid for key '$key'");
             unset($added_array[$k]);
@@ -100,9 +106,9 @@ function get_order_direction($param_order_direction)
 {
 
     $order_direction = isset($_GET['order_direction']) ?
-        filter_input(INPUT_GET, 'order_direction', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : ($param_order_direction["default"] ?? "");
+    filter_input(INPUT_GET, 'order_direction', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : ($param_order_direction["default"] ?? "");
 
-    if (!$order_direction) {
+    if (! $order_direction) {
         return "DESC";
     }
 
@@ -111,7 +117,7 @@ function get_order_direction($param_order_direction)
     // $order_direction upper
     $order_direction = strtoupper($order_direction);
 
-    if (!in_array($order_direction, $valid_orders)) {
+    if (! in_array($order_direction, $valid_orders)) {
         $order_direction = "DESC";
     }
 
@@ -128,7 +134,7 @@ function add_order($qua, $endpoint_data, $get_value)
 
     $param_order = $params_key_to_data["order"] ?? [];
 
-    if (!$param_order) {
+    if (! $param_order) {
         // error_log("No 'order' parameter defined in endpoint data");
         return $qua;
     }
@@ -142,28 +148,27 @@ function add_order($qua, $endpoint_data, $get_value)
 
     $added = $default_order;
 
-    if (!empty($get_value)) {
+    if (! empty($get_value)) {
         $added_value = $order_values[$get_value] ?? "";
         // error_log("get_value: $get_value, added_value: $added_value");
-        if (!empty($added_value)) {
+        if (! empty($added_value)) {
             $added = $added_value;
         } else {
             $added = filter_order('order', $endpoint_data, $get_value) ?? $default_order;
         }
     }
 
-    if (!$added) {
+    if (! $added) {
         return $qua;
     }
 
     $param_order_direction = $params_key_to_data["order_direction"] ?? [];
-    $order_direction = get_order_direction($param_order_direction);
+    $order_direction       = get_order_direction($param_order_direction);
 
     $qua .= " ORDER BY $added $order_direction";
 
     return $qua;
 }
-
 
 function add_distinct($qua)
 {
@@ -175,7 +180,7 @@ function add_one_param($qua, $column, $added, $tabe)
 {
 
     $add_str = "";
-    $params = [];
+    $params  = [];
 
     $where_or_and = (strpos(strtoupper($qua), 'WHERE') !== false) ? ' AND ' : ' WHERE ';
 
@@ -192,7 +197,7 @@ function add_one_param($qua, $column, $added, $tabe)
         list($add_str, $params) = add_array_params($add_str, $params, $tabe['name'], $column, $where_or_and);
     } else {
         $params[] = $added;
-        $add_str = " $where_or_and $column = ? ";
+        $add_str  = " $where_or_and $column = ? ";
 
         $value_can_be_null = isset($tabe['value_can_be_null']) ? $tabe['value_can_be_null'] : false;
 
@@ -221,13 +226,19 @@ function change_types($types, $endpoint_params, $ignore_params)
         foreach ($endpoint_params as $param) {
             // { "name": "title", "column": "w_title", "type": "text", "placeholder": "Page Title" },
             // , "no_select": true
-            if (isset($param['no_select'])) continue;
+            if (isset($param['no_select'])) {
+                continue;
+            }
+
             $types[$param['name']] = $param;
         }
     }
 
     foreach ($ignore_params as $param) {
-        if (isset($types[$param])) unset($types[$param]);
+        if (isset($types[$param])) {
+            unset($types[$param]);
+        }
+
     }
 
     return $types;
@@ -241,7 +252,7 @@ function add_array_params($qua, $params, $param = "titles", $column = "title", $
 
     $titles = $_GET[$param] ?? [];
 
-    if (!empty($titles) && is_array($titles)) {
+    if (! empty($titles) && is_array($titles)) {
 
         $placeholders = rtrim(str_repeat('?,', count($titles)), ',');
 
@@ -261,7 +272,7 @@ function read_scalar_param(string $key): ?string
 {
     // $v = filter_input(INPUT_GET, $key) ?? null;
     $v = $_GET[$key] ?? null;
-    if (!is_string($v)) {
+    if (! is_string($v)) {
         return null;
     }
     // إزالة محارف التحكم فقط
@@ -278,7 +289,9 @@ function add_li_params(string $qua, array $types, array $endpoint_params = [], a
 
         $column = $tabe['column'];
 
-        if (empty($column)) continue;
+        if (empty($column)) {
+            continue;
+        }
 
         if (isset($_GET[$type]) || isset($_GET[$column])) {
 

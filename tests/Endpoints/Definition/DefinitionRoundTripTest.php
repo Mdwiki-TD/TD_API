@@ -1,11 +1,10 @@
 <?php
 // tests/DefinitionRoundTripTest.php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 use App\Endpoints\Definition\EndpointDefinitions;
 use PHPUnit\Framework\TestCase;
 
-/** يضمن أن التعريفات تطابق endpoint_params.json حرفياً (المرجع الحاسم قبل حذفه). */
 final class DefinitionRoundTripTest extends TestCase
 {
     private static function legacy(): array
@@ -23,7 +22,7 @@ final class DefinitionRoundTripTest extends TestCase
             $this->assertArrayHasKey($name, $defs, "missing definition: $name");
 
             $actual = $defs[$name]->toArray();
-            $this->assertEquals($source['params']  ?? [], $actual['params'],  "$name: params differ");
+            $this->assertEquals($source['params'] ?? [], $actual['params'], "$name: params differ");
             $this->assertEquals($source['columns'] ?? [], $actual['columns'], "$name: columns differ");
             $this->assertEquals($source['order_values'] ?? [], $actual['order_values'] ?? [], "$name: order_values differ");
         }

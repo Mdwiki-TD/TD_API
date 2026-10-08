@@ -1,24 +1,23 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Tests;
-
-use PHPUnit\Framework\TestCase;
-
-use function API\Helps\change_types;
 
 /**
  * Tests for change_types function in app/helps.php
  * This function converts type definitions for query parameter handling
  */
+use function API\Helps\change_types;
+use PHPUnit\Framework\TestCase;
+
 class ChangeTypesTest extends TestCase
 {
     public function testChangeTypesWithEmptyArrays(): void
     {
-        $types = [];
+        $types           = [];
         $endpoint_params = [];
-        $ignore_params = [];
+        $ignore_params   = [];
 
         $result = change_types($types, $endpoint_params, $ignore_params);
 
@@ -28,26 +27,26 @@ class ChangeTypesTest extends TestCase
     public function testChangeTypesWithSimpleTypes(): void
     {
         // When $types is an array of strings, it converts them to column definitions
-        $types = ['title', 'lang', 'user'];
+        $types           = ['title', 'lang', 'user'];
         $endpoint_params = [];
-        $ignore_params = [];
+        $ignore_params   = [];
 
         $result = change_types($types, $endpoint_params, $ignore_params);
 
         $this->assertSame([
             'title' => ['column' => 'title'],
-            'lang' => ['column' => 'lang'],
-            'user' => ['column' => 'user']
+            'lang'  => ['column' => 'lang'],
+            'user'  => ['column' => 'user'],
         ], $result);
     }
 
     public function testChangeTypesFallsBackToEndpointParams(): void
     {
         // When $types is empty, it falls back to using $endpoint_params
-        $types = [];
+        $types           = [];
         $endpoint_params = [
             ['name' => 'title', 'column' => 'w_title'],
-            ['name' => 'lang', 'column' => 'lang_code']
+            ['name' => 'lang', 'column' => 'lang_code'],
         ];
         $ignore_params = [];
 
@@ -55,18 +54,18 @@ class ChangeTypesTest extends TestCase
 
         $this->assertSame([
             'title' => ['name' => 'title', 'column' => 'w_title'],
-            'lang' => ['name' => 'lang', 'column' => 'lang_code']
+            'lang'  => ['name' => 'lang', 'column' => 'lang_code'],
         ], $result);
     }
 
     public function testChangeTypesSkipsNoSelectParams(): void
     {
         // Params with 'no_select' => true should be skipped when falling back to endpoint_params
-        $types = [];
+        $types           = [];
         $endpoint_params = [
             ['name' => 'title', 'column' => 'w_title'],
             ['name' => 'hidden_field', 'column' => 'hidden_col', 'no_select' => true],
-            ['name' => 'lang', 'column' => 'lang_code']
+            ['name' => 'lang', 'column' => 'lang_code'],
         ];
         $ignore_params = [];
 
@@ -80,9 +79,9 @@ class ChangeTypesTest extends TestCase
     public function testChangeTypesIgnoresSpecifiedParams(): void
     {
         // When $types is an array of strings, $ignore_params removes items from the result
-        $types = ['title', 'lang', 'user'];
+        $types           = ['title', 'lang', 'user'];
         $endpoint_params = [];
-        $ignore_params = ['lang'];
+        $ignore_params   = ['lang'];
 
         $result = change_types($types, $endpoint_params, $ignore_params);
 
@@ -94,9 +93,9 @@ class ChangeTypesTest extends TestCase
     public function testChangeTypesPrefersTypesOverEndpointParams(): void
     {
         // When $types is provided (not empty), it should be used instead of $endpoint_params
-        $types = ['custom_title'];
+        $types           = ['custom_title'];
         $endpoint_params = [
-            ['name' => 'title', 'column' => 'w_title']
+            ['name' => 'title', 'column' => 'w_title'],
         ];
         $ignore_params = [];
 
@@ -109,10 +108,10 @@ class ChangeTypesTest extends TestCase
     public function testChangeTypesFallsBackToEndpointParamsOnlyWhenTypesEmpty(): void
     {
         // Verify that empty $types triggers fallback to $endpoint_params
-        $types = [];
+        $types           = [];
         $endpoint_params = [
             ['name' => 'param1', 'column' => 'col1'],
-            ['name' => 'param2', 'column' => 'col2']
+            ['name' => 'param2', 'column' => 'col2'],
         ];
         $ignore_params = [];
 
@@ -126,10 +125,10 @@ class ChangeTypesTest extends TestCase
     public function testChangeTypesIgnoresFromEndpointParams(): void
     {
         // $ignore_params should work when falling back to $endpoint_params
-        $types = [];
+        $types           = [];
         $endpoint_params = [
             ['name' => 'title', 'column' => 'w_title'],
-            ['name' => 'lang', 'column' => 'lang_code']
+            ['name' => 'lang', 'column' => 'lang_code'],
         ];
         $ignore_params = ['lang'];
 
@@ -141,9 +140,9 @@ class ChangeTypesTest extends TestCase
 
     public function testChangeTypesHandlesEmptyIgnoreParams(): void
     {
-        $types = ['title', 'lang'];
+        $types           = ['title', 'lang'];
         $endpoint_params = [];
-        $ignore_params = [];
+        $ignore_params   = [];
 
         $result = change_types($types, $endpoint_params, $ignore_params);
 
