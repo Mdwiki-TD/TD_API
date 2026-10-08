@@ -4,7 +4,7 @@ namespace App\Legacy;
 class Leaderboard
 {
 
-    public function langs_format($data)
+    public static function langs_format($data)
     {
         $result = [];
         foreach ($data as $Key => $lang_info) {
@@ -17,7 +17,7 @@ class Leaderboard
         return $result;
     }
 
-    public function leaderboard_table_format($data)
+    public static function leaderboard_table_format($data)
     {
 
         $result = [

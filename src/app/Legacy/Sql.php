@@ -58,7 +58,7 @@ class Sql
 
     public static function add_to_apcu($sqlQuery, $params, $results)
     {
-        $cache_key = create_apcu_key($sqlQuery, $params);
+        $cache_key = self::create_apcu_key($sqlQuery, $params);
 
         $cache_ttl = 3600 * 12;
 
@@ -68,7 +68,7 @@ class Sql
     public static function fetch_query_new($sqlQuery, $params, $get)
     {
         if ($get != 'settings' && isset($_REQUEST['apcu'])) {
-            $in_apcu = get_from_apcu($sqlQuery, $params);
+            $in_apcu = self::get_from_apcu($sqlQuery, $params);
 
             if ($in_apcu && is_array($in_apcu)) {
                 return [$in_apcu, "apcu"];
