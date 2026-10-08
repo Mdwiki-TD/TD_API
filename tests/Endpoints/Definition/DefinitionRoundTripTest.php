@@ -9,7 +9,7 @@ final class DefinitionRoundTripTest extends TestCase
 {
     private static function legacy(): array
     {
-        return json_decode(file_get_contents(__DIR__ . '/../src/app/endpoint_params.json'), true, 512, JSON_THROW_ON_ERROR);
+        return json_decode(file_get_contents(__DIR__ . '/../../../src/app/endpoint_params.json'), true, 512, JSON_THROW_ON_ERROR);
     }
 
     public function testEveryLegacyEndpointMatchesItsDefinition(): void
