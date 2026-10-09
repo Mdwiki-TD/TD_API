@@ -1,10 +1,11 @@
 <?php
-// src/app/request.php
+// src/Legacy/LegacyController.php
+
+namespace Legacy;
 
 /**
  * DEPRECATED
  */
-header('Content-Type: application/json');
 use Legacy\AddParams;
 use Legacy\Helps;
 use Legacy\Leaderboard;
@@ -26,11 +27,19 @@ use App\Endpoints\Definition\EndpointDefinitions;
 
 class LegacyController
 {
+
+    function enabled(string $key): bool
+    {
+        return isset($_GET[$key]) && $_GET[$key] !== 'false' && $_GET[$key] !== '0';
+    }
+
     /**
      * Main entry point
      */
     public function handleRequest(): void
     {
+        header('Content-Type: application/json');
+
         $other_tables = [
             'in_process',
             'assessments',
@@ -44,12 +53,7 @@ class LegacyController
             'translate_type',
         ];
 
-        function enabled(string $key): bool
-        {
-            return isset($_GET[$key]) && $_GET[$key] !== 'false' && $_GET[$key] !== '0';
-        }
-
-        $DISTINCT = enabled('distinct') ? 'DISTINCT ' : '';
+        $DISTINCT = $this->enabled('distinct') ? 'DISTINCT ' : '';
         $get = filter_input(INPUT_GET, 'get', FILTER_SANITIZE_FULL_SPECIAL_CHARS); //$_GET['get']
 
         $qua = "";
@@ -114,7 +118,7 @@ class LegacyController
 
             case 'users': // now at UsersHandler.php
                 $query = "SELECT username FROM users";
-                if (enabled('userlike')) {
+                if ($this->enabled('userlike')) {
                     $added = filter_input(INPUT_GET, 'userlike', FILTER_SANITIZE_SPECIAL_CHARS);
                     if ($added !== null) {
                         $query .= " WHERE username like ?";
@@ -175,7 +179,7 @@ class LegacyController
 
             case 'lang_views': // now at ViewsHandler.php
             case 'lang_views2':
-                if (enabled('lang')) {
+                if ($this->enabled('lang')) {
                     $query = <<<SQL
                         SELECT p.title, v.target, v.lang, v.views
                         FROM views_new_all v
@@ -189,7 +193,7 @@ class LegacyController
 
             case 'user_views': // now at ViewsHandler.php
             case 'user_views2':
-                if (enabled('user')) {
+                if ($this->enabled('user')) {
                     $query = <<<SQL
                         SELECT p.title, v.target, v.lang, v.views
                         FROM views_new_all v
@@ -230,7 +234,7 @@ class LegacyController
                     where pum.id = pu.id
                 ";
                 $params = [];
-                if (enabled('lang')) {
+                if ($this->enabled('lang')) {
                     $added = filter_input(INPUT_GET, 'lang', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
                     if ($added !== null) {
                         $query .= " AND pu.lang = ?";
@@ -479,5 +483,5 @@ class LegacyController
 
         echo json_encode($out, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
-}
+    }
 }
