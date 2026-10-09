@@ -9,7 +9,9 @@ use App\OpenApi\{OpenApiBuilder, OpenApiCatalog};
 
 $builder = new OpenApiBuilder(EndpointDefinitions::all(), OpenApiCatalog::data());
 
-$errors = $builder->validate(array_keys((new EndpointRegistry())->all()));
+$registry = new EndpointRegistry();
+
+$errors = $builder->validate(array_keys($registry->all()));
 if ($errors) {
     fwrite(STDERR, implode("\n", $errors) . "\n");
     exit(1);
