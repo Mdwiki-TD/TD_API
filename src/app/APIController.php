@@ -7,8 +7,8 @@ namespace App;
 use App\Database\Database;
 use App\Database\QueryExecutor;
 use App\Endpoints\EndpointContext;
-
 use App\Endpoints\EndpointRegistry;
+use App\Formatting\ResponseBuilder;
 use App\Http\Request;
 use Throwable;
 
