@@ -87,6 +87,7 @@ class LegacyController
 
             case 'exists_statics_by_category':
                 [$query, $params, $error] = exists_statics_by_category($endpoint_params);
+                break;
 
             case 'exists_by_lang_and_category':
                 [$query, $params, $error] = exists_by_lang_and_category($endpoint_params);
