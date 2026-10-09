@@ -66,6 +66,12 @@ class APIController
 
             $ctx = new EndpointContext($get, $definition, $this->request);
 
+            $missingRequires = $ctx->hasMissingRequires();
+            if ($missingRequires) {
+                $this->emit($this->builder->build($ctx, error: $missingRequires->error));
+                return;
+            }
+
             $spec = $handler->handle($ctx);
             if ($spec->sql === '') {
                 $this->emit($this->builder->build($ctx, error: $spec->error));

@@ -15,7 +15,6 @@ final class ViewsHandler implements DefinedEndpoint
 
     public function __construct(
         private string $endpoint,
-        private ?string $requiredParam = null,
         private string $defaultOrder = '',
     ) {
         $this->endpoint = $endpoint;
@@ -107,10 +106,6 @@ final class ViewsHandler implements DefinedEndpoint
 
     public function handle(EndpointContext $ctx): QuerySpec
     {
-        if ($this->requiredParam !== null && !$ctx->request->enabled($this->requiredParam)) {
-            return new QuerySpec(error: "{$this->requiredParam} param required");
-        }
-
         $sql = "SELECT p.title, v.target, v.lang, v.views
                 FROM views_new_all v
                 LEFT JOIN pages p

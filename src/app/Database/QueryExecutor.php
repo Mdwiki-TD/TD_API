@@ -39,11 +39,11 @@ final class QueryExecutor
         $useCache = $ctx->request->enabled('apcu') && !in_array($ctx->get, self::NO_CACHE, true);
 
         $results = $useCache ? $this->cache->get($sql, $spec->params) : null;
-        $source  = 'apcu';
+        $source = 'apcu';
 
         if ($results === null) {
             $results = $this->db->fetchQuery($sql, $spec->params);
-            $source  = 'db';
+            $source = 'db';
             if ($useCache && $results) {
                 $this->cache->set($sql, $spec->params, $results);
             }

@@ -65,8 +65,8 @@ final class EndpointRegistry
 
         $this->handlers = [
             'views'                        => new ViewsHandler(endpoint: 'views', defaultOrder: '1 DESC'),
-            'user_views'                   => new ViewsHandler(endpoint: 'user_views', requiredParam: 'user'),
-            'lang_views'                   => new ViewsHandler(endpoint: 'lang_views', requiredParam: 'lang'),
+            'user_views'                   => new ViewsHandler(endpoint: 'user_views'),
+            'lang_views'                   => new ViewsHandler(endpoint: 'lang_views'),
 
             'missing'                      => new MissingPagesHandler(),
             'missing_by_lang_and_category' => new MissingByLangAndCategoryHandler(),

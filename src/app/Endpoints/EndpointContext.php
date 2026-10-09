@@ -30,9 +30,9 @@ final class EndpointContext
         public readonly EndpointDefinition $data,
         public readonly Request $request,
     ) {
-        $this->params = $data->params ?? [];
+        $this->params = $data->params;
+        $this->columns = $data->columns;
 
-        $this->columns = $data->columns ?? [];
         $this->select = SelectBuilder::build($this->params, $this->columns, $request);
 
         $this->distinct = $request->enabled('distinct') ? 'DISTINCT ' : '';
@@ -40,6 +40,21 @@ final class EndpointContext
         $this->order = $request->get('order');
     }
 
+    public function hasMissingRequires(): QuerySpec|bool
+    {
+        $requireds = $this->data->getrequiredParams();
+        if (!$requireds) {
+            return false;
+        }
+        foreach ($requireds as $param) {
+            $value = $this->request->get($param->name);
+            if (!$this->isValid($value)) {
+                return new QuerySpec(error: "{$param->name} param required.");
+            }
+        }
+        return false;
+
+    }
     /** @return array{0: string, 1: array} [sql, params] */
     public function applyFilters(string $sql, array $ignore = []): array
     {
