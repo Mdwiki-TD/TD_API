@@ -53,7 +53,7 @@ final class FilterBuilder
             if ($column === 'limit' || $column === 'select' || !self::isValid($value)) {
                 continue;
             }
-            if (isset($def['no_empty_value']) && empty($value)) {
+            if (isset($def['noEmptyValue']) && empty($value)) {
                 continue;
             }
 

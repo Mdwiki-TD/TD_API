@@ -38,7 +38,7 @@ final class Param
         if ($this->options !== null)     $a['options'] = $this->options;
         if ($this->value !== null)       $a['value'] = $this->value;
         if ($this->valueCanBeNull)       $a['value_can_be_null'] = true;
-        if ($this->noEmptyValue !== null) $a['no_empty_value'] = $this->noEmptyValue;
+        if ($this->noEmptyValue !== null) $a['noEmptyValue'] = $this->noEmptyValue;
         return $a;
     }
 }

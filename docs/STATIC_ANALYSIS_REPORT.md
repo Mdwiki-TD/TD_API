@@ -1270,7 +1270,7 @@ function add_li_params(
             continue;
         }
 
-        if (isset($config['no_empty_value']) && empty($value)) {
+        if (isset($config['noEmptyValue']) && empty($value)) {
             continue;
         }
 
@@ -1319,7 +1319,7 @@ namespace API\Types;
  *     options?: array<int, string>,
  *     default?: string,
  *     no_select?: bool,
- *     no_empty_value?: bool,
+ *     noEmptyValue?: bool,
  *     value_can_be_null?: bool
  * }
  *

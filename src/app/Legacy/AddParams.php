@@ -134,7 +134,7 @@ class AddParams
                     continue;
                 }
 
-                if (isset($tabe['no_empty_value']) && empty($added)) {
+                if (isset($tabe['noEmptyValue']) && empty($added)) {
                     continue;
                 }
 
