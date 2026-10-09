@@ -12,29 +12,29 @@ use App\Endpoints\Handlers\Top\{
     TopUsersHandler,
     TopLangOfUsersHandler,
 };
-use App\Endpoints\Handlers\{
-    GraphDataHandler,
-    DefaultTableHandler,
-    StaticSqlHandler,
-    FilteredSqlHandler,
-    UsersHandler,
-    CategoryMembersHandler,
-    ViewsHandler,
-    LeaderboardHandler,
-    QidsHandler,
-    PagesUsersToMainHandler,
-    PagesWithViewsHandler,
-    PagesByUserOrLangHandler,
-    UserStatusHandler,
-    PagesHandler,
-    UserDataStatusHandler,
-};
-use App\Endpoints\Handlers\{
-    MissingByLangAndCategoryHandler,
-    MissingPagesHandler,
+use App\Endpoints\Handlers\ByCategory\{
     ExistsByLangAndCategoryHandler,
     ExistsStaticsByCategoryHandler,
+    MissingByLangAndCategoryHandler,
     StaticsByCategoryHandler,
+};
+use App\Endpoints\Handlers\{
+    CategoryMembersHandler,
+    DefaultTableHandler,
+    FilteredSqlHandler,
+    GraphDataHandler,
+    LeaderboardHandler,
+    MissingPagesHandler,
+    PagesByUserOrLangHandler,
+    PagesHandler,
+    PagesUsersToMainHandler,
+    PagesWithViewsHandler,
+    QidsHandler,
+    StaticSqlHandler,
+    UserDataStatusHandler,
+    UsersHandler,
+    UserStatusHandler,
+    ViewsHandler,
 };
 
 final class EndpointRegistry
@@ -61,14 +61,11 @@ final class EndpointRegistry
     public function __construct()
     {
 
-        $views = new ViewsHandler(defaultOrder: '1 DESC');
-        $userViews = new ViewsHandler(requiredParam: 'user');
-        $langViews = new ViewsHandler(requiredParam: 'lang');
-
-        $leader = new LeaderboardHandler();
-        $qids = new QidsHandler();
-
         $this->handlers = [
+            'views'                        => new ViewsHandler(endpoint: 'views', defaultOrder: '1 DESC'),
+            'user_views'                   => new ViewsHandler(endpoint: 'user_views', requiredParam: 'user'),
+            'lang_views'                   => new ViewsHandler(endpoint: 'lang_views', requiredParam: 'lang'),
+
             'missing'                      => new MissingPagesHandler(),
             'missing_by_lang_and_category' => new MissingByLangAndCategoryHandler(),
 
@@ -80,6 +77,56 @@ final class EndpointRegistry
             'top_langs'                    => new TopLangsHandler(),
             'top_users'                    => new TopUsersHandler(),
             'top_lang_of_users'            => new TopLangOfUsersHandler(),
+
+            'user_status'                  => new UserStatusHandler(),
+            'user_data_status'             => new UserDataStatusHandler(),
+
+            'users'                        => new UsersHandler(),
+            'category_members'             => new CategoryMembersHandler(),
+
+            'graph_data'                   => new GraphDataHandler(),
+
+            'leaderboard_table'            => new LeaderboardHandler(endpoint: 'leaderboard_table'),
+            'leaderboard_table_formated'   => new LeaderboardHandler(endpoint: 'leaderboard_table_formated'),
+
+            'qids'                         => new QidsHandler('qids'),
+            'qids_others'                  => new QidsHandler('qids_others'),
+            'pages_users_to_main'          => new PagesUsersToMainHandler(),
+
+            'pages_with_views'             => new PagesWithViewsHandler(),
+            'pages_by_user_or_lang'        => new PagesByUserOrLangHandler(),
+
+            'pages'                        => new PagesHandler('pages'),
+            'pages_users'                  => new PagesHandler('pages_users'),
+
+
+            'coordinators'                 => new StaticSqlHandler(
+                'SELECT id, username, is_active FROM coordinators ORDER BY id',
+                applyOrder: false,
+            ),
+
+            'langs'                        => new StaticSqlHandler('SELECT code, autonym, name, redirects FROM langs'),
+
+            'users_by_last_pupdate'        => new StaticSqlHandler(
+                "WITH RankedPages AS (
+                    SELECT p1.target, p1.user, p1.pupdate, p1.lang, p1.title,
+                            ROW_NUMBER() OVER (PARTITION BY p1.user ORDER BY p1.pupdate DESC) AS rn
+                    FROM pages p1
+                    WHERE p1.target != ''
+                )
+                SELECT target, user, pupdate, lang, title
+                FROM RankedPages
+                WHERE rn = 1
+                ORDER BY pupdate DESC",
+                applyOrder: false,
+            ),
+
+            'pages_langs'                  => new StaticSqlHandler(
+                'SELECT lang, autonym FROM pages p LEFT JOIN langs la ON lang = la.code GROUP BY lang'
+            ),
+            'pages_users_langs'            => new StaticSqlHandler(
+                'SELECT lang, autonym FROM pages_users p LEFT JOIN langs la ON lang = la.code GROUP BY lang'
+            ),
 
             'revids'                       => new FilteredSqlHandler('SELECT title, revid FROM mdwiki_revids'),
             'titles'                       => new FilteredSqlHandler(
@@ -99,35 +146,6 @@ final class EndpointRegistry
                     left join refs_counts rc        on rc.r_title = ase.title
                     left join words w               on w.w_title  = ase.title"
             ),
-
-            'user_status'                  => new UserStatusHandler(),
-            'user_data_status'             => new UserDataStatusHandler(),
-
-            'users'                        => new UsersHandler(),
-            'category_members'             => new CategoryMembersHandler(),
-
-            'coordinators'                 => new StaticSqlHandler(
-                'SELECT id, username, is_active FROM coordinators ORDER BY id',
-                applyOrder: false,
-            ),
-
-            'langs'                        => new StaticSqlHandler('SELECT code, autonym, name, redirects FROM langs'),
-
-            'graph_data'                   => new GraphDataHandler(),
-
-            'views'                        => $views,
-            'views_new'                    => $views,
-            'user_views'                   => $userViews,
-            'user_views2'                  => $userViews,
-            'lang_views'                   => $langViews,
-            'lang_views2'                  => $langViews,
-
-            'leaderboard_table'            => $leader,
-            'leaderboard_table_formated'   => $leader,
-
-            'qids'                         => $qids,
-            'qids_others'                  => $qids,
-            'pages_users_to_main'          => new PagesUsersToMainHandler(),
 
             'language_settings'            => new FilteredSqlHandler('SELECT DISTINCT * FROM language_settings'),
 
@@ -154,30 +172,6 @@ final class EndpointRegistry
                 LEFT JOIN langs la ON lang = la.code',
                 groupable: true,
             ),
-            'pages_with_views'             => new PagesWithViewsHandler(),
-
-            'users_by_last_pupdate'        => new StaticSqlHandler(
-                "WITH RankedPages AS (
-                    SELECT p1.target, p1.user, p1.pupdate, p1.lang, p1.title,
-                            ROW_NUMBER() OVER (PARTITION BY p1.user ORDER BY p1.pupdate DESC) AS rn
-                    FROM pages p1
-                    WHERE p1.target != ''
-                )
-                SELECT target, user, pupdate, lang, title
-                FROM RankedPages
-                WHERE rn = 1
-                ORDER BY pupdate DESC",
-                applyOrder: false,
-            ),
-
-            'pages_by_user_or_lang'        => new PagesByUserOrLangHandler(),
-
-            'pages_langs'                  => new StaticSqlHandler(
-                'SELECT lang, autonym FROM pages p LEFT JOIN langs la ON lang = la.code GROUP BY lang'
-            ),
-            'pages_users_langs'            => new StaticSqlHandler(
-                'SELECT lang, autonym FROM pages_users p LEFT JOIN langs la ON lang = la.code GROUP BY lang'
-            ),
 
             'get_lang_years'               => new FilteredSqlHandler(
                 'SELECT DISTINCT YEAR(p.pupdate) as year
@@ -185,8 +179,6 @@ final class EndpointRegistry
                     LEFT JOIN categories ca ON p.cat = ca.category',
             ),
 
-            'pages'                        => new PagesHandler('pages'),
-            'pages_users'                  => new PagesHandler('pages_users'),
         ];
         foreach (self::TABLES as $table) {
             $this->handlers[$table] = new DefaultTableHandler($table);

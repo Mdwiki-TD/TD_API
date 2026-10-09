@@ -1,8 +1,9 @@
 <?php
-// src/app/Endpoints/Handlers/CategoryLangHandler.php
+// src/app/Endpoints/Handlers/ByCategory/CategoryLangHandler.php
 declare(strict_types=1);
-namespace App\Endpoints\Handlers;
-use App\Endpoints\Definition\EndpointDefinition;
+
+namespace App\Endpoints\Handlers\ByCategory;
+
 use App\Endpoints\{DefinedEndpoint, EndpointContext, EndpointHandler};
 use App\Endpoints\Definition\Param;
 use App\Query\InputSanitizer;

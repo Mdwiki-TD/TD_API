@@ -1,12 +1,13 @@
 <?php
-// src/app/Endpoints/Handlers/ExistsByLangAndCategoryHandler.php
+// src/app/Endpoints/Handlers/ByCategory/ExistsByLangAndCategoryHandler.php
 declare(strict_types=1);
 
-namespace App\Endpoints\Handlers;
+namespace App\Endpoints\Handlers\ByCategory;
 
 /*
 replace the old exists_by_lang_and_category
 */
+use App\Endpoints\Handlers\ByCategory\CategoryLangHandler;
 use App\Endpoints\Definition\EndpointDefinition;
 use App\Endpoints\{EndpointContext, QuerySpec};
 

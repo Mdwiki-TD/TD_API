@@ -11,12 +11,20 @@ use App\Endpoints\Definition\EndpointDefinition;
 /** التنسيق (formated) يتم لاحقاً في ResponseBuilder::format حسب قيمة get */
 final class LeaderboardHandler implements EndpointHandler, DefinedEndpoint
 {
+    public function __construct(
+        private string $endpoint,
+    ) {
+    }
+
     public function definition(): EndpointDefinition
     {
+        $summary = $this->endpoint == ""
+            ? "Retrieve leaderboard table data"
+            : "Retrieve formatted leaderboard table data";
+
         return new EndpointDefinition(
-            // endpoint: 'leaderboard_table_formated',
-            endpoint: 'leaderboard_table',
-            summary: 'Retrieve leaderboard table data',
+            endpoint: $this->endpoint,
+            summary: $summary,
             tag: 'statistics',
             params: [
                 new Param(

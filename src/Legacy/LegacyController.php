@@ -160,7 +160,6 @@ class LegacyController
                 break;
 
             case 'views': // now at ViewsHandler.php
-            case 'views_new':
                 $query = <<<SQL
                         SELECT p.title, v.target, v.lang, v.views
                         FROM views_new_all v
@@ -173,7 +172,6 @@ class LegacyController
                 break;
 
             case 'lang_views': // now at ViewsHandler.php
-            case 'lang_views2':
                 if ($this->enabled('lang')) {
                     $query = <<<SQL
                         SELECT p.title, v.target, v.lang, v.views
@@ -187,7 +185,6 @@ class LegacyController
                 break;
 
             case 'user_views': // now at ViewsHandler.php
-            case 'user_views2':
                 if ($this->enabled('user')) {
                     $query = <<<SQL
                         SELECT p.title, v.target, v.lang, v.views

@@ -49,7 +49,7 @@ return [
         'tag' => 'languages',
         'params' => ['LimitParam'],
     ],
-    'lang_views2' => [
+    'lang_views' => [
         'summary' => 'Retrieve language view statistics (type 2)',
         'tag' => 'views',
         'params' => ['LimitParam', 'UserParam', 'LangParam', 'YearParam'],
@@ -231,11 +231,6 @@ return [
         'tag' => 'languages',
         'params' => ['LimitParam', 'LeadTranslationParam', 'FullTranslationParam'],
     ],
-    'user_views2' => [
-        'summary' => 'Retrieve user view statistics (type 2)',
-        'tag' => 'views',
-        'params' => ['LimitParam', 'UserParam', 'LangParam', 'YearParam'],
-    ],
     'users' => [
         'summary' => 'Retrieve user information',
         'tag' => 'users',
@@ -251,7 +246,7 @@ return [
         'tag' => 'users',
         'params' => ['LimitParam'],
     ],
-    'views_new' => [
+    'views' => [
         'summary' => 'Retrieve new page views',
         'tag' => 'views',
         'params' => ['LimitParam', 'LangParam', 'PublicationYearParam', 'ViewsParam'],

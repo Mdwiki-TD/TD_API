@@ -1,12 +1,13 @@
 <?php
-// src/app/Endpoints/Handlers/StaticsByCategoryHandler.php
+// src/app/Endpoints/Handlers/ByCategory/StaticsByCategoryHandler.php
 declare(strict_types=1);
 
-namespace App\Endpoints\Handlers;
+namespace App\Endpoints\Handlers\ByCategory;
 
 /*
 replace the old statics_by_category
 */
+use App\Endpoints\Handlers\ByCategory\CategoryLangHandler;
 use App\Endpoints\Definition\EndpointDefinition;
 use App\Endpoints\EndpointContext;
 use App\Endpoints\QuerySpec;

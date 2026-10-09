@@ -659,10 +659,10 @@
                 }
             }
         },
-        "/api.php?get=lang_views2": {
+        "/api.php?get=lang_views": {
             "get": {
-                "summary": "Retrieve language view statistics (type 2)",
-                "description": "Corresponds to calling `api.php?get=lang_views2` with query parameters.",
+                "summary": "Retrieve language view statistics",
+                "description": "Corresponds to calling `api.php?get=lang_views` with query parameters.",
                 "tags": [
                     "views"
                 ],
@@ -1257,10 +1257,10 @@
                 }
             }
         },
-        "/api.php?get=user_views2": {
+        "/api.php?get=user_views": {
             "get": {
-                "summary": "Retrieve user view statistics (type 2)",
-                "description": "Corresponds to calling `api.php?get=user_views2` with query parameters.",
+                "summary": "Retrieve user view statistics",
+                "description": "Corresponds to calling `api.php?get=user_views` with query parameters.",
                 "tags": [
                     "views"
                 ],
@@ -1351,10 +1351,10 @@
                 }
             }
         },
-        "/api.php?get=views_new": {
+        "/api.php?get=views": {
             "get": {
                 "summary": "Retrieve new page views",
-                "description": "Corresponds to calling `api.php?get=views_new` with query parameters.",
+                "description": "Corresponds to calling `api.php?get=views` with query parameters.",
                 "tags": [
                     "views"
                 ],

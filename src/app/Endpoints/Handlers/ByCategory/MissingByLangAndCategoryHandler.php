@@ -1,11 +1,12 @@
 <?php
-// src/app/Endpoints/Handlers/MissingByLangAndCategoryHandler.php
+// src/app/Endpoints/Handlers/ByCategory/MissingByLangAndCategoryHandler.php
 declare(strict_types=1);
 
-namespace App\Endpoints\Handlers;
+namespace App\Endpoints\Handlers\ByCategory;
 
 use App\Endpoints\{EndpointContext, QuerySpec};
 use App\Endpoints\Definition\EndpointDefinition;
+use App\Endpoints\Handlers\ByCategory\CategoryLangHandler;
 
 class MissingByLangAndCategoryHandler extends CategoryLangHandler
 {
