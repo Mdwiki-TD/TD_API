@@ -21,59 +21,140 @@ U = "Mr.Ibrahem"                              # غيّره لمستخدم موج
 
 # (الاستعلام, يُتوقع اختلافه؟)  — الاختلاف المتوقع = إصلاح مقصود في الجديد
 CASES = [
-    # --- top_*
-    ("get=top_langs", False),
-    ("get=top_users", False),
-    ("get=top_users&year=2024&month=3", False),
-    ("get=top_langs&user_group=Wiki&cat=RTT", False),
-    ("get=top_users&limit=5", False),
-    (f"get=top_lang_of_users&users[]={U}&users[]=Ibrahem", False),
-    ("get=top_lang_of_users", False),
-    (f"get=top_lang_of_users&users[]={U}&limit=5", True),     # القديم: ; تكسر LIMIT
-    # --- category / missing
-    ("get=missing_by_lang_and_category&lang=ar&limit=5", False),
-    ("get=missing&lang=ar&limit=5", False),
+    # --- category_members / categories
+    ("get=category_members", False),
+    ("get=category_members&cat=RTT", False),
     ("get=exists_by_lang_and_category&lang=ar&cat=RTT&limit=5", False),
     ("get=exists_statics_by_category", False),
-    ("get=exists_statics_by_category&limit=5", True),         # القديم: ; تكسر LIMIT
-    ("get=statics_by_category&category=RTT", False),
-    ("get=missing_by_lang_and_category", False),              # error: lang is missing
-    # --- pages / meta
-    ("get=pages&limit=1", False),
-    ("get=pages&limit=10", False),
-    (f"get=pages&user={U}&limit=10", False),
-    ("get=pages&lang=ar&cat=RTT", True),                      # القديم: cat وحده لا يفلتر
-    ("get=pages&select=lang&distinct=1", False),
-    ("get=pages&order=pupdate&limit=5", False),
-    ("get=pages&offset=5", True),                             # الجديد يتجاهل offset بلا limit
-    ("get=publish_reports&limit=1", False),
-    ("get=in_process&limit=1", False),
-    ("get=in_process&group=lang&limit=10", False),
-    # --- views / leaderboard / status
-    ("get=views&limit=10", False),
-    (f"get=user_views&user={U}&limit=10", False),
-    ("get=user_views", True),                                 # الجديد: error صريح
-    ("get=lang_views&lang=ar&limit=10", False),
-    ("get=leaderboard_table&cat=RTT&limit=10", False),
-    ("get=leaderboard_table_formated&limit=50", False),
-    ("get=status&year=2024", False),
-    ("get=status&year=2024&limit=5", True),                   # القديم: ; تكسر LIMIT
-    # --- أخرى
-    ("get=langs", False),
-    ("get=users&userlike=Mr", False),
-    ("get=category_members&cat=RTT", False),
+    ("get=exists_statics_by_category&limit=5", True),         # القديم: كان يفشل بسبب ;
+    ("get=statics_by_category&category=RTT&limit=5", False),
+
+    # --- coordinators / users
     ("get=coordinators&limit=5", False),
-    ("get=qids&limit=10", False),
-    ("get=qids&dis=empty&limit=10", False),
-    ("get=count_pages&limit=10", False),
-    ("get=words&limit=10", False),
-    ("get=titles&limit=5", False),
-    ("get=revids&limit=5", False),
-    ("get=pages_with_views&limit=10", False),
-    ("get=pages_by_user_or_lang&lang=ar&year=2024", True),    # الجديد يتعامل مع year وحدها
-    ("get=pages_langs", False),
+    ("get=coordinators&order=username", False),                # يجب ألا يُحدث خطأ SQL
+    ("get=users", False),
+    ("get=users&userlike=false", False),
+    ("get=users&userlike=Mr", False),
+    ("get=users&userlike=O'Brien", False),
     ("get=users_by_last_pupdate", False),
-    ("get=nonexistent", False),
+    ("get=users_by_last_pupdate&limit=5", True),               # يُتوقع أن يختلف (كان يفشل بسبب ;)
+    ("get=user_access&limit=3", False),
+    ("get=user_lang_status&select=lang&user=Mr.Ibrahem", False),
+    ("get=user_status&select=year&distinct=1", False),
+    ("get=user_status&user=Mr.Ibrahem", False),
+
+    # --- count_pages / graph_data / in_process
+    ("get=count_pages&limit=10", False),
+    ("get=count_pages&order=count", False),                    # يعمل إن عُرّف order في JSON
+    ("get=count_pages&user=Mr.Ibrahem", False),
+    ("get=graph_data", False),
+    ("get=graph_data&order=c", False),
+    ("get=in_process&group=lang", False),
+    ("get=in_process&group=lang&limit=10", False),
+    ("get=in_process&group=lang&order=lang", False),
+    ("get=in_process&lang=ar&cat=RTT", False),
+    ("get=in_process&limit=10", False),
+    ("get=in_process&order=add_date&limit=10", False),
+    ("get=in_process&user=Mr.Ibrahem", False),
+
+    # --- views / lang_views / user_views
+    ("get=lang_views", True),                                 # error: "lang param required"
+    ("get=lang_views&lang=ar&limit=10", False),
+    ("get=lang_views2&lang=ar", False),
+    ("get=user_views", True),                                 # error: "user param required"
+    ("get=user_views&user=false", True),                      # نفس الخطأ
+    ("get=user_views&user=Mr.Ibrahem&limit=10", False),
+    ("get=user_views2&user=Mr.Ibrahem", False),
+    ("get=views&limit=10", False),
+    ("get=views&order=views", False),                         # ترتيب views أو التأكد من سلوك add_order
+
+    # --- langs / language_settings
+    ("get=langs", False),                                     # redirects مصفوفة / charset / langs_format
+    ("get=language_settings", False),
+
+    # --- leaderboard_table
+    ("get=leaderboard_table&cat=RTT&limit=10", False),
+    ("get=leaderboard_table&order=lang", False),
+    ("get=leaderboard_table_formated&limit=10", False),
+    ("get=leaderboard_table_formated&limit=50", False),
+
+    # --- missing / missing_by_lang_and_category
+    ("get=missing&lang=ar&limit=5", False),                   # يمر عبر subs
+    ("get=missing&lang=ar&order=en_views&limit=5", False),    # order مدعوم هنا فقط
+    ("get=missing_by_lang_and_category", True),               # error: lang is missing
+    ("get=missing_by_lang_and_category&lang=ar&limit=5", False),
+    ("get=missing_by_lang_and_category&lang=ar&order=x", False), # يُتجاهل
+    ("get=missing_by_lang_and_category&lang=zz", False),      # لغة غير صالحة: نتيجة فارغة
+
+    # --- pages / pages_by_user_or_lang / pages_*
+    ("get=pages&campaign=Main", False),
+    ("get=pages&campaign=Main&limit=10", False),
+    ("get=pages&cat=RTT", True),                              # كان يرجع كل الصفوف، يفلتر الآن
+    ("get=pages&lang=ar&cat=RTT", False),
+    ("get=pages&limit=10", False),
+    ("get=pages&limit=3", False),                             # مع Cookie: test=1
+    ("get=pages&limit=3&apcu", False),                        # الكاش يعمل (QueryExecutor الجديد)
+    ("get=pages&limit=3&test", False),                        # لا طباعة إضافية، JSON سليم
+    ("get=pages&limit=5", False),
+    ("get=pages&limit=5&apcu", False),                        # source: apcu / source: db
+    ("get=pages&limit=5&apcu=false", False),
+    ("get=pages&limit=5&offset=5", False),
+    ("get=pages&offset=5", True),                             # offset يُتجاهل بلا limit
+    ("get=pages&order=pupdate&limit=5", False),
+    ("get=pages&select=count&count=*", False),
+    ("get=pages&select=lang&distinct=1", False),
+    ("get=pages&test", False),
+    ("get=pages&title=Aspirin", False),
+    ("get=pages&title=Friedreich%27s%20ataxia", False),
+    ("get=pages&title=Friedreich's ataxia", False),
+    ("get=pages&title[]=A&title[]=B", False),                 # إن كان title من نوع array في JSON
+    ("get=pages&user=Mr.Ibrahem&limit=10", False),
+    ("get=pages_by_user_or_lang&group=lang", False),
+    ("get=pages_by_user_or_lang&lang=ar&year=2024", False),
+    ("get=pages_by_user_or_lang&user=Mr.Ibrahem&limit=10", False),
+    ("get=pages_by_user_or_lang&year=2024", True),           # كان يفشل، يعمل الآن
+    ("get=pages_langs", False),
+    ("get=pages_users&limit=10", False),
+    ("get=pages_users&user=Mr.Ibrahem", False),
+    ("get=pages_users_langs", False),
+    ("get=pages_users_to_main&lang=ar", False),
+    ("get=pages_users_to_main&limit=10", False),
+    ("get=pages_with_views&group=lang", False),
+    ("get=pages_with_views&lang=ar&cat=RTT&limit=10", False),
+    ("get=pages_with_views&limit=10", False),
+    ("get=pages_with_views&order=pupdate&limit=10", False),
+    ("get=pages_with_views&title=Crohn's disease", False),
+    ("get=pages_with_views&user=Mr.Ibrahem&limit=10", False),
+
+    # --- publish_reports / publish_reports_stats
+    ("get=publish_reports&distinct=1&select=lang", False),
+    ("get=publish_reports&lang=ar&limit=5", False),
+    ("get=publish_reports&limit=10", False),
+    ("get=publish_reports&order=year&order_direction=asc&limit=5", False),
+    ("get=publish_reports&select=lang&distinct=1", False),
+    ("get=publish_reports&year=2024&limit=5", False),
+    ("get=publish_reports&year=2024&month=3&lang=ar", False),
+    ("get=publish_reports_stats&lang=ar", True),             # يعمل الآن
+    ("get=publish_reports_stats&limit=10", False),
+
+    # --- qids
+    ("get=qids&dis=duplicate&limit=10", False),
+    ("get=qids&dis=empty&limit=10", False),
+    ("get=qids&dis=غير_موجود", False),                       # يجب أن يرجع all
+    ("get=qids&limit=10", False),
+    ("get=qids_others&dis=all&limit=10", False),
+
+    # --- status / settings / top_users / others
+    ("get=revids&limit=5", False),
+    ("get=settings&apcu", False),                             # source: db دائماً
+    ("get=status&cat=RTT&user_group=Wiki", False),
+    ("get=status&year=2024", False),
+    ("get=status&year=2024&limit=5", True),                   # يعمل الآن (كان ; يكسره)
+    ("get=titles&limit=5", False),
+    ("get=top_users&limit=5", False),
+    ("get=views_new&limit=10", False),
+    ("get=words&limit=10", False),
+    ("get=nonexistent", False),                               # invalid get request
 ]
 
 
