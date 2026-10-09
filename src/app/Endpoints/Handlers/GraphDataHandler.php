@@ -6,12 +6,60 @@ namespace App\Endpoints\Handlers;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 use App\Endpoints\DefinedEndpoint;
+use App\Endpoints\Definition\Param;
 use App\Endpoints\Definition\EndpointDefinition;
 final class GraphDataHandler implements EndpointHandler, DefinedEndpoint
 {
     public function definition(): EndpointDefinition
     {
         return new EndpointDefinition(
+            endpoint: 'graph_data',
+            summary: 'Retrieve graph data',
+            tag: 'statistics',
+            params: [
+                new Param(
+                    name: 'user_group',
+                    column: 'u.user_group',
+                    placeholder: 'User Group Name'
+                ),
+                new Param(
+                    name: 'month',
+                    column: 'MONTH(p.pupdate)',
+                    type: 'number',
+                    placeholder: 'month of date',
+                    noEmptyValue: true
+                ),
+                new Param(
+                    name: 'year',
+                    column: 'YEAR(p.pupdate)',
+                    type: 'number',
+                    placeholder: 'year of date',
+                    noEmptyValue: true,
+                    doc: 'PublicationYearParam'
+                ),
+                new Param(
+                    name: 'user',
+                    column: 'p.user',
+                    placeholder: 'Username',
+                    noEmptyValue: false
+                ),
+                new Param(
+                    name: 'lang',
+                    column: 'p.lang',
+                    placeholder: 'Language code',
+                    noEmptyValue: false
+                ),
+                new Param(
+                    name: 'category',
+                    column: 'p.cat',
+                    placeholder: 'Category'
+                ),
+                new Param(
+                    name: 'campaign',
+                    column: 'p.campaign',
+                    placeholder: 'Campaign'
+                ),
+            ],
         );
     }
 

@@ -5,8 +5,29 @@ declare(strict_types=1);
 namespace App\Endpoints\Handlers;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
-final class UserDataStatusHandler implements EndpointHandler
+use App\Endpoints\DefinedEndpoint;
+use App\Endpoints\Definition\Param;
+use App\Endpoints\Definition\EndpointDefinition;
+
+final class UserDataStatusHandler implements EndpointHandler, DefinedEndpoint
 {
+    public function definition(): EndpointDefinition
+    {
+        return new EndpointDefinition(
+            endpoint: 'user_data_status',
+            summary: "Retrieve years, languages and campaigns of a user's pages",
+            tag: 'users',
+            params: [
+                new Param(
+                    name: 'user',
+                    column: 'p.user',
+                    placeholder: 'Username',
+                    required: true
+                ),
+            ],
+        );
+    }
+
 
     public function handle(EndpointContext $ctx): QuerySpec
     {

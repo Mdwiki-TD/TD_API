@@ -6,6 +6,7 @@ namespace App\Endpoints\Handlers;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 use App\Endpoints\DefinedEndpoint;
+use App\Endpoints\Definition\Param;
 use App\Endpoints\Definition\EndpointDefinition;
 /** التنسيق (formated) يتم لاحقاً في ResponseBuilder::format حسب قيمة get */
 final class LeaderboardHandler implements EndpointHandler, DefinedEndpoint
@@ -13,6 +14,37 @@ final class LeaderboardHandler implements EndpointHandler, DefinedEndpoint
     public function definition(): EndpointDefinition
     {
         return new EndpointDefinition(
+            // endpoint: 'leaderboard_table_formated',
+            endpoint: 'leaderboard_table',
+            summary: 'Retrieve leaderboard table data',
+            tag: 'statistics',
+            params: [
+                new Param(
+                    name: 'year',
+                    column: 'YEAR(p.pupdate)',
+                    type: 'number',
+                    placeholder: 'Year of publication',
+                    doc: 'PublicationYearParam'
+                ),
+                new Param(
+                    name: 'cat',
+                    column: 'cat',
+                    placeholder: 'Category',
+                    valueCanBeNull: true
+                ),
+                new Param(
+                    name: 'user_group',
+                    column: 'u.user_group',
+                    placeholder: 'User Group Name'
+                ),
+                new Param(
+                    name: 'order',
+                    column: 'order',
+                    placeholder: 'Order by',
+                    noSelect: true
+                ),
+            ],
+            columns: ['u.user_group'],
         );
     }
 

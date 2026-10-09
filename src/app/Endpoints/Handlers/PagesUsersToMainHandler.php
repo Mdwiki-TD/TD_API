@@ -6,12 +6,17 @@ namespace App\Endpoints\Handlers;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 use App\Endpoints\DefinedEndpoint;
+use App\Endpoints\Definition\Param;
 use App\Endpoints\Definition\EndpointDefinition;
 final class PagesUsersToMainHandler implements EndpointHandler, DefinedEndpoint
 {
     public function definition(): EndpointDefinition
     {
         return new EndpointDefinition(
+            endpoint: 'pages_users_to_main',
+            summary: 'Retrieve pages users to main data',
+            tag: 'pages',
+            columns: ['new_target', 'new_user', 'new_qid'],
         );
     }
 

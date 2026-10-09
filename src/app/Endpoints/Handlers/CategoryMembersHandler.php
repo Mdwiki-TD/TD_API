@@ -14,7 +14,7 @@ final class CategoryMembersHandler implements EndpointHandler, DefinedEndpoint
     public function definition(): EndpointDefinition
     {
         return new EndpointDefinition(
-            endpoint: '',
+            endpoint: 'category_members',
             summary: 'Retrieve article ids of a category',
             tag: 'pages',
         );

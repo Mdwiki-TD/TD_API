@@ -15,7 +15,7 @@ final class EndpointDefinitions
     {
         return [
             'assessments'                => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'assessments',
                 summary: 'Retrieve page assessments',
                 tag: 'pages_infos',
                 params: [
@@ -39,7 +39,7 @@ final class EndpointDefinitions
                 columns: ['title', 'importance'],
             ),
             'categories'                 => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'categories',
                 summary: 'Retrieve categories',
                 tag: 'other',
                 params: [
@@ -64,7 +64,7 @@ final class EndpointDefinitions
                 columns: ['category', 'category2', 'display', 'campaign', 'depth', 'is_default'],
             ),
             'coordinators'               => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'coordinators',
                 summary: 'Retrieve coordinators information',
                 tag: 'users',
                 params: [
@@ -77,7 +77,7 @@ final class EndpointDefinitions
                 columns: ['username', 'is_active'],
             ),
             'count_pages'                => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'count_pages',
                 summary: 'Count pages',
                 tag: 'statistics',
                 params: [
@@ -89,7 +89,7 @@ final class EndpointDefinitions
                 ],
             ),
             'enwiki_pageviews'           => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'enwiki_pageviews',
                 summary: 'Retrieve English Wikipedia page views',
                 tag: 'pages_infos',
                 params: [
@@ -108,62 +108,13 @@ final class EndpointDefinitions
                 columns: ['title', 'en_views'],
             ),
             'full_translators'           => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'full_translators',
                 summary: 'Retrieve full translators',
                 tag: 'users',
                 columns: ['user', 'is_active'],
             ),
-            'graph_data'                 => new EndpointDefinition(
-                endpoint: '',
-                summary: 'Retrieve graph data',
-                tag: 'statistics',
-                params: [
-                    new Param(
-                        name: 'user_group',
-                        column: 'u.user_group',
-                        placeholder: 'User Group Name'
-                    ),
-                    new Param(
-                        name: 'month',
-                        column: 'MONTH(p.pupdate)',
-                        type: 'number',
-                        placeholder: 'month of date',
-                        noEmptyValue: true
-                    ),
-                    new Param(
-                        name: 'year',
-                        column: 'YEAR(p.pupdate)',
-                        type: 'number',
-                        placeholder: 'year of date',
-                        noEmptyValue: true,
-                        doc: 'PublicationYearParam'
-                    ),
-                    new Param(
-                        name: 'user',
-                        column: 'p.user',
-                        placeholder: 'Username',
-                        noEmptyValue: false
-                    ),
-                    new Param(
-                        name: 'lang',
-                        column: 'p.lang',
-                        placeholder: 'Language code',
-                        noEmptyValue: false
-                    ),
-                    new Param(
-                        name: 'category',
-                        column: 'p.cat',
-                        placeholder: 'Category'
-                    ),
-                    new Param(
-                        name: 'campaign',
-                        column: 'p.campaign',
-                        placeholder: 'Campaign'
-                    ),
-                ],
-            ),
             'in_process'                 => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'in_process',
                 summary: 'Retrieve in-process pages',
                 tag: 'pages',
                 params: [
@@ -217,13 +168,13 @@ final class EndpointDefinitions
                 columns: ['title', 'user', 'lang', 'cat', 'translate_type', 'word', 'add_date'],
             ),
             'langs'                      => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'langs',
                 summary: 'Retrieve language names',
                 tag: 'languages',
                 columns: ['code', 'autonym', 'name', 'redirects'],
             ),
             'lang_views2'                => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'lang_views2',
                 summary: 'Retrieve language view statistics (type 2)',
                 tag: 'views',
                 params: [
@@ -246,40 +197,8 @@ final class EndpointDefinitions
                     ),
                 ],
             ),
-            'leaderboard_table'          => new EndpointDefinition(
-                endpoint: '',
-                summary: 'Retrieve leaderboard table data',
-                tag: 'statistics',
-                params: [
-                    new Param(
-                        name: 'year',
-                        column: 'YEAR(p.pupdate)',
-                        type: 'number',
-                        placeholder: 'Year of publication',
-                        doc: 'PublicationYearParam'
-                    ),
-                    new Param(
-                        name: 'cat',
-                        column: 'cat',
-                        placeholder: 'Category',
-                        valueCanBeNull: true
-                    ),
-                    new Param(
-                        name: 'user_group',
-                        column: 'u.user_group',
-                        placeholder: 'User Group Name'
-                    ),
-                    new Param(
-                        name: 'order',
-                        column: 'order',
-                        placeholder: 'Order by',
-                        noSelect: true
-                    ),
-                ],
-                columns: ['u.user_group'],
-            ),
             'leaderboard_table_formated' => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'leaderboard_table_formated',
                 summary: 'Retrieve formatted leaderboard table data',
                 tag: 'statistics',
                 params: [
@@ -311,7 +230,7 @@ final class EndpointDefinitions
                 columns: ['u.user_group'],
             ),
             'pages'                      => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'pages',
                 summary: 'Retrieve pages list',
                 tag: 'pages',
                 params: [
@@ -429,7 +348,7 @@ final class EndpointDefinitions
                 ],
             ),
             'pages_by_user_or_lang'      => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'pages_by_user_or_lang',
                 summary: 'Retrieve pages list by user or language',
                 tag: 'pages',
                 params: [
@@ -459,7 +378,7 @@ final class EndpointDefinitions
                 ],
             ),
             'pages_users'                => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'pages_users',
                 summary: 'Retrieve pages and users data',
                 tag: 'pages',
                 params: [
@@ -537,14 +456,8 @@ final class EndpointDefinitions
                 ],
                 columns: ['title', 'word', 'translate_type', 'cat', 'lang', 'user', 'target', 'date', 'pupdate', 'add_date', 'deleted', 'mdwiki_revid'],
             ),
-            'pages_users_to_main'        => new EndpointDefinition(
-                endpoint: '',
-                summary: 'Retrieve pages users to main data',
-                tag: 'pages',
-                columns: ['new_target', 'new_user', 'new_qid'],
-            ),
             'pages_with_views'           => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'pages_with_views',
                 summary: 'Retrieve pages with view counts (redirects to pages)',
                 tag: 'pages',
                 description: 'Corresponds to calling `api.php?get=pages_with_views` which redirects internally to `api.php?get=pages`. Parameters are the same as the `api.php?get=pages` endpoint.',
@@ -663,13 +576,13 @@ final class EndpointDefinitions
                 ],
             ),
             'projects'                   => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'projects',
                 summary: 'Retrieve projects',
                 tag: 'other',
                 columns: ['g_id', 'g_title'],
             ),
             'qids'                       => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'qids',
                 summary: 'Retrieve QIDs',
                 tag: 'identifiers',
                 params: [
@@ -683,7 +596,7 @@ final class EndpointDefinitions
                 columns: ['title', 'qid'],
             ),
             'qids_others'                => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'qids_others',
                 summary: 'Retrieve other QIDs',
                 tag: 'identifiers',
                 params: [
@@ -697,7 +610,7 @@ final class EndpointDefinitions
                 columns: ['title', 'qid'],
             ),
             'refs_counts'                => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'refs_counts',
                 summary: 'Retrieve reference counts for pages',
                 tag: 'pages_infos',
                 params: [
@@ -723,13 +636,13 @@ final class EndpointDefinitions
                 columns: ['r_id', 'r_title', 'r_lead_refs', 'r_all_refs'],
             ),
             'settings'                   => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'settings',
                 summary: 'Retrieve settings',
                 tag: 'other',
                 columns: ['title', 'displayed', 'Type', 'value', 'ignored'],
             ),
             'titles'                     => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'titles',
                 summary: 'Retrieve pages by title or importance',
                 tag: 'pages_infos',
                 params: [
@@ -751,7 +664,7 @@ final class EndpointDefinitions
                 ],
             ),
             'translate_type'             => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'translate_type',
                 summary: 'Retrieve translation type data',
                 tag: 'languages',
                 params: [
@@ -772,7 +685,7 @@ final class EndpointDefinitions
                 columns: ['tt_id', 'tt_title', 'tt_lead', 'tt_full'],
             ),
             'user_views2'                => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'user_views2',
                 summary: 'Retrieve user view statistics (type 2)',
                 tag: 'views',
                 params: [
@@ -796,7 +709,7 @@ final class EndpointDefinitions
                 ],
             ),
             'users'                      => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'users',
                 summary: 'Retrieve user information',
                 tag: 'users',
                 params: [
@@ -821,18 +734,18 @@ final class EndpointDefinitions
                 columns: ['user_id', 'username', 'email', 'wiki', 'user_group', 'reg_date'],
             ),
             'users_by_last_pupdate'      => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'users_by_last_pupdate',
                 summary: 'Retrieve users by last pupdate',
                 tag: 'users',
             ),
             'users_no_inprocess'         => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'users_no_inprocess',
                 summary: 'Retrieve users not in process',
                 tag: 'users',
                 columns: ['user', 'is_active'],
             ),
             'views_new'                  => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'views_new',
                 summary: 'Retrieve new page views',
                 tag: 'views',
                 params: [
@@ -858,7 +771,7 @@ final class EndpointDefinitions
                 columns: ['target', 'lang', 'year', 'views'],
             ),
             'words'                      => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'words',
                 summary: 'Retrieve word counts for pages',
                 tag: 'pages_infos',
                 params: [
@@ -883,7 +796,7 @@ final class EndpointDefinitions
                 columns: ['w_id', 'w_title', 'w_lead_words', 'w_all_words'],
             ),
             'revids'                     => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'revids',
                 summary: 'Retrieve revision IDs',
                 tag: 'pages_infos',
                 description: 'Retrieve revision IDs for specified titles or title arrays',
@@ -902,7 +815,7 @@ final class EndpointDefinitions
                 columns: ['title', 'revid'],
             ),
             'publish_reports'            => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'publish_reports',
                 summary: 'publish reports',
                 tag: 'other',
                 params: [
@@ -960,7 +873,7 @@ final class EndpointDefinitions
                 columns: ['date', 'title', 'user', 'lang', 'sourcetitle', 'result', 'data'],
             ),
             'publish_reports_stats'      => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'publish_reports_stats',
                 summary: 'publish reports stats',
                 tag: 'other',
                 params: [
@@ -989,44 +902,8 @@ final class EndpointDefinitions
                 ],
                 columns: ['lang_code', 'move_dots', 'expend', 'add_en_lang'],
             ),
-            'user_status'                => new EndpointDefinition(
-                endpoint: 'user_status',
-                summary: 'User status',
-                tag: 'users',
-                description: 'list of users (langs, campaigns, categories)',
-                params: [
-                    new Param(
-                        name: 'user',
-                        column: 'p.user',
-                        placeholder: 'Username',
-                        noEmptyValue: false
-                    ),
-                    new Param(
-                        name: 'lang',
-                        column: 'p.lang',
-                        placeholder: 'Language code',
-                        noEmptyValue: false
-                    ),
-                    new Param(
-                        name: 'select',
-                        column: 'select',
-                        placeholder: 'Select fields',
-                        options: ['lang', 'campaign', 'cat', 'year'],
-                        doc: [
-                            'in'          => 'query',
-                            'name'        => 'select',
-                            'description' => 'Select fields',
-                            'required'    => false,
-                            'schema'      => [
-                                'type' => 'string',
-                                'enum' => ['lang', 'campaign', 'category', 'year'],
-                            ],
-                        ]
-                    ),
-                ],
-            ),
             'get_lang_years'             => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'get_lang_years',
                 summary: 'Years of language',
                 tag: 'languages',
                 description: 'list of years of language',
@@ -1040,7 +917,7 @@ final class EndpointDefinitions
                 ],
             ),
             'views'                      => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'views',
                 summary: 'Retrieve page views',
                 tag: 'views',
                 params: [
@@ -1059,7 +936,7 @@ final class EndpointDefinitions
                 ],
             ),
             'user_views'                 => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'user_views',
                 summary: 'Retrieve page views for a user',
                 tag: 'views',
                 params: [
@@ -1083,7 +960,7 @@ final class EndpointDefinitions
                 ],
             ),
             'lang_views'                 => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'lang_views',
                 summary: 'Retrieve page views for a language',
                 tag: 'views',
                 params: [
@@ -1107,27 +984,14 @@ final class EndpointDefinitions
                 ],
             ),
             'pages_langs'                => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'pages_langs',
                 summary: 'Retrieve languages that have translated pages',
                 tag: 'languages',
             ),
             'pages_users_langs'          => new EndpointDefinition(
-                endpoint: '',
+                endpoint: 'pages_users_langs',
                 summary: 'Retrieve languages that have user pages',
                 tag: 'languages',
-            ),
-            'user_data_status'           => new EndpointDefinition(
-                endpoint: '',
-                summary: "Retrieve years, languages and campaigns of a user's pages",
-                tag: 'users',
-                params: [
-                    new Param(
-                        name: 'user',
-                        column: 'p.user',
-                        placeholder: 'Username',
-                        required: true
-                    ),
-                ],
             ),
         ];
     }
