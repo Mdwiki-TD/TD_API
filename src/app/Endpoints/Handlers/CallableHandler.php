@@ -1,9 +1,12 @@
 <?php
 // src/app/Endpoints/Handlers/CallableHandler.php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace App\Endpoints\Handlers;
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+
+use App\Endpoints\EndpointContext;
+use App\Endpoints\EndpointHandler;
+use App\Endpoints\QuerySpec;
 use Closure;
 
 /**
@@ -11,7 +14,8 @@ use Closure;
  */
 final class CallableHandler implements EndpointHandler
 {
-    public function __construct(private Closure $fn) {}
+    public function __construct(private Closure $fn)
+    {}
 
     public function handle(EndpointContext $ctx): QuerySpec
     {

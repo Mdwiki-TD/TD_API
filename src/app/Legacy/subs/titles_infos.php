@@ -1,5 +1,4 @@
 <?php
-
 namespace API\TitlesInfos;
 
 use App\Legacy\AddParams;
@@ -60,16 +59,16 @@ function pages_query($endpoint_params, $SELECT, $DISTINCT, $get)
     $campaign_raw = $_GET['campaign'] ?? null;
     $category_raw = $_GET['category'] ?? $_GET['cat'] ?? null;
 
-    $campaign   = Helps::sanitize_input($campaign_raw ?? '', '/^[A-Za-z0-9- ]+$/');
-    $category   = Helps::sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $campaign = Helps::sanitize_input($campaign_raw ?? '', '/^[A-Za-z0-9- ]+$/');
+    $category = Helps::sanitize_input($category_raw ?? '', '/^[A-Za-z0-9- ]+$/');
 
     if ($category !== null) {
-        $query .= " AND p.cat = ?";
-        $params[] = $category;
+        $query    .= " AND p.cat = ?";
+        $params[]  = $category;
     } elseif ($campaign !== null) {
         // $query .= " AND p.cat IN (SELECT category FROM categories WHERE campaign = ?)";
-        $query .= " AND ca.campaign = ?";
-        $params[] = $campaign;
+        $query    .= " AND ca.campaign = ?";
+        $params[]  = $campaign;
     }
 
     return [$query, $params, ""];

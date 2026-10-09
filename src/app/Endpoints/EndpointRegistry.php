@@ -1,44 +1,32 @@
 <?php
 // src/app/Endpoints/EndpointRegistry.php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace App\Endpoints;
 
-use App\Endpoints\Definition\{EndpointDefinition, EndpointDefinitions};
+use App\Endpoints\Definition\EndpointDefinition;
+use App\Endpoints\Definition\EndpointDefinitions;
 
-use App\Endpoints\DefinedEndpoint;
-use App\Endpoints\Handlers\{
-    GraphDataHandler,
-    CallableHandler,
-    DefaultTableHandler,
-    StaticSqlHandler,
-    FilteredSqlHandler,
-    UsersHandler,
-    CategoryMembersHandler,
-    ViewsHandler,
-    LeaderboardHandler,
-    QidsHandler,
-    PagesUsersToMainHandler,
-    PagesWithViewsHandler,
-    PagesByUserOrLangHandler,
-    UserStatusHandler,
-    PagesHandler,
-    UserDataStatusHandler,
-};
-use App\Endpoints\Handlers\{
-    MissingByLangAndCategoryHandler,
-    MissingPagesHandler,
-    ExistsByLangAndCategoryHandler,
-    ExistsStaticsByCategoryHandler,
-    StaticsByCategoryHandler,
-};
-use function API\Missing\{
-    missing_by_lang_and_category,
-    exists_statics_by_category,
-    exists_by_lang_and_category,
-    statics_by_category,
-};
-use function API\Top\{top_langs, top_users, top_lang_of_users};
+use App\Endpoints\Handlers\CallableHandler;
+use App\Endpoints\Handlers\CategoryMembersHandler;
+use App\Endpoints\Handlers\DefaultTableHandler;
+use App\Endpoints\Handlers\FilteredSqlHandler;
+use App\Endpoints\Handlers\GraphDataHandler;
+use App\Endpoints\Handlers\LeaderboardHandler;
+use App\Endpoints\Handlers\PagesByUserOrLangHandler;
+use App\Endpoints\Handlers\PagesHandler;
+use App\Endpoints\Handlers\PagesUsersToMainHandler;
+use App\Endpoints\Handlers\PagesWithViewsHandler;
+use App\Endpoints\Handlers\QidsHandler;
+use App\Endpoints\Handlers\StaticSqlHandler;
+use App\Endpoints\Handlers\UserDataStatusHandler;
+use App\Endpoints\Handlers\UsersHandler;
+use App\Endpoints\Handlers\UserStatusHandler;
+use App\Endpoints\Handlers\ViewsHandler;
+
+use function API\Top\top_langs;
+use function API\Top\top_lang_of_users;
+use function API\Top\top_users;
 
 final class EndpointRegistry
 {
@@ -57,20 +45,19 @@ final class EndpointRegistry
         'publish_reports',
     ];
 
-
     /** @var array<string, EndpointHandler> */
     private array $handlers;
 
     public function __construct()
     {
-        $missing = new CallableHandler(fn($c): array => missing_by_lang_and_category($c->params));
+        $missing = new CallableHandler(fn($c): array=> missing_by_lang_and_category($c->params));
 
         $views     = new ViewsHandler(defaultOrder: '1 DESC');
         $userViews = new ViewsHandler(requiredParam: 'user');
         $langViews = new ViewsHandler(requiredParam: 'lang');
 
-        $leader    = new LeaderboardHandler();
-        $qids = new QidsHandler();
+        $leader = new LeaderboardHandler();
+        $qids   = new QidsHandler();
 
         $this->handlers = [
             'missing'                      => new MissingPagesHandler(),
@@ -85,15 +72,15 @@ final class EndpointRegistry
             // 'statics_by_category'          => new CallableHandler(fn($c): array => statics_by_category($c->params)),
 
             // TODO: top.php need to be replaced by Handlers
-            'top_langs'                    => new CallableHandler(fn($c): array => top_langs($c->params)),
-            'top_users'                    => new CallableHandler(fn($c): array => top_users($c->params)),
-            'top_lang_of_users'            => new CallableHandler(fn($c): array => top_lang_of_users($c->params)),
+            'top_langs'                    => new CallableHandler(fn($c): array=> top_langs($c->params)),
+            'top_users'                    => new CallableHandler(fn($c): array=> top_users($c->params)),
+            'top_lang_of_users'            => new CallableHandler(fn($c): array=> top_lang_of_users($c->params)),
 
             // 'missing'                      => $missing,
             // 'missing_by_lang_and_category' => $missing,
 
-            'revids' => new FilteredSqlHandler('SELECT title, revid FROM mdwiki_revids'),
-            'titles' => new FilteredSqlHandler(
+            'revids'                       => new FilteredSqlHandler('SELECT title, revid FROM mdwiki_revids'),
+            'titles'                       => new FilteredSqlHandler(
                 "SELECT
                     ase.title AS title,
                     ase.importance AS importance,
@@ -114,52 +101,52 @@ final class EndpointRegistry
             'user_status'                  => new UserStatusHandler(),
             'user_data_status'             => new UserDataStatusHandler(),
 
-            'users'            => new UsersHandler(),
-            'category_members' => new CategoryMembersHandler(),
+            'users'                        => new UsersHandler(),
+            'category_members'             => new CategoryMembersHandler(),
 
-            'coordinators' => new StaticSqlHandler(
+            'coordinators'                 => new StaticSqlHandler(
                 'SELECT id, username, is_active FROM coordinators ORDER BY id',
                 applyOrder: false,
             ),
 
-            'langs' => new StaticSqlHandler('SELECT code, autonym, name, redirects FROM langs'),
+            'langs'                        => new StaticSqlHandler('SELECT code, autonym, name, redirects FROM langs'),
 
-            'graph_data' => new GraphDataHandler(),
+            'graph_data'                   => new GraphDataHandler(),
 
-            'user_access' => new FilteredSqlHandler('SELECT id, user_name, created_at FROM access_keys'),
+            'user_access'                  => new FilteredSqlHandler('SELECT id, user_name, created_at FROM access_keys'),
 
-            'views'       => $views,
-            'views_new'   => $views,
-            'user_views'  => $userViews,
-            'user_views2' => $userViews,
-            'lang_views'  => $langViews,
-            'lang_views2' => $langViews,
+            'views'                        => $views,
+            'views_new'                    => $views,
+            'user_views'                   => $userViews,
+            'user_views2'                  => $userViews,
+            'lang_views'                   => $langViews,
+            'lang_views2'                  => $langViews,
 
-            'leaderboard_table'          => $leader,
-            'leaderboard_table_formated' => $leader,
+            'leaderboard_table'            => $leader,
+            'leaderboard_table_formated'   => $leader,
 
-            'qids'        => $qids,
-            'qids_others' => $qids,
-            'pages_users_to_main' => new PagesUsersToMainHandler(),
+            'qids'                         => $qids,
+            'qids_others'                  => $qids,
+            'pages_users_to_main'          => new PagesUsersToMainHandler(),
 
-            'language_settings' => new FilteredSqlHandler('SELECT DISTINCT * FROM language_settings'),
+            'language_settings'            => new FilteredSqlHandler('SELECT DISTINCT * FROM language_settings'),
 
-            'words' => new FilteredSqlHandler(
+            'words'                        => new FilteredSqlHandler(
                 'SELECT w_id, w_title, w_lead_words, w_all_words FROM words'
             ),
 
-            'count_pages' => new FilteredSqlHandler(
+            'count_pages'                  => new FilteredSqlHandler(
                 'SELECT DISTINCT user, COUNT(target) AS count FROM pages',
                 suffix: ' GROUP BY user',
                 defaultOrder: 'count DESC',
             ),
 
-            'publish_reports_stats' => new FilteredSqlHandler(
+            'publish_reports_stats'        => new FilteredSqlHandler(
                 'SELECT DISTINCT YEAR(date) AS year, MONTH(date) AS month, lang, user, result
                 FROM publish_reports',
                 // suffix: ' GROUP BY year, month, lang, user, result',
             ),
-            'in_process' => new FilteredSqlHandler(
+            'in_process'                   => new FilteredSqlHandler(
                 'SELECT title, user, lang, cat, translate_type, word, add_date,
                         ca.campaign, la.autonym
                 FROM in_process
@@ -167,9 +154,9 @@ final class EndpointRegistry
                 LEFT JOIN langs la ON lang = la.code',
                 groupable: true,
             ),
-            'pages_with_views' => new PagesWithViewsHandler(),
+            'pages_with_views'             => new PagesWithViewsHandler(),
 
-            'users_by_last_pupdate' => new StaticSqlHandler(
+            'users_by_last_pupdate'        => new StaticSqlHandler(
                 "WITH RankedPages AS (
                     SELECT p1.target, p1.user, p1.pupdate, p1.lang, p1.title,
                             ROW_NUMBER() OVER (PARTITION BY p1.user ORDER BY p1.pupdate DESC) AS rn
@@ -183,23 +170,23 @@ final class EndpointRegistry
                 applyOrder: false,
             ),
 
-            'pages_by_user_or_lang' => new PagesByUserOrLangHandler(),
+            'pages_by_user_or_lang'        => new PagesByUserOrLangHandler(),
 
-            'pages_langs' => new StaticSqlHandler(
+            'pages_langs'                  => new StaticSqlHandler(
                 'SELECT lang, autonym FROM pages p LEFT JOIN langs la ON lang = la.code GROUP BY lang'
             ),
-            'pages_users_langs' => new StaticSqlHandler(
+            'pages_users_langs'            => new StaticSqlHandler(
                 'SELECT lang, autonym FROM pages_users p LEFT JOIN langs la ON lang = la.code GROUP BY lang'
             ),
 
-            'get_lang_years' => new FilteredSqlHandler(
+            'get_lang_years'               => new FilteredSqlHandler(
                 'SELECT DISTINCT YEAR(p.pupdate) as year
                     FROM pages p
                     LEFT JOIN categories ca ON p.cat = ca.category',
             ),
 
-            'pages'       => new PagesHandler('pages'),
-            'pages_users' => new PagesHandler('pages_users'),
+            'pages'                        => new PagesHandler('pages'),
+            'pages_users'                  => new PagesHandler('pages_users'),
         ];
         foreach (self::TABLES as $table) {
             $this->handlers[$table] = new DefaultTableHandler($table);
@@ -215,7 +202,9 @@ final class EndpointRegistry
     public function resolve(string $get): ?array
     {
         $handler = $this->handlers[$get] ?? null;
-        if ($handler === null) return null;
+        if ($handler === null) {
+            return null;
+        }
 
         $definition = $handler instanceof DefinedEndpoint
             ? $handler->definition()
@@ -230,7 +219,10 @@ final class EndpointRegistry
         $out = [];
         foreach ($this->handlers as $name => $h) {
             $d = $h instanceof DefinedEndpoint ? $h->definition() : EndpointDefinitions::for($name);
-            if ($d !== null) $out[$name] = $d;
+            if ($d !== null) {
+                $out[$name] = $d;
+            }
+
         }
         return $out;
     }

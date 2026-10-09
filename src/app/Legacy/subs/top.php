@@ -1,5 +1,4 @@
 <?php
-
 namespace API\Top;
 
 use App\Legacy\AddParams;
@@ -74,7 +73,7 @@ function top_langs($endpoint_params)
 function top_lang_of_users($endpoint_params)
 {
 
-    $params = [];
+    $params     = [];
     $query_line = "";
 
     list($query_line, $params) = AddParams::add_array_params($query_line, $params, 'users', 'p.user', "AND");
