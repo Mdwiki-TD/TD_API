@@ -210,8 +210,9 @@ final class EndpointRegistry
     public function resolve(string $get): ?array
     {
         $handler = $this->handlers[$get] ?? null;
-        if ($handler === null)
+        if ($handler === null) {
             return null;
+        }
 
         $definition = $handler instanceof DefinedEndpoint
             ? $handler->definition()
@@ -226,8 +227,10 @@ final class EndpointRegistry
         $out = [];
         foreach ($this->handlers as $name => $h) {
             $d = $h instanceof DefinedEndpoint ? $h->definition() : EndpointDefinitions::for($name);
-            if ($d !== null)
+            if ($d !== null) {
                 $out[$name] = $d;
+            }
+
         }
         return $out;
     }
