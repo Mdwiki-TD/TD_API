@@ -1154,7 +1154,7 @@ function add_one_param(string $query, string $column, mixed $value, array $confi
         $params[] = $value;
         $clause = " $whereOrAnd $column = ?";
 
-        if ($config['valueCanBeNull'] ?? false) {
+        if ($config['value_can_be_null'] ?? false) {
             $clause = " $whereOrAnd ($column = ? OR $column IS NULL OR $column = '')";
         }
     }
@@ -1215,7 +1215,7 @@ function change_types(array $types, array $endpointParams, array $ignoreParams):
     // Merge with endpoint params if no types provided
     if (empty($result) && !empty($endpointParams)) {
         foreach ($endpointParams as $param) {
-            if (isset($param['noSelect'])) {
+            if (isset($param['no_select'])) {
                 continue;
             }
             $result[$param['name']] = $param;
@@ -1318,9 +1318,9 @@ namespace API\Types;
  *     placeholder?: string,
  *     options?: array<int, string>,
  *     default?: string,
- *     noSelect?: bool,
+ *     no_select?: bool,
  *     noEmptyValue?: bool,
- *     valueCanBeNull?: bool
+ *     value_can_be_null?: bool
  * }
  *
  * @psalm-type EndpointConfig = array{
