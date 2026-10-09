@@ -3,12 +3,12 @@
 declare(strict_types=1);
 require __DIR__ . '/../src/app/bootstrap.php';
 
-use App\Endpoints\Definition\EndpointDefinitions;
 use App\Endpoints\EndpointRegistry;
 use App\OpenApi\{OpenApiBuilder, OpenApiCatalog};
 
 $registry = new EndpointRegistry();
-$builder = new OpenApiBuilder(EndpointDefinitions::all(), OpenApiCatalog::data());
+
+$builder = new OpenApiBuilder($registry->definitions(), OpenApiCatalog::data());
 
 $errors = $builder->validate(array_keys($registry->all()));
 if ($errors) {

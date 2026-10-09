@@ -7,6 +7,10 @@ use App\Endpoints\Handlers\Top\TopHandler;
 
 final class TopUsersHandler extends TopHandler
 {
+    protected function endpointName(): string
+    {
+        return 'top_users';
+    }
     protected function selectField(): string
     {
         return 'p.user';

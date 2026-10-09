@@ -11,6 +11,7 @@ final class MissingPagesHandler extends MissingByLangAndCategoryHandler
     public function definition(): EndpointDefinition
     {
         return new EndpointDefinition(
+            endpoint: 'missing',
             summary: 'Retrieve missing pages',
             tag: 'pages_infos',
             params: [

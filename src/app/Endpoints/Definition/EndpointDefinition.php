@@ -12,6 +12,8 @@ final class EndpointDefinition
      * @param array<string,string> $orderValues
      */
     public function __construct(
+        // public readonly string $name,
+        public readonly string $endpoint,
         public readonly string $summary,
         public readonly string $tag,
         public readonly array $params = [],

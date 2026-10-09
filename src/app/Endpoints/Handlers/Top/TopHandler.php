@@ -46,11 +46,13 @@ abstract class TopHandler implements EndpointHandler, DefinedEndpoint
     /** عمود GROUP BY */
     abstract protected function groupColumn(): string;
 
+    abstract protected function endpointName(): string;
     abstract protected function summary(): string;
 
     public function definition(): EndpointDefinition
     {
         return new EndpointDefinition(
+            endpoint: $this->endpointName(),
             summary: $this->summary(),
             tag: 'users',
             params: [

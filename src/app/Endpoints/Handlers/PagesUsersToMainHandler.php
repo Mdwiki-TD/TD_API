@@ -5,8 +5,16 @@ declare(strict_types=1);
 namespace App\Endpoints\Handlers;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
-final class PagesUsersToMainHandler implements EndpointHandler
+use App\Endpoints\DefinedEndpoint;
+use App\Endpoints\Definition\EndpointDefinition;
+final class PagesUsersToMainHandler implements EndpointHandler, DefinedEndpoint
 {
+    public function definition(): EndpointDefinition
+    {
+        return new EndpointDefinition(
+        );
+    }
+
     public function handle(EndpointContext $ctx): QuerySpec
     {
         $old_query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid

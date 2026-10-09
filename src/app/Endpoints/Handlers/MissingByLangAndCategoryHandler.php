@@ -12,9 +12,10 @@ class MissingByLangAndCategoryHandler extends CategoryLangHandler
     public function definition(): EndpointDefinition
     {
         return new EndpointDefinition(
+            endpoint: 'missing_by_lang_and_category',
             summary: 'Retrieve missing statics by language and category',
             tag: 'pages_infos',
-            params: [self::langParam(), self::categoryParam()],
+            params: [self::langParamRequired(), self::categoryParam()],
         );
     }
 

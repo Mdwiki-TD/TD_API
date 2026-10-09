@@ -5,8 +5,16 @@ declare(strict_types=1);
 namespace App\Endpoints\Handlers;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
-final class GraphDataHandler implements EndpointHandler
+use App\Endpoints\DefinedEndpoint;
+use App\Endpoints\Definition\EndpointDefinition;
+final class GraphDataHandler implements EndpointHandler, DefinedEndpoint
 {
+    public function definition(): EndpointDefinition
+    {
+        return new EndpointDefinition(
+        );
+    }
+
     public function handle(EndpointContext $ctx): QuerySpec
     {
         // api.php?get=graph_data&year=All&month=&category=&campaign=All&user_group=all

@@ -16,6 +16,7 @@ final class StaticsByCategoryHandler extends CategoryLangHandler
     public function definition(): EndpointDefinition
     {
         return new EndpointDefinition(
+            endpoint: 'statics_by_category',
             summary: 'Retrieve the number of available titles per language for a category',
             tag: 'pages_infos',
             params: [self::categoryParam()],

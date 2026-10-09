@@ -5,8 +5,17 @@ declare(strict_types=1);
 namespace App\Endpoints\Handlers;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
-final class UserStatusHandler implements EndpointHandler
+use App\Endpoints\DefinedEndpoint;
+use App\Endpoints\Definition\EndpointDefinition;
+
+final class UserStatusHandler implements EndpointHandler, DefinedEndpoint
 {
+    public function definition(): EndpointDefinition
+    {
+        return new EndpointDefinition(
+        );
+    }
+
     public function handle(EndpointContext $ctx): QuerySpec
     {
         $select = ($ctx->select === '*' || $ctx->select === 'year')

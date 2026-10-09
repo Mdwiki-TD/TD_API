@@ -5,9 +5,17 @@ declare(strict_types=1);
 namespace App\Endpoints\Handlers;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
+use App\Endpoints\DefinedEndpoint;
+use App\Endpoints\Definition\EndpointDefinition;
 /** التنسيق (formated) يتم لاحقاً في ResponseBuilder::format حسب قيمة get */
-final class LeaderboardHandler implements EndpointHandler
+final class LeaderboardHandler implements EndpointHandler, DefinedEndpoint
 {
+    public function definition(): EndpointDefinition
+    {
+        return new EndpointDefinition(
+        );
+    }
+
     public function handle(EndpointContext $ctx): QuerySpec
     {
         $sql = "SELECT p.title, p.target, p.cat, p.lang, p.word,

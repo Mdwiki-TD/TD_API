@@ -24,7 +24,7 @@ abstract class CategoryLangHandler implements EndpointHandler, DefinedEndpoint
         return InputSanitizer::match($raw, self::WORDS) ?? self::DEFAULT_CATEGORY;
     }
 
-    protected static function langParam(): Param
+    protected static function langParamRequired(): Param
     {
         return new Param(
             name: 'lang',

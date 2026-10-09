@@ -13,6 +13,7 @@ final class TopLangOfUsersHandler implements EndpointHandler, DefinedEndpoint
     public function definition(): EndpointDefinition
     {
         return new EndpointDefinition(
+            endpoint: 'top_lang_of_users',
             summary: 'Retrieve the most used language of each user',
             tag: 'users',
             params: [

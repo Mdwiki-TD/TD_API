@@ -15,9 +15,10 @@ final class ExistsByLangAndCategoryHandler extends CategoryLangHandler
     public function definition(): EndpointDefinition
     {
         return new EndpointDefinition(
+            endpoint: 'exists_by_lang_and_category',
             summary: 'Retrieve exists statics by language and category',
             tag: 'pages_infos',
-            params: [self::langParam(), self::categoryParam()],
+            params: [self::langParamRequired(), self::categoryParam()],
         );
     }
 

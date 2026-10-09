@@ -8,6 +8,10 @@ use App\Endpoints\Handlers\Top\TopHandler;
 
 final class TopLangsHandler extends TopHandler
 {
+    protected function endpointName(): string
+    {
+        return 'top_langs';
+    }
     protected function selectField(): string
     {
         return 'p.lang, la.name AS lang_name';

@@ -14,8 +14,9 @@ final class ExistsStaticsByCategoryHandler extends CategoryLangHandler
 {
     public function definition(): EndpointDefinition
     {
-        // required: true محفوظ كما في JSON القديم (round-trip)، مع أن الكود يرجع إلى RTT عند غيابه
+        // required: true saved as in the old JSON, but the code returns RTT when it is missing
         return new EndpointDefinition(
+            endpoint: 'exists_statics_by_category',
             summary: 'Retrieve missing statics',
             tag: 'pages_infos',
             params: [self::categoryParam(required: true)],
