@@ -12,11 +12,16 @@
 
 رمز الخروج: 0 = لا فروق غير متوقعة، 1 = يوجد فرق غير متوقع أو خطأ اتصال.
 """
-import argparse, json, sys, urllib.request, urllib.error
+import argparse
+import json
+import sys
+import urllib.request
+import urllib.error
 
 NEW = "http://localhost:9001/api.php"
 OLD = "http://localhost:9001/api/request.php"
 IGNORE = {"time", "query", "source"}          # تتغير بين الطلبات
+
 U = "Mr.Ibrahem"                              # غيّره لمستخدم موجود عندك
 
 # (الاستعلام, يُتوقع اختلافه؟)  — الاختلاف المتوقع = إصلاح مقصود في الجديد
@@ -159,6 +164,8 @@ CASES = [
 
 
 def fetch(url):
+    print(f"fetching {url}…")
+
     try:
         with urllib.request.urlopen(url, timeout=60) as r:
             body = r.read().decode("utf-8", "replace")
@@ -229,13 +236,16 @@ def main():
     cases = [c for c in cases if args.filter in c[0]]
 
     bad = same = expected = errors = 0
+
     for q, expect in cases:
         new, ns = fetch(f"{args.new}?{q}")
         old, os_ = fetch(f"{args.old}?{q}")
+
         if new is None or old is None:
             errors += 1
             print(f"✗ ERR   {q}\n        جديد: {ns if new is None else 'ok'} | قديم: {os_ if old is None else 'ok'}")
             continue
+
         d = diff(clean(old, ignore), clean(new, ignore))
         ln = f"len {old.get('length')}→{new.get('length')}" if isinstance(old, dict) else ""
         if not d:
