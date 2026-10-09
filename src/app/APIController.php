@@ -1,14 +1,15 @@
 <?php
 // src/app/APIController.php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace App;
 
-use App\Database\QueryExecutor;
-use App\Endpoints\{EndpointContext, EndpointRegistry};
-use App\Formatting\ResponseBuilder;
-use App\Http\Request;
 use App\Database\Database;
+use App\Database\QueryExecutor;
+use App\Endpoints\EndpointContext;
+
+use App\Endpoints\EndpointRegistry;
+use App\Http\Request;
 use Throwable;
 
 /*
@@ -37,11 +38,11 @@ class APIController
         private ?ResponseBuilder $builder = null,
         private ?Request $request = null,
     ) {
-        $this->db       = $db ?? new Database();
+        $this->db = $db ?? new Database();
         $this->registry ??= new EndpointRegistry();
         $this->executor ??= new QueryExecutor($this->db);
-        $this->builder  ??= new ResponseBuilder();
-        $this->request  ??= new Request();
+        $this->builder ??= new ResponseBuilder();
+        $this->request ??= new Request();
     }
     /**
      * Main entry point
@@ -64,7 +65,7 @@ class APIController
             }
             [$handler, $definition] = $resolved;
 
-            $ctx  = new EndpointContext($get, $definition->toArray(), $this->request);
+            $ctx = new EndpointContext($get, $definition->toArray(), $this->request);
 
             $spec = $handler->handle($ctx);
             if ($spec->sql === '') {
@@ -87,7 +88,7 @@ class APIController
         } catch (Throwable $e) {
             error_log('[API] ' . $e->getMessage());
             http_response_code(500);
-            $result = $this->builder->errorOnly('internal error');
+            $result      = $this->builder->errorOnly('internal error');
             $result["e"] = $e->getMessage();
             $this->emit($result);
         }

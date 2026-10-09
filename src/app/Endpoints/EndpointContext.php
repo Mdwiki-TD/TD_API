@@ -1,15 +1,14 @@
 <?php
 // src/app/Endpoints/EndpointContext.php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace App\Endpoints;
 
-use App\Query\Ordering;
-use App\Query\FilterBuilder;
-use App\Query\SelectBuilder;
 use App\Http\Request;
+use App\Query\FilterBuilder;
 use App\Query\InputSanitizer;
-
+use App\Query\Ordering;
+use App\Query\SelectBuilder;
 
 final class EndpointContext
 {
@@ -26,10 +25,10 @@ final class EndpointContext
         public readonly array $data,
         public readonly Request $request,
     ) {
-        $this->params   = $data['params'] ?? [];
+        $this->params = $data['params'] ?? [];
 
-        $this->columns  = $data['columns'] ?? [];
-        $this->select   = SelectBuilder::build($this->params, $this->columns, $request);
+        $this->columns = $data['columns'] ?? [];
+        $this->select  = SelectBuilder::build($this->params, $this->columns, $request);
 
         $this->distinct = $request->enabled('distinct') ? 'DISTINCT ' : '';
         $this->group    = $request->get('group');
@@ -63,11 +62,11 @@ final class EndpointContext
         $glue = FilterBuilder::glue($sql);
 
         if (FilterBuilder::isValid($category)) {
-            $sql .= "$glue p.cat = ?";
-            $params[] = $category;
+            $sql      .= "$glue p.cat = ?";
+            $params[]  = $category;
         } elseif (FilterBuilder::isValid($campaign)) {
-            $sql .= "$glue ca.campaign = ?";
-            $params[] = $campaign;
+            $sql      .= "$glue ca.campaign = ?";
+            $params[]  = $campaign;
         }
         return [$sql, $params];
     }
