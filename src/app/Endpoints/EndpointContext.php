@@ -1,6 +1,6 @@
 <?php
 // src/app/Endpoints/EndpointContext.php
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Endpoints;
 
@@ -28,11 +28,11 @@ final class EndpointContext
         $this->params = $data['params'] ?? [];
 
         $this->columns = $data['columns'] ?? [];
-        $this->select  = SelectBuilder::build($this->params, $this->columns, $request);
+        $this->select = SelectBuilder::build($this->params, $this->columns, $request);
 
         $this->distinct = $request->enabled('distinct') ? 'DISTINCT ' : '';
-        $this->group    = $request->get('group');
-        $this->order    = $request->get('order');
+        $this->group = $request->get('group');
+        $this->order = $request->get('order');
     }
 
     /** @return array{0: string, 1: array} [sql, params] */
@@ -62,11 +62,11 @@ final class EndpointContext
         $glue = FilterBuilder::glue($sql);
 
         if (FilterBuilder::isValid($category)) {
-            $sql      .= "$glue p.cat = ?";
-            $params[]  = $category;
+            $sql .= "$glue p.cat = ?";
+            $params[] = $category;
         } elseif (FilterBuilder::isValid($campaign)) {
-            $sql      .= "$glue ca.campaign = ?";
-            $params[]  = $campaign;
+            $sql .= "$glue ca.campaign = ?";
+            $params[] = $campaign;
         }
         return [$sql, $params];
     }

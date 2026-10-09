@@ -1,13 +1,13 @@
 <?php
 // src/app/Logger.php
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App;
 
 final class Logger
 {
     /** @var (callable(string, string): void)|null */
-    private static $sink        = null;
+    private static $sink = null;
     private static ?bool $debug = null;
 
     /**
@@ -15,7 +15,7 @@ final class Logger
      *
      * @param (callable(string $level, string $message): void)|null $sink
      */
-    public static function setSink( ? callable $sink) : void
+    public static function setSink(?callable $sink): void
     {
         self::$sink = $sink;
     }
@@ -23,7 +23,7 @@ final class Logger
     /** Reset cached state (useful in tests). */
     public static function reset(): void
     {
-        self::$sink  = null;
+        self::$sink = null;
         self::$debug = null;
     }
 

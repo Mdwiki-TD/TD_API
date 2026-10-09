@@ -1,6 +1,6 @@
 <?php
 // src/app/APIController.php
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App;
 
@@ -73,7 +73,7 @@ class APIController
                 return;
             }
 
-            $run     = $this->executor->run($spec, $ctx);
+            $run = $this->executor->run($spec, $ctx);
             $results = $this->builder->format($get, $run['results']);
 
             $this->emit($this->builder->build(
@@ -88,7 +88,7 @@ class APIController
         } catch (Throwable $e) {
             error_log('[API] ' . $e->getMessage());
             http_response_code(500);
-            $result      = $this->builder->errorOnly('internal error');
+            $result = $this->builder->errorOnly('internal error');
             $result["e"] = $e->getMessage();
             $this->emit($result);
         }

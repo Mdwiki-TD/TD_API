@@ -1,6 +1,6 @@
 <?php
 // src/app/Query/FilterBuilder.php
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Query;
 
@@ -41,7 +41,7 @@ final class FilterBuilder
 
         foreach (self::filters($endpointParams, $ignore) as $name => $def) {
             $column = (string) ($def['column'] ?? '');
-            if ($column === '' || (! $request->has($name) && ! $request->has($column))) {
+            if ($column === '' || (!$request->has($name) && !$request->has($column))) {
                 continue;
             }
 
@@ -50,7 +50,7 @@ final class FilterBuilder
                 $value = $request->get($column) ?? '';
             }
 
-            if ($column === 'limit' || $column === 'select' || ! self::isValid($value)) {
+            if ($column === 'limit' || $column === 'select' || !self::isValid($value)) {
                 continue;
             }
             if (isset($def['no_empty_value']) && empty($value)) {
@@ -65,8 +65,8 @@ final class FilterBuilder
             }
 
             [$part, $new] = self::condition($sql, $name, $column, $value, $def, $request);
-            $sql          .= $part;
-            $params       = array_merge($params, $new);
+            $sql .= $part;
+            $params = array_merge($params, $new);
         }
 
         return [$sql, $params];
@@ -77,7 +77,7 @@ final class FilterBuilder
     {
         $out = [];
         foreach ($endpointParams as $p) {
-            if (! isset($p['name']) || isset($p['no_select'])) {
+            if (!isset($p['name']) || isset($p['no_select'])) {
                 continue;
             }
             $out[$p['name']] = $p;
@@ -115,7 +115,7 @@ final class FilterBuilder
             return [" $glue $column IN ($marks)", $values];
         }
 
-        if (! empty($def['value_can_be_null'])) {
+        if (!empty($def['value_can_be_null'])) {
             return [" $glue ($column = ? OR $column IS NULL OR $column = '')", [$value]];
         }
         return [" $glue $column = ?", [$value]];

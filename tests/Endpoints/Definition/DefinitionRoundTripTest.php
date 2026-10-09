@@ -1,6 +1,6 @@
 <?php
 // tests/DefinitionRoundTripTest.php
-declare (strict_types = 1);
+declare(strict_types=1);
 
 use App\Endpoints\Definition\EndpointDefinitions;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +15,7 @@ final class DefinitionRoundTripTest extends TestCase
     public function testEveryLegacyEndpointMatchesItsDefinition(): void
     {
         $legacy = self::legacy();
-        $defs   = EndpointDefinitions::all();
+        $defs = EndpointDefinitions::all();
 
         foreach ($legacy as $name => $entry) {
             $source = isset($entry['redirect']) ? $legacy[$entry['redirect']] : $entry;

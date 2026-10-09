@@ -1,6 +1,6 @@
 <?php
 // src/app/Endpoints/Handlers/CallableHandler.php
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
 
@@ -15,7 +15,8 @@ use Closure;
 final class CallableHandler implements EndpointHandler
 {
     public function __construct(private Closure $fn)
-    {}
+    {
+    }
 
     public function handle(EndpointContext $ctx): QuerySpec
     {

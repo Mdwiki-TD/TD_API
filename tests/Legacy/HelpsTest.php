@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Tests;
 
@@ -83,13 +83,13 @@ class HelpsTest extends TestCase
     public function testGetOrderDirectionInvalidDefaultsToDesc(): void
     {
         $_GET['order_direction'] = 'INVALID';
-        $result                  = Helps::get_order_direction([]);
+        $result = Helps::get_order_direction([]);
         $this->assertSame('DESC', $result);
     }
 
     public function testGetOrderDirectionFromDefaultParam(): void
     {
-        $param  = ['default' => 'ASC'];
+        $param = ['default' => 'ASC'];
         $result = Helps::get_order_direction($param);
         $this->assertSame('ASC', $result);
     }
@@ -102,7 +102,7 @@ class HelpsTest extends TestCase
         // Function returns null when $_GET is not available
         $endpoint_data = [
             'columns' => ['title', 'id', 'date'],
-            'params'  => [],
+            'params' => [],
         ];
         $result = Helps::filter_order('order', $endpoint_data, '');
         $this->assertNull($result);
@@ -114,7 +114,7 @@ class HelpsTest extends TestCase
         // Function returns null when $_GET is not available
         $endpoint_data = [
             'columns' => ['title', 'id'],
-            'params'  => ['user', 'lang'],
+            'params' => ['user', 'lang'],
         ];
         $result = Helps::filter_order('order', $endpoint_data, '');
         $this->assertNull($result);
@@ -124,7 +124,7 @@ class HelpsTest extends TestCase
     {
         $endpoint_data = [
             'columns' => ['title'],
-            'params'  => [],
+            'params' => [],
         ];
         $result = Helps::filter_order('order', $endpoint_data, '');
         $this->assertNull($result);
@@ -136,7 +136,7 @@ class HelpsTest extends TestCase
     {
         $endpoint_data = [
             'columns' => ['title', 'id'],
-            'params'  => [],
+            'params' => [],
         ];
         $result = Helps::filter_order('order', $endpoint_data, 'invalid_column');
         $this->assertNull($result);
@@ -151,7 +151,7 @@ class HelpsTest extends TestCase
         // so the function returns null after processing an empty result.
         $endpoint_data = [
             'columns' => ['title', 'id'],
-            'params'  => [],
+            'params' => [],
         ];
         $result = Helps::filter_order('order', $endpoint_data, 'title,id,999');
         $this->assertNull($result);
@@ -161,10 +161,10 @@ class HelpsTest extends TestCase
 
     public function testAddOrderWithoutParamConfig(): void
     {
-        $query         = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $endpoint_data = [
             'columns' => ['title'],
-            'params'  => [],
+            'params' => [],
         ];
         $result = Helps::add_order($query, $endpoint_data, "");
         $this->assertSame('SELECT * FROM pages', $result);
@@ -172,10 +172,10 @@ class HelpsTest extends TestCase
 
     public function testAddOrderWithDefault(): void
     {
-        $query         = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $endpoint_data = [
             'columns' => ['title', 'date'],
-            'params'  => [
+            'params' => [
                 ['name' => 'order', 'default' => 'date'],
                 ['name' => 'order_direction'],
             ],
@@ -189,10 +189,10 @@ class HelpsTest extends TestCase
         // filter_input() does not read $_GET assignments in PHPUnit.
         // Helps::filter_order() returns null so no ORDER BY clause is added.
         $_GET['order_direction'] = 'ASC';
-        $query                   = 'SELECT * FROM pages';
-        $endpoint_data           = [
+        $query = 'SELECT * FROM pages';
+        $endpoint_data = [
             'columns' => ['title', 'date'],
-            'params'  => [
+            'params' => [
                 ['name' => 'order'],
                 ['name' => 'order_direction'],
             ],
@@ -207,10 +207,10 @@ class HelpsTest extends TestCase
         // When $_GET['order'] is set, Helps::filter_order() is called (not the default),
         // but filter_input returns null so filter_order returns null.
         // add_order gets null and returns the unchanged query.
-        $query         = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $endpoint_data = [
-            'columns'      => ['title'],
-            'params'       => [
+            'columns' => ['title'],
+            'params' => [
                 ["name" => "order", "column" => "order", "type" => "text", "placeholder" => "Order by", 'default' => ''],
                 ['name' => 'order_direction'],
             ],
@@ -226,7 +226,7 @@ class HelpsTest extends TestCase
 
     public function testAddLimitWithDefault(): void
     {
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $result = Helps::add_limit($query);
         // No limit added when $_GET['limit'] is not set
         $this->assertSame('SELECT * FROM pages', $result);
@@ -239,8 +239,8 @@ class HelpsTest extends TestCase
         // Note: filter_input() doesn't read from $_GET directly in PHPUnit
         // This test verifies the function doesn't break when limit is set
         $_GET['limit'] = '10';
-        $query         = 'SELECT * FROM pages';
-        $result        = Helps::add_limit($query);
+        $query = 'SELECT * FROM pages';
+        $result = Helps::add_limit($query);
         // filter_input() reads from actual GET request, not $_GET assignment
         // So the limit won't be added in test environment
         $this->assertSame('SELECT * FROM pages', $result);
@@ -251,8 +251,8 @@ class HelpsTest extends TestCase
     public function testAddLimitWithZeroDoesNotAdd(): void
     {
         $_GET['limit'] = '0';
-        $query         = 'SELECT * FROM pages';
-        $result        = Helps::add_limit($query);
+        $query = 'SELECT * FROM pages';
+        $result = Helps::add_limit($query);
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
@@ -261,8 +261,8 @@ class HelpsTest extends TestCase
     public function testAddLimitWithNegativeDoesNotAdd(): void
     {
         $_GET['limit'] = '-5';
-        $query         = 'SELECT * FROM pages';
-        $result        = Helps::add_limit($query);
+        $query = 'SELECT * FROM pages';
+        $result = Helps::add_limit($query);
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
@@ -271,8 +271,8 @@ class HelpsTest extends TestCase
     public function testAddLimitSkipsIfAlreadyPresent(): void
     {
         $_GET['limit'] = '10';
-        $query         = 'SELECT * FROM pages LIMIT 5';
-        $result        = Helps::add_limit($query);
+        $query = 'SELECT * FROM pages LIMIT 5';
+        $result = Helps::add_limit($query);
         // Should not add another LIMIT
         $this->assertSame('SELECT * FROM pages LIMIT 5', $result);
     }
@@ -286,8 +286,8 @@ class HelpsTest extends TestCase
         // Note: filter_input() doesn't read from $_GET directly in PHPUnit
         // This test verifies the function doesn't break when offset is set
         $_GET['offset'] = '20';
-        $query          = 'SELECT * FROM pages';
-        $result         = Helps::add_offset($query);
+        $query = 'SELECT * FROM pages';
+        $result = Helps::add_offset($query);
         // filter_input() reads from actual GET request, not $_GET assignment
         // So the offset won't be added in test environment
         $this->assertSame('SELECT * FROM pages', $result);
@@ -298,8 +298,8 @@ class HelpsTest extends TestCase
     public function testAddOffsetWithZeroDoesNotAdd(): void
     {
         $_GET['offset'] = '0';
-        $query          = 'SELECT * FROM pages';
-        $result         = Helps::add_offset($query);
+        $query = 'SELECT * FROM pages';
+        $result = Helps::add_offset($query);
         $this->assertSame('SELECT * FROM pages', $result);
     }
 
@@ -308,8 +308,8 @@ class HelpsTest extends TestCase
     public function testAddOffsetSkipsIfAlreadyPresent(): void
     {
         $_GET['offset'] = '20';
-        $query          = 'SELECT * FROM pages OFFSET 10';
-        $result         = Helps::add_offset($query);
+        $query = 'SELECT * FROM pages OFFSET 10';
+        $result = Helps::add_offset($query);
         $this->assertSame('SELECT * FROM pages OFFSET 10', $result);
     }
 
@@ -319,10 +319,10 @@ class HelpsTest extends TestCase
     {
         // filter_input() does not read $_GET assignments in PHPUnit.
         // Helps::filter_order() returns null so no GROUP BY clause is added.
-        $query         = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $endpoint_data = [
             'columns' => ['lang', 'title'],
-            'params'  => [],
+            'params' => [],
         ];
         $result = Helps::add_group($query, $endpoint_data, 'lang');
         $this->assertSame('SELECT * FROM pages', $result);
@@ -330,10 +330,10 @@ class HelpsTest extends TestCase
 
     public function testAddGroupNotSet(): void
     {
-        $query         = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $endpoint_data = [
             'columns' => ['lang'],
-            'params'  => [],
+            'params' => [],
         ];
         $result = Helps::add_group($query, $endpoint_data, '');
         $this->assertSame('SELECT * FROM pages', $result);

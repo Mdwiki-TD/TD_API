@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace Tests;
 
@@ -32,7 +32,7 @@ class AddParamsTest extends TestCase
 
     public function testAddLiParamsWithEmptyTypes(): void
     {
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $result = AddParams::add_li_params($query, [], [], []);
         $this->assertSame(['SELECT * FROM pages', []], $result);
     }
@@ -40,9 +40,9 @@ class AddParamsTest extends TestCase
     public function testAddLiParamsWithSimpleWhere(): void
     {
         $_GET['title'] = 'TestPage';
-        $query         = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         // Types should be an array of strings, not an associative array
-        $types  = ['title'];
+        $types = ['title'];
         $result = AddParams::add_li_params($query, $types, [], []);
         $this->assertStringContainsString('title = ?', $result[0]);
         $this->assertSame(['TestPage'], $result[1]);
@@ -51,10 +51,10 @@ class AddParamsTest extends TestCase
     public function testAddLiParamsWithMultipleConditions(): void
     {
         $_GET['title'] = 'TestPage';
-        $_GET['lang']  = 'en';
-        $query         = 'SELECT * FROM pages';
+        $_GET['lang'] = 'en';
+        $query = 'SELECT * FROM pages';
         // Types should be an array of strings, not an associative array
-        $types  = ['title', 'lang'];
+        $types = ['title', 'lang'];
         $result = AddParams::add_li_params($query, $types, [], []);
         $this->assertStringContainsString('title = ?', $result[0]);
         $this->assertStringContainsString('lang = ?', $result[0]);
@@ -64,9 +64,9 @@ class AddParamsTest extends TestCase
     public function testAddLiParamsIgnoresLimitColumn(): void
     {
         $_GET['limit'] = '10';
-        $query         = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         // Types should be an array of strings
-        $types  = ['limit'];
+        $types = ['limit'];
         $result = AddParams::add_li_params($query, $types, [], []);
         // Should not add WHERE clause for limit
         $this->assertSame('SELECT * FROM pages', $result[0]);
@@ -75,9 +75,9 @@ class AddParamsTest extends TestCase
     public function testAddLiParamsIgnoresSelectColumn(): void
     {
         $_GET['select'] = 'title';
-        $query          = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         // Types should be an array of strings
-        $types  = ['select'];
+        $types = ['select'];
         $result = AddParams::add_li_params($query, $types, [], []);
         $this->assertSame('SELECT * FROM pages', $result[0]);
     }
@@ -85,9 +85,9 @@ class AddParamsTest extends TestCase
     public function testAddLiParamsWithNotEmptyValue(): void
     {
         $_GET['filter'] = 'not_empty';
-        $query          = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         // Types should be an array of strings
-        $types  = ['filter'];
+        $types = ['filter'];
         $result = AddParams::add_li_params($query, $types, [], []);
         $this->assertStringContainsString("filter != '' AND filter IS NOT NULL", $result[0]);
         $this->assertSame([], $result[1]);
@@ -96,9 +96,9 @@ class AddParamsTest extends TestCase
     public function testAddLiParamsWithEmptyValue(): void
     {
         $_GET['filter'] = 'empty';
-        $query          = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         // Types should be an array of strings
-        $types  = ['filter'];
+        $types = ['filter'];
         $result = AddParams::add_li_params($query, $types, [], []);
         $this->assertStringContainsString("filter = '' OR filter IS NULL", $result[0]);
         $this->assertSame([], $result[1]);
@@ -107,9 +107,9 @@ class AddParamsTest extends TestCase
     public function testAddLiParamsWithGreaterThanZero(): void
     {
         $_GET['count'] = '>0';
-        $query         = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         // Types should be an array of strings
-        $types  = ['count'];
+        $types = ['count'];
         $result = AddParams::add_li_params($query, $types, [], []);
         $this->assertStringContainsString('count > 0', $result[0]);
         $this->assertSame([], $result[1]);
@@ -118,9 +118,9 @@ class AddParamsTest extends TestCase
     public function testAddLiParamsWithDistinctFlag(): void
     {
         $_GET['distinct'] = '1';
-        $query            = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         // Types should be an array of strings
-        $types  = ['distinct'];
+        $types = ['distinct'];
         $result = AddParams::add_li_params($query, $types, [], []);
         $this->assertSame('SELECT DISTINCT * FROM pages', $result[0]);
         $this->assertSame([], $result[1]);
@@ -131,11 +131,11 @@ class AddParamsTest extends TestCase
     public function testAddLiParamsWithNoEmptyValueSkipsEmpty(): void
     {
         $_GET['filter'] = '';
-        $query          = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         // Types should be an array of strings, pass extra config via endpoint_params
-        $types           = [];
+        $types = [];
         $endpoint_params = [['name' => 'filter', 'column' => 'filter_col', 'no_empty_value' => true]];
-        $result          = AddParams::add_li_params($query, $types, $endpoint_params, []);
+        $result = AddParams::add_li_params($query, $types, $endpoint_params, []);
         $this->assertSame('SELECT * FROM pages', $result[0]);
     }
 
@@ -144,11 +144,11 @@ class AddParamsTest extends TestCase
     public function testAddLiParamsWithValueCanBeNull(): void
     {
         $_GET['status'] = 'active';
-        $query          = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         // Types should be an array of strings, pass extra config via endpoint_params
-        $types           = [];
+        $types = [];
         $endpoint_params = [['name' => 'status', 'column' => 'status', 'value_can_be_null' => true]];
-        $result          = AddParams::add_li_params($query, $types, $endpoint_params, []);
+        $result = AddParams::add_li_params($query, $types, $endpoint_params, []);
         $this->assertStringContainsString('(status = ? OR status IS NULL OR status = \'\')', $result[0]);
     }
 
@@ -158,14 +158,14 @@ class AddParamsTest extends TestCase
 
     public function testAddDistinct(): void
     {
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $result = AddParams::add_distinct($query);
         $this->assertSame('SELECT DISTINCT * FROM pages', $result);
     }
 
     public function testAddDistinctWithLowercase(): void
     {
-        $query  = 'select name from pages';
+        $query = 'select name from pages';
         $result = AddParams::add_distinct($query);
         $this->assertSame('SELECT DISTINCT name from pages', $result);
     }
@@ -177,8 +177,8 @@ class AddParamsTest extends TestCase
     public function testAddArrayParamsWithEmptyArray(): void
     {
         $_GET['titles'] = [];
-        $query          = 'SELECT * FROM pages';
-        $params         = [];
+        $query = 'SELECT * FROM pages';
+        $params = [];
 
         $result = AddParams::add_array_params($query, $params, 'titles', 'title', ' AND ');
 
@@ -191,8 +191,8 @@ class AddParamsTest extends TestCase
     public function testAddArrayParamsWithSingleValue(): void
     {
         $_GET['titles'] = ['Page1'];
-        $query          = 'SELECT * FROM pages';
-        $params         = [];
+        $query = 'SELECT * FROM pages';
+        $params = [];
 
         $result = AddParams::add_array_params($query, $params, 'titles', 'title', ' AND ');
 
@@ -205,8 +205,8 @@ class AddParamsTest extends TestCase
     public function testAddArrayParamsWithMultipleValues(): void
     {
         $_GET['titles'] = ['Page1', 'Page2', 'Page3'];
-        $query          = 'SELECT * FROM pages';
-        $params         = [];
+        $query = 'SELECT * FROM pages';
+        $params = [];
 
         $result = AddParams::add_array_params($query, $params, 'titles', 'title', ' AND ');
 
@@ -219,8 +219,8 @@ class AddParamsTest extends TestCase
     public function testAddArrayParamsWithWhereClause(): void
     {
         $_GET['titles'] = ['Page1', 'Page2'];
-        $query          = 'SELECT * FROM pages WHERE lang = ?';
-        $params         = ['en'];
+        $query = 'SELECT * FROM pages WHERE lang = ?';
+        $params = ['en'];
 
         $result = AddParams::add_array_params($query, $params, 'titles', 'title', ' AND ');
 
@@ -235,8 +235,8 @@ class AddParamsTest extends TestCase
     public function testAddArrayParamsWithDifferentParameterName(): void
     {
         $_GET['langs'] = ['en', 'ar', 'fr'];
-        $query         = 'SELECT * FROM pages';
-        $params        = [];
+        $query = 'SELECT * FROM pages';
+        $params = [];
 
         $result = AddParams::add_array_params($query, $params, 'langs', 'lang_code', ' WHERE ');
 
@@ -250,8 +250,8 @@ class AddParamsTest extends TestCase
     public function testAddArrayParamsAppendsToExistingParams(): void
     {
         $_GET['titles'] = ['Page1'];
-        $query          = 'SELECT * FROM pages WHERE id > ?';
-        $params         = [100];
+        $query = 'SELECT * FROM pages WHERE id > ?';
+        $params = [100];
 
         $result = AddParams::add_array_params($query, $params, 'titles', 'title');
 
@@ -263,8 +263,8 @@ class AddParamsTest extends TestCase
     public function testAddArrayParamsWithoutWhereOrAndUsesWhere(): void
     {
         $_GET['titles'] = ['Page1'];
-        $query          = 'SELECT * FROM pages';
-        $params         = [];
+        $query = 'SELECT * FROM pages';
+        $params = [];
 
         // Empty where_or_and should auto-detect based on existing WHERE clause
         $result = AddParams::add_array_params($query, $params, 'titles', 'title', '');
@@ -279,8 +279,8 @@ class AddParamsTest extends TestCase
     public function testAddArrayParamsWithExistingWhere(): void
     {
         $_GET['titles'] = ['Page1'];
-        $query          = 'SELECT * FROM pages WHERE active = 1';
-        $params         = [];
+        $query = 'SELECT * FROM pages WHERE active = 1';
+        $params = [];
 
         // Empty where_or_and should auto-detect based on existing WHERE clause
         $result = AddParams::add_array_params($query, $params, 'titles', 'title', '');
@@ -295,7 +295,7 @@ class AddParamsTest extends TestCase
     public function testAddArrayParamsWhenNotSetInGet(): void
     {
         // Don't set $_GET['titles']
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $params = [];
 
         $result = AddParams::add_array_params($query, $params, 'titles', 'title', ' AND ');
@@ -309,10 +309,10 @@ class AddParamsTest extends TestCase
     // ---------------------
     public function testAddOneParamWithRegularValue(): void
     {
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $column = 'title';
-        $added  = 'TestPage';
-        $tabe   = [];
+        $added = 'TestPage';
+        $tabe = [];
 
         $result = AddParams::add_one_param($query, $column, $added, $tabe);
 
@@ -324,10 +324,10 @@ class AddParamsTest extends TestCase
 
     public function testAddOneParamWithNotEmptyValue(): void
     {
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $column = 'content';
-        $added  = 'not_empty';
-        $tabe   = [];
+        $added = 'not_empty';
+        $tabe = [];
 
         $result = AddParams::add_one_param($query, $column, $added, $tabe);
 
@@ -337,10 +337,10 @@ class AddParamsTest extends TestCase
 
     public function testAddOneParamWithNotMtAlias(): void
     {
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $column = 'content';
-        $added  = 'not_mt';
-        $tabe   = [];
+        $added = 'not_mt';
+        $tabe = [];
 
         $result = AddParams::add_one_param($query, $column, $added, $tabe);
 
@@ -350,10 +350,10 @@ class AddParamsTest extends TestCase
 
     public function testAddOneParamWithEmptyValue(): void
     {
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $column = 'content';
-        $added  = 'empty';
-        $tabe   = [];
+        $added = 'empty';
+        $tabe = [];
 
         $result = AddParams::add_one_param($query, $column, $added, $tabe);
 
@@ -363,10 +363,10 @@ class AddParamsTest extends TestCase
 
     public function testAddOneParamWithMtAlias(): void
     {
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $column = 'content';
-        $added  = 'mt';
-        $tabe   = [];
+        $added = 'mt';
+        $tabe = [];
 
         $result = AddParams::add_one_param($query, $column, $added, $tabe);
 
@@ -376,10 +376,10 @@ class AddParamsTest extends TestCase
 
     public function testAddOneParamWithGreaterThanZero(): void
     {
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $column = 'view_count';
-        $added  = '>0';
-        $tabe   = [];
+        $added = '>0';
+        $tabe = [];
 
         $result = AddParams::add_one_param($query, $column, $added, $tabe);
 
@@ -389,10 +389,10 @@ class AddParamsTest extends TestCase
 
     public function testAddOneParamWithHtmlEncodedGreaterThanZero(): void
     {
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $column = 'view_count';
-        $added  = '&#62;0'; // HTML encoded >0
-        $tabe   = [];
+        $added = '&#62;0'; // HTML encoded >0
+        $tabe = [];
 
         $result = AddParams::add_one_param($query, $column, $added, $tabe);
 
@@ -402,10 +402,10 @@ class AddParamsTest extends TestCase
 
     public function testAddOneParamWithExistingWhereClause(): void
     {
-        $query  = 'SELECT * FROM pages WHERE lang = ?';
+        $query = 'SELECT * FROM pages WHERE lang = ?';
         $column = 'title';
-        $added  = 'TestPage';
-        $tabe   = [];
+        $added = 'TestPage';
+        $tabe = [];
 
         $result = AddParams::add_one_param($query, $column, $added, $tabe);
 
@@ -417,10 +417,10 @@ class AddParamsTest extends TestCase
 
     public function testAddOneParamWithValueCanBeNull(): void
     {
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $column = 'status';
-        $added  = 'active';
-        $tabe   = ['value_can_be_null' => true];
+        $added = 'active';
+        $tabe = ['value_can_be_null' => true];
 
         $result = AddParams::add_one_param($query, $column, $added, $tabe);
 
@@ -433,10 +433,10 @@ class AddParamsTest extends TestCase
         // Array type should call AddParams::add_array_params
         $_GET['titles'] = ['Page1', 'Page2'];
 
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $column = 'title';
-        $added  = ''; // Value doesn't matter for array type
-        $tabe   = ['type' => 'array', 'name' => 'titles'];
+        $added = ''; // Value doesn't matter for array type
+        $tabe = ['type' => 'array', 'name' => 'titles'];
 
         $result = AddParams::add_one_param($query, $column, $added, $tabe);
 
@@ -449,10 +449,10 @@ class AddParamsTest extends TestCase
 
     public function testAddOneParamWithNumericValue(): void
     {
-        $query  = 'SELECT * FROM pages';
+        $query = 'SELECT * FROM pages';
         $column = 'id';
-        $added  = '123';
-        $tabe   = [];
+        $added = '123';
+        $tabe = [];
 
         $result = AddParams::add_one_param($query, $column, $added, $tabe);
 
@@ -468,9 +468,9 @@ class AddParamsTest extends TestCase
 
     public function testChangeTypesWithEmptyArrays(): void
     {
-        $types           = [];
+        $types = [];
         $endpoint_params = [];
-        $ignore_params   = [];
+        $ignore_params = [];
 
         $result = AddParams::change_types($types, $endpoint_params, $ignore_params);
 
@@ -480,23 +480,23 @@ class AddParamsTest extends TestCase
     public function testChangeTypesWithSimpleTypes(): void
     {
         // When $types is an array of strings, it converts them to column definitions
-        $types           = ['title', 'lang', 'user'];
+        $types = ['title', 'lang', 'user'];
         $endpoint_params = [];
-        $ignore_params   = [];
+        $ignore_params = [];
 
         $result = AddParams::change_types($types, $endpoint_params, $ignore_params);
 
         $this->assertSame([
             'title' => ['column' => 'title'],
-            'lang'  => ['column' => 'lang'],
-            'user'  => ['column' => 'user'],
+            'lang' => ['column' => 'lang'],
+            'user' => ['column' => 'user'],
         ], $result);
     }
 
     public function testChangeTypesFallsBackToEndpointParams(): void
     {
         // When $types is empty, it falls back to using $endpoint_params
-        $types           = [];
+        $types = [];
         $endpoint_params = [
             ['name' => 'title', 'column' => 'w_title'],
             ['name' => 'lang', 'column' => 'lang_code'],
@@ -507,14 +507,14 @@ class AddParamsTest extends TestCase
 
         $this->assertSame([
             'title' => ['name' => 'title', 'column' => 'w_title'],
-            'lang'  => ['name' => 'lang', 'column' => 'lang_code'],
+            'lang' => ['name' => 'lang', 'column' => 'lang_code'],
         ], $result);
     }
 
     public function testChangeTypesSkipsNoSelectParams(): void
     {
         // Params with 'no_select' => true should be skipped when falling back to endpoint_params
-        $types           = [];
+        $types = [];
         $endpoint_params = [
             ['name' => 'title', 'column' => 'w_title'],
             ['name' => 'hidden_field', 'column' => 'hidden_col', 'no_select' => true],
@@ -532,9 +532,9 @@ class AddParamsTest extends TestCase
     public function testChangeTypesIgnoresSpecifiedParams(): void
     {
         // When $types is an array of strings, $ignore_params removes items from the result
-        $types           = ['title', 'lang', 'user'];
+        $types = ['title', 'lang', 'user'];
         $endpoint_params = [];
-        $ignore_params   = ['lang'];
+        $ignore_params = ['lang'];
 
         $result = AddParams::change_types($types, $endpoint_params, $ignore_params);
 
@@ -546,7 +546,7 @@ class AddParamsTest extends TestCase
     public function testChangeTypesPrefersTypesOverEndpointParams(): void
     {
         // When $types is provided (not empty), it should be used instead of $endpoint_params
-        $types           = ['custom_title'];
+        $types = ['custom_title'];
         $endpoint_params = [
             ['name' => 'title', 'column' => 'w_title'],
         ];
@@ -561,7 +561,7 @@ class AddParamsTest extends TestCase
     public function testChangeTypesFallsBackToEndpointParamsOnlyWhenTypesEmpty(): void
     {
         // Verify that empty $types triggers fallback to $endpoint_params
-        $types           = [];
+        $types = [];
         $endpoint_params = [
             ['name' => 'param1', 'column' => 'col1'],
             ['name' => 'param2', 'column' => 'col2'],
@@ -578,7 +578,7 @@ class AddParamsTest extends TestCase
     public function testChangeTypesIgnoresFromEndpointParams(): void
     {
         // $ignore_params should work when falling back to $endpoint_params
-        $types           = [];
+        $types = [];
         $endpoint_params = [
             ['name' => 'title', 'column' => 'w_title'],
             ['name' => 'lang', 'column' => 'lang_code'],
@@ -593,9 +593,9 @@ class AddParamsTest extends TestCase
 
     public function testChangeTypesHandlesEmptyIgnoreParams(): void
     {
-        $types           = ['title', 'lang'];
+        $types = ['title', 'lang'];
         $endpoint_params = [];
-        $ignore_params   = [];
+        $ignore_params = [];
 
         $result = AddParams::change_types($types, $endpoint_params, $ignore_params);
 
