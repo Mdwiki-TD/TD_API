@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Endpoints\Definition;
 
 /**
- * مولَّد من endpoint_params.json + openapi.json (مرحلي).
- * بعد التحقق ينتقل كل تعريف إلى الـ handler الخاص به ويُحذف هذا الملف.
+ * Generated from endpoint_params.json + openapi.json (transitional).
+ * After verification, each definition will move to its handler and this file will be deleted.
  */
 final class EndpointDefinitions
 {
@@ -1269,39 +1269,6 @@ final class EndpointDefinitions
             'pages_users_langs'            => new EndpointDefinition(
                 summary: 'Retrieve languages that have user pages',
                 tag: 'languages',
-            ),
-            'status'                       => new EndpointDefinition(
-                summary: 'Retrieve monthly publication counts',
-                tag: 'statistics',
-                params: [
-                    new Param(
-                        name: 'year',
-                        column: 'YEAR(p.pupdate)',
-                        type: 'number',
-                        placeholder: 'Year of publication',
-                        doc: 'PublicationYearParam'
-                    ),
-                    new Param(
-                        name: 'user_group',
-                        column: 'u.user_group',
-                        placeholder: 'User Group Name'
-                    ),
-                    new Param(
-                        name: 'campaign',
-                        column: 'campaign',
-                        placeholder: 'Campaign'
-                    ),
-                    new Param(
-                        name: 'category',
-                        column: 'cat',
-                        placeholder: 'Category'
-                    ),
-                    new Param(
-                        name: 'cat',
-                        column: 'cat',
-                        placeholder: 'Category'
-                    ),
-                ],
             ),
             'user_access'                  => new EndpointDefinition(
                 summary: 'TODO',

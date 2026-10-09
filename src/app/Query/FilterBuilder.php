@@ -77,7 +77,7 @@ final class FilterBuilder
     {
         $out = [];
         foreach ($endpointParams as $p) {
-            if (!isset($p['name']) || isset($p['no_select'])) {
+            if (!isset($p['name']) || isset($p['noSelect'])) {
                 continue;
             }
             $out[$p['name']] = $p;
@@ -115,7 +115,7 @@ final class FilterBuilder
             return [" $glue $column IN ($marks)", $values];
         }
 
-        if (!empty($def['value_can_be_null'])) {
+        if (!empty($def['valueCanBeNull'])) {
             return [" $glue ($column = ? OR $column IS NULL OR $column = '')", [$value]];
         }
         return [" $glue $column = ?", [$value]];

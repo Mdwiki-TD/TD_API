@@ -147,7 +147,7 @@ class AddParamsTest extends TestCase
         $query = 'SELECT * FROM pages';
         // Types should be an array of strings, pass extra config via endpoint_params
         $types = [];
-        $endpoint_params = [['name' => 'status', 'column' => 'status', 'value_can_be_null' => true]];
+        $endpoint_params = [['name' => 'status', 'column' => 'status', 'valueCanBeNull' => true]];
         $result = AddParams::add_li_params($query, $types, $endpoint_params, []);
         $this->assertStringContainsString('(status = ? OR status IS NULL OR status = \'\')', $result[0]);
     }
@@ -420,7 +420,7 @@ class AddParamsTest extends TestCase
         $query = 'SELECT * FROM pages';
         $column = 'status';
         $added = 'active';
-        $tabe = ['value_can_be_null' => true];
+        $tabe = ['valueCanBeNull' => true];
 
         $result = AddParams::add_one_param($query, $column, $added, $tabe);
 
@@ -513,11 +513,11 @@ class AddParamsTest extends TestCase
 
     public function testChangeTypesSkipsNoSelectParams(): void
     {
-        // Params with 'no_select' => true should be skipped when falling back to endpoint_params
+        // Params with 'noSelect' => true should be skipped when falling back to endpoint_params
         $types = [];
         $endpoint_params = [
             ['name' => 'title', 'column' => 'w_title'],
-            ['name' => 'hidden_field', 'column' => 'hidden_col', 'no_select' => true],
+            ['name' => 'hidden_field', 'column' => 'hidden_col', 'noSelect' => true],
             ['name' => 'lang', 'column' => 'lang_code'],
         ];
         $ignore_params = [];

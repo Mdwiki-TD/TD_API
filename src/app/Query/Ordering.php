@@ -16,7 +16,7 @@ final class Ordering
         foreach ($data['params'] ?? [] as $p) {
             $name = $p['name'] ?? '';
             $col  = $p['column'] ?? '';
-            if ($name === '' || $col === '' || isset($p['no_select'])) {
+            if ($name === '' || $col === '' || isset($p['noSelect'])) {
                 continue;
             }
             $map[$name] = $col;   // اسم البارامتر يُترجم إلى عموده الحقيقي

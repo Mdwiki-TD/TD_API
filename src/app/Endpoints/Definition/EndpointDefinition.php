@@ -8,7 +8,7 @@ final class EndpointDefinition
 {
     /**
      * @param list<Param>          $params
-     * @param list<string>         $columns     الأعمدة المسموح بها في select/order/group
+     * @param list<string>         $columns     allowed columns in select/order/group
      * @param array<string,string> $orderValues
      */
     public function __construct(
@@ -17,10 +17,13 @@ final class EndpointDefinition
         public readonly array $params = [],
         public readonly array $columns = [],
         public readonly array $orderValues = [],
-        public readonly string $description = '',   // فارغ = الوصف القياسي
-    ) {}
+        public readonly string $description = '',   // empty = default description
+    ) {
+    }
 
-    /** الشكل الذي تقرؤه Query/* و ResponseBuilder (بديل endpoint_params.json) */
+    /**
+     * With form of Query/* and ResponseBuilder (alternative to endpoint_params.json)
+     * */
     public function toArray(): array
     {
         $a = [
