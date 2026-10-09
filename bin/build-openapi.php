@@ -7,9 +7,8 @@ use App\Endpoints\Definition\EndpointDefinitions;
 use App\Endpoints\EndpointRegistry;
 use App\OpenApi\{OpenApiBuilder, OpenApiCatalog};
 
-$builder = new OpenApiBuilder(EndpointDefinitions::all(), OpenApiCatalog::data());
-
 $registry = new EndpointRegistry();
+$builder = new OpenApiBuilder(EndpointDefinitions::all(), OpenApiCatalog::data());
 
 $errors = $builder->validate(array_keys($registry->all()));
 if ($errors) {
