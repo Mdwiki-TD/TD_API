@@ -2,13 +2,13 @@
 """
 يقارن استجابات API الجديد بالقديم.
 
-  python3 compare_api.py                       # كل الحالات
-  python3 compare_api.py top_                  # الحالات التي يحتوي اسمها/رابطها على النص
-  python3 compare_api.py -v                    # يعرض الفروق التفصيلية دائماً
-  python3 compare_api.py --new http://localhost:9001/api.php --old http://localhost:9001/api/request.php
+  python3 bin/compare_api.py                       # كل الحالات
+  python3 bin/compare_api.py top_                  # الحالات التي يحتوي اسمها/رابطها على النص
+  python3 bin/compare_api.py -v                    # يعرض الفروق التفصيلية دائماً
+  python3 bin/compare_api.py --new http://localhost:9001/api.php --old http://localhost:9001/api/request.php
 
 حالات إضافية: ملف نصي (سطر لكل حالة: استعلام  [# expect-diff])
-  python3 compare_api.py --cases my_cases.txt
+  python3 bin/compare_api.py --cases my_cases.txt
 
 رمز الخروج: 0 = لا فروق غير متوقعة، 1 = يوجد فرق غير متوقع أو خطأ اتصال.
 """
