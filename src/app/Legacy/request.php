@@ -22,6 +22,7 @@ use function API\TitlesInfos\titles_query;
 use function API\Top\top_langs;
 use function API\Top\top_lang_of_users;
 use function API\Top\top_users;
+use App\Endpoints\Definition\EndpointDefinitions;
 
 $other_tables = [
     'in_process',
@@ -52,13 +53,8 @@ $error_results = [];
 $execution_time = 0;
 
 // load endpoint_params.json
-$endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
-
+$endpoint_params_tab = EndpointDefinitions::alltoArray();
 $endpoint_data = $endpoint_params_tab[$get] ?? [];
-
-if (isset($endpoint_data['redirect'])) {
-    $endpoint_data = $endpoint_params_tab[$endpoint_data['redirect']] ?? [];
-}
 
 $endpoint_params = $endpoint_data['params'] ?? [];
 $endpoint_columns = $endpoint_data['columns'] ?? [];
