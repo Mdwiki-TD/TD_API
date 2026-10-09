@@ -1,11 +1,12 @@
 <?php
 // src/app/Endpoints/Handlers/StaticsByCategoryHandler.php
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace App\Endpoints\Handlers;
 
-use App\Endpoints\{EndpointContext, QuerySpec};
 use App\Endpoints\Definition\EndpointDefinition;
+use App\Endpoints\EndpointContext;
+use App\Endpoints\QuerySpec;
 
 final class StaticsByCategoryHandler extends CategoryLangHandler
 {
