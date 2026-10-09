@@ -1,7 +1,7 @@
 <?php
 namespace API\Top;
 
-use App\Legacy\AddParams;
+use Legacy\AddParams;
 
 function top_query($select)
 {

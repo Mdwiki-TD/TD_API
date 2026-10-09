@@ -1,7 +1,7 @@
 <?php
 // src/app/helps.php
 
-namespace App\Legacy;
+namespace Legacy;
 
 class Helps
 {

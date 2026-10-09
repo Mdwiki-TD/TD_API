@@ -1,7 +1,7 @@
 <?php
 // src/app/qids.php
 
-namespace App\Legacy;
+namespace Legacy;
 
 class Qids
 {

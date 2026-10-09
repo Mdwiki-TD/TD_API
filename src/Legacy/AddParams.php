@@ -1,5 +1,5 @@
 <?php
-namespace App\Legacy;
+namespace Legacy;
 
 class AddParams
 {

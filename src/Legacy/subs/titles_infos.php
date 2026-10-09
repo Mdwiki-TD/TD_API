@@ -1,8 +1,8 @@
 <?php
 namespace API\TitlesInfos;
 
-use App\Legacy\AddParams;
-use App\Legacy\Helps;
+use Legacy\AddParams;
+use Legacy\Helps;
 
 function titles_query($endpoint_params)
 {

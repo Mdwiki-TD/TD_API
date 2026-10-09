@@ -5,12 +5,12 @@
  * DEPRECATED
  */
 header('Content-Type: application/json');
-use App\Legacy\AddParams;
-use App\Legacy\Helps;
-use App\Legacy\Leaderboard;
-use App\Legacy\Qids;
-use App\Legacy\SelectHelps;
-use App\Legacy\Sql;
+use Legacy\AddParams;
+use Legacy\Helps;
+use Legacy\Leaderboard;
+use Legacy\Qids;
+use Legacy\SelectHelps;
+use Legacy\Sql;
 
 use function API\Missing\exists_by_lang_and_category;
 use function API\Missing\exists_statics_by_category;
