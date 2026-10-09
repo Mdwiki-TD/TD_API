@@ -52,7 +52,7 @@ $error_results = [];
 $execution_time = 0;
 
 // load endpoint_params.json
-$endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/endpoint_params.json'), true);
+$endpoint_params_tab = json_decode(file_get_contents(__DIR__ . '/../endpoint_params.json'), true);
 
 $endpoint_data = $endpoint_params_tab[$get] ?? [];
 
