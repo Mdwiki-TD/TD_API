@@ -42,7 +42,7 @@ final class FilterBuilder
         $filterdList = self::filters($endpointParams, $ignore);
 
         foreach ($filterdList as $def) {
-            $column = (string) ($def->column ?? '');
+            $column = $def->column;
             if ($column === '' || (!$request->has($def->name) && !$request->has($column))) {
                 continue;
             }
@@ -55,7 +55,7 @@ final class FilterBuilder
             if ($column === 'limit' || $column === 'select' || !self::isValid($value)) {
                 continue;
             }
-            if (isset($def->noEmptyValue) && empty($value)) {
+            if ($def->noEmptyValue === true && empty($value)) {
                 continue;
             }
 
@@ -84,7 +84,7 @@ final class FilterBuilder
     {
         $out = [];
         foreach ($endpointParams as $p) {
-            if (!isset($p->name) || isset($p->noSelect)) {
+            if ($p->noSelect) {
                 continue;
             }
             if (in_array($p->name, $ignore, true)) {
@@ -115,7 +115,7 @@ final class FilterBuilder
             return [" $glue $column > 0", []];
         }
 
-        if (($def->type ?? '') === 'array') {
+        if ($def->type === 'array') {
             $values = $request->getArray($def->name);
             if ($values === []) {
                 return ['', []];

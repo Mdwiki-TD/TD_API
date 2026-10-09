@@ -61,7 +61,7 @@ final class ViewsHandler implements DefinedEndpoint
                     ),
                     new Param(
                         name: 'lang',
-                        column: 'p.lang',
+                        column: 'v.lang',
                         placeholder: 'Language code',
                         required: true,
                     ),
