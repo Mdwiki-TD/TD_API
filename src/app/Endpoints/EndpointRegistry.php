@@ -7,9 +7,13 @@ namespace App\Endpoints;
 use App\Endpoints\Definition\{EndpointDefinition, EndpointDefinitions};
 
 use App\Endpoints\DefinedEndpoint;
+use App\Endpoints\Handlers\Top\{
+    TopLangsHandler,
+    TopUsersHandler,
+    TopLangOfUsersHandler,
+};
 use App\Endpoints\Handlers\{
     GraphDataHandler,
-    CallableHandler,
     DefaultTableHandler,
     StaticSqlHandler,
     FilteredSqlHandler,
@@ -32,13 +36,6 @@ use App\Endpoints\Handlers\{
     ExistsStaticsByCategoryHandler,
     StaticsByCategoryHandler,
 };
-use function API\Missing\{
-    missing_by_lang_and_category,
-    exists_statics_by_category,
-    exists_by_lang_and_category,
-    statics_by_category,
-};
-use function API\Top\{top_langs, top_users, top_lang_of_users};
 
 final class EndpointRegistry
 {
@@ -63,7 +60,6 @@ final class EndpointRegistry
 
     public function __construct()
     {
-        $missing = new CallableHandler(fn($c): array => missing_by_lang_and_category($c->params));
 
         $views = new ViewsHandler(defaultOrder: '1 DESC');
         $userViews = new ViewsHandler(requiredParam: 'user');
@@ -79,13 +75,9 @@ final class EndpointRegistry
             'exists_statics_by_category' => new ExistsStaticsByCategoryHandler(),
             'statics_by_category' => new StaticsByCategoryHandler(),
 
-            // TODO: top.php need to be replaced by Handlers
-            'top_langs' => new CallableHandler(fn($c): array => top_langs($c->params)),
-            'top_users' => new CallableHandler(fn($c): array => top_users($c->params)),
-            'top_lang_of_users' => new CallableHandler(fn($c): array => top_lang_of_users($c->params)),
-
-            // 'missing'                      => $missing,
-            // 'missing_by_lang_and_category' => $missing,
+            'top_langs' => new TopLangsHandler(),
+            'top_users' => new TopUsersHandler(),
+            'top_lang_of_users' => new TopLangOfUsersHandler(),
 
             'revids' => new FilteredSqlHandler('SELECT title, revid FROM mdwiki_revids'),
             'titles' => new FilteredSqlHandler(
@@ -103,7 +95,8 @@ final class EndpointRegistry
                     left join enwiki_pageviews ep   on ep.title   = ase.title
                     left join qids q                on q.title    = ase.title
                     left join refs_counts rc        on rc.r_title = ase.title
-                    left join words w               on w.w_title  = ase.title"
+                    left join words w               on w.w_title  = ase.title
+                    "
             ),
 
             'user_status' => new UserStatusHandler(),
