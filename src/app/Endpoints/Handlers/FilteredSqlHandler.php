@@ -7,16 +7,16 @@ use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 
 /**
- * استعلام أساسي + فلاتر من endpoint_params.json (user_access, language_settings ...)
+ * Base query + filters from endpoint_params.json (user_access, language_settings ...)
  */
 
 final class FilteredSqlHandler implements EndpointHandler
 {
     public function __construct(
         private string $sql,
-        private string $suffix = '',        // يُلصق بعد الفلاتر (GROUP BY ثابت ...)
+        private string $suffix = '',        // Appended after filters (constant GROUP BY ...)
         private string $defaultOrder = '',
-        private bool $groupable = false,    // يدعم ?group= من المستخدم
+        private bool $groupable = false,    // Supports ?group= from the user
     ) {
     }
 
@@ -32,3 +32,4 @@ final class FilteredSqlHandler implements EndpointHandler
         return new QuerySpec($sql, $params, defaultOrder: $this->defaultOrder);
     }
 }
+
