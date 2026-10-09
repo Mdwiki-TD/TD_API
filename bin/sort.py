@@ -7,7 +7,7 @@ save
 from pathlib import Path
 import json
 
-file_path = Path(__file__).parent.parent / 'endpoint_params.json'
+file_path = Path(__file__).parent.parent / 'src/app/endpoint_params.json'
 
 with open(file_path, 'r') as f:
     data = json.load(f)
