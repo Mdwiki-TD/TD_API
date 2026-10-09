@@ -12,10 +12,10 @@ use App\Legacy\Qids;
 use App\Legacy\SelectHelps;
 use App\Legacy\Sql;
 
-use function App\Endpoints\Handlers\exists_by_lang_and_category;
-use function App\Endpoints\Handlers\exists_statics_by_category;
-use function App\Endpoints\Handlers\missing_by_lang_and_category;
-use function App\Endpoints\Handlers\statics_by_category;
+use function API\Missing\exists_by_lang_and_category;
+use function API\Missing\exists_statics_by_category;
+use function API\Missing\missing_by_lang_and_category;
+use function API\Missing\statics_by_category;
 use function API\TitlesInfos\mdwiki_revids;
 use function API\TitlesInfos\pages_query;
 use function API\TitlesInfos\titles_query;
@@ -86,7 +86,7 @@ switch ($get) {
         break;
 
     case 'statics_by_category':
-        [$query, $params, $error] = statics_by_category();
+        [$query, $params, $error] = statics_by_category($endpoint_params);
         break;
 
     case 'revids':
@@ -446,11 +446,11 @@ switch ($get) {
 }
 
 $out = [
-    "time" => $execution_time,
-    "query" => $qua,
-    "source" => $source,
-    "length" => count($results),
-    "results" => $results,
+    "time"             => $execution_time,
+    "query"            => $qua,
+    "source"           => $source,
+    "length"           => count($results),
+    "results"          => $results,
     // "endpoint_params" => $endpoint_params,
     "supported_params" => [],
     "supported_values" => [],

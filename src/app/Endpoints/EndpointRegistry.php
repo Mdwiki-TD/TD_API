@@ -69,18 +69,18 @@ final class EndpointRegistry
         $qids = new QidsHandler();
 
         $this->handlers = [
-            'missing' => new MissingPagesHandler(),
+            'missing'                      => new MissingPagesHandler(),
             'missing_by_lang_and_category' => new MissingByLangAndCategoryHandler(),
-            'exists_by_lang_and_category' => new ExistsByLangAndCategoryHandler(),
-            'exists_statics_by_category' => new ExistsStaticsByCategoryHandler(),
-            'statics_by_category' => new StaticsByCategoryHandler(),
+            'exists_by_lang_and_category'  => new ExistsByLangAndCategoryHandler(),
+            'exists_statics_by_category'   => new ExistsStaticsByCategoryHandler(),
+            'statics_by_category'          => new StaticsByCategoryHandler(),
 
-            'top_langs' => new TopLangsHandler(),
-            'top_users' => new TopUsersHandler(),
-            'top_lang_of_users' => new TopLangOfUsersHandler(),
+            'top_langs'                    => new TopLangsHandler(),
+            'top_users'                    => new TopUsersHandler(),
+            'top_lang_of_users'            => new TopLangOfUsersHandler(),
 
-            'revids' => new FilteredSqlHandler('SELECT title, revid FROM mdwiki_revids'),
-            'titles' => new FilteredSqlHandler(
+            'revids'                       => new FilteredSqlHandler('SELECT title, revid FROM mdwiki_revids'),
+            'titles'                       => new FilteredSqlHandler(
                 "SELECT
                     ase.title AS title,
                     ase.importance AS importance,
@@ -95,59 +95,58 @@ final class EndpointRegistry
                     left join enwiki_pageviews ep   on ep.title   = ase.title
                     left join qids q                on q.title    = ase.title
                     left join refs_counts rc        on rc.r_title = ase.title
-                    left join words w               on w.w_title  = ase.title
-                    "
+                    left join words w               on w.w_title  = ase.title"
             ),
 
-            'user_status' => new UserStatusHandler(),
-            'user_data_status' => new UserDataStatusHandler(),
+            'user_status'                  => new UserStatusHandler(),
+            'user_data_status'             => new UserDataStatusHandler(),
 
-            'users' => new UsersHandler(),
-            'category_members' => new CategoryMembersHandler(),
+            'users'                        => new UsersHandler(),
+            'category_members'             => new CategoryMembersHandler(),
 
-            'coordinators' => new StaticSqlHandler(
+            'coordinators'                 => new StaticSqlHandler(
                 'SELECT id, username, is_active FROM coordinators ORDER BY id',
                 applyOrder: false,
             ),
 
-            'langs' => new StaticSqlHandler('SELECT code, autonym, name, redirects FROM langs'),
+            'langs'                        => new StaticSqlHandler('SELECT code, autonym, name, redirects FROM langs'),
 
-            'graph_data' => new GraphDataHandler(),
+            'graph_data'                   => new GraphDataHandler(),
 
-            'user_access' => new FilteredSqlHandler('SELECT id, user_name, created_at FROM access_keys'),
+            'user_access'                  => new FilteredSqlHandler('SELECT id, user_name, created_at FROM access_keys'),
 
-            'views' => $views,
-            'views_new' => $views,
-            'user_views' => $userViews,
-            'user_views2' => $userViews,
-            'lang_views' => $langViews,
-            'lang_views2' => $langViews,
+            'views'                        => $views,
+            'views_new'                    => $views,
+            'user_views'                   => $userViews,
+            'user_views2'                  => $userViews,
+            'lang_views'                   => $langViews,
+            'lang_views2'                  => $langViews,
 
-            'leaderboard_table' => $leader,
-            'leaderboard_table_formated' => $leader,
+            'leaderboard_table'            => $leader,
+            'leaderboard_table_formated'   => $leader,
 
-            'qids' => $qids,
-            'qids_others' => $qids,
-            'pages_users_to_main' => new PagesUsersToMainHandler(),
+            'qids'                         => $qids,
+            'qids_others'                  => $qids,
+            'pages_users_to_main'          => new PagesUsersToMainHandler(),
 
-            'language_settings' => new FilteredSqlHandler('SELECT DISTINCT * FROM language_settings'),
+            'language_settings'            => new FilteredSqlHandler('SELECT DISTINCT * FROM language_settings'),
 
-            'words' => new FilteredSqlHandler(
+            'words'                        => new FilteredSqlHandler(
                 'SELECT w_id, w_title, w_lead_words, w_all_words FROM words'
             ),
 
-            'count_pages' => new FilteredSqlHandler(
+            'count_pages'                  => new FilteredSqlHandler(
                 'SELECT DISTINCT user, COUNT(target) AS count FROM pages',
                 suffix: ' GROUP BY user',
                 defaultOrder: 'count DESC',
             ),
 
-            'publish_reports_stats' => new FilteredSqlHandler(
+            'publish_reports_stats'        => new FilteredSqlHandler(
                 'SELECT DISTINCT YEAR(date) AS year, MONTH(date) AS month, lang, user, result
                 FROM publish_reports',
                 // suffix: ' GROUP BY year, month, lang, user, result',
             ),
-            'in_process' => new FilteredSqlHandler(
+            'in_process'                   => new FilteredSqlHandler(
                 'SELECT title, user, lang, cat, translate_type, word, add_date,
                         ca.campaign, la.autonym
                 FROM in_process
@@ -155,9 +154,9 @@ final class EndpointRegistry
                 LEFT JOIN langs la ON lang = la.code',
                 groupable: true,
             ),
-            'pages_with_views' => new PagesWithViewsHandler(),
+            'pages_with_views'             => new PagesWithViewsHandler(),
 
-            'users_by_last_pupdate' => new StaticSqlHandler(
+            'users_by_last_pupdate'        => new StaticSqlHandler(
                 "WITH RankedPages AS (
                     SELECT p1.target, p1.user, p1.pupdate, p1.lang, p1.title,
                             ROW_NUMBER() OVER (PARTITION BY p1.user ORDER BY p1.pupdate DESC) AS rn
@@ -171,23 +170,23 @@ final class EndpointRegistry
                 applyOrder: false,
             ),
 
-            'pages_by_user_or_lang' => new PagesByUserOrLangHandler(),
+            'pages_by_user_or_lang'        => new PagesByUserOrLangHandler(),
 
-            'pages_langs' => new StaticSqlHandler(
+            'pages_langs'                  => new StaticSqlHandler(
                 'SELECT lang, autonym FROM pages p LEFT JOIN langs la ON lang = la.code GROUP BY lang'
             ),
-            'pages_users_langs' => new StaticSqlHandler(
+            'pages_users_langs'            => new StaticSqlHandler(
                 'SELECT lang, autonym FROM pages_users p LEFT JOIN langs la ON lang = la.code GROUP BY lang'
             ),
 
-            'get_lang_years' => new FilteredSqlHandler(
+            'get_lang_years'               => new FilteredSqlHandler(
                 'SELECT DISTINCT YEAR(p.pupdate) as year
                     FROM pages p
                     LEFT JOIN categories ca ON p.cat = ca.category',
             ),
 
-            'pages' => new PagesHandler('pages'),
-            'pages_users' => new PagesHandler('pages_users'),
+            'pages'                        => new PagesHandler('pages'),
+            'pages_users'                  => new PagesHandler('pages_users'),
         ];
         foreach (self::TABLES as $table) {
             $this->handlers[$table] = new DefaultTableHandler($table);
