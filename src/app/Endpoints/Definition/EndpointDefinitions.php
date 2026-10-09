@@ -1270,17 +1270,6 @@ final class EndpointDefinitions
                 summary: 'Retrieve languages that have user pages',
                 tag: 'languages',
             ),
-            'user_access'                  => new EndpointDefinition(
-                summary: 'TODO',
-                tag: 'users',
-                params: [
-                    new Param(
-                        name: 'user_name',
-                        column: 'user_name',
-                        placeholder: 'Username'
-                    ),
-                ],
-            ),
             'statics_by_category'          => new EndpointDefinition(
                 summary: 'TODO',
                 tag: 'pages_infos',

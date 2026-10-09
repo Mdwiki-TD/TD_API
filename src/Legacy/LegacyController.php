@@ -159,11 +159,6 @@ class LegacyController
                 SQL;
                 break;
 
-            case 'user_access':
-                $query = "SELECT id, user_name, created_at FROM access_keys";
-                [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params);
-                break;
-
             case 'views': // now at ViewsHandler.php
             case 'views_new':
                 $query = <<<SQL

@@ -115,8 +115,6 @@ final class EndpointRegistry
 
             'graph_data'                   => new GraphDataHandler(),
 
-            'user_access'                  => new FilteredSqlHandler('SELECT id, user_name, created_at FROM access_keys'),
-
             'views'                        => $views,
             'views_new'                    => $views,
             'user_views'                   => $userViews,

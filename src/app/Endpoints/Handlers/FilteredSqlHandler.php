@@ -7,7 +7,7 @@ use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 
 /**
- * Base query + filters from endpoint_params.json (user_access, language_settings ...)
+ * Base query + filters from endpoint_params.json (language_settings ...)
  */
 
 final class FilteredSqlHandler implements EndpointHandler
