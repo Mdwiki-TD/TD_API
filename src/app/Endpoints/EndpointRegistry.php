@@ -71,8 +71,10 @@ final class EndpointRegistry
         $this->handlers = [
             'missing'                      => new MissingPagesHandler(),
             'missing_by_lang_and_category' => new MissingByLangAndCategoryHandler(),
+
             'exists_by_lang_and_category'  => new ExistsByLangAndCategoryHandler(),
             'exists_statics_by_category'   => new ExistsStaticsByCategoryHandler(),
+
             'statics_by_category'          => new StaticsByCategoryHandler(),
 
             'top_langs'                    => new TopLangsHandler(),

@@ -1333,6 +1333,13 @@ final class EndpointDefinitions
         ];
     }
 
+    public static function alltoArray(): array
+    {
+        return array_map(function (EndpointDefinition $definition) {
+            return $definition->toArray();
+        }, self::all());
+    }
+
     public static function for(string $name): ?EndpointDefinition
     {
         return self::all()[$name] ?? null;
