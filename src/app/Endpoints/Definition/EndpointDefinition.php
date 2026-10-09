@@ -23,6 +23,19 @@ final class EndpointDefinition
     ) {
     }
 
+    public function getrequiredParams(): array
+    {
+        return array_filter($this->params, static fn(Param $p): bool => $p->required);
+    }
+    public function getParam(string $name): Param|null
+    {
+        foreach ($this->params as $param) {
+            if ($param->name === $name) {
+                return $param;
+            }
+        }
+        return null;
+    }
     /**
      * With form of Query/* and ResponseBuilder (alternative to endpoint_params.json)
      * */

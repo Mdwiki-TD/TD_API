@@ -19,6 +19,10 @@ final class FilteredSqlHandler implements EndpointHandler
     ) {
     }
 
+    public function definition()
+    {
+        return null;
+    }
     public function handle(EndpointContext $ctx): QuerySpec
     {
         [$sql, $params] = $ctx->applyFilters($this->sql);

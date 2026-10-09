@@ -33,7 +33,8 @@ final class ViewsHandler implements DefinedEndpoint
                     new Param(
                         name: 'user',
                         column: 'p.user',
-                        placeholder: 'Username'
+                        placeholder: 'Username',
+                        required: true,
                     ),
                     new Param(
                         name: 'lang',
@@ -62,7 +63,8 @@ final class ViewsHandler implements DefinedEndpoint
                     new Param(
                         name: 'lang',
                         column: 'p.lang',
-                        placeholder: 'Language code'
+                        placeholder: 'Language code',
+                        required: true,
                     ),
                     new Param(
                         name: 'year',

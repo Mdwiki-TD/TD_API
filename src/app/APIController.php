@@ -64,7 +64,7 @@ class APIController
             }
             [$handler, $definition] = $resolved;
 
-            $ctx = new EndpointContext($get, $definition->toArray(), $this->request);
+            $ctx = new EndpointContext($get, $definition, $this->request);
 
             $spec = $handler->handle($ctx);
             if ($spec->sql === '') {

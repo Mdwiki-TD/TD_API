@@ -6,6 +6,6 @@ namespace App\Endpoints;
 
 interface EndpointHandler
 {
-    // public function definition(): EndpointDefinition;
     public function handle(EndpointContext $ctx): QuerySpec;
+    public function definition();
 }

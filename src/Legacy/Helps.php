@@ -41,7 +41,7 @@ class Helps
 
     public static function sanitize_input($input, $pattern)
     {
-        if (! empty($input) && preg_match($pattern, $input) && $input !== "all") {
+        if (!empty($input) && preg_match($pattern, $input) && $input !== "all") {
             return filter_var($input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         }
         return null;
@@ -50,17 +50,17 @@ class Helps
     public static function filter_order($key, $endpoint_data, $get_value)
     {
 
-        $endpoint_params  = $endpoint_data['params'] ?? [];
+        $endpoint_params = $endpoint_data['params'] ?? [];
         $endpoint_columns = $endpoint_data['columns'] ?? [];
 
-        if (! isset($_GET[$key])) {
+        if (!isset($_GET[$key])) {
             // error_log("No '$key' parameter defined in endpoint data");
             return null;
         }
 
         $added = $get_value;
 
-        if (! $added) {
+        if (!$added) {
             // error_log("No '$key' parameter provided in the request");
             return null;
         }
@@ -77,9 +77,9 @@ class Helps
             $value = trim($value);
             // if its number okay
             if (
-                ! in_array($value, $endpoint_columns) &&
-                ! in_array($value, $endpoint_params) &&
-                ! is_numeric($value)
+                !in_array($value, $endpoint_columns) &&
+                !in_array($value, $endpoint_params) &&
+                !is_numeric($value)
             ) {
                 error_log("order value '$value' is not valid for key '$key'");
                 unset($added_array[$k]);
@@ -108,36 +108,36 @@ class Helps
     public static function get_order_direction($param_order_direction)
     {
 
-        $order_direction = isset($_GET['order_direction']) ?
-        filter_input(INPUT_GET, 'order_direction', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : ($param_order_direction["default"] ?? "");
+        $direction = isset($_GET['order_direction']) ?
+            filter_input(INPUT_GET, 'order_direction', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : ($param_order_direction["default"] ?? "");
 
-        if (! $order_direction) {
+        if (!$direction) {
             return "DESC";
         }
 
         $valid_orders = ["ASC", "DESC"];
 
-        // $order_direction upper
-        $order_direction = strtoupper($order_direction);
+        // $direction upper
+        $direction = strtoupper($direction);
 
-        if (! in_array($order_direction, $valid_orders)) {
-            $order_direction = "DESC";
+        if (!in_array($direction, $valid_orders)) {
+            $direction = "DESC";
         }
 
-        return $order_direction;
+        return $direction;
     }
 
     public static function add_order($qua, $endpoint_data, $get_value)
     {
 
         $endpoint_params = $endpoint_data['params'] ?? [];
-        $order_values    = $endpoint_data['order_values'] ?? [];
+        $order_values = $endpoint_data['order_values'] ?? [];
 
         $params_key_to_data = array_column($endpoint_params, null, 'name');
 
         $param_order = $params_key_to_data["order"] ?? [];
 
-        if (! $param_order) {
+        if (!$param_order) {
             // error_log("No 'order' parameter defined in endpoint data");
             return $qua;
         }
@@ -151,22 +151,22 @@ class Helps
 
         $added = $default_order;
 
-        if (! empty($get_value)) {
+        if (!empty($get_value)) {
             $added_value = $order_values[$get_value] ?? "";
             // error_log("get_value: $get_value, added_value: $added_value");
-            if (! empty($added_value)) {
+            if (!empty($added_value)) {
                 $added = $added_value;
             } else {
                 $added = self::filter_order('order', $endpoint_data, $get_value) ?? $default_order;
             }
         }
 
-        if (! $added) {
+        if (!$added) {
             return $qua;
         }
 
         $param_order_direction = $params_key_to_data["order_direction"] ?? [];
-        $order_direction       = self::get_order_direction($param_order_direction);
+        $order_direction = self::get_order_direction($param_order_direction);
 
         $qua .= " ORDER BY $added $order_direction";
 

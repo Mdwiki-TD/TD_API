@@ -187,7 +187,6 @@ final class EndpointRegistry
         }
     }
 
-    /** @return array<string, EndpointHandler> الاسم => handler (aliases تشير لنفس الكائن) */
     public function all(): array
     {
         return $this->handlers;
@@ -200,9 +199,8 @@ final class EndpointRegistry
             return null;
         }
 
-        $definition = $handler instanceof DefinedEndpoint
-            ? $handler->definition()
-            : EndpointDefinitions::for($get);
+        // $definition = $handler instanceof DefinedEndpoint ? $handler->definition() : EndpointDefinitions::for($get);
+        $definition = $handler->definition() ?? EndpointDefinitions::for($get);
 
         return $definition ? [$handler, $definition] : null;
     }
@@ -211,10 +209,11 @@ final class EndpointRegistry
     public function definitions(): array
     {
         $out = [];
-        foreach ($this->handlers as $name => $h) {
-            $d = $h instanceof DefinedEndpoint ? $h->definition() : EndpointDefinitions::for($name);
-            if ($d !== null) {
-                $out[$name] = $d;
+        foreach ($this->handlers as $name => $handler) {
+            // $definition = $handler instanceof DefinedEndpoint ? $handler->definition() : EndpointDefinitions::for($name);
+            $definition = $handler->definition() ?? EndpointDefinitions::for($name);
+            if ($definition !== null) {
+                $out[$name] = $definition;
             }
 
         }

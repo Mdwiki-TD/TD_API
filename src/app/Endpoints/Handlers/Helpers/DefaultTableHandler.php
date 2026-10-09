@@ -6,6 +6,10 @@ use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 final class DefaultTableHandler implements EndpointHandler
 {
+    public function definition()
+    {
+        return null;
+    }
     public function __construct(private string $table)
     {
     }

@@ -13,6 +13,10 @@ final class StaticSqlHandler implements EndpointHandler
     ) {
     }
 
+    public function definition()
+    {
+        return null;
+    }
     public function handle(EndpointContext $ctx): QuerySpec
     {
         return new QuerySpec($this->sql, [], '', $this->applyOrder);
