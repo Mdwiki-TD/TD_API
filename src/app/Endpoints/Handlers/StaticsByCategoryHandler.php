@@ -1,6 +1,6 @@
 <?php
 // src/app/Endpoints/Handlers/StaticsByCategoryHandler.php
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
 
