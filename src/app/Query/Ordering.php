@@ -19,16 +19,16 @@ final class Ordering
     {
         $map = [];
 
-        foreach ($data->params ?? [] as $p) {
-            $name = $p->name ?? '';
-            $col = $p->column ?? '';
-            if ($name === '' || $col === '' || isset($p->noSelect)) {
+        foreach ($data->params as $p) {
+            $name = $p->name;
+            $col = $p->column;
+            if ($name === '' || $col === '' || $p->noSelect) {
                 continue;
             }
             $map[$name] = $col;
         }
 
-        foreach ($data->columns ?? [] as $c) {
+        foreach ($data->columns as $c) {
             $map[$c] = $c;
         }
 
