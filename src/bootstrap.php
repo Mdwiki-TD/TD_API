@@ -7,3 +7,4 @@ if ($env === 'development' && file_exists(__DIR__ . '/load_env.php')) {
 }
 
 include_once __DIR__ . '/app/bootstrap.php';
+include_once __DIR__ . '/Legacy/bootstrap.php';
