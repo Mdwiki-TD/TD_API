@@ -5,7 +5,8 @@ namespace App\Endpoints\Handlers;
 
 use App\Endpoints\Definition\{EndpointDefinition, Param};
 
-/** الاسم القديم `missing`: نفس الاستعلام، لكن يقبل ?order= ولا يطلب lang في تعريفه */
+use App\Endpoints\Handlers\ByCategory\MissingByLangAndCategoryHandler;
+
 final class MissingPagesHandler extends MissingByLangAndCategoryHandler
 {
     public function definition(): EndpointDefinition

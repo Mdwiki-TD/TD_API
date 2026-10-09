@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
 use App\Endpoints\Definition\EndpointDefinition;
-use App\Endpoints\{EndpointContext, DefinedEndpoint, EndpointHandler, QuerySpec};
+use App\Endpoints\{EndpointContext, DefinedEndpoint, QuerySpec};
 
-final class CategoryMembersHandler implements EndpointHandler, DefinedEndpoint
+final class CategoryMembersHandler implements DefinedEndpoint
 {
     public const ENDPOINT_NAME    = 'category_members';
     private const DEFAULT_CATEGORY = 'RTT';

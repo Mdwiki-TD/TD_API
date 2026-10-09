@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{EndpointContext, QuerySpec};
 
 
 use App\Endpoints\DefinedEndpoint;
 use App\Endpoints\Definition\Param;
 use App\Endpoints\Definition\EndpointDefinition;
 
-final class ViewsHandler implements EndpointHandler, DefinedEndpoint
+final class ViewsHandler implements DefinedEndpoint
 {
 
     public function __construct(
@@ -75,25 +75,6 @@ final class ViewsHandler implements EndpointHandler, DefinedEndpoint
             ),
             'views'      => new EndpointDefinition(
                 endpoint: 'views',
-                summary: 'Retrieve page views',
-                tag: 'views',
-                params: [
-                    new Param(
-                        name: 'lang',
-                        column: 'p.lang',
-                        placeholder: 'Language code'
-                    ),
-                    new Param(
-                        name: 'year',
-                        column: 'YEAR(p.pupdate)',
-                        type: 'number',
-                        placeholder: 'Year of publication',
-                        doc: 'PublicationYearParam'
-                    ),
-                ],
-            ),
-            'views_new'  => new EndpointDefinition(
-                endpoint: 'views_new',
                 summary: 'Retrieve new page views',
                 tag: 'views',
                 params: [

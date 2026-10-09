@@ -157,7 +157,7 @@ CASES = [
     ("get=status&year=2024&limit=5", True),                   # يعمل الآن (كان ; يكسره)
     ("get=titles&limit=5", False),
     ("get=top_users&limit=5", False),
-    ("get=views_new&limit=10", False),
+    ("get=views&limit=10", False),
     ("get=words&limit=10", False),
     ("get=nonexistent", False),                               # invalid get request
 ]

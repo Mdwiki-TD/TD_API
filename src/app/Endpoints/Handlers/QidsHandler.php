@@ -6,13 +6,13 @@ declare(strict_types=1);
             # AND A.id < B.id
 */
 namespace App\Endpoints\Handlers;
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{EndpointContext, QuerySpec};
 
 use App\Endpoints\DefinedEndpoint;
 use App\Endpoints\Definition\Param;
 use App\Endpoints\Definition\EndpointDefinition;
 
-final class QidsHandler implements EndpointHandler, DefinedEndpoint
+final class QidsHandler implements DefinedEndpoint
 {
 
     private const TABLES = ['qids', 'qids_others'];

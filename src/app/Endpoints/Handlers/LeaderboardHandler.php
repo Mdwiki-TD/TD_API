@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{EndpointContext, QuerySpec};
 
 use App\Endpoints\DefinedEndpoint;
 use App\Endpoints\Definition\Param;
 use App\Endpoints\Definition\EndpointDefinition;
 /** التنسيق (formated) يتم لاحقاً في ResponseBuilder::format حسب قيمة get */
-final class LeaderboardHandler implements EndpointHandler, DefinedEndpoint
+final class LeaderboardHandler implements DefinedEndpoint
 {
     public function __construct(
         private string $endpoint,

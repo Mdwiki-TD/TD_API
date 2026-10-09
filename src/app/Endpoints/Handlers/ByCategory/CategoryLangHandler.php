@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Endpoints\Handlers\ByCategory;
 
-use App\Endpoints\{DefinedEndpoint, EndpointContext, EndpointHandler};
+use App\Endpoints\{DefinedEndpoint, EndpointContext};
 use App\Endpoints\Definition\Param;
 use App\Query\InputSanitizer;
 
 /** أساس endpoints الفئة/اللغة: قراءة lang و category (مع الافتراضي RTT) وتعريفاتهما المشتركة */
-abstract class CategoryLangHandler implements EndpointHandler, DefinedEndpoint
+abstract class CategoryLangHandler implements DefinedEndpoint
 {
     protected const WORDS            = '/^[A-Za-z0-9- ]+$/';
     protected const DEFAULT_CATEGORY = 'RTT';

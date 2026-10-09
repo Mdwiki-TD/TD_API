@@ -3,42 +3,10 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers\Top;
-use App\Endpoints\{DefinedEndpoint, EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{DefinedEndpoint, EndpointContext, QuerySpec};
 use App\Endpoints\Definition\{EndpointDefinition, Param};
 
-function top_query($select)
-{
-
-    $select_field = ($select === 'user') ? 'p.user' : 'p.lang, la.name as lang_name';
-
-    $query = <<<SQL
-        SELECT
-            $select_field,
-            COUNT(p.target) AS targets,
-            SUM(CASE
-                WHEN p.word IS NOT NULL AND p.word != 0 AND p.word != '' THEN p.word
-                WHEN translate_type = 'all' THEN w.w_all_words
-                ELSE w.w_lead_words
-            END) AS words,
-            SUM(CASE
-                    WHEN v.views IS NULL OR v.views = '' THEN 0
-                    ELSE CAST(v.views AS UNSIGNED)
-                END) AS views
-
-        FROM pages p
-        LEFT JOIN users u        ON p.user = u.username
-        LEFT JOIN words w        ON w.w_title = p.title
-        LEFT JOIN views_new_all v ON p.target = v.target AND p.lang = v.lang
-        LEFT JOIN langs la       ON p.lang = la.code
-
-        WHERE p.target != '' AND p.target IS NOT NULL
-        AND p.user != '' AND p.user IS NOT NULL
-        AND p.lang != '' AND p.lang IS NOT NULL
-        SQL;
-
-    return $query;
-}
-abstract class TopHandler implements EndpointHandler, DefinedEndpoint
+abstract class TopHandler implements DefinedEndpoint
 {
     /** عمود/أعمدة SELECT الأولى */
     abstract protected function selectField(): string;

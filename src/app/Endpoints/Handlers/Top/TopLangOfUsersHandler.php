@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Endpoints\Handlers\Top;
 
-use App\Endpoints\{DefinedEndpoint, EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{DefinedEndpoint, EndpointContext, QuerySpec};
 use App\Endpoints\Definition\{EndpointDefinition, Param};
 
 
-final class TopLangOfUsersHandler implements EndpointHandler, DefinedEndpoint
+final class TopLangOfUsersHandler implements DefinedEndpoint
 {
     public function definition(): EndpointDefinition
     {

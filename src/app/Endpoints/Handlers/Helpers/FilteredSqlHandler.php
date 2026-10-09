@@ -1,8 +1,7 @@
 <?php
-// src/app/Endpoints/Handlers/FilteredSqlHandler.php
 declare(strict_types=1);
 
-namespace App\Endpoints\Handlers;
+namespace App\Endpoints\Handlers\Helpers;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 

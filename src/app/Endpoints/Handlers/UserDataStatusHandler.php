@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{EndpointContext, QuerySpec};
 
 use App\Endpoints\DefinedEndpoint;
 use App\Endpoints\Definition\Param;
 use App\Endpoints\Definition\EndpointDefinition;
 
-final class UserDataStatusHandler implements EndpointHandler, DefinedEndpoint
+final class UserDataStatusHandler implements DefinedEndpoint
 {
     public function definition(): EndpointDefinition
     {

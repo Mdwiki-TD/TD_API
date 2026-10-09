@@ -18,10 +18,13 @@ use App\Endpoints\Handlers\ByCategory\{
     MissingByLangAndCategoryHandler,
     StaticsByCategoryHandler,
 };
+use App\Endpoints\Handlers\Helpers\{
+    DefaultTableHandler,
+    StaticSqlHandler,
+    FilteredSqlHandler,
+};
 use App\Endpoints\Handlers\{
     CategoryMembersHandler,
-    DefaultTableHandler,
-    FilteredSqlHandler,
     GraphDataHandler,
     LeaderboardHandler,
     MissingPagesHandler,
@@ -30,7 +33,6 @@ use App\Endpoints\Handlers\{
     PagesUsersToMainHandler,
     PagesWithViewsHandler,
     QidsHandler,
-    StaticSqlHandler,
     UserDataStatusHandler,
     UsersHandler,
     UserStatusHandler,
@@ -55,7 +57,7 @@ final class EndpointRegistry
     ];
 
 
-    /** @var array<string, EndpointHandler> */
+    /** @var array<string, EndpointHandler | DefinedEndpoint> */
     private array $handlers;
 
     public function __construct()

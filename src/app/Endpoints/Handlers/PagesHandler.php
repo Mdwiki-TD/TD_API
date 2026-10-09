@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{EndpointContext, QuerySpec};
 
 use App\Endpoints\DefinedEndpoint;
 use App\Endpoints\Definition\Param;
 use App\Endpoints\Definition\EndpointDefinition;
 
-final class PagesHandler implements EndpointHandler, DefinedEndpoint
+final class PagesHandler implements DefinedEndpoint
 {
     private const DEFAULT_SELECT =
         'title, word, translate_type, cat, lang, user, target, date, pupdate, add_date, deleted, mdwiki_revid, campaign';
