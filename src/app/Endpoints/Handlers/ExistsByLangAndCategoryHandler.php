@@ -3,6 +3,10 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
+
+/*
+replace the old exists_by_lang_and_category
+*/
 use App\Endpoints\Definition\EndpointDefinition;
 use App\Endpoints\{EndpointContext, QuerySpec};
 

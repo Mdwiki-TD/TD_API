@@ -4,6 +4,9 @@ declare (strict_types = 1);
 
 namespace App\Endpoints\Handlers;
 
+/*
+replace the old statics_by_category
+*/
 use App\Endpoints\Definition\EndpointDefinition;
 use App\Endpoints\EndpointContext;
 use App\Endpoints\QuerySpec;
