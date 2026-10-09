@@ -1123,7 +1123,7 @@ final class EndpointDefinitions
                 ],
             ),
             'top_lang_of_users'            => new EndpointDefinition(
-                summary: '',
+                summary: 'User top languages',
                 tag: 'users',
                 params: [
                     new Param(
@@ -1147,7 +1147,7 @@ final class EndpointDefinitions
                 ],
             ),
             'user_status'                  => new EndpointDefinition(
-                summary: '',
+                summary: 'User status',
                 tag: 'users',
                 description: 'list of users (langs, campaigns, categories)',
                 params: [
@@ -1182,7 +1182,7 @@ final class EndpointDefinitions
                 ],
             ),
             'get_lang_years'               => new EndpointDefinition(
-                summary: '',
+                summary: 'Years of language',
                 tag: 'languages',
                 description: 'list of years of language',
                 params: [
