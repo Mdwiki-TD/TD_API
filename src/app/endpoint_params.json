@@ -1080,28 +1080,28 @@
                 "column": "MONTH(p.pupdate)",
                 "type": "number",
                 "placeholder": "month of date",
-                "no_empty_value": true
+                "noEmptyValue": true
             },
             {
                 "name": "year",
                 "column": "YEAR(p.pupdate)",
                 "type": "number",
                 "placeholder": "year of date",
-                "no_empty_value": true
+                "noEmptyValue": true
             },
             {
                 "name": "user",
                 "column": "p.user",
                 "type": "text",
                 "placeholder": "Username",
-                "no_empty_value": false
+                "noEmptyValue": false
             },
             {
                 "name": "lang",
                 "column": "p.lang",
                 "type": "text",
                 "placeholder": "Language code",
-                "no_empty_value": false
+                "noEmptyValue": false
             },
             {
                 "name": "category",
@@ -1129,28 +1129,28 @@
                 "column": "YEAR(p.pupdate)",
                 "type": "number",
                 "placeholder": "year of date",
-                "no_empty_value": true
+                "noEmptyValue": true
             },
             {
                 "name": "month",
                 "column": "MONTH(p.pupdate)",
                 "type": "number",
                 "placeholder": "month of date",
-                "no_empty_value": true
+                "noEmptyValue": true
             },
             {
                 "name": "user_group",
                 "column": "u.user_group",
                 "type": "text",
                 "placeholder": "User Group Name",
-                "no_empty_value": true
+                "noEmptyValue": true
             },
             {
                 "name": "cat",
                 "column": "p.cat",
                 "type": "text",
                 "placeholder": "Category",
-                "no_empty_value": true
+                "noEmptyValue": true
             }
         ]
     },
@@ -1162,28 +1162,28 @@
                 "column": "YEAR(p.pupdate)",
                 "type": "number",
                 "placeholder": "year of date",
-                "no_empty_value": true
+                "noEmptyValue": true
             },
             {
                 "name": "month",
                 "column": "MONTH(p.pupdate)",
                 "type": "number",
                 "placeholder": "month of date",
-                "no_empty_value": true
+                "noEmptyValue": true
             },
             {
                 "name": "user_group",
                 "column": "u.user_group",
                 "type": "text",
                 "placeholder": "User Group Name",
-                "no_empty_value": true
+                "noEmptyValue": true
             },
             {
                 "name": "cat",
                 "column": "p.cat",
                 "type": "text",
                 "placeholder": "Category",
-                "no_empty_value": true
+                "noEmptyValue": true
             }
         ]
     },
@@ -1205,14 +1205,14 @@
                 "column": "p.user",
                 "type": "text",
                 "placeholder": "Username",
-                "no_empty_value": false
+                "noEmptyValue": false
             },
             {
                 "name": "lang",
                 "column": "p.lang",
                 "type": "text",
                 "placeholder": "Language code",
-                "no_empty_value": false
+                "noEmptyValue": false
             },
             {
                 "name": "select",
@@ -1236,7 +1236,7 @@
                 "column": "p.lang",
                 "type": "text",
                 "placeholder": "Language code",
-                "no_empty_value": false
+                "noEmptyValue": false
             }
         ]
     }

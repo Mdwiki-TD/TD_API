@@ -14,9 +14,22 @@ final class MissingPagesHandler extends MissingByLangAndCategoryHandler
             summary: 'Retrieve missing pages',
             tag: 'pages_infos',
             params: [
-                new Param(name: 'lang', column: 't.code', placeholder: 'Language code'),
-                new Param(name: 'category', column: 'a.category', placeholder: 'Category'),
-                new Param(name: 'order', column: 'order', placeholder: 'Order by', noSelect: true),
+                new Param(
+                    name: 'lang',
+                    column: 't.code',
+                    placeholder: 'Language code'
+                ),
+                new Param(
+                    name: 'category',
+                    column: 'a.category',
+                    placeholder: 'Category'
+                ),
+                new Param(
+                    name: 'order',
+                    column: 'order',
+                    placeholder: 'Order by',
+                    noSelect: true
+                ),
             ],
         );
     }

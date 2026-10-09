@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers\Top;
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
-
-use App\Legacy\AddParams;
+use App\Endpoints\{DefinedEndpoint, EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\Definition\{EndpointDefinition, Param};
 
 function top_query($select)
 {
@@ -21,26 +20,16 @@ function top_query($select)
                 WHEN translate_type = 'all' THEN w.w_all_words
                 ELSE w.w_lead_words
             END) AS words,
-            SUM(
-                CASE
+            SUM(CASE
                     WHEN v.views IS NULL OR v.views = '' THEN 0
                     ELSE CAST(v.views AS UNSIGNED)
-                END
-                ) AS views
+                END) AS views
 
         FROM pages p
-
-        LEFT JOIN users u
-            ON p.user = u.username
-
-        LEFT JOIN words w
-            ON w.w_title = p.title
-
-        LEFT JOIN views_new_all v
-            ON p.target = v.target AND p.lang = v.lang
-
-        LEFT JOIN langs la
-            ON p.lang = la.code
+        LEFT JOIN users u        ON p.user = u.username
+        LEFT JOIN words w        ON w.w_title = p.title
+        LEFT JOIN views_new_all v ON p.target = v.target AND p.lang = v.lang
+        LEFT JOIN langs la       ON p.lang = la.code
 
         WHERE p.target != '' AND p.target IS NOT NULL
         AND p.user != '' AND p.user IS NOT NULL
@@ -49,37 +38,62 @@ function top_query($select)
 
     return $query;
 }
-
-function top_users($endpoint_params)
+abstract class TopHandler implements EndpointHandler, DefinedEndpoint
 {
+    /** عمود/أعمدة SELECT الأولى */
+    abstract protected function selectField(): string;
 
-    $query = top_query('user');
+    /** عمود GROUP BY */
+    abstract protected function groupColumn(): string;
 
-    [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params, []);
+    abstract protected function summary(): string;
 
-    $query .= " GROUP BY p.user ORDER BY targets DESC";
+    public function definition(): EndpointDefinition
+    {
+        return new EndpointDefinition(
+            summary: $this->summary(),
+            tag: 'users',
+            params: [
+                new Param(name: 'year', column: 'YEAR(p.pupdate)', type: 'number', placeholder: 'year of date', noEmptyValue: true, doc: 'YearParam'),
+                new Param(name: 'month', column: 'MONTH(p.pupdate)', type: 'number', placeholder: 'month of date', noEmptyValue: true),
+                new Param(name: 'user_group', column: 'u.user_group', placeholder: 'User Group Name', noEmptyValue: true),
+                new Param(name: 'cat', column: 'p.cat', placeholder: 'Category', noEmptyValue: true),
+            ],
+        );
+    }
 
-    return [$query, $params, ""];
+    public function handle(EndpointContext $ctx): QuerySpec
+    {
+        $sql = "SELECT
+                {$this->selectField()},
+                COUNT(p.target) AS targets,
+                SUM(CASE
+                    WHEN p.word IS NOT NULL AND p.word != 0 AND p.word != '' THEN p.word
+                    WHEN translate_type = 'all' THEN w.w_all_words
+                    ELSE w.w_lead_words
+                END) AS words,
+                SUM(CASE
+                    WHEN v.views IS NULL OR v.views = '' THEN 0
+                    ELSE CAST(v.views AS UNSIGNED)
+                END) AS views
+
+            FROM pages p
+            LEFT JOIN users u        ON p.user = u.username
+            LEFT JOIN words w        ON w.w_title = p.title
+            LEFT JOIN views_new_all v ON p.target = v.target AND p.lang = v.lang
+            LEFT JOIN langs la       ON p.lang = la.code
+
+            WHERE p.target != '' AND p.target IS NOT NULL
+              AND p.user != '' AND p.user IS NOT NULL
+              AND p.lang != '' AND p.lang IS NOT NULL";
+
+        // الفلاتر (AND ...) ثم GROUP BY، وبعدها ORDER/LIMIT من QueryExecutor
+        [$sql, $params] = $ctx->applyFilters($sql);
+
+        return new QuerySpec(
+            $sql . ' GROUP BY ' . $this->groupColumn(),
+            $params,
+            defaultOrder: 'targets DESC',
+        );
+    }
 }
-
-function top_langs($endpoint_params)
-{
-
-    $query = top_query('lang');
-
-    [$query, $params] = AddParams::add_li_params($query, [], $endpoint_params, [""]);
-
-    $query .= " GROUP BY p.lang ORDER BY targets DESC";
-
-    return [$query, $params, ""];
-}
-
-
-final class TopHandler implements EndpointHandler
-{
-}
-
-// 'top_langs' => new CallableHandler(fn($c): array => top_langs($c->params)),
-// 'top_users' => new CallableHandler(fn($c): array => top_users($c->params)),
-// 'top_lang_of_users' => new CallableHandler(fn($c): array => top_lang_of_users($c->params)),
-

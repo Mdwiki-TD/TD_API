@@ -3,14 +3,20 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers\Top;
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\Handlers\Top\TopHandler;
 
-final class TopUsersHandler implements EndpointHandler
+final class TopUsersHandler extends TopHandler
 {
-    public function handle(EndpointContext $ctx): QuerySpec
+    protected function selectField(): string
     {
-        return new QuerySpec(
-            'SELECT ',
-        );
+        return 'p.user';
+    }
+    protected function groupColumn(): string
+    {
+        return 'p.user';
+    }
+    protected function summary(): string
+    {
+        return 'Retrieve Top users';
     }
 }

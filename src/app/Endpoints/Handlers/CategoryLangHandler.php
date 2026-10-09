@@ -10,7 +10,7 @@ use App\Query\InputSanitizer;
 /** أساس endpoints الفئة/اللغة: قراءة lang و category (مع الافتراضي RTT) وتعريفاتهما المشتركة */
 abstract class CategoryLangHandler implements EndpointHandler, DefinedEndpoint
 {
-    protected const WORDS = '/^[A-Za-z0-9- ]+$/';
+    protected const WORDS            = '/^[A-Za-z0-9- ]+$/';
     protected const DEFAULT_CATEGORY = 'RTT';
 
     protected function lang(EndpointContext $ctx): ?string
@@ -26,17 +26,28 @@ abstract class CategoryLangHandler implements EndpointHandler, DefinedEndpoint
 
     protected static function langParam(): Param
     {
-        return new Param(name: 'lang', column: 't.code', placeholder: 'Language code', required: true);
+        return new Param(
+            name: 'lang',
+            column: 't.code',
+            placeholder: 'Language code',
+            required: true
+        );
     }
 
     protected static function categoryParam(bool $required = false): Param
     {
         return new Param(
-            name: 'category', column: 'a.category', placeholder: 'Category',
-            default: self::DEFAULT_CATEGORY, required: $required,
+            name: 'category',
+            column: 'a.category',
+            placeholder: 'Category',
+            default: self::DEFAULT_CATEGORY,
+            required: $required,
             doc: [
-                'in' => 'query', 'name' => 'category', 'description' => 'Category', 'required' => false,
-                'schema' => ['default' => self::DEFAULT_CATEGORY, 'type' => 'string'],
+                'in'          => 'query',
+                'name'        => 'category',
+                'description' => 'Category',
+                'required'    => false,
+                'schema'      => ['default' => self::DEFAULT_CATEGORY, 'type' => 'string'],
             ],
         );
     }

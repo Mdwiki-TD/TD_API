@@ -3,14 +3,21 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers\Top;
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\Handlers\Top\TopHandler;
 
-final class TopLangsHandler implements EndpointHandler
+
+final class TopLangsHandler extends TopHandler
 {
-    public function handle(EndpointContext $ctx): QuerySpec
+    protected function selectField(): string
     {
-        return new QuerySpec(
-            'SELECT ',
-        );
+        return 'p.lang, la.name AS lang_name';
+    }
+    protected function groupColumn(): string
+    {
+        return 'p.lang';
+    }
+    protected function summary(): string
+    {
+        return 'Retrieve Top langs';
     }
 }

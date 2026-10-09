@@ -134,7 +134,7 @@ class AddParamsTest extends TestCase
         $query = 'SELECT * FROM pages';
         // Types should be an array of strings, pass extra config via endpoint_params
         $types = [];
-        $endpoint_params = [['name' => 'filter', 'column' => 'filter_col', 'no_empty_value' => true]];
+        $endpoint_params = [['name' => 'filter', 'column' => 'filter_col', 'noEmptyValue' => true]];
         $result = AddParams::add_li_params($query, $types, $endpoint_params, []);
         $this->assertSame('SELECT * FROM pages', $result[0]);
     }
