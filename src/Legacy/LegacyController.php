@@ -23,7 +23,7 @@ use function API\TitlesInfos\titles_query;
 use function API\Top\top_langs;
 use function API\Top\top_lang_of_users;
 use function API\Top\top_users;
-use App\Endpoints\Definition\EndpointDefinitions;
+use App\Endpoints\EndpointRegistry;
 
 class LegacyController
 {
@@ -64,11 +64,17 @@ class LegacyController
         $execution_time = 0;
 
         // load endpoint_params.json
-        $endpoint_params_tab = EndpointDefinitions::alltoArray();
-        $endpoint_data = $endpoint_params_tab[$get] ?? [];
+        // $endpoint_params_tab = EndpointDefinitions::alltoArray();
+        $registry = new EndpointRegistry();
 
-        $endpoint_params = $endpoint_data['params'] ?? [];
-        $endpoint_columns = $endpoint_data['columns'] ?? [];
+        $endpoint_params_tab = $registry->definitions();
+
+        $endpointData = $endpoint_params_tab[$get] ?? [];
+        $endpoint_columns = $endpointData ? $endpointData->columns : [];
+
+        $endpoint_data = $endpointData ? $endpointData->toArray() : [];
+
+        $endpoint_params = $endpoint_data["params"] ?? [];
 
         $SELECT = SelectHelps::get_select($endpoint_params, $endpoint_columns);
 

@@ -205,7 +205,10 @@ final class EndpointRegistry
         return $definition ? [$handler, $definition] : null;
     }
 
-    /** @return array<string, EndpointDefinition> للمولّد ولاختبار round-trip */
+    /**
+     * @return array<string, EndpointDefinition> for generator and to test round-trip
+     *
+     */
     public function definitions(): array
     {
         $out = [];

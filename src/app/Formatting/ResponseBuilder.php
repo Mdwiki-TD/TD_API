@@ -33,10 +33,10 @@ final class ResponseBuilder
         string $error = '',
     ): array {
         $out = [
-            'time'   => $time,
-            'query'  => '',
-            'source' => $source,
-            'length' => count($results),
+            'time'    => $time,
+            'query'   => '',
+            'source'  => $source,
+            'length'  => count($results),
             'results' => $results,
         ];
 
@@ -49,12 +49,15 @@ final class ResponseBuilder
         }
 
         if ($error !== '') {
-            $out['error'] = ['error' => $error];   // نفس الشكل القديم
+            $out['error'] = ['error' => $error];   // same old format
         }
 
         $out['supported_params'] = array_column($ctx->params, 'name');
-        $out['supported_values'] = array_column($ctx->params, 'options', 'name');
-        $out['columns']          = $ctx->columns;
+
+        // supported_values should not have null values
+        $out['supported_values'] = array_filter(array_column($ctx->params, 'options', 'name'), fn($value) => $value !== null);
+
+        $out['columns'] = $ctx->columns;
         return $out;
     }
 

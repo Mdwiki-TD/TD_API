@@ -3,7 +3,7 @@ namespace Legacy;
 
 class SelectHelps
 {
-    public static function get_select($endpoint_params, $endpoint_columns)
+    public static function get_select(array $endpoint_params, array $endpoint_columns, ?string $SELECT = null)
     {
 
         $false_selects = [
@@ -11,8 +11,9 @@ class SelectHelps
             '0',
             'select',
         ];
-
-        $SELECT = (isset($_GET['select']) && ! in_array($_GET['select'], $false_selects)) ? $_GET['select'] : '*';
+        if ($SELECT === null) {
+            $SELECT = (isset($_GET['select']) && !in_array($_GET['select'], $false_selects)) ? $_GET['select'] : '*';
+        }
 
         if ($SELECT == '*') {
             return '*';
@@ -50,10 +51,10 @@ class SelectHelps
         $select_options = $params_key_to_data["select"]["options"] ?? [];
 
         if (
-            ! in_array($select_lower, $select_valids) &&
-            ! in_array($select_lower, $supported_params) &&
-            ! in_array($select_lower, $select_options) &&
-            ! in_array($select_lower, $endpoint_columns)
+            !in_array($select_lower, $select_valids) &&
+            !in_array($select_lower, $supported_params) &&
+            !in_array($select_lower, $select_options) &&
+            !in_array($select_lower, $endpoint_columns)
         ) {
             $SELECT = '*';
         }

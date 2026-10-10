@@ -6,7 +6,7 @@ namespace Legacy;
 class Helps
 {
 
-    public static function add_offset($qua)
+    public static function add_offset(string $qua)
     {
         // if $qua has OFFSET then return
         if (strpos($qua, 'OFFSET') !== false || strpos($qua, 'offset') !== false) {
@@ -22,7 +22,7 @@ class Helps
         }
         return $qua;
     }
-    public static function add_limit($qua)
+    public static function add_limit(string $qua)
     {
         // if $qua has LIMIT then return
         if (strpos($qua, 'LIMIT') !== false || strpos($qua, 'limit') !== false) {
@@ -39,7 +39,7 @@ class Helps
         return $qua;
     }
 
-    public static function sanitize_input($input, $pattern)
+    public static function sanitize_input(string $input, string $pattern)
     {
         if (!empty($input) && preg_match($pattern, $input) && $input !== "all") {
             return filter_var($input, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -47,7 +47,7 @@ class Helps
         return null;
     }
 
-    public static function filter_order($key, $endpoint_data, $get_value)
+    public static function filter_order(string $key, array $endpoint_data, string $get_value)
     {
 
         $endpoint_params = $endpoint_data['params'] ?? [];
@@ -93,7 +93,7 @@ class Helps
         return null;
     }
 
-    public static function add_group($qua, $endpoint_data, $get_value)
+    public static function add_group(string $qua, array $endpoint_data, string $get_value)
     {
 
         $added = self::filter_order('group', $endpoint_data, $get_value);
@@ -105,12 +105,13 @@ class Helps
         return $qua;
     }
 
-    public static function get_order_direction($param_order_direction)
+    public static function get_order_direction(array $param_order_direction, ?string $direction = null)
     {
-
-        $direction = isset($_GET['order_direction']) ?
-            filter_input(INPUT_GET, 'order_direction', FILTER_SANITIZE_FULL_SPECIAL_CHARS) : ($param_order_direction["default"] ?? "");
-
+        if ($direction === null) {
+            $direction = isset($_GET['order_direction'])
+                ? filter_input(INPUT_GET, 'order_direction', FILTER_SANITIZE_FULL_SPECIAL_CHARS)
+                : ($param_order_direction["default"] ?? "");
+        }
         if (!$direction) {
             return "DESC";
         }
@@ -127,7 +128,7 @@ class Helps
         return $direction;
     }
 
-    public static function add_order($qua, $endpoint_data, $get_value)
+    public static function add_order(string $qua, array $endpoint_data, ?string $get_value = null)
     {
 
         $endpoint_params = $endpoint_data['params'] ?? [];
