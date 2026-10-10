@@ -16,7 +16,7 @@ final class EndpointContext
 {
     private const PATTERN = '/^[A-Za-z0-9- ]+$/';
     /**
-     * @var array<Param>
+     * @var list<Param>
      */
     public readonly array   $params;
     public readonly array   $columns;

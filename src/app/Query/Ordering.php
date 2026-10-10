@@ -15,7 +15,7 @@ final class Ordering
      * @param EndpointDefinition $data
      * @return array<string, string> Allowed name => SQL expression
      */
-    private static function allowed(EndpointDefinition $data): array
+    private static function allowedParams(EndpointDefinition $data): array
     {
         $map = [];
 
@@ -36,9 +36,9 @@ final class Ordering
     }
 
     /** Allowed list separated by commas (or null) */
-    private static function columns(string $value, EndpointDefinition $data): ?string
+    private static function columnsList(string $value, EndpointDefinition $data): ?string
     {
-        $allowed = self::allowed($data);
+        $allowed = self::allowedParams($data);
         $out = [];
 
         foreach (explode(',', $value) as $item) {
@@ -61,7 +61,7 @@ final class Ordering
             return $sql;
         }
 
-        $cols = self::columns($value, $data);
+        $cols = self::columnsList($value, $data);
         return $cols ? "$sql GROUP BY $cols" : $sql;
     }
 
@@ -83,7 +83,7 @@ final class Ordering
         $expr = $default;
         if ($hasValue) {
             $fromMap = (string) ($data->orderValues[$value] ?? '');
-            $expr = $fromMap !== '' ? $fromMap : (self::columns($value, $data) ?? $default);
+            $expr = $fromMap !== '' ? $fromMap : (self::columnsList($value, $data) ?? $default);
         }
 
         if ($expr === '') {

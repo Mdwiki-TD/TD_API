@@ -20,33 +20,18 @@ final class ViewsHandler implements DefinedEndpoint
         $this->endpoint = $endpoint;
     }
 
-
     public function definition(): EndpointDefinition
     {
+        $yearParam = new Param(name: 'year', column: 'YEAR(p.pupdate)', type: 'number', placeholder: 'Year of publication', doc: 'PublicationYearParam');
         $definitions = [
             'user_views' => new EndpointDefinition(
                 endpoint: 'user_views',
                 summary: 'Retrieve page views for a user',
                 tag: 'views',
                 params: [
-                    new Param(
-                        name: 'user',
-                        column: 'p.user',
-                        placeholder: 'Username',
-                        required: true,
-                    ),
-                    new Param(
-                        name: 'lang',
-                        column: 'p.lang',
-                        placeholder: 'Language code'
-                    ),
-                    new Param(
-                        name: 'year',
-                        column: 'YEAR(pupdate)',
-                        type: 'number',
-                        placeholder: 'Year',
-                        doc: 'PublicationYearParam'
-                    ),
+                    new Param(name: 'user', column: 'p.user', placeholder: 'Username', required: true),
+                    new Param(name: 'lang', column: 'p.lang', placeholder: 'Language code'),
+                    $yearParam,
                 ],
             ),
             'lang_views' => new EndpointDefinition(
@@ -54,24 +39,9 @@ final class ViewsHandler implements DefinedEndpoint
                 summary: 'Retrieve language view statistics',
                 tag: 'views',
                 params: [
-                    new Param(
-                        name: 'user',
-                        column: 'p.user',
-                        placeholder: 'Username'
-                    ),
-                    new Param(
-                        name: 'lang',
-                        column: 'v.lang',
-                        placeholder: 'Language code',
-                        required: true,
-                    ),
-                    new Param(
-                        name: 'year',
-                        column: 'YEAR(pupdate)',
-                        type: 'number',
-                        placeholder: 'Year',
-                        doc: 'YearParam'
-                    ),
+                    new Param(name: 'user', column: 'p.user', placeholder: 'Username'),
+                    new Param(name: 'lang', column: 'p.lang', placeholder: 'Language code', required: true),
+                    $yearParam,
                 ],
             ),
             'views'      => new EndpointDefinition(
@@ -79,26 +49,10 @@ final class ViewsHandler implements DefinedEndpoint
                 summary: 'Retrieve new page views',
                 tag: 'views',
                 params: [
-                    new Param(
-                        name: 'lang',
-                        column: 'v.lang',
-                        placeholder: 'Language code'
-                    ),
-                    new Param(
-                        name: 'year',
-                        column: 'YEAR(p.pupdate)',
-                        type: 'number',
-                        placeholder: 'Year of publication',
-                        doc: 'PublicationYearParam'
-                    ),
-                    new Param(
-                        name: 'views',
-                        column: 'v.views',
-                        type: 'number',
-                        placeholder: 'Views'
-                    ),
+                    new Param(name: 'lang', column: 'p.lang', placeholder: 'Language code'),
+                    new Param(name: 'views', column: 'v.views', type: 'number', placeholder: 'Views'),
+                    $yearParam,
                 ],
-                columns: ['target', 'lang', 'year', 'views'],
             ),
         ];
         return $definitions[$this->endpoint];

@@ -28,7 +28,7 @@ final class FilterBuilder
     }
 
     /**
-     * @param  array<Param> $endpointParams
+     * @param  list<Param> $endpointParams
      * @param  list<string> $ignore parameters to handled manually
      * @return array{0: string, 1: array} [sql, params]
      */
@@ -75,9 +75,9 @@ final class FilterBuilder
     }
 
     /**
-     * @param  array<Param> $endpointParams
+     * @param  list<Param> $endpointParams
      * @param  list<string> $ignore parameters to handled manually
-     * @return array<Param>
+     * @return list<Param>
      *
      */
     private static function filters(array $endpointParams, array $ignore): array

@@ -18,9 +18,9 @@ final class LeaderboardHandler implements DefinedEndpoint
 
     public function definition(): EndpointDefinition
     {
-        $summary = $this->endpoint === 'leaderboard_table_formated'
-            ? "Retrieve formatted leaderboard table data"
-            : "Retrieve leaderboard table data";
+        $summary = $this->endpoint === 'leaderboard_table'
+            ? "Retrieve leaderboard table data"
+            : "Retrieve formatted leaderboard table data";
 
         return new EndpointDefinition(
             endpoint: $this->endpoint,
