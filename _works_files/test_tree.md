@@ -1,13 +1,15 @@
 ```
 tests/
-├── AddOneParamTest.php
-├── ArrayParamsTest.php
-├── bootstrap.php
-├── ChangeTypesTest.php
-├── HelpsTest.php
-├── InputSanityTest.php
-├── SelectHelpsTest.php
-├── SqlFunctionsTest.php
-└── SqlTest.php
+├── App/
+│   └── Endpoints/
+│       └── Definition/
+├── Legacy/
+│   ├── AddParamsTest.php
+│   ├── HelpsTest.php
+│   └── SelectHelpsTest.php
+├── Unit/
+│   └── Endpoints/
+│       └── ViewsHandlerTest.php
+└── bootstrap.php
 
 ```
