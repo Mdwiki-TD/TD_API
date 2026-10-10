@@ -9,25 +9,30 @@ use App\Query\FilterBuilder;
 use App\Query\InputSanitizer;
 use App\Query\Ordering;
 use App\Query\SelectBuilder;
+use App\Endpoints\Definition\Param;
+use App\Endpoints\Definition\EndpointDefinition;
 
 final class EndpointContext
 {
     private const PATTERN = '/^[A-Za-z0-9- ]+$/';
-    public readonly array $params;
-    public readonly array $columns;
-    public readonly string $select;
-    public readonly string $distinct;
+    /**
+     * @var list<Param>
+     */
+    public readonly array   $params;
+    public readonly array   $columns;
+    public readonly string  $select;
+    public readonly string  $distinct;
     public readonly ?string $group;
     public readonly ?string $order;
 
     public function __construct(
         public readonly string $get,
-        public readonly array $data,
+        public readonly EndpointDefinition $data,
         public readonly Request $request,
     ) {
-        $this->params = $data['params'] ?? [];
+        $this->params = $data->params;
+        $this->columns = $data->columns;
 
-        $this->columns = $data['columns'] ?? [];
         $this->select = SelectBuilder::build($this->params, $this->columns, $request);
 
         $this->distinct = $request->enabled('distinct') ? 'DISTINCT ' : '';
@@ -35,6 +40,21 @@ final class EndpointContext
         $this->order = $request->get('order');
     }
 
+    public function hasMissingRequires(): QuerySpec|bool
+    {
+        $requireds = $this->data->getrequiredParams();
+        if (!$requireds) {
+            return false;
+        }
+        foreach ($requireds as $param) {
+            $value = $this->request->get($param->name);
+            if (!$this->isValid($value)) {
+                return new QuerySpec(error: "{$param->name} param required.");
+            }
+        }
+        return false;
+
+    }
     /** @return array{0: string, 1: array} [sql, params] */
     public function applyFilters(string $sql, array $ignore = []): array
     {
@@ -46,10 +66,10 @@ final class EndpointContext
         return Ordering::group($sql, $this->data, $this->group);
     }
 
-    /** @return array{0: string, 1: array} [sql, params] */
+    /** @return array{0: string, 1: array} [sql, sqlParams] */
     public function applyCampaignCategory(
         string $sql,
-        array $params
+        array $sqlParams
     ): array {
 
         // Apply campaign/category filters
@@ -63,12 +83,12 @@ final class EndpointContext
 
         if (FilterBuilder::isValid($category)) {
             $sql .= "$glue p.cat = ?";
-            $params[] = $category;
+            $sqlParams[] = $category;
         } elseif (FilterBuilder::isValid($campaign)) {
             $sql .= "$glue ca.campaign = ?";
-            $params[] = $campaign;
+            $sqlParams[] = $campaign;
         }
-        return [$sql, $params];
+        return [$sql, $sqlParams];
     }
     public function isValid(?string $value): bool
     {

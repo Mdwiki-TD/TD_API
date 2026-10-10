@@ -1,22 +1,28 @@
 <?php
-// src/app/Endpoints/Handlers/FilteredSqlHandler.php
 declare(strict_types=1);
 
-namespace App\Endpoints\Handlers;
+namespace App\Endpoints\Handlers\Helpers;
 use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
 
 
-/** استعلام أساسي + فلاتر من endpoint_params.json (user_access, language_settings ...) */
+/**
+ * Base query + filters from endpoint_params.json (language_settings ...)
+ */
 
 final class FilteredSqlHandler implements EndpointHandler
 {
     public function __construct(
         private string $sql,
-        private string $suffix = '',        // يُلصق بعد الفلاتر (GROUP BY ثابت ...)
+        private string $suffix = '',        // Appended after filters (constant GROUP BY ...)
         private string $defaultOrder = '',
-        private bool $groupable = false,    // يدعم ?group= من المستخدم
-    ) {}
+        private bool $groupable = false,    // Supports ?group= from the user
+    ) {
+    }
 
+    public function definition()
+    {
+        return null;
+    }
     public function handle(EndpointContext $ctx): QuerySpec
     {
         [$sql, $params] = $ctx->applyFilters($this->sql);
@@ -29,3 +35,4 @@ final class FilteredSqlHandler implements EndpointHandler
         return new QuerySpec($sql, $params, defaultOrder: $this->defaultOrder);
     }
 }
+

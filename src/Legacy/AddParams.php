@@ -1,5 +1,5 @@
 <?php
-namespace App\Legacy;
+namespace Legacy;
 
 class AddParams
 {
@@ -14,14 +14,14 @@ class AddParams
         foreach ($types as $type) {
             $types2[$type] = ["column" => $type];
         }
-        // ---value_can_be_null
+        // ---valueCanBeNull
         $types = $types2;
 
         if (count($types) == 0 && count($endpoint_params) > 0) {
             foreach ($endpoint_params as $param) {
                 // { "name": "title", "column": "w_title", "type": "text", "placeholder": "Page Title" },
-                // , "no_select": true
-                if (isset($param['no_select'])) {
+                // , "noSelect": true
+                if (isset($param['noSelect'])) {
                     continue;
                 }
 
@@ -68,9 +68,9 @@ class AddParams
             $params[] = $added;
             $add_str  = " $where_or_and $column = ? ";
 
-            $value_can_be_null = isset($tabe['value_can_be_null']) ? $tabe['value_can_be_null'] : false;
+            $valueCanBeNull = isset($tabe['valueCanBeNull']) ? $tabe['valueCanBeNull'] : false;
 
-            if ($value_can_be_null) {
+            if ($valueCanBeNull) {
                 $add_str = " $where_or_and ($column = ? OR $column IS NULL OR $column = '') ";
             }
         }

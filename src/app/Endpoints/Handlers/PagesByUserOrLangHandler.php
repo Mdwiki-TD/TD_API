@@ -4,10 +4,48 @@ declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
 use App\Query\FilterBuilder;
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
+use App\Endpoints\{EndpointContext, QuerySpec};
 
-final class PagesByUserOrLangHandler implements EndpointHandler
+use App\Endpoints\DefinedEndpoint;
+use App\Endpoints\Definition\Param;
+use App\Endpoints\Definition\EndpointDefinition;
+
+final class PagesByUserOrLangHandler implements DefinedEndpoint
 {
+    public function definition(): EndpointDefinition
+    {
+        return new EndpointDefinition(
+            endpoint: 'pages_by_user_or_lang',
+            summary: 'Retrieve pages list by user or language',
+            tag: 'pages',
+            params: [
+                new Param(
+                    name: 'lang',
+                    column: 'p.lang',
+                    placeholder: 'Language code'
+                ),
+                new Param(
+                    name: 'user',
+                    column: 'p.user',
+                    placeholder: 'Username'
+                ),
+                new Param(
+                    name: 'year',
+                    column: 'YEAR(p.date)',
+                    type: 'number',
+                    placeholder: 'year of date',
+                    doc: 'YearParam'
+                ),
+                new Param(
+                    name: 'order',
+                    column: 'order',
+                    placeholder: 'Order by',
+                    noSelect: true
+                ),
+            ],
+        );
+    }
+
     private const BASE = <<<SQL
         SELECT DISTINCT p.title, p.word, p.translate_type, p.cat, p.lang, p.user,
                p.target, p.date, p.pupdate, p.add_date, p.deleted, v.views

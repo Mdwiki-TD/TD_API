@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Query;
 
 use App\Http\Request;
+use App\Endpoints\Definition\Param;
 
 /**
  * Change endpoint_params.json parameters to WHERE conditions with placeholders
@@ -27,7 +28,7 @@ final class FilterBuilder
     }
 
     /**
-     * @param  array<int, array<string, mixed>> $endpointParams
+     * @param  list<Param> $endpointParams
      * @param  list<string> $ignore parameters to handled manually
      * @return array{0: string, 1: array} [sql, params]
      */
@@ -38,14 +39,15 @@ final class FilterBuilder
         array $ignore = []
     ): array {
         $params = [];
+        $filterdList = self::filters($endpointParams, $ignore);
 
-        foreach (self::filters($endpointParams, $ignore) as $name => $def) {
-            $column = (string) ($def['column'] ?? '');
-            if ($column === '' || (!$request->has($name) && !$request->has($column))) {
+        foreach ($filterdList as $def) {
+            $column = $def->column;
+            if ($column === '' || (!$request->has($def->name) && !$request->has($column))) {
                 continue;
             }
 
-            $value = $request->get($name) ?? '';
+            $value = $request->get($def->name) ?? '';
             if ($value === '') {
                 $value = $request->get($column) ?? '';
             }
@@ -53,7 +55,7 @@ final class FilterBuilder
             if ($column === 'limit' || $column === 'select' || !self::isValid($value)) {
                 continue;
             }
-            if (isset($def['noEmptyValue']) && empty($value)) {
+            if ($def->noEmptyValue === true && empty($value)) {
                 continue;
             }
 
@@ -64,7 +66,7 @@ final class FilterBuilder
                 continue;
             }
 
-            [$part, $new] = self::condition($sql, $name, $column, $value, $def, $request);
+            [$part, $new] = self::condition($sql, $column, $value, $def, $request);
             $sql .= $part;
             $params = array_merge($params, $new);
         }
@@ -72,26 +74,33 @@ final class FilterBuilder
         return [$sql, $params];
     }
 
-    /** @return array<string, array<string, mixed>> */
+    /**
+     * @param  list<Param> $endpointParams
+     * @param  list<string> $ignore parameters to handled manually
+     * @return list<Param>
+     *
+     */
     private static function filters(array $endpointParams, array $ignore): array
     {
         $out = [];
         foreach ($endpointParams as $p) {
-            if (!isset($p['name']) || isset($p['no_select'])) {
+            if ($p->noSelect) {
                 continue;
             }
-            $out[$p['name']] = $p;
+            if (in_array($p->name, $ignore, true)) {
+                continue;
+            }
+            $out[] = $p;
         }
-        return array_diff_key($out, array_flip($ignore));
+        return $out;
     }
 
     /** @return array{0: string, 1: array} */
     private static function condition(
         string $sql,
-        string $name,
         string $column,
         string $value,
-        array $def,
+        Param $def,
         Request $request
     ): array {
         $glue = self::glue($sql);
@@ -106,8 +115,8 @@ final class FilterBuilder
             return [" $glue $column > 0", []];
         }
 
-        if (($def['type'] ?? '') === 'array') {
-            $values = $request->getArray($name);
+        if ($def->type === 'array') {
+            $values = $request->getArray($def->name);
             if ($values === []) {
                 return ['', []];
             }
@@ -115,7 +124,7 @@ final class FilterBuilder
             return [" $glue $column IN ($marks)", $values];
         }
 
-        if (!empty($def['value_can_be_null'])) {
+        if (!empty($def->valueCanBeNull)) {
             return [" $glue ($column = ? OR $column IS NULL OR $column = '')", [$value]];
         }
         return [" $glue $column = ?", [$value]];

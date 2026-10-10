@@ -7,19 +7,22 @@ namespace App\OpenApi;
 use App\Endpoints\Definition\{EndpointDefinition, Param};
 
 /**
- * يولّد openapi.json (3.0.0، متوافق مع Swagger UI 4.5) من EndpointDefinition لكل endpoint
- * + OpenApiCatalog (info/servers/tags/المكوّنات المشتركة).
+ * Generates openapi.json (3.0.0, compatible with Swagger UI 4.5) from EndpointDefinition for each endpoint
+ * + OpenApiCatalog (info/servers/tags/shared components).
  *
- * ربط البارامتر بالوثيقة:
- *   Param::$doc = string → مكوّن مشترك صريح | array → inline كامل
- *   null → مكوّن مشترك واحد بنفس الاسم (غير حساس لحالة الأحرف)، وإلا inline مولَّد من Param
- *   limit و offset يُضافان تلقائياً (Pagination تطبقهما على كل endpoint)
+ * Parameter documentation binding:
+ *   Param::$doc = string → explicit shared component | array → full inline
+ *   null → a single shared component with the same name (case-insensitive), otherwise an inline generated from Param
+ *   limit and offset are added automatically (Pagination applies them to each endpoint)
  */
 final class OpenApiBuilder
 {
     private const DEFAULT_DESCRIPTION = 'Corresponds to calling `api.php?get=%s` with query parameters.';
 
-    /** @var array<string, list<string>> اسم بارامتر (lower) => مكوّنات تحمله */
+    /**
+     * @var array<string, list<string>> Parameter name (lower) => components that carry it
+     *
+     */
     private array $byName = [];
 
     /** @param array<string, EndpointDefinition> $definitions */
@@ -34,13 +37,15 @@ final class OpenApiBuilder
     {
         $paths = [];
         foreach ($this->definitions as $name => $def) {
-            $paths["/api.php?get=$name"] = ['get' => [
-                'summary'     => $def->summary,
-                'description' => $def->description !== '' ? $def->description : sprintf(self::DEFAULT_DESCRIPTION, $name),
-                'tags'        => [$def->tag],
-                'parameters'  => $this->parameters($def),
-                'responses'   => ['200' => ['$ref' => '#/components/responses/Success']],
-            ]];
+            $paths["/api.php?get=$name"] = [
+                'get' => [
+                    'summary'     => $def->summary,
+                    'description' => $def->description !== '' ? $def->description : sprintf(self::DEFAULT_DESCRIPTION, $name),
+                    'tags'        => [$def->tag],
+                    'parameters'  => $this->parameters($def),
+                    'responses'   => ['200' => ['$ref' => '#/components/responses/Success']],
+                ]
+            ];
         }
 
         return [
@@ -58,14 +63,16 @@ final class OpenApiBuilder
 
     private function parameters(EndpointDefinition $def): array
     {
-        $out  = [];
+        $out = [];
         $seen = [];
         foreach ($def->params as $p) {
             $out[] = $this->parameter($p);
             $seen[strtolower($p->name)] = true;
         }
-        if (!isset($seen['limit']))  array_unshift($out, ['$ref' => '#/components/parameters/LimitParam']);
-        if (!isset($seen['offset'])) $out[] = ['$ref' => '#/components/parameters/OffsetParam'];
+        if (!isset($seen['limit']))
+            array_unshift($out, ['$ref' => '#/components/parameters/LimitParam']);
+        if (!isset($seen['offset']))
+            $out[] = ['$ref' => '#/components/parameters/OffsetParam'];
         return $out;
     }
 
@@ -89,8 +96,8 @@ final class OpenApiBuilder
         $schema = match ($p->type) {
             'number' => ['type' => 'number'],
             'switch' => ['type' => 'boolean'],
-            'array'  => ['type' => 'array', 'items' => ['type' => 'string']],
-            default  => ['type' => 'string'],
+            'array'  => ['type'  => 'array', 'items'  => ['type'  => 'string']],
+            default  => ['type'  => 'string'],
         };
         if ($p->options) {
             $schema['enum'] = $p->options;
@@ -99,15 +106,18 @@ final class OpenApiBuilder
             $schema['default'] = $p->default;
         }
         return [
-            'in' => 'query',
-            'name' => $p->name,
+            'in'          => 'query',
+            'name'        => $p->name,
             'description' => $p->placeholder,
-            'required' => $p->required,
-            'schema' => $schema,
+            'required'    => $p->required,
+            'schema'      => $schema,
         ];
     }
 
-    /** أخطاء الاتساق: تُستخدم في bin/build-openapi.php وفي الاختبارات */
+    /**
+     * Consistency errors: used in bin/build-openapi.php and in tests
+     * @return list<string>
+     */
     public function validate(array $registryNames): array
     {
         $errors = [];

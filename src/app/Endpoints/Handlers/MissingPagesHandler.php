@@ -5,18 +5,33 @@ namespace App\Endpoints\Handlers;
 
 use App\Endpoints\Definition\{EndpointDefinition, Param};
 
-/** الاسم القديم `missing`: نفس الاستعلام، لكن يقبل ?order= ولا يطلب lang في تعريفه */
+use App\Endpoints\Handlers\ByCategory\MissingByLangAndCategoryHandler;
+
 final class MissingPagesHandler extends MissingByLangAndCategoryHandler
 {
     public function definition(): EndpointDefinition
     {
         return new EndpointDefinition(
+            endpoint: 'missing',
             summary: 'Retrieve missing pages',
             tag: 'pages_infos',
             params: [
-                new Param(name: 'lang', column: 't.code', placeholder: 'Language code'),
-                new Param(name: 'category', column: 'a.category', placeholder: 'Category'),
-                new Param(name: 'order', column: 'order', placeholder: 'Order by', noSelect: true),
+                new Param(
+                    name: 'lang',
+                    column: 't.code',
+                    placeholder: 'Language code'
+                ),
+                new Param(
+                    name: 'category',
+                    column: 'a.category',
+                    placeholder: 'Category'
+                ),
+                new Param(
+                    name: 'order',
+                    column: 'order',
+                    placeholder: 'Order by',
+                    noSelect: true
+                ),
             ],
         );
     }

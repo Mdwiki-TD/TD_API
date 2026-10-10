@@ -17,7 +17,6 @@ index.php
   → bootstrap (env, autoload)
   → APIController::handleRequest()
         1. Request            ← Reads $_GET once
-        2. EndpointConfig     ← Parses JSON + resolves redirects
         3. EndpointContext    ← Resolves get, params, columns, select, distinct, group
         4. EndpointRegistry   ← Resolves the appropriate Handler
         5. Handler->handle()  ← Returns a QuerySpec (query, params, error, skipOrder?)
@@ -65,7 +64,13 @@ class APIController
             }
             [$handler, $definition] = $resolved;
 
-            $ctx = new EndpointContext($get, $definition->toArray(), $this->request);
+            $ctx = new EndpointContext($get, $definition, $this->request);
+
+            $missingRequires = $ctx->hasMissingRequires();
+            if ($missingRequires) {
+                $this->emit($this->builder->build($ctx, error: $missingRequires->error));
+                return;
+            }
 
             $spec = $handler->handle($ctx);
             if ($spec->sql === '') {

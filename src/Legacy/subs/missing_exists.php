@@ -1,7 +1,7 @@
 <?php
 namespace API\Missing;
 
-use App\Legacy\Helps;
+use Legacy\Helps;
 
 function exists_statics_by_category($endpoint_params)
 {

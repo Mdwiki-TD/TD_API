@@ -35,7 +35,7 @@ All endpoints accept **HTTP GET** requests. The API uses a single entry point (`
 | `/api.php?get=full_translators`             | GET    | Full translators with active status                                                          |
 | `/api.php?get=graph_data`                   | GET    | Monthly page publication counts                                                              |
 | `/api.php?get=in_process`                   | GET    | In-process translations with campaign and language info                                      |
-| `/api.php?get=lang_views2`                  | GET    | Page views filtered by language (alias)                                                      |
+| `/api.php?get=lang_views`                   | GET    | Page views filtered by language (alias)                                                      |
 | `/api.php?get=lang_views`                   | GET    | Page views filtered by language                                                              |
 | `/api.php?get=langs`                        | GET    | All languages with code, autonym, name, redirects                                            |
 | `/api.php?get=language_settings`            | GET    | Language settings with distinct values                                                       |
@@ -67,11 +67,10 @@ All endpoints accept **HTTP GET** requests. The API uses a single entry point (`
 | `/api.php?get=user_access`                  | GET    | Access keys with usernames                                                                   |
 | `/api.php?get=get_lang_years`               | GET    | User status by language (redirects to user_status)                                           |
 | `/api.php?get=user_status`                  | GET    | User status by language with year/select options                                             |
-| `/api.php?get=user_views2`                  | GET    | Page views filtered by a specific user (alias)                                               |
+| `/api.php?get=user_views`                   | GET    | Page views filtered by a specific user (alias)                                               |
 | `/api.php?get=user_views`                   | GET    | Page views filtered by a specific user                                                       |
 | `/api.php?get=users_by_last_pupdate`        | GET    | Users with their latest page update                                                          |
 | `/api.php?get=users_no_inprocess`           | GET    | Users without in-process articles                                                            |
 | `/api.php?get=users`                        | GET    | List of usernames (supports `userlike` filter)                                               |
-| `/api.php?get=views_new`                    | GET    | Page views from views_new_all table                                                          |
 | `/api.php?get=views`                        | GET    | Page view stats joined with pages                                                            |
 | `/api.php?get=words`                        | GET    | Word counts for page titles (lead and all words)                                             |

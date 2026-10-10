@@ -1,20 +1,22 @@
 <?php
-// src/app/Endpoints/Handlers/MissingByLangAndCategoryHandler.php
+// src/app/Endpoints/Handlers/ByCategory/MissingByLangAndCategoryHandler.php
 declare(strict_types=1);
 
-namespace App\Endpoints\Handlers;
+namespace App\Endpoints\Handlers\ByCategory;
 
 use App\Endpoints\{EndpointContext, QuerySpec};
 use App\Endpoints\Definition\EndpointDefinition;
+use App\Endpoints\Handlers\ByCategory\CategoryLangHandler;
 
 class MissingByLangAndCategoryHandler extends CategoryLangHandler
 {
     public function definition(): EndpointDefinition
     {
         return new EndpointDefinition(
+            endpoint: 'missing_by_lang_and_category',
             summary: 'Retrieve missing statics by language and category',
             tag: 'pages_infos',
-            params: [self::langParam(), self::categoryParam()],
+            params: [self::langParamRequired(), self::categoryParam()],
         );
     }
 
