@@ -33,7 +33,7 @@ final class Param
     /**
      * The same format as endpoint_params.json (absent keys are omitted)
      */
-    public function toArray(): array
+    public function toArrayOld(): array
     {
         return [
             'name'           => $this->name,
@@ -48,5 +48,29 @@ final class Param
             'valueCanBeNull' => $this->valueCanBeNull,
             'noEmptyValue'   => $this->noEmptyValue,
         ];
+    }
+    /**
+     * The same format as endpoint_params.json (absent keys are omitted)
+     */
+    public function toArray(): array
+    {
+        $a = ['name' => $this->name, 'column' => $this->column, 'type' => $this->type];
+        if ($this->placeholder !== '')
+            $a['placeholder'] = $this->placeholder;
+        if ($this->noSelect)
+            $a['no_select'] = true;
+        if ($this->default !== null)
+            $a['default'] = $this->default;
+        if ($this->required)
+            $a['required'] = true;
+        if ($this->options !== null)
+            $a['options'] = $this->options;
+        if ($this->value !== null)
+            $a['value'] = $this->value;
+        if ($this->valueCanBeNull)
+            $a['value_can_be_null'] = true;
+        if ($this->noEmptyValue !== null)
+            $a['noEmptyValue'] = $this->noEmptyValue;
+        return $a;
     }
 }
