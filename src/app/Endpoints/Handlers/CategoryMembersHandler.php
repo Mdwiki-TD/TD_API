@@ -3,13 +3,22 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
+use App\Endpoints\Definition\EndpointDefinition;
+use App\Endpoints\{EndpointContext, DefinedEndpoint, QuerySpec};
 
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
-
-final class CategoryMembersHandler implements EndpointHandler
+final class CategoryMembersHandler implements DefinedEndpoint
 {
-    public const ENDPOINT_NAME = 'category_members';
+    public const ENDPOINT_NAME    = 'category_members';
     private const DEFAULT_CATEGORY = 'RTT';
+
+    public function definition(): EndpointDefinition
+    {
+        return new EndpointDefinition(
+            endpoint: 'category_members',
+            summary: 'Retrieve article ids of a category',
+            tag: 'pages',
+        );
+    }
 
     public function handle(EndpointContext $ctx): QuerySpec
     {

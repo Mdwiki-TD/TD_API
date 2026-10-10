@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Config\EndpointConfig;
+use App\Database\Database;
 use App\Database\QueryExecutor;
-use App\Endpoints\{EndpointContext, EndpointRegistry};
+use App\Endpoints\EndpointContext;
+use App\Endpoints\EndpointRegistry;
 use App\Formatting\ResponseBuilder;
 use App\Http\Request;
-use App\Database\Database;
 use Throwable;
 
 /*
@@ -17,7 +17,6 @@ index.php
   → bootstrap (env, autoload)
   → APIController::handleRequest()
         1. Request            ← Reads $_GET once
-        2. EndpointConfig     ← Parses JSON + resolves redirects
         3. EndpointContext    ← Resolves get, params, columns, select, distinct, group
         4. EndpointRegistry   ← Resolves the appropriate Handler
         5. Handler->handle()  ← Returns a QuerySpec (query, params, error, skipOrder?)
@@ -38,11 +37,11 @@ class APIController
         private ?ResponseBuilder $builder = null,
         private ?Request $request = null,
     ) {
-        $this->db       = $db ?? new Database();
+        $this->db = $db ?? new Database();
         $this->registry ??= new EndpointRegistry();
         $this->executor ??= new QueryExecutor($this->db);
-        $this->builder  ??= new ResponseBuilder();
-        $this->request  ??= new Request();
+        $this->builder ??= new ResponseBuilder();
+        $this->request ??= new Request();
     }
     /**
      * Main entry point
@@ -58,12 +57,18 @@ class APIController
         header('Content-Type: application/json');
 
         try {
-            $config = new EndpointConfig(__DIR__ . '/endpoint_params.json');
-            $ctx    = new EndpointContext($get, $config->find($get), $this->request);
+            $resolved = $this->registry->resolve($get);
+            if ($resolved === null) {
+                $this->emit($this->builder->errorOnly('invalid get request'));
+                return;
+            }
+            [$handler, $definition] = $resolved;
 
-            $handler = $this->registry->resolve($ctx);
-            if ($handler === null) {
-                $this->emit($this->builder->build($ctx, error: 'invalid get request'));
+            $ctx = new EndpointContext($get, $definition, $this->request);
+
+            $missingRequires = $ctx->hasMissingRequires();
+            if ($missingRequires) {
+                $this->emit($this->builder->build($ctx, error: $missingRequires->error));
                 return;
             }
 
@@ -73,7 +78,7 @@ class APIController
                 return;
             }
 
-            $run     = $this->executor->run($spec, $ctx);
+            $run = $this->executor->run($spec, $ctx);
             $results = $this->builder->format($get, $run['results']);
 
             $this->emit($this->builder->build(

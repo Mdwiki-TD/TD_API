@@ -7,4 +7,5 @@ namespace App\Endpoints;
 interface EndpointHandler
 {
     public function handle(EndpointContext $ctx): QuerySpec;
+    public function definition();
 }

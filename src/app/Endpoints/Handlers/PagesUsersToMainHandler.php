@@ -3,11 +3,23 @@
 declare(strict_types=1);
 
 namespace App\Endpoints\Handlers;
+use App\Endpoints\{EndpointContext, QuerySpec};
 
-use App\Endpoints\{EndpointContext, EndpointHandler, QuerySpec};
-
-final class PagesUsersToMainHandler implements EndpointHandler
+use App\Endpoints\DefinedEndpoint;
+use App\Endpoints\Definition\Param;
+use App\Endpoints\Definition\EndpointDefinition;
+final class PagesUsersToMainHandler implements DefinedEndpoint
 {
+    public function definition(): EndpointDefinition
+    {
+        return new EndpointDefinition(
+            endpoint: 'pages_users_to_main',
+            summary: 'Retrieve pages users to main data',
+            tag: 'pages',
+            columns: ['new_target', 'new_user', 'new_qid'],
+        );
+    }
+
     public function handle(EndpointContext $ctx): QuerySpec
     {
         $old_query = "SELECT pum.id, pum.new_target, pum.new_user, pum.new_qid
