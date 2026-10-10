@@ -33,25 +33,6 @@ final class Param
     /**
      * The same format as endpoint_params.json (absent keys are omitted)
      */
-    public function toArrayOld(): array
-    {
-        return [
-            'name'           => $this->name,
-            'column'         => $this->column,
-            'type'           => $this->type,
-            'placeholder'    => $this->placeholder,
-            'noSelect'       => $this->noSelect,
-            'default'        => $this->default,
-            'required'       => $this->required,
-            'options'        => $this->options,
-            'value'          => $this->value,
-            'valueCanBeNull' => $this->valueCanBeNull,
-            'noEmptyValue'   => $this->noEmptyValue,
-        ];
-    }
-    /**
-     * The same format as endpoint_params.json (absent keys are omitted)
-     */
     public function toArray(): array
     {
         $a = ['name' => $this->name, 'column' => $this->column, 'type' => $this->type];
