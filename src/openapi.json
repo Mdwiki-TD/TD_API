@@ -230,8 +230,7 @@
                 "description": "Maximum number of results to return",
                 "required": false,
                 "schema": {
-                    "type": "integer",
-                    "default": 50
+                    "type": "integer"
                 }
             },
             "OffsetParam": {
@@ -440,177 +439,14 @@
         }
     },
     "paths": {
-        "/api.php?get=assessments": {
+        "/api.php?get=views": {
             "get": {
-                "summary": "Retrieve page assessments",
-                "description": "Corresponds to calling `api.php?get=assessments` with query parameters.",
+                "summary": "Retrieve new page views",
+                "description": "Corresponds to calling `api.php?get=views` with query parameters.",
                 "tags": [
-                    "pages_infos"
+                    "views"
                 ],
                 "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TitleParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/ImportanceParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/DistinctParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=categories": {
-            "get": {
-                "summary": "Retrieve categories",
-                "description": "Corresponds to calling `api.php?get=categories` with query parameters.",
-                "tags": [
-                    "other"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/DepthParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/SelectParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=coordinators": {
-            "get": {
-                "summary": "Retrieve coordinators information",
-                "description": "Corresponds to calling `api.php?get=coordinators` with query parameters.",
-                "tags": [
-                    "users"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CoordUserParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=count_pages": {
-            "get": {
-                "summary": "Count pages",
-                "description": "Corresponds to calling `api.php?get=count_pages` with query parameters.",
-                "tags": [
-                    "statistics"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TargetParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=enwiki_pageviews": {
-            "get": {
-                "summary": "Retrieve English Wikipedia page views",
-                "description": "Corresponds to calling `api.php?get=enwiki_pageviews` with query parameters.",
-                "tags": [
-                    "pages_infos"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TitleParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/EnViewsParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=full_translators": {
-            "get": {
-                "summary": "Retrieve full translators",
-                "description": "Corresponds to calling `api.php?get=full_translators` with query parameters.",
-                "tags": [
-                    "users"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=graph_data": {
-            "get": {
-                "summary": "Retrieve graph data",
-                "description": "Corresponds to calling `api.php?get=graph_data` with query parameters.",
-                "tags": [
-                    "statistics"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=in_process": {
-            "get": {
-                "summary": "Retrieve in-process pages",
-                "description": "Corresponds to calling `api.php?get=in_process` with query parameters.",
-                "tags": [
-                    "pages"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/DistinctParam"
-                    },
                     {
                         "$ref": "#/components/parameters/LimitParam"
                     },
@@ -618,19 +454,13 @@
                         "$ref": "#/components/parameters/LangParam"
                     },
                     {
-                        "$ref": "#/components/parameters/UserParam"
+                        "$ref": "#/components/parameters/ViewsParam"
                     },
                     {
-                        "$ref": "#/components/parameters/YearParam"
+                        "$ref": "#/components/parameters/PublicationYearParam"
                     },
                     {
-                        "$ref": "#/components/parameters/SelectParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/GroupParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/OrderParam"
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -640,16 +470,28 @@
                 }
             }
         },
-        "/api.php?get=langs": {
+        "/api.php?get=user_views": {
             "get": {
-                "summary": "Retrieve language names",
-                "description": "Corresponds to calling `api.php?get=langs` with query parameters.",
+                "summary": "Retrieve page views for a user",
+                "description": "Corresponds to calling `api.php?get=user_views` with query parameters.",
                 "tags": [
-                    "languages"
+                    "views"
                 ],
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/PublicationYearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -677,63 +519,10 @@
                         "$ref": "#/components/parameters/LangParam"
                     },
                     {
-                        "$ref": "#/components/parameters/YearParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=leaderboard_table": {
-            "get": {
-                "summary": "Retrieve leaderboard table data",
-                "description": "Corresponds to calling `api.php?get=leaderboard_table` with query parameters.",
-                "tags": [
-                    "statistics"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
                         "$ref": "#/components/parameters/PublicationYearParam"
                     },
                     {
-                        "$ref": "#/components/parameters/CatParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/UserGroupParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=leaderboard_table_formated": {
-            "get": {
-                "summary": "Retrieve formatted leaderboard table data",
-                "description": "Corresponds to calling `api.php?get=leaderboard_table_formated` with query parameters.",
-                "tags": [
-                    "statistics"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/PublicationYearParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CatParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/UserGroupParam"
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -762,32 +551,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/OrderParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=exists_statics_by_category": {
-            "get": {
-                "summary": "Retrieve missing statics",
-                "description": "Corresponds to calling `api.php?get=exists_statics_by_category` with query parameters.",
-                "tags": [
-                    "pages_infos"
-                ],
-                "parameters": [
+                    },
                     {
-                        "in": "query",
-                        "name": "category",
-                        "description": "Category",
-                        "required": false,
-                        "schema": {
-                            "default": "RTT",
-                            "type": "string"
-                        }
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -806,6 +572,9 @@
                 ],
                 "parameters": [
                     {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
                         "$ref": "#/components/parameters/LangParam"
                     },
                     {
@@ -817,6 +586,9 @@
                             "default": "RTT",
                             "type": "string"
                         }
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -835,6 +607,9 @@
                 ],
                 "parameters": [
                     {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
                         "$ref": "#/components/parameters/LangParam"
                     },
                     {
@@ -846,76 +621,9 @@
                             "default": "RTT",
                             "type": "string"
                         }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=pages": {
-            "get": {
-                "summary": "Retrieve pages list",
-                "description": "Corresponds to calling `api.php?get=pages` with query parameters.",
-                "tags": [
-                    "pages"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TitleParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/LangParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/UserParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TargetParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CatParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CampaignParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/PupdateParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/AddDateParam"
                     },
                     {
                         "$ref": "#/components/parameters/OffsetParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/PublicationYearParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/YearDateParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/SelectParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TranslateTypeParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/DistinctParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/DeletedParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/GroupParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/OrderParam"
                     }
                 ],
                 "responses": {
@@ -925,242 +633,10 @@
                 }
             }
         },
-        "/api.php?get=pages_by_user_or_lang": {
+        "/api.php?get=exists_statics_by_category": {
             "get": {
-                "summary": "Retrieve pages list by user or language",
-                "description": "",
-                "tags": [
-                    "pages"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/LangParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/UserParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/YearParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/OrderParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=pages_users": {
-            "get": {
-                "summary": "Retrieve pages and users data",
-                "description": "Corresponds to calling `api.php?get=pages_users` with query parameters.",
-                "tags": [
-                    "pages"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/LangParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/UserParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TargetParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TitleParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/OrderParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/PupdateParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/AddDateParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/GroupParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/OffsetParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/SelectParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/DistinctParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=pages_users_to_main": {
-            "get": {
-                "summary": "Retrieve pages users to main data",
-                "description": "Corresponds to calling `api.php?get=pages_users_to_main` with query parameters.",
-                "tags": [
-                    "pages"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=pages_with_views": {
-            "get": {
-                "summary": "Retrieve pages with view counts (redirects to pages)",
-                "description": "Corresponds to calling `api.php?get=pages_with_views` which redirects internally to `api.php?get=pages`. Parameters are the same as the `api.php?get=pages` endpoint.",
-                "tags": [
-                    "pages"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TitleParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/LangParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/UserParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TargetParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CatParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/PupdateParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/AddDateParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/OffsetParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/PublicationYearParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/YearDateParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/SelectParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TranslateTypeParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/DistinctParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/DeletedParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/GroupParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/OrderParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=projects": {
-            "get": {
-                "summary": "Retrieve projects",
-                "description": "Corresponds to calling `api.php?get=projects` with query parameters.",
-                "tags": [
-                    "other"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=qids": {
-            "get": {
-                "summary": "Retrieve QIDs",
-                "description": "Corresponds to calling `api.php?get=qids` with query parameters.",
-                "tags": [
-                    "identifiers"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/DisParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=qids_others": {
-            "get": {
-                "summary": "Retrieve other QIDs",
-                "description": "Corresponds to calling `api.php?get=qids_others` with query parameters.",
-                "tags": [
-                    "identifiers"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/DisParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=refs_counts": {
-            "get": {
-                "summary": "Retrieve reference counts for pages",
-                "description": "Corresponds to calling `api.php?get=refs_counts` with query parameters.",
+                "summary": "Retrieve missing statics",
+                "description": "Corresponds to calling `api.php?get=exists_statics_by_category` with query parameters.",
                 "tags": [
                     "pages_infos"
                 ],
@@ -1169,13 +645,17 @@
                         "$ref": "#/components/parameters/LimitParam"
                     },
                     {
-                        "$ref": "#/components/parameters/TitleParam"
+                        "in": "query",
+                        "name": "category",
+                        "description": "Category",
+                        "required": false,
+                        "schema": {
+                            "default": "RTT",
+                            "type": "string"
+                        }
                     },
                     {
-                        "$ref": "#/components/parameters/LeadRefsParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/AllRefsParam"
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -1185,29 +665,10 @@
                 }
             }
         },
-        "/api.php?get=settings": {
+        "/api.php?get=statics_by_category": {
             "get": {
-                "summary": "Retrieve settings",
-                "description": "Corresponds to calling `api.php?get=settings` with query parameters.",
-                "tags": [
-                    "other"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=titles": {
-            "get": {
-                "summary": "Retrieve pages by title or importance",
-                "description": "Corresponds to calling `api.php?get=titles` with query parameters.",
+                "summary": "Retrieve the number of available titles per language for a category",
+                "description": "Corresponds to calling `api.php?get=statics_by_category` with query parameters.",
                 "tags": [
                     "pages_infos"
                 ],
@@ -1216,13 +677,17 @@
                         "$ref": "#/components/parameters/LimitParam"
                     },
                     {
-                        "$ref": "#/components/parameters/TitleParam"
+                        "in": "query",
+                        "name": "category",
+                        "description": "Category",
+                        "required": false,
+                        "schema": {
+                            "default": "RTT",
+                            "type": "string"
+                        }
                     },
                     {
-                        "$ref": "#/components/parameters/ImportanceParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/TitlesParam"
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -1232,22 +697,37 @@
                 }
             }
         },
-        "/api.php?get=translate_type": {
+        "/api.php?get=top_langs": {
             "get": {
-                "summary": "Retrieve translation type data",
-                "description": "Corresponds to calling `api.php?get=translate_type` with query parameters.",
+                "summary": "Retrieve Top langs",
+                "description": "Corresponds to calling `api.php?get=top_langs` with query parameters.",
                 "tags": [
-                    "languages"
+                    "users"
                 ],
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/LimitParam"
                     },
                     {
-                        "$ref": "#/components/parameters/LeadTranslationParam"
+                        "$ref": "#/components/parameters/YearParam"
                     },
                     {
-                        "$ref": "#/components/parameters/FullTranslationParam"
+                        "in": "query",
+                        "name": "month",
+                        "description": "month of date",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserGroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CatParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -1257,12 +737,87 @@
                 }
             }
         },
-        "/api.php?get=user_views": {
+        "/api.php?get=top_users": {
             "get": {
-                "summary": "Retrieve user view statistics",
-                "description": "Corresponds to calling `api.php?get=user_views` with query parameters.",
+                "summary": "Retrieve Top users",
+                "description": "Corresponds to calling `api.php?get=top_users` with query parameters.",
                 "tags": [
-                    "views"
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YearParam"
+                    },
+                    {
+                        "in": "query",
+                        "name": "month",
+                        "description": "month of date",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserGroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CatParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=top_lang_of_users": {
+            "get": {
+                "summary": "Retrieve the most used language of each user",
+                "description": "Corresponds to calling `api.php?get=top_lang_of_users` with query parameters.",
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "in": "query",
+                        "name": "users",
+                        "description": "list of users",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "maxItems": 50
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=user_status": {
+            "get": {
+                "summary": "User status",
+                "description": "list of users (langs, campaigns, categories)",
+                "tags": [
+                    "users"
                 ],
                 "parameters": [
                     {
@@ -1275,7 +830,47 @@
                         "$ref": "#/components/parameters/LangParam"
                     },
                     {
-                        "$ref": "#/components/parameters/YearParam"
+                        "in": "query",
+                        "name": "select",
+                        "description": "Select fields",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "lang",
+                                "campaign",
+                                "category",
+                                "year"
+                            ]
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=user_data_status": {
+            "get": {
+                "summary": "Retrieve years, languages and campaigns of a user's pages",
+                "description": "Corresponds to calling `api.php?get=user_data_status` with query parameters.",
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -1304,6 +899,493 @@
                     },
                     {
                         "$ref": "#/components/parameters/UserGroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=category_members": {
+            "get": {
+                "summary": "Retrieve article ids of a category",
+                "description": "Corresponds to calling `api.php?get=category_members` with query parameters.",
+                "tags": [
+                    "pages"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=graph_data": {
+            "get": {
+                "summary": "Retrieve graph data",
+                "description": "Corresponds to calling `api.php?get=graph_data` with query parameters.",
+                "tags": [
+                    "statistics"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserGroupParam"
+                    },
+                    {
+                        "in": "query",
+                        "name": "month",
+                        "description": "month of date",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/PublicationYearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CategoryParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CampaignParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=leaderboard_table": {
+            "get": {
+                "summary": "Retrieve leaderboard table data",
+                "description": "Corresponds to calling `api.php?get=leaderboard_table` with query parameters.",
+                "tags": [
+                    "statistics"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/PublicationYearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CatParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserGroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=leaderboard_table_formated": {
+            "get": {
+                "summary": "Retrieve formatted leaderboard table data",
+                "description": "Corresponds to calling `api.php?get=leaderboard_table_formated` with query parameters.",
+                "tags": [
+                    "statistics"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/PublicationYearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CatParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserGroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=qids": {
+            "get": {
+                "summary": "Retrieve QIDs",
+                "description": "Corresponds to calling `api.php?get=qids` with query parameters.",
+                "tags": [
+                    "identifiers"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/DisParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=qids_others": {
+            "get": {
+                "summary": "Retrieve other QIDs",
+                "description": "Corresponds to calling `api.php?get=qids_others` with query parameters.",
+                "tags": [
+                    "identifiers"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/DisParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=pages_users_to_main": {
+            "get": {
+                "summary": "Retrieve pages users to main data",
+                "description": "Corresponds to calling `api.php?get=pages_users_to_main` with query parameters.",
+                "tags": [
+                    "pages"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=pages_with_views": {
+            "get": {
+                "summary": "Retrieve pages with view counts (redirects to pages)",
+                "description": "Corresponds to calling `api.php?get=pages_with_views` which redirects internally to `api.php?get=pages`. Parameters are the same as the `api.php?get=pages` endpoint.",
+                "tags": [
+                    "pages"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/TitleParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TargetParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CatParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CampaignParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/GroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/PupdateParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/AddDateParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/PublicationYearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YearDateParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/SelectParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TranslateTypeParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/DistinctParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/DeletedParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=pages_by_user_or_lang": {
+            "get": {
+                "summary": "Retrieve pages list by user or language",
+                "description": "Corresponds to calling `api.php?get=pages_by_user_or_lang` with query parameters.",
+                "tags": [
+                    "pages"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=pages": {
+            "get": {
+                "summary": "Retrieve pages list",
+                "description": "Corresponds to calling `api.php?get=pages` with query parameters.",
+                "tags": [
+                    "pages"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/TitleParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TargetParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CatParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CampaignParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/GroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/PupdateParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/AddDateParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/PublicationYearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YearDateParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/SelectParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TranslateTypeParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/DistinctParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/DeletedParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=pages_users": {
+            "get": {
+                "summary": "Retrieve pages and users data",
+                "description": "Corresponds to calling `api.php?get=pages_users` with query parameters.",
+                "tags": [
+                    "pages"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TargetParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TitleParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/PupdateParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/AddDateParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/GroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/SelectParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/DistinctParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=coordinators": {
+            "get": {
+                "summary": "Retrieve coordinators information",
+                "description": "Corresponds to calling `api.php?get=coordinators` with query parameters.",
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CoordUserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=langs": {
+            "get": {
+                "summary": "Retrieve language names",
+                "description": "Corresponds to calling `api.php?get=langs` with query parameters.",
+                "tags": [
+                    "languages"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -1323,6 +1405,9 @@
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -1332,16 +1417,19 @@
                 }
             }
         },
-        "/api.php?get=users_no_inprocess": {
+        "/api.php?get=pages_langs": {
             "get": {
-                "summary": "Retrieve users not in process",
-                "description": "Corresponds to calling `api.php?get=users_no_inprocess` with query parameters.",
+                "summary": "Retrieve languages that have translated pages",
+                "description": "Corresponds to calling `api.php?get=pages_langs` with query parameters.",
                 "tags": [
-                    "users"
+                    "languages"
                 ],
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -1351,25 +1439,109 @@
                 }
             }
         },
-        "/api.php?get=views": {
+        "/api.php?get=pages_users_langs": {
             "get": {
-                "summary": "Retrieve new page views",
-                "description": "Corresponds to calling `api.php?get=views` with query parameters.",
+                "summary": "Retrieve languages that have user pages",
+                "description": "Corresponds to calling `api.php?get=pages_users_langs` with query parameters.",
                 "tags": [
-                    "views"
+                    "languages"
                 ],
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/LimitParam"
                     },
                     {
-                        "$ref": "#/components/parameters/LangParam"
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=revids": {
+            "get": {
+                "summary": "Retrieve revision IDs",
+                "description": "Retrieve revision IDs for specified titles or title arrays",
+                "tags": [
+                    "pages_infos"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
                     },
                     {
-                        "$ref": "#/components/parameters/PublicationYearParam"
+                        "$ref": "#/components/parameters/TitleParam"
                     },
                     {
-                        "$ref": "#/components/parameters/ViewsParam"
+                        "$ref": "#/components/parameters/TitlesParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=titles": {
+            "get": {
+                "summary": "Retrieve pages by title or importance",
+                "description": "Corresponds to calling `api.php?get=titles` with query parameters.",
+                "tags": [
+                    "pages_infos"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TitleParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/ImportanceParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TitlesParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=language_settings": {
+            "get": {
+                "summary": "language settings",
+                "description": "Corresponds to calling `api.php?get=language_settings` with query parameters.",
+                "tags": [
+                    "other"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "in": "query",
+                        "name": "lang_code",
+                        "description": "Language code",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -1398,6 +1570,9 @@
                     },
                     {
                         "$ref": "#/components/parameters/AllWordsParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -1407,19 +1582,358 @@
                 }
             }
         },
-        "/api.php?get=revids": {
+        "/api.php?get=count_pages": {
             "get": {
-                "summary": "Retrieve revision IDs",
-                "description": "Retrieve revision IDs for specified titles or title arrays",
+                "summary": "Count pages",
+                "description": "Corresponds to calling `api.php?get=count_pages` with query parameters.",
+                "tags": [
+                    "statistics"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TargetParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=publish_reports_stats": {
+            "get": {
+                "summary": "publish reports stats",
+                "description": "Corresponds to calling `api.php?get=publish_reports_stats` with query parameters.",
+                "tags": [
+                    "other"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=in_process": {
+            "get": {
+                "summary": "Retrieve in-process pages",
+                "description": "Corresponds to calling `api.php?get=in_process` with query parameters.",
+                "tags": [
+                    "pages"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CatParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/UserParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/SelectParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/DistinctParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/GroupParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OrderParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YearParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=get_lang_years": {
+            "get": {
+                "summary": "Years of language",
+                "description": "list of years of language",
+                "tags": [
+                    "languages"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LangParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=assessments": {
+            "get": {
+                "summary": "Retrieve page assessments",
+                "description": "Corresponds to calling `api.php?get=assessments` with query parameters.",
                 "tags": [
                     "pages_infos"
                 ],
                 "parameters": [
                     {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
                         "$ref": "#/components/parameters/TitleParam"
                     },
                     {
-                        "$ref": "#/components/parameters/TitlesParam"
+                        "$ref": "#/components/parameters/ImportanceParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/DistinctParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=refs_counts": {
+            "get": {
+                "summary": "Retrieve reference counts for pages",
+                "description": "Corresponds to calling `api.php?get=refs_counts` with query parameters.",
+                "tags": [
+                    "pages_infos"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TitleParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LeadRefsParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/AllRefsParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=enwiki_pageviews": {
+            "get": {
+                "summary": "Retrieve English Wikipedia page views",
+                "description": "Corresponds to calling `api.php?get=enwiki_pageviews` with query parameters.",
+                "tags": [
+                    "pages_infos"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/TitleParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/EnViewsParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=categories": {
+            "get": {
+                "summary": "Retrieve categories",
+                "description": "Corresponds to calling `api.php?get=categories` with query parameters.",
+                "tags": [
+                    "other"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/DepthParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/CampaignParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/SelectParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=full_translators": {
+            "get": {
+                "summary": "Retrieve full translators",
+                "description": "Corresponds to calling `api.php?get=full_translators` with query parameters.",
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=users_no_inprocess": {
+            "get": {
+                "summary": "Retrieve users not in process",
+                "description": "Corresponds to calling `api.php?get=users_no_inprocess` with query parameters.",
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=projects": {
+            "get": {
+                "summary": "Retrieve projects",
+                "description": "Corresponds to calling `api.php?get=projects` with query parameters.",
+                "tags": [
+                    "other"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=settings": {
+            "get": {
+                "summary": "Retrieve settings",
+                "description": "Corresponds to calling `api.php?get=settings` with query parameters.",
+                "tags": [
+                    "other"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Success"
+                    }
+                }
+            }
+        },
+        "/api.php?get=translate_type": {
+            "get": {
+                "summary": "Retrieve translation type data",
+                "description": "Corresponds to calling `api.php?get=translate_type` with query parameters.",
+                "tags": [
+                    "languages"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/LeadTranslationParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/FullTranslationParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
@@ -1432,13 +1946,25 @@
         "/api.php?get=publish_reports": {
             "get": {
                 "summary": "publish reports",
-                "description": "",
+                "description": "Corresponds to calling `api.php?get=publish_reports` with query parameters.",
                 "tags": [
                     "other"
                 ],
                 "parameters": [
                     {
                         "$ref": "#/components/parameters/LimitParam"
+                    },
+                    {
+                        "$ref": "#/components/parameters/YearParam"
+                    },
+                    {
+                        "in": "query",
+                        "name": "month",
+                        "description": "month of date",
+                        "required": false,
+                        "schema": {
+                            "type": "number"
+                        }
                     },
                     {
                         "$ref": "#/components/parameters/TitleParam"
@@ -1448,21 +1974,6 @@
                     },
                     {
                         "$ref": "#/components/parameters/LangParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/YearParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/SelectParam"
-                    },
-                    {
-                        "in": "query",
-                        "name": "month",
-                        "description": "month of date",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
                     },
                     {
                         "in": "query",
@@ -1483,206 +1994,13 @@
                         }
                     },
                     {
+                        "$ref": "#/components/parameters/SelectParam"
+                    },
+                    {
                         "$ref": "#/components/parameters/DistinctParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=publish_reports_stats": {
-            "get": {
-                "summary": "publish reports stats",
-                "description": "",
-                "tags": [
-                    "other"
-                ],
-                "parameters": [],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=language_settings": {
-            "get": {
-                "summary": "language settings",
-                "description": "",
-                "tags": [
-                    "other"
-                ],
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "lang_code",
-                        "description": "Language code",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=top_users": {
-            "get": {
-                "summary": "Retrieve Top users",
-                "description": "",
-                "tags": [
-                    "users"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
                     },
                     {
-                        "$ref": "#/components/parameters/YearParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/UserGroupParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CatParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=top_langs": {
-            "get": {
-                "summary": "Retrieve Top langs",
-                "description": "",
-                "tags": [
-                    "users"
-                ],
-                "parameters": [
-                    {
-                        "$ref": "#/components/parameters/LimitParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/YearParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/UserGroupParam"
-                    },
-                    {
-                        "$ref": "#/components/parameters/CatParam"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=top_lang_of_users": {
-            "get": {
-                "summary": "",
-                "description": "",
-                "tags": [
-                    "users"
-                ],
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "users",
-                        "description": "list of users",
-                        "required": false,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            },
-                            "maxItems": 50
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=user_status": {
-            "get": {
-                "summary": "",
-                "description": "list of users (langs, campaigns, categories)",
-                "tags": [
-                    "users"
-                ],
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "user",
-                        "description": "Username",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "in": "query",
-                        "name": "lang",
-                        "description": "Language code",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "in": "query",
-                        "name": "select",
-                        "description": "Select fields",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "lang",
-                                "campaign",
-                                "category",
-                                "year"
-                            ]
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/Success"
-                    }
-                }
-            }
-        },
-        "/api.php?get=get_lang_years": {
-            "get": {
-                "summary": "",
-                "description": "list of years of language",
-                "tags": [
-                    "languages"
-                ],
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "lang",
-                        "description": "Language code",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
+                        "$ref": "#/components/parameters/OffsetParam"
                     }
                 ],
                 "responses": {
